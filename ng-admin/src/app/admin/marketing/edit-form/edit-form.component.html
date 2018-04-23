@@ -1,0 +1,37 @@
+<form nz-form [formGroup]="form" *ngIf="modalVisible" id="frm_edit_form" (ngSubmit)="save()">
+    <nz-modal [nzVisible]="modalVisible" [nzTitle]="'修改商品信息'" [nzConfirmLoading]="loading" [nzContent]="modalContent" [nzFooter]="modalFooter"
+        (nzOnCancel)="handleCancel($event)">
+        <ng-template #modalContent>
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="6">
+                    <label nz-form-item-required>商品规格</label>
+                </div>
+                <div nz-form-control nz-col [nzSpan]="14">
+                    <nz-select formControlName="activityGoodsId" [(ngModel)]="formDto.activityGoodsId" [nzPlaceHolder]="'请选择商品规格'" [nzSize]="'large'">
+                        <nz-option *ngFor="let goods of goodsList" [nzLabel]="goods.specification" [nzValue]="goods.id">
+                        </nz-option>
+                        <div nz-form-explain *ngIf="getFormControl('activityGoodsId').dirty&&getFormControl('activityGoodsId').hasError('required')">商品规格必填</div>
+                    </nz-select>
+                </div>
+            </div>
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSpan]="6">
+                    <label>申请数量</label>
+                </div>
+                <div nz-form-control nz-col [nzSpan]="14">
+                    <nz-input-number formControlName="num" [(ngModel)]="formDto.num" [nzSize]="'large'" [nzStep]="1" [nzMin]="1"></nz-input-number>
+                    <span nz-form-text> 条</span>
+                    <div nz-form-explain *ngIf="getFormControl('num').dirty&&getFormControl('num').hasError('required')">申请数量必填</div>
+                </div>
+            </div>
+        </ng-template>
+        <ng-template #modalFooter>
+            <button nz-button [nzType]="'default'" [nzSize]="'large'" type="button" (click)="handleCancel($event)">
+                取消
+            </button>
+            <button nz-button [nzType]="'primary'" [nzSize]="'large'" type="submit" [nzLoading]="isConfirmLoading">
+                保存
+            </button>
+        </ng-template>
+    </nz-modal>
+</form>

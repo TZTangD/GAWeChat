@@ -1,0 +1,133 @@
+<pro-header></pro-header>
+<nz-card [nzBordered]="false">
+    <form nz-form (ngSubmit)="refreshData(false,true)" [nzLayout]="'inline'">
+        <div nz-row [nzGutter]="24">
+            <ng-template #deleteContent>
+                <h2>是否删除活动{{activityName}}?</h2>
+            </ng-template>
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label>
+                        <label for="name">活动名称</label>
+                    </div>
+                    <div nz-form-control class="flex-1">
+                        <nz-input [(ngModel)]="search.name" name="name" [nzSize]="'large'" [nzPlaceHolder]="'请输入活动名称'" nzId="name"></nz-input>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label>
+                        <label for="startTime">开始时间</label>
+                    </div>
+                    <div nz-form-control class="flex-1">
+                        <nz-datepicker name="startTime" style="width:100%;" [nzSize]="'large'" nzId="startTime" [(ngModel)]="search.startTime" nzPlaceHolder="请选择开始时间"></nz-datepicker>
+                    </div>
+                </div>
+            </div>
+
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label>
+                        <label>结束时间</label>
+                    </div>
+                    <div nz-form-control class="flex-1">
+                        <nz-datepicker name="endTime" style="width:100%;" nzId="endTime" [(ngModel)]="search.endTime" nzPlaceHolder="请选择结束时间"></nz-datepicker>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label>
+                        <label>活动分类</label>
+                    </div>
+                    <div nz-form-control class="flex-1">
+                        <nz-select [nzPlaceHolder]="'请选择活动分类'" name="type" [(ngModel)]="search.type" [nzShowSearch]="true" nzSize="large">
+                            <nz-option *ngFor="let i of AcTypes" [nzLabel]="i.text" [nzValue]="i.value">
+                            </nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+            </div>
+            <!-- </div> -->
+
+            <!-- <div nz-row [nzGutter]="24"> -->
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label>
+                        <label>活动状态</label>
+                    </div>
+                    <div nz-form-control class="flex-1">
+                        <nz-select [nzPlaceHolder]="'活动状态'" name="status" [(ngModel)]="search.status" [nzShowSearch]="true" nzSize="large">
+                            <nz-option *ngFor="let i of statuses" [nzLabel]="i.text" [nzValue]="i.value">
+                            </nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <button nz-button type="submit" [nzType]="'primary'" [nzLoading]="loading" [nzSize]="'large'">查询</button>
+                <button nz-button type="reset" (click)="refreshData(true)" [nzSize]="'large'" class="mx-sm">重置</button>
+                <button nz-button (click)="createActivity()" [nzType]="'primary'" [nzSize]="'large'">
+                    <i class="anticon anticon-plus"></i>
+                    <span>新建</span>
+                </button>
+            </div>
+        </div>
+    </form>
+    <nz-table #nzTable [nzAjaxData]="acticities" [nzTotal]="query.total" [(nzPageIndex)]="query.pageIndex" [(nzPageSize)]="query.pageSize"
+        [nzLoading]="loading" [nzShowTotal]="'true'" [nzShowSizeChanger]="true" (nzPageIndexChange)="refreshData()" (nzPageSizeChange)="refreshData()">
+        <thead nz-thead>
+            <tr>
+                <th nz-th>
+                    <span>名称</span>
+                </th>
+                <th nz-th>
+                    <span>开始时间</span>
+                </th>
+                <th nz-th>
+                    <span>结束时间</span>
+                </th>
+                <th nz-th>
+                    <span>分类</span>
+                </th>
+                <!-- <th nz-th>
+                    <span>活动内容</span>
+                </th> -->
+                <th nz-th>
+                    <span>客户经理申请限制</span>
+                </th>
+                <th nz-th>
+                    <span>零售客户申请限制</span>
+                </th>
+                <th nz-th>
+                    <span>发布时间</span>
+                </th>
+                <th nz-th>
+                    <span>状态</span>
+                </th>
+                <th nz-th>
+                    <span>操作</span>
+                </th>
+            </tr>
+        </thead>
+        <tbody nz-tbody>
+            <tr nz-tbody-tr *ngFor="let activity of nzTable.data">
+                <td nz-td>{{activity.name}}</td>
+                <td nz-td>{{activity.beginTime | _date}}</td>
+                <td nz-td>{{activity.endTime | _date}}</td>
+                <td nz-td>{{activity.typeName}}</td>
+                <!-- <td nz-td>{{activity.content}}</td> -->
+                <td nz-td>{{activity.mUnfinished}}</td>
+                <td nz-td>{{activity.rUnfinished}}</td>
+                <td nz-td>{{activity.publishTime | _date}}</td>
+                <td nz-td>{{activity.statusName}}</td>
+                <td nz-td>
+                    <a (click)="editActivity(activity)">查看详情</a>
+                    <!-- <span nz-table-divider></span> -->
+                    <!-- <a (click)="delete(activity,deleteContent)">删除</a> -->
+                </td>
+            </tr>
+        </tbody>
+    </nz-table>
+</nz-card>

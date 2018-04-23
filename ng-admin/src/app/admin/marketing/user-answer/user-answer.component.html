@@ -1,0 +1,19 @@
+<pro-header [title]="'问卷调查详细'"></pro-header>
+<nz-card [nzNoHovering]="true" >
+    <ng-template #body>
+            <div class="text-lg mb-md">用户提交信息</div>
+        <desc-list size="large" *ngIf="question" class="mb-lg">
+            <desc-list-item term="问卷主题">{{question.name}}</desc-list-item>
+            <desc-list-item term="客户姓名">{{question.userName}}</desc-list-item>
+            <desc-list-item term="联系电话">{{question.phone}}</desc-list-item>
+            <desc-list-item term="客户地址">{{question.address}}</desc-list-item>
+            <desc-list-item term="提交时间">{{question.creationTime | _date}}</desc-list-item>
+        </desc-list>
+        <nz-divider class="mb-lg"></nz-divider>
+        <div *ngFor="let q of questions">
+            <div class="text-lg mb-md">{{q.no}}. {{q.text}}</div>
+            <nz-checkbox-group [(ngModel)]="q.answers"></nz-checkbox-group>
+            <nz-divider class="mb-lg"></nz-divider>
+        </div>
+    </ng-template>
+</nz-card>

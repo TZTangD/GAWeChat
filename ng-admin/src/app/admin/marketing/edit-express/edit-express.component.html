@@ -1,0 +1,54 @@
+<form nz-form [formGroup]="form" *ngIf="modalVisible" id="frm_edit_express" (ngSubmit)="save()">
+    <nz-modal [nzVisible]="modalVisible" [nzTitle]="title" [nzConfirmLoading]="loading" [nzContent]="modalContent" [nzFooter]="modalFooter"
+        (nzOnCancel)="handleCancel($event)">
+        <ng-template #modalContent>
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSm]="4">
+                    <label for="expressCompany" nz-form-item-required>快递公司</label>
+                </div>
+                <div nz-form-control nz-col [nzSm]="20" nzHasFeedback [nzValidateStatus]="getFormControl('expressCompany')">
+                    <nz-input formControlName="expressCompany" [(ngModel)]="deliveryDto.expressCompany" nzPlaceHolder="请输入物流公司" [nzId]="'expressCompany'"></nz-input>
+                    <div nz-form-explain *ngIf="getFormControl('expressCompany').dirty&&getFormControl('expressCompany').hasError('maxlength')">字符长度小于等于200</div>
+                    <div nz-form-explain *ngIf="getFormControl('expressCompany').dirty&&getFormControl('expressCompany').hasError('required')">请输入物流公司</div>
+                </div>
+            </div>
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSm]="4">
+                    <label for="expressNo" nz-form-item-required>快递单号</label>
+                </div>
+                <div nz-form-control nz-col [nzSm]="20" nzHasFeedback [nzValidateStatus]="getFormControl('expressNo')">
+                    <nz-input formControlName="expressNo" [(ngModel)]="deliveryDto.expressNo" nzPlaceHolder="请输入快递单号" [nzId]="'expressNo'"></nz-input>
+                    <div nz-form-explain *ngIf="getFormControl('expressNo').dirty&&getFormControl('expressNo').hasError('maxlength')">字符长度小于等于200</div>
+                    <div nz-form-explain *ngIf="getFormControl('expressNo').dirty&&getFormControl('expressNo').hasError('required')">请输入快递单号</div>
+                </div>
+            </div>
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSm]="4">
+                    <label for="sendTime" nz-form-item-required>发件日期</label>
+                </div>
+                <div nz-form-control nz-col [nzSm]="20" nzHasFeedback [nzValidateStatus]="getFormControl('sendTime')">
+                    <nz-datepicker [(ngModel)]="deliveryDto.sendTime" formControlName="sendTime" [nzPlaceHolder]="'请输入发件日期'"></nz-datepicker>
+                    <div nz-form-explain *ngIf="getFormControl('sendTime').dirty&&getFormControl('sendTime').hasError('required')">请输入发件日期</div>
+                </div>
+            </div>
+            <div nz-form-item nz-row>
+                <div nz-form-label nz-col [nzSm]="4">
+                    <label for="remark">备注</label>
+                </div>
+                <div nz-form-control nz-col [nzSm]="20" nzHasFeedback [nzValidateStatus]="getFormControl('remark')">
+                    <nz-input [nzType]="'textarea'" [nzRows]="'4'" formControlName="remark" [(ngModel)]="deliveryDto.remark" nzPlaceHolder="输入备注"
+                        [nzId]="'remark'"></nz-input>
+                    <div nz-form-explain *ngIf="getFormControl('remark').dirty&&getFormControl('remark').hasError('maxlength')">字符长度小于等于500</div>
+                </div>
+            </div>
+        </ng-template>
+        <ng-template #modalFooter>
+            <button nz-button [nzType]="'default'" [nzSize]="'large'" type="button" (click)="handleCancel($event)">
+                取消
+            </button>
+            <button nz-button [nzType]="'primary'" [nzSize]="'large'" type="submit" [nzLoading]="isConfirmLoading">
+                保存
+            </button>
+        </ng-template>
+    </nz-modal>
+</form>

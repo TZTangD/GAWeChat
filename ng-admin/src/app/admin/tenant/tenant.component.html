@@ -1,0 +1,51 @@
+<pro-header></pro-header>
+<nz-card [nzBordered]="false">
+    <form nz-form (ngSubmit)="refreshData()" [nzLayout]="'inline'">
+        <div nz-row [nzGutter]="24">
+            <ng-template #modelContent>
+                <h2>是否删除租户{{TenantName}}?</h2>
+            </ng-template>
+            <div nz-col [nzSpan]="8" class="mb-md" [class.text-right]="'true'">
+                <button nz-button (click)="createTenant()" [nzType]="'primary'" [nzSize]="'large'">
+                    <i class="anticon anticon-plus"></i>
+                    <span>新建</span>
+                </button>
+            </div>
+        </div>
+    </form>
+    <nz-table #nzTable [nzAjaxData]="tenants" [nzTotal]="q.total" [(nzPageIndex)]="q.pi" [(nzPageSize)]="q.ps" [nzLoading]="loading"
+        [nzShowSizeChanger]="true" [nzShowTotal]="'true'" (nzPageIndexChange)="refreshData()" (nzPageSizeChange)="refreshData()">
+        <thead nz-thead>
+            <tr>
+                <th nz-th>
+                    <span>租户名</span>
+                </th>
+                <th nz-th>
+                    <span>名称</span>
+                </th>
+                <th nz-th>
+                    <span>启用</span>
+                </th>
+                <th nz-th>
+                    <span>操作</span>
+                </th>
+            </tr>
+        </thead>
+        <tbody nz-tbody>
+            <tr nz-tbody-tr *ngFor="let tenant of nzTable.data">
+                <td nz-td>{{tenant.tenancyName}}</td>
+                <td nz-td>{{tenant.name}}</td>
+                <td nz-td>
+                    <nz-badge [nzStatus]="tenant.activeType" [nzText]="tenant.activeText"></nz-badge>
+                </td>
+                <td nz-td>
+                    <a (click)="editTenant(tenant)">编辑</a>
+                    <span nz-table-divider></span>
+                    <a (click)="delete(tenant,modelContent)">删除</a>
+                </td>
+            </tr>
+        </tbody>
+    </nz-table>
+</nz-card>
+<edit-tenant-modal #editTenantModal (modalSave)="refreshData()"></edit-tenant-modal>
+<create-tenant-modal #createTenantModal (modalSave)="refreshData()"></create-tenant-modal>

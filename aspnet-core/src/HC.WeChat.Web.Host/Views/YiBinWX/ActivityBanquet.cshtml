@@ -1,0 +1,536 @@
+﻿@model HC.WeChat.Models.WeChat.ActivityBanquetModel
+@{
+    ViewData["Title"] = "宜宾烟草";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+    <title>宜宾烟草</title>
+    <link rel="stylesheet" href="static/css/base.css" />
+    <link rel="stylesheet" href="static/css/commons.css" />
+    <link rel="stylesheet" href="static/css/tobacco.css" />
+</head>
+<body class="bg_gary">
+    <div id="background" class="background" style="display: none; "></div>
+    <div id="progressBar" class="progressBar" style="display: none; ">正在提交中，请稍等...</div>
+    <!--页面整体-->
+    <div class="all_width">
+        <!--通用头部-->
+        <div class="header bg_green tc">
+            宴席信息完善
+        </div>
+        <!--banner展示-->
+        <img src="static/img/activity/banner.jpg" class="img_width" />
+        <!--活动申请输入部分-->
+        <div class="pr advise_area">
+            <!--透明背景-->
+            <div class="opacity_bg all_width">
+                <!--选其它需要输入商品规格-->
+                <div class="advise_warp pt5 pb5">
+                    <span class="entry_key">选择区县</span>
+                    <select id="ddlArea" class="ml10 entry_value" value="@Model.BanquetWeChat.Area" placeholder="请输入选择区县">
+                        <option value="翠屏区">翠屏区</option>
+                        <option value="南溪区">南溪区</option>
+                        <option value="宜宾县">宜宾县</option>
+                        <option value="江安县">江安县</option>
+                        <option value="长宁县">长宁县</option>
+                        <option value="高县">高县</option>
+                        <option value="筠连县">筠连县</option>
+                        <option value="珙县">珙县</option>
+                        <option value="兴文县">兴文县</option>
+                        <option value="屏山县">屏山县</option>
+                    </select>
+                    @*<input type="text" maxlength="500" id="txtArea" class="fl ml10 entry_value" value="@Model.BanquetWeChat.Area" placeholder="请输入区县" />*@
+                </div>
+                <!--申请数量-->
+                <div class="advise_warp pt5 pb5">
+                    <span class="entry_key">宴席时间</span>
+                    <input type="date" id="txtBanquetTime" maxlength="20" value="@Model.BanquetWeChat.ShowBanquetTime" placeholder="请输入宴席时间" />
+                </div>
+                <div class="advise_warp pt5 pb5">
+                    <span class="entry_key fl">宴席地点</span>
+                    <input type="text" id="txtPosition" class="fl ml10 entry_value" value="@Model.BanquetWeChat.Position" placeholder="请输入宴席地点" />
+                </div>
+                <div class="advise_warp pt5 pb5">
+                    <span class="entry_key fl">现场人数</span>
+                    <input type="number" id="txtNum" class="fl ml10 entry_value" value="@Model.BanquetWeChat.Num" placeholder="请输入现场人数" />
+                </div>
+                <div class="advise_warp">
+                    <span class="entry_key db pb3 pt3">现场简述</span>
+                    <!--内容输入框-->
+                    <textarea class="contain_entry" id="txtDesc" maxlength="500" placeholder="请输入现场简述">@Model.BanquetWeChat.Desc</textarea>
+                </div>
+                <div class="advise_warp pt5 pb5">
+                    <span class="entry_key fl">推荐人姓名</span>
+                    <input type="text" maxlength="50" id="txtUserNaem" class="fl ml10 entry_value" value="@Model.BanquetWeChat.UserName" placeholder="请输入收货姓名" />
+                </div>
+                <!--联系电话-->
+                <div class="advise_warp pt3 pb3">
+                    <span class="entry_key fl">推荐人电话</span>
+                    <input type="number" maxlength="11" id="txtPhone" class="fl ml10 entry_value" value="@Model.BanquetWeChat.Phone" placeholder="请输入联系电话" />
+                </div>
+                <!--收货地址-->
+                <div class="advise_warp pt3 pb3">
+                    <span class="entry_key fl">推荐人地址</span>
+                    <textarea class="contain_entry" id="txtAddress" placeholder="请输入收货地址">@Model.BanquetWeChat.Address</textarea>
+                </div>
+                <!--备注-->
+                <div class="advise_warp pt3 pb3">
+                    <span class="entry_key fl">备注</span>
+                    <textarea class="contain_entry" id="txtDeliveryRemark" placeholder="请输入备注">@Model.BanquetWeChat.DeliveryRemark</textarea>
+                </div>
+                <!--上传图片-->
+                <div class="file_upload pr">
+                    <input type="hidden" id="Images" name="Images" value="" />
+                    @foreach (var url in Model.PhotoUrls)
+        {
+            <img name="photo" src="@(ViewBag.ServerRootAddress + url)" orgsrc="@url" />
+}
+                    @*<input id="Photos" name="Photos" multiple type="file"  class="none pa">*@
+                    @*<img name="photo" src="~/YiBinWX/static/img/advise/add.png">
+            <img name="photo" src="~/YiBinWX/static/img/advise/add1.png">
+            <img name="photo" src="~/YiBinWX/static/img/advise/add3.png">*@
+                    <img id="add" src="~/YiBinWX/static/img/advise/add.png">
+                </div>
+                <!--上传图片限制提示-->
+                <span id="spanTips" class="upload_tips">最多可上传8张图片，长按图片可删除，点击图片可预览</span>
+                <input type="hidden" id="hidOpenId" value="@ViewBag.OpenId" />
+                <input type="hidden" id="hidTenantId" value="@ViewBag.TenantId" />
+                <input type="hidden" id="hidActivityFormId" value="@ViewBag.ActivityFormId" />
+                <input type="hidden" id="hidUserType" value="@ViewBag.UserType" />
+                <input type="hidden" id="hidActivityFormStatus" value="@ViewBag.ActivityFormStatus" />
+
+                <input type="hidden" id="hidBanquetId" value="@Model.BanquetWeChat.BanquetId" />
+                <input type="hidden" id="hidDeliveryId" value="@Model.BanquetWeChat.DeliveryId" />
+            </div>
+        </div>
+        <!--用户操作按钮-->
+        <div class="width_90 mt30 mb20" id="divButton">
+            <input type="button" class="middel_btn fl cancel" id="btnCancel" onclick="Cancel()" value="取消" />
+            <input type="button" class="middel_btn fr ok" id="btnSave" value="提交资料" onclick="Save()" />
+            <input type="button" class="middel_btn fr ok" id="btnAudit" value="审核通过" onclick="Save()" />
+        </div>
+    </div>
+    <script type="text/javascript" src="static/js/jquery.min.js"></script>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        wx.config({
+            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            appId: '@Model.JsSdkApiConfig.AppId', // 必填，公众号的唯一标识
+            timestamp: @Model.JsSdkApiConfig.Timestamp, // 必填，生成签名的时间戳
+            nonceStr: '@Model.JsSdkApiConfig.NonceStr', // 必填，生成签名的随机串
+            signature: '@Model.JsSdkApiConfig.Signature',// 必填，签名
+            jsApiList: ['chooseImage', 'previewImage', 'uploadImage', 'downloadImage'] // 必填，需要使用的JS接口列表
+        });
+
+        //window.ontouchstart = function (e) {
+        //    e.preventDefault();
+        //};
+
+        function fnImgDelete(obj) {
+            //alert(666)
+            //alert($(obj).attr("src"))
+            if (confirm("确认要删除该图片吗？")) {
+                deletId($(obj).attr("src"));
+                $(obj).remove();
+            }
+        }
+
+        $.fn.longPress = function () {
+            var $this = this;
+            var timeout = undefined;
+            for (var i = 0; i < $this.length; i++) {
+                //var timeout = 0;
+                //$($this[i]).on({
+                //    touchstart: function (e) {
+                //        timeout = setTimeout(fn($this[i], timeout), 800);
+                //        e.preventDefault();
+                //    },
+                //    touchmove: function () {
+                //        clearTimeout(timeout);
+                //        timeout = 0;
+                //    },
+                //    touchend: function () {
+                //        clearTimeout(timeout);
+                //        if (timeout != 0) {
+                //            alert("你这是点击，不是长按");
+                //        }
+                //        return false;
+                //    }
+                //})
+                $this[i].addEventListener('touchstart', function (event) {
+                    timeout = setTimeout(fnImgDelete, 800, this);
+                    event.preventDefault();
+                }, false);
+                $this[i].addEventListener('touchend', function (event) {
+                    clearTimeout(timeout);
+                    funcSetReadImgInfo(this);
+                }, false);
+            }
+
+        }
+
+        var wximgIds = [];
+        var wxlocalIds = [];
+
+        /*调用微信预览图片的方法*/
+        function funcReadImgInfo() {
+            var imgs = [];
+            var imgObj = $("img[name='photo']");//这里改成相应的对象
+            for (var i = 0; i < imgObj.length; i++) {
+                imgs.push(imgObj.eq(i).attr('src'));
+                imgObj.eq(i).click(function () {
+                    var nowImgurl = $(this).attr('src');
+                    WeixinJSBridge.invoke("imagePreview", {
+                        "urls": imgs,
+                        "current": nowImgurl
+                    });
+                });
+            }
+        }
+        //设置预览图片
+        function funcSetReadImgInfo(obj) {
+            var imgs = [];
+            var imgObj = $("img[name='photo']");//这里改成相应的对象
+            for (var i = 0; i < imgObj.length; i++) {
+                imgs.push(imgObj.eq(i).attr('src'));
+            }
+            var nowImgurl = $(obj).attr('src');
+            //alert("预览了")
+            WeixinJSBridge.invoke("imagePreview", {
+                "urls": imgs,
+                "current": nowImgurl
+            });
+        }
+
+        function wxchooseImage() {
+            if (wximgIds.length == 8) {
+                alert("上传图片不能超过8张");
+                return;
+            }
+            var clen = $("img[name='photo']").length;
+            var mlen = 8 - clen;
+            wx.chooseImage({
+                count: mlen, // 默认9
+                sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                success: function (res) {
+                    var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                    //$("img[name='photo']").remove();
+                    var imgs = $("img[name='photo']");
+                    for (var i = 0; i < localIds.length; i++) {
+                        //数量限制
+                        if (imgs.length >= 8)
+                            break;
+
+                        //wxlocalIds.push(localIds[i]);
+
+                        var img = $('<img name="photo" />');
+                        img[0].src = localIds[i];
+                        //$(img[0]).attr('orgsrc', localIds[i]);
+                        $("#add").before(img);
+                        //添加长按删除
+                        img.each(function () {
+                            $(this).longPress(function (obj) {
+                                if (confirm("确认要删除该图片吗？")) {
+                                    deletId($(obj).attr("src"));
+                                    $(obj).remove();
+                                }
+                            });
+                        });
+
+                        //img.click(function (e) {
+                            //deletId($(this).attr("src"));
+                            //deletwxlocalId($(this).attr("src"));
+                            //$(this).remove();
+                            //点击图片 进行预览
+                            //funcReadImgInfo();
+                        //});
+                    }
+                    //点击图片预览
+                    //funcReadImgInfo();
+
+                    syncUpload(localIds);
+                }
+            });
+        }
+
+        var deletId = function (localId) {
+            for (var i = 0; i < wximgIds.length; i++) {
+                if (wximgIds[i].lid == localId) {
+                    wximgIds.splice(i, 1);
+                }
+            }
+        }
+
+        var deletwxlocalId = function (localId) {
+            for (var i = 0; i < wxlocalIds.length; i++) {
+                if (wxlocalIds[i].lid == localId) {
+                    wxlocalIds.splice(i, 1);
+                }
+            }
+        }
+
+        var syncUpload = function (localIds) {
+            if (wximgIds.length >= 8) {
+                return;
+            }
+            var localId = localIds.pop();
+            wx.uploadImage({
+                localId: localId,
+                isShowProgressTips: 1,
+                success: function (res) {
+                    var serverId = res.serverId; // 返回图片的服务器端ID
+                    //$('#divtest').text(serverId);
+                    var imgmodel = { lid: localId, sid: serverId };
+                    wximgIds.push(imgmodel);
+                    //其他对serverId做处理的代码
+                    if (localIds.length > 0) {
+                        syncUpload(localIds);
+                    }
+                }
+            });
+        }
+
+        var wxupload = function () {
+            if (wxlocalIds.length > 0) {
+                for (var i = 0; i < wxlocalIds.length; i++) {
+                    var localId = wxlocalIds[i];
+                    wx.uploadImage({
+                        localId: localId,
+                        isShowProgressTips: 1,
+                        success: function (res) {
+                            var serverId = res.serverId; // 返回图片的服务器端ID
+                            //$('#divtest').text(serverId);
+                            var imgmodel = { lid: localId, sid: serverId };
+                            wximgIds.push(imgmodel);
+                        }
+                    });
+                }
+            }
+        }
+
+        $("#add").click(function (e) {
+            wxchooseImage();
+            //$("#Photos").click();
+        });
+
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            var userType = $("#hidUserType").val();
+            var status = $("#hidActivityFormStatus").val();
+            $("#spanTips").hide();//提示信息显示控制
+            if (userType == 1) {//零售客户
+                if (status == 2) {//初审通过
+                    $("#add").show();
+                    $("#spanTips").show();
+                    //长按图片删除
+                    funcLongPress();
+                    $("#btnSave").show();
+                    $("#btnAudit").hide();
+                } else {
+                    $("#add").hide();
+                    $("#btnSave").hide();
+                    $("#btnAudit").hide();
+                    $("#btnCancel").removeClass("fl");
+                    $("#divButton").css({ 'text-align': 'center'});
+                }
+            } else if (userType == 2) {//客户经理
+                if (status == 1 || status == 2) {//提交申请 或 初审通过
+                    var banquetId = $("#hidBanquetId").val();
+                    $("#add").show();
+                    $("#spanTips").show();
+                    //长按图片删除
+                    funcLongPress();
+                    if (banquetId == "") {
+                        $("#btnSave").show();
+                        $("#btnAudit").hide();
+                    } else {
+                        $("#btnSave").hide();
+                        $("#btnAudit").show();
+                    }
+                } else {
+                    $("#add").hide();
+                    $("#btnSave").hide();
+                    $("#btnAudit").hide();
+                    $("#btnCancel").removeClass("fl");
+                    $("#divButton").css({ 'text-align': 'center' });
+                }
+            } else {
+                $("#add").hide();
+                $("#btnSave").hide();
+                $("#btnAudit").hide();
+                $("#btnCancel").removeClass("fl");
+                $("#divButton").css({ 'text-align': 'center' });
+            }
+            //点击图片预览
+            //funcReadImgInfo();
+        });
+
+
+        function funcLongPress() {
+            //$("img[name='photo']")
+            //$("img[name='photo']").each(function () {
+            //    $(this).on({
+            //        touchstart: function (e) {
+            //            timeOutEvent = setTimeout(imgLongPress, 800, $(this));
+            //            e.preventDefault();
+            //        },
+            //        touchmove: function () {
+            //            clearTimeout(timeOutEvent);
+            //            timeOutEvent = 0;
+            //        },
+            //        touchend: function () {
+            //            clearTimeout(timeOutEvent);
+            //            if (timeOutEvent != 0) {
+            //                alert("你这是点击，不是长按");
+            //            }
+            //            return false;
+            //        }
+            //    });
+            //});
+            $("img[name='photo']").each(function () {
+                $(this).longPress();
+            });
+         }
+
+        function checkMobile(str) {
+            var re = /^1\d{10}$/
+            return re.test(str);
+        }
+
+        var Cancel = function () {
+            WeixinJSBridge.call('closeWindow');
+        }
+
+        var Save = function () {
+            var reqUrl = "@ViewBag.ServerRootAddress" + "/api/services/app/ActivityBanquet/SubmitActivityBanquetWeChatAsync";
+            var para = {};
+            para.area = $("#ddlArea").val();
+            if (para.area == "") {
+                alert("区县不能为空！");
+                return;
+            }
+
+            para.banquetTime = $("#txtBanquetTime").val();
+            if (para.banquetTime == "") {
+                alert("宴席时间不能为空！");
+                return;
+            }
+            para.position = $("#txtPosition").val();
+            if (para.reason == "") {
+                alert("宴席地点不能为空！");
+                return;
+            }
+
+            para.num = $("#txtNum").val();
+            if (para.num == "") {
+                alert("现场人数不能为空！");
+                return;
+            }
+
+            if (parseInt(para.num) <= 0) {
+                alert("现场人数不能小于0！");
+                return;
+            }
+
+            para.desc = $("#txtDesc").val();
+            if (para.desc == "") {
+                alert("现场简述不能为空！");
+                return;
+            }
+
+            para.userName = $("#txtUserNaem").val();
+            if (para.userName == "") {
+                alert("推荐人姓名不能为空！");
+                return;
+            }
+            para.phone = $("#txtPhone").val();
+            if (para.phone == "") {
+                alert("推荐人电话不能为空！");
+                return;
+            }
+
+            if (!checkMobile(para.phone)) {
+                alert("请输入正确的推荐人电话！");
+                return;
+            }
+
+            para.address = $("#txtAddress").val();
+            if (para.address == "") {
+                alert("推荐地址不能为空！");
+                return;
+            }
+
+            var imgobjs = $("img[name='photo']");
+
+            if (imgobjs.length < 4) {
+                alert("上传图片不能少于4张！");
+                return;
+            }
+
+            //img 回传
+            var imgs = '';
+            $(imgobjs).each(function () {
+                if ($(this).attr('orgsrc') != '' && $(this).attr('orgsrc') != null && $(this).attr('orgsrc') != undefined) {
+                    imgs = imgs + $(this).attr('orgsrc') + ',';
+                }
+            });
+
+            for (var i = 0; i < wximgIds.length; i++) {
+                imgs = imgs + wximgIds[i].sid + ',';
+            }
+            para.photoUrl = imgs;
+
+            para.deliveryRemark = $("#txtDeliveryRemark").val();
+
+            para.tenantId = $("#hidTenantId").val();
+            para.openId = $("#hidOpenId").val();
+            para.activityFormId = $("#hidActivityFormId").val();
+            para.appId = '@Model.JsSdkApiConfig.AppId';
+            para.banquetId = $("#hidBanquetId").val();
+            para.deliveryId = $("#hidDeliveryId").val();
+
+            if (confirm("请确认信息填写无误，提交后不可更改")) {
+                $("#btnSave").attr("disabled", true);
+                $("#btnSave").attr("disabled", "disabled");
+                var ajaxbg = $("#background, #progressBar");
+                ajaxbg.show();
+                $.ajax({
+                    url: reqUrl,
+                    type: "POST",
+                    dataType: "JSON",
+                    contentType: "application/json;charset=utf-8",
+                    data: JSON.stringify(para),
+                    success: function (data) {
+                        ajaxbg.hide();
+                        if (data.success) {
+                            if (data.result.code == 0) {
+                                alert(data.result.msg);
+                                WeixinJSBridge.call('closeWindow');
+                            } else {
+                                alert(data.result.msg);
+                            }
+                        } else {
+                            alert("保存异常！");
+                        }
+                        $("#btnSave").removeAttr("disabled");
+                        $("#btnSave").attr("disabled", false);
+                    },
+                    error: function () {
+                        ajaxbg.hide();
+                        alert("提交失败，稍后请重试！");
+                        $("#btnSave").removeAttr("disabled");
+                        $("#btnSave").attr("disabled", false);
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>
+
+

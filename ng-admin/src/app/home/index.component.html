@@ -1,0 +1,110 @@
+<div class="content__title">
+    <h1>
+        {{ 'homeindex.title' | translate }}
+        <small class="text-sm hidden-xs">{{ 'homeindex.welcome' | translate }}</small>
+    </h1>
+    <div style=" float:right;">我的角色：{{roleName}}</div>
+</div>
+<div nz-row nzGutter="16">
+    <div nz-col nzXs="24" nzSm="12" nzMd="6" class="mb-md">
+        <div nz-row nzType="flex" nzAlign="middle" class="bg-primary rounded-md">
+            <div nz-col nzSpan="12" class="p-md text-white">
+                <div class="h2 mt0">{{activityFormInfo.isCheckedCount}} 单</div>
+                <p class="text-nowrap">活动申请单</p>
+            </div>
+            <div nz-col nzSpan="12">
+                <mini-bar height="35" color="#fff" borderWidth="3" [padding]="[36, 30, 30, 30]" [data]="webSite"></mini-bar>
+            </div>
+        </div>
+    </div>
+    <div nz-col nzXs="24" nzSm="12" nzMd="6" class="mb-md">
+        <div nz-row nzType="flex" nzAlign="middle" class="bg-success rounded-md">
+            <div nz-col nzSpan="12" class="p-md text-white">
+                <div class="h2 mt0">{{activityFormInfo.goodsCount}} 条</div>
+                <p class="text-nowrap">申请商品</p>
+            </div>
+            <div nz-col nzSpan="12">
+                <mini-bar height="35" color="#fff" borderWidth="3" [padding]="[36, 30, 30, 30]" [data]="webSite"></mini-bar>
+            </div>
+        </div>
+    </div>
+    <div nz-col nzXs="24" nzSm="12" nzMd="6" class="mb-md">
+        <div nz-row nzType="flex" nzAlign="middle" class="bg-orange rounded-md">
+            <div nz-col nzSpan="12" class="p-md text-white">
+                <div class="h2 mt0">{{activityFormInfo.checkCount}} 单</div>
+                <p class="text-nowrap">待审批申请单</p>
+            </div>
+            <div nz-col nzSpan="12">
+                <mini-bar height="35" color="#fff" borderWidth="3" [padding]="[36, 30, 30, 30]" [data]="webSite"></mini-bar>
+            </div>
+        </div>
+    </div>
+    <div nz-col nzXs="24" nzSm="12" nzMd="6" class="mb-md">
+        <div nz-row nzType="flex" nzAlign="middle" class="bg-pink rounded-md">
+            <div nz-col nzSpan="12" class="p-md text-white">
+                <div class="h2 mt0">{{activityFormInfo.weiChatAttention}} 人</div>
+                <p class="text-nowrap">微信关注</p>
+            </div>
+            <div nz-col nzSpan="12">
+                <mini-bar height="35" color="#fff" borderWidth="3" [padding]="[36, 30, 30, 30]" [data]="webSite"></mini-bar>
+            </div>
+        </div>
+    </div>
+</div>
+<div nz-row nzGutter="16">
+    <div nz-col nzXs="24" nzMd="12">
+        <nz-card [nzBordered]="false">
+            <ng-template #title>
+                近12个月申请单数 (模拟数据)
+            </ng-template>
+            <bar height="275" [data]="salesData"></bar>
+        </nz-card>
+    </div>
+    <div nz-col nzXs="24" nzMd="12">
+        <nz-card [nzTitle]="nzTitle1" [nzBordered]="false">
+            <ng-template #nzTitle1>
+                24小时网站访问量和活动申请单笔数 (模拟数据)
+            </ng-template>
+            <timeline [data]="offlineChartData" [height]="239" [padding]="[0, 0, 0, 0]" [titleMap]="{ y1: '网站访问量', y2: '申请单笔数' }"></timeline>
+        </nz-card>
+    </div>
+</div>
+<div nz-row nzGutter="16">
+    <div nz-col nzXs="24" nzMd="6">
+        <nz-card [nzBordered]="false" [nzTitle]="nzTitle2" class="ant-card__img">
+            <ng-template #nzTitle2>
+                宜宾微信公众号
+            </ng-template>
+            <img class="img" src="./assets/img/weixin.jpg">
+        </nz-card>
+    </div>
+    <div nz-col nzXs="24" nzMd="18">
+        <nz-card [nzTitle]="nzTitle3" [nzBordered]="false" nzNoPadding>
+            <ng-template #nzTitle3>
+                最新用户建议反馈 (模拟数据)
+            </ng-template>
+            <div nz-row [nzType]="'flex'" [nzJustify]="'center'" [nzAlign]="'middle'" class="py-sm bg-grey-lighter-h point" *ngFor="let item of todoData">
+                <div nz-col [nzSpan]="4" class="text-center">
+                    <nz-avatar [nzSrc]="'./assets/img/' + item.avatar + '.png'" [nzSize]="'large'"></nz-avatar>
+                </div>
+                <div nz-col [nzSpan]="20">
+                    <strong>{{item.name}}</strong>
+                    <p>{{item.content}}</p>
+                </div>
+            </div>
+        </nz-card>
+    </div>
+</div>
+
+<!-- <div class="clearfix">
+    <nz-upload nzAction="http://localhost:21021/WeChatFile/BanquetPhotoSave/" nzListType="picture-card" [(nzFileList)]="fileList"
+        [nzShowButton]="fileList.length < 6" [nzPreview]="handlePreview">
+        <i class="anticon anticon-plus"></i>
+        <div class="ant-upload-text">上传</div>
+    </nz-upload>
+    <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null" (nzOnCancel)="previewVisible=false">
+        <ng-template #modalContent>
+            <img [src]="previewImage" [ngStyle]="{ 'width': '100%' }" />
+        </ng-template>
+    </nz-modal>
+</div> -->

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+		<title>意见反馈</title>
+		<link rel="stylesheet" href="static/css/base.css" />
+		<link rel="stylesheet" href="static/css/commons.css" />
+		<link rel="stylesheet" href="static/css/tobacco.css" />
+	</head>
+	<body class="bg_gary">
+		<!--页面整体-->
+		<div class="all_width">
+			<!--通用头部-->
+			<div class="header bg_green tc">
+				建议举报
+			</div>
+			<!--banner展示-->
+			<img src="static/img/advise/banner.png" class="img_width"/>
+			<!--建议输入部分-->
+			<div class="pr advise_area">
+				<!--透明背景-->
+				<div class="opacity_bg all_width">
+					<!--标题-->
+					<div class="advise_warp pt5 pb5">
+						<span class="entry_key fl">标题</span>
+						<input type="text" class="fl ml10 entry_value" placeholder="请输入标题"/>
+					</div>
+					<!--联系电话-->
+					<div class="advise_warp pt3 pb3">
+						<select class="fl entry_value" placeholder="请输入联系电话">
+							<option>我是消费者</option>
+							<option>我是零售户</option>
+						</select>
+					</div>
+					<div class="advise_warp">
+						<span class="entry_key db pb20 pt5">建议举报内容</span>
+						<!--内容输入框-->
+						<textarea class="contain_entry" placeholder="请输入举报内容"></textarea>
+					</div>
+					<!--联系电话-->
+					<div class="advise_warp pt3 pb3">
+						<span class="entry_key fl">联系电话</span>
+						<input type="text" class="fl ml10 entry_value" placeholder="请输入联系电话"/>
+					</div>
+					<!--上传图片-->
+					<div class="file_upload pr">
+						<input id="Photos" multiple type="file" class="none pa">
+					    <img id="add" src="static/img/advise/add.png">
+					</div>
+					<!--上传图片限制提示-->
+					<span class="upload_tips">最多可上传8张图片</span>
+				</div>
+			</div>
+			<!--用户操作按钮-->
+			<div class="width_90 mt30 mb20">
+				<input type="button" class="middel_btn fl cancel" value="取消发布" />
+				<input type="button" class="middel_btn fr ok" value="确认发布"  onclick="javascript:window.location.href='advise_back.html'"/>
+			</div>
+		</div>
+		<script type="text/javascript" src="static/js/jquery.min.js" ></script>
+		<script>
+		$("#add").click(function(e) {
+                $("#Photos").click();
+            });
+			$("#Photos").change(function(e) {
+                var files = $(this)[0].files;
+				for(var i = 0; i < files.length; i++) {
+					//已经添加过了
+					var found = false;
+					var imgs = $("img[name='photo']");
+					/*for(var ii = 0; ii < imgs.length; ii++) {
+						if($(imgs[ii]).prop("file").name == files[i].name) {
+							found = true;
+							break;
+						}
+					}*/
+					if(found)
+						continue;
+						
+					//数量限制
+					if(imgs.length >= 8)
+						break;
+					
+					var src = window.URL.createObjectURL(files[i]);
+					var img = $('<img name="photo"/>');
+					img[0].src = src;
+					img.prop("file", files[i]);
+					$("#add").before(img);
+					img.click(function(e) {
+						$(this).remove();
+					});
+				}
+				
+				$(this).val("");
+            });
+		</script>
+	</body>
+</html>
