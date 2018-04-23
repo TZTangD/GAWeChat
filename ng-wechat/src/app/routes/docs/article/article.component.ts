@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { META } from '../meta';
+//import { META } from '../meta';
 
 @Component({
     selector: 'app-docs-article',
@@ -18,14 +18,14 @@ export class DocsArticleComponent implements OnInit {
     item: any;
 
     private genData(id: string) {
-        const item = META.find(w => w.name === id);
+       /* const item = META.find(w => w.name === id);
         if (!item) {
             this.router.navigateByUrl('/');
             return ;
         }
         this.item = Object.assign({
         }, item);
-        this.initHLJS();
+        this.initHLJS();*/
     }
 
     constructor(

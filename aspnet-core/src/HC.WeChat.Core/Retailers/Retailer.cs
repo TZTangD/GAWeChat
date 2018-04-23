@@ -131,5 +131,11 @@ namespace HC.WeChat.Retailers
         /// </summary>
         [StringLength(50)]
         public string LicenseKey { get; set; }
+
+        /// <summary>
+        /// 绑定验证码
+        /// </summary>
+        [StringLength(50)]
+        public string VerificationCode { get; set; }
     }
 }

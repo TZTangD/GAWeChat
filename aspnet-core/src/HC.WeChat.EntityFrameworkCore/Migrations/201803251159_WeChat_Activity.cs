@@ -186,7 +186,8 @@ namespace HC.WeChat.Migrations
                     LastModificationTime = table.Column<DateTime>(nullable: true),
                     LastModifierUserId = table.Column<long>(nullable: true),
                     DeletionTime = table.Column<DateTime>(nullable: true),
-                    DeleterUserId = table.Column<long>(nullable: true)
+                    DeleterUserId = table.Column<long>(nullable: true),
+                    VerificationCode = table.Column<string>(maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -223,7 +224,8 @@ namespace HC.WeChat.Migrations
                     LastModificationTime = table.Column<DateTime>(nullable: true),
                     LastModifierUserId = table.Column<long>(nullable: true),
                     DeletionTime = table.Column<DateTime>(nullable: true),
-                    DeleterUserId = table.Column<long>(nullable: true)
+                    DeleterUserId = table.Column<long>(nullable: true),
+                    VerificationCode = table.Column<string>(maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -243,7 +245,12 @@ namespace HC.WeChat.Migrations
                     BindStatus = table.Column<int>(nullable: false),
                     BindTime = table.Column<DateTime>(nullable: true),
                     TenantId = table.Column<int>(nullable: true),
-                    UnBindTime = table.Column<DateTime>(nullable: true)
+                    UnBindTime = table.Column<DateTime>(nullable: true),
+                    Phone = table.Column<string>(maxLength: 20, nullable: true),
+                    MemberBarCode = table.Column<string>(maxLength: 30, nullable: true),
+                    IntegralTotal = table.Column<int>(nullable: true),
+                    IsShopkeeper = table.Column<bool>(nullable: true),
+                    Status = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {

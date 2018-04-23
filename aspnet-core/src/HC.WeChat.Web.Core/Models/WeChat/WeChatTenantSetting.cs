@@ -6,10 +6,10 @@ namespace HC.WeChat.Models.WeChat
 {
     public class WeChatTenantSetting
     {
-        public int YiBin { get; set; }
+        public int? YiBin { get; set; }
 
-        public int GuangAn { get; set; }
+        public int? GuangAn { get; set; }
 
-        public int DaZhou { get; set; }
+        public int? DaZhou { get; set; }
     }
 }

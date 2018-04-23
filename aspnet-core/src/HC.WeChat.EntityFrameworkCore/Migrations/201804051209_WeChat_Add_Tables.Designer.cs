@@ -1435,6 +1435,7 @@ namespace HC.WeChat.Migrations
                 b.Property<long?>("LastModifierUserId");
                 b.Property<DateTime?>("DeletionTime");
                 b.Property<long?>("DeleterUserId");
+                b.Property<string>("VerificationCode").HasMaxLength(50);
 
                 b.HasKey("Id");
 
@@ -1493,6 +1494,12 @@ namespace HC.WeChat.Migrations
                 b.Property<DateTime?>("BindTime");
                 b.Property<int?>("TenantId");
                 b.Property<DateTime?>("UnBindTime");
+                b.Property<string>("Phone").HasMaxLength(20);
+                b.Property<string>("MemberBarCode").HasMaxLength(30);
+                b.Property<int?>("IntegralTotal");
+                b.Property<bool?>("IsShopkeeper");
+                b.Property<int>("UserType").IsRequired();
+                b.Property<int?>("Status");
 
                 b.HasKey("Id");
 

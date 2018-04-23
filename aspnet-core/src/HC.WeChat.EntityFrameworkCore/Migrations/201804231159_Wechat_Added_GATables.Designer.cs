@@ -10,8 +10,8 @@ using System.Text;
 namespace HC.WeChat.Migrations
 {
     [DbContext(typeof(WeChatDbContext))]
-    [Migration("201803251159_WeChat_Activity")]
-    partial class WeChat_Activity
+    [Migration("201804231159_Wechat_Added_GATables")]
+    partial class Wechat_Added_GATables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -1265,7 +1265,7 @@ namespace HC.WeChat.Migrations
                 b.ToTable("WechatMessages");
             });
 
-            modelBuilder.Entity("HC.WeChat.WechatSubscribes.WechatSubscribe", b => 
+            modelBuilder.Entity("HC.WeChat.WechatSubscribes.WechatSubscribe", b =>
             {
                 b.Property<Guid>("Id").ValueGeneratedOnAdd();
                 b.Property<int>("MsgType").IsRequired();
@@ -1314,12 +1314,18 @@ namespace HC.WeChat.Migrations
                 b.Property<string>("FormCode").IsRequired().HasMaxLength(50);
                 b.Property<Guid>("ActivityId").IsRequired();
                 b.Property<Guid?>("RetailerId");
-                b.Property<Guid>("ActivityGoodsId").IsRequired();
-                b.Property<string>("GoodsSpecification").IsRequired().HasMaxLength(200);
+                b.Property<Guid?>("ActivityGoodsId");
+                b.Property<string>("GoodsSpecification").HasMaxLength(200);
                 b.Property<int>("Num").IsRequired();
                 b.Property<string>("Reason").IsRequired();
                 b.Property<int>("Status").IsRequired();
                 b.Property<DateTime>("CreationTime").IsRequired();
+                b.Property<string>("ActivityName").HasMaxLength(200);
+                b.Property<string>("RetailerName").HasMaxLength(50);
+                b.Property<string>("ManagerName").HasMaxLength(50);
+                b.Property<Guid?>("ManagerId");
+                b.Property<Guid?>("CreationId");
+                b.Property<string>("CreationUser").HasMaxLength(50);
 
                 b.HasKey("Id");
 
@@ -1328,7 +1334,7 @@ namespace HC.WeChat.Migrations
                 b.ToTable("ActivityForms");
             });
 
-            modelBuilder.Entity("HC.WeChat.ActivityBanquets.ActivityBanquet", b => 
+            modelBuilder.Entity("HC.WeChat.ActivityBanquets.ActivityBanquet", b =>
             {
                 b.Property<Guid>("Id").ValueGeneratedOnAdd();
                 b.Property<Guid>("ActivityFormId").IsRequired();
@@ -1339,7 +1345,7 @@ namespace HC.WeChat.Migrations
                 b.Property<string>("Position").IsRequired().HasMaxLength(500);
                 b.Property<int>("Num").IsRequired();
                 b.Property<string>("Desc").IsRequired().HasMaxLength(500);
-                b.Property<string>("PhotoUrl").IsRequired();
+                b.Property<string>("PhotoUrl");
                 b.Property<DateTime>("CreationTime").IsRequired();
                 b.Property<string>("UserName").IsRequired().HasMaxLength(50);
 
@@ -1350,13 +1356,21 @@ namespace HC.WeChat.Migrations
                 b.ToTable("ActivityBanquets");
             });
 
-            modelBuilder.Entity("HC.WeChat.ActivityDeliveryInfos.ActivityDeliveryInfo", b => 
+            modelBuilder.Entity("HC.WeChat.ActivityDeliveryInfos.ActivityDeliveryInfo", b =>
             {
                 b.Property<Guid>("Id").ValueGeneratedOnAdd();
                 b.Property<Guid>("ActivityFormId").IsRequired();
-                b.Property<string>("UserName").IsRequired().HasMaxLength(50);
-                b.Property<string>("Phone").IsRequired().HasMaxLength(20);
-                b.Property<string>("Address").IsRequired().HasMaxLength(500);
+                b.Property<string>("UserName").HasMaxLength(50);
+                b.Property<string>("Phone").HasMaxLength(20);
+                b.Property<string>("Address").HasMaxLength(500);
+                b.Property<int?>("Type");
+                b.Property<string>("ExpressCompany").HasMaxLength(200);
+                b.Property<string>("ExpressNo").HasMaxLength(200);
+                b.Property<string>("Remark").HasMaxLength(500);
+                b.Property<string>("DeliveryRemark").HasMaxLength(500);
+                b.Property<DateTime?>("SendTime");
+                b.Property<DateTime>("CreationTime").IsRequired();
+                b.Property<bool>("IsSend");
 
                 b.HasKey("Id");
 
@@ -1365,7 +1379,7 @@ namespace HC.WeChat.Migrations
                 b.ToTable("ActivityDeliveryInfos");
             });
 
-            modelBuilder.Entity("HC.WeChat.ActivityFormLogs.ActivityFormLog", b => 
+            modelBuilder.Entity("HC.WeChat.ActivityFormLogs.ActivityFormLog", b =>
             {
                 b.Property<Guid>("Id").ValueGeneratedOnAdd();
                 b.Property<Guid>("ActivityFormId").IsRequired();
@@ -1384,7 +1398,7 @@ namespace HC.WeChat.Migrations
                 b.ToTable("ActivityFormLogs");
             });
 
-            modelBuilder.Entity("HC.WeChat.ActivityGoodses.ActivityGoods", b => 
+            modelBuilder.Entity("HC.WeChat.ActivityGoodses.ActivityGoods", b =>
             {
                 b.Property<Guid>("Id").ValueGeneratedOnAdd();
                 b.Property<string>("Specification").IsRequired().HasMaxLength(200);
@@ -1407,7 +1421,7 @@ namespace HC.WeChat.Migrations
                 b.ToTable("ActivityGoodses");
             });
 
-            modelBuilder.Entity("HC.WeChat.Employees.Employee", b => 
+            modelBuilder.Entity("HC.WeChat.Employees.Employee", b =>
             {
                 b.Property<Guid>("Id").ValueGeneratedOnAdd();
                 b.Property<string>("Code").IsRequired().HasMaxLength(50);
@@ -1463,6 +1477,7 @@ namespace HC.WeChat.Migrations
                 b.Property<long?>("LastModifierUserId");
                 b.Property<DateTime?>("DeletionTime");
                 b.Property<long?>("DeleterUserId");
+                b.Property<string>("LicenseKey").HasMaxLength(50);
                 b.Property<string>("VerificationCode").HasMaxLength(50);
 
                 b.HasKey("Id");
@@ -1472,7 +1487,7 @@ namespace HC.WeChat.Migrations
                 b.ToTable("Retailers");
             });
 
-            modelBuilder.Entity("HC.WeChat.WeChatUsers.WeChatUser", b => 
+            modelBuilder.Entity("HC.WeChat.WeChatUsers.WeChatUser", b =>
             {
                 b.Property<Guid>("Id").ValueGeneratedOnAdd();
                 b.Property<string>("NickName").IsRequired().HasMaxLength(50);
@@ -1484,6 +1499,7 @@ namespace HC.WeChat.Migrations
                 b.Property<DateTime?>("BindTime");
                 b.Property<int?>("TenantId");
                 b.Property<DateTime?>("UnBindTime");
+                b.Property<string>("HeadImgUrl").HasMaxLength(500);
                 b.Property<string>("Phone").HasMaxLength(20);
                 b.Property<string>("MemberBarCode").HasMaxLength(30);
                 b.Property<int?>("IntegralTotal");
@@ -1536,6 +1552,261 @@ namespace HC.WeChat.Migrations
                     .WithMany("ApprovalLogs")
                     .HasForeignKey("ActivityFormId")
                     .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            //add 2018-4-5
+            modelBuilder.Entity("HC.WeChat.Advises.Advise", b =>
+            {
+                b.Property<Guid>("Id").ValueGeneratedOnAdd();
+                b.Property<string>("Title").IsRequired().HasMaxLength(500);
+                b.Property<string>("UserTypeName").IsRequired().HasMaxLength(50);
+                b.Property<string>("OpenId").HasMaxLength(50);
+                b.Property<string>("Phone").HasMaxLength(20);
+                b.Property<string>("Content").HasMaxLength(500);
+                b.Property<string>("PhotoUrl").HasMaxLength(2000);
+                b.Property<int?>("TenantId");
+                b.Property<DateTime>("CreationTime").IsRequired();
+                b.HasKey("Id");
+
+                //b.HasIndex("TargetTenantId", "TargetUserId", "ReadState");
+
+                b.ToTable("Advises");
+            });
+
+            modelBuilder.Entity("HC.WeChat.UserQuestions.UserQuestion", b =>
+            {
+                b.Property<Guid>("Id").ValueGeneratedOnAdd();
+                b.Property<string>("Name").IsRequired().HasMaxLength(500);
+                b.Property<string>("UserName").HasMaxLength(50);
+                b.Property<string>("Phone").HasMaxLength(20);
+                b.Property<string>("Address").HasMaxLength(500);
+                b.Property<string>("OpenId").HasMaxLength(50);
+                b.Property<int?>("TenantId");
+                b.Property<DateTime>("CreationTime").IsRequired();
+
+                b.HasKey("Id");
+
+                //b.HasIndex("TargetTenantId", "TargetUserId", "ReadState");
+
+                b.ToTable("UserQuestions");
+            });
+
+            modelBuilder.Entity("HC.WeChat.UserAnswers.UserAnswer", b =>
+            {
+                b.Property<Guid>("Id").ValueGeneratedOnAdd();
+                b.Property<Guid>("UserQuestionId").IsRequired();
+                b.Property<int?>("AnswerSqe");
+                b.Property<string>("Content").HasMaxLength(500);
+                b.HasKey("Id");
+
+                //b.HasIndex("TargetTenantId", "TargetUserId", "ReadState");
+
+                b.ToTable("UserAnswers");
+            });
+
+            modelBuilder.Entity("HC.WeChat.UserAnswers.UserAnswer", b =>
+            {
+                b.HasOne("HC.WeChat.UserQuestions.UserQuestion")
+                    .WithMany("UserAnswer")
+                    .HasForeignKey("UserQuestionId")
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            //2018-4-23
+            modelBuilder.Entity("HC.WeChat.Articles.Article", b => 
+            {
+                b.Property<Guid>("Id").ValueGeneratedOnAdd();
+                b.Property<string>("Title").IsRequired().HasMaxLength(200);
+                b.Property<string>("Author").IsRequired().HasMaxLength(50);
+                b.Property<int>("Type");
+                b.Property<string>("CoverPhoto").IsRequired().HasMaxLength(500);
+                b.Property<string>("Content");
+                b.Property<int?>("ReadTotal");
+                b.Property<int?>("GoodTotal");
+                b.Property<int?>("TenantId");
+                b.Property<bool>("IsDeleted").IsRequired();
+                b.Property<DateTime>("CreationTime").IsRequired();
+                b.Property<long?>("CreatorUserId");
+                b.Property<DateTime?>("LastModificationTime");
+                b.Property<long?>("LastModifierUserId");
+                b.Property<DateTime?>("DeletionTime");
+                b.Property<long?>("DeleterUserId");
+
+                b.HasKey("Id");
+
+                //b.HasIndex("TargetTenantId", "TargetUserId", "ReadState");
+
+                b.ToTable("Articles");
+            });
+
+            modelBuilder.Entity("HC.WeChat.IntegralDetails.IntegralDetail", b => 
+            {
+                b.Property<Guid>("Id").ValueGeneratedOnAdd();
+                b.Property<string>("OpenId").HasMaxLength(50);
+                b.Property<int?>("InitialIntegral");
+                b.Property<int?>("Integral");
+                b.Property<int?>("FinalIntegral");
+                b.Property<int?>("Type");
+                b.Property<string>("Desc").HasMaxLength(500);
+                b.Property<Guid?>("RefId");
+                b.Property<DateTime>("CreationTime").IsRequired();
+                b.Property<int?>("TenantId"); b.HasKey("Id");
+
+                //b.HasIndex("TargetTenantId", "TargetUserId", "ReadState");
+
+                b.ToTable("IntegralDetails");
+            });
+
+            modelBuilder.Entity("HC.WeChat.Manuscripts.Manuscript", b => 
+            {
+                b.Property<Guid>("Id").ValueGeneratedOnAdd();
+                b.Property<int?>("Type");
+                b.Property<string>("Title").IsRequired().HasMaxLength(200);
+                b.Property<string>("Content");
+                b.Property<string>("UserName").HasMaxLength(50);
+                b.Property<string>("Phone").HasMaxLength(20);
+                b.Property<string>("OpenId").HasMaxLength(50);
+                b.Property<int?>("Status");
+                b.Property<int?>("TenantId");
+                b.Property<DateTime>("CreationTime").IsRequired();
+
+                b.HasKey("Id");
+
+                //b.HasIndex("TargetTenantId", "TargetUserId", "ReadState");
+
+                b.ToTable("Manuscripts");
+            });
+
+            modelBuilder.Entity("HC.WeChat.MemberConfigs.MemberConfig", b => 
+            {
+                b.Property<Guid>("Id").ValueGeneratedOnAdd();
+                b.Property<int?>("Type");
+                b.Property<int?>("Code");
+                b.Property<string>("Value");
+                b.Property<DateTime>("CreationTime").IsRequired();
+
+                b.HasKey("Id");
+
+                //b.HasIndex("TargetTenantId", "TargetUserId", "ReadState");
+
+                b.ToTable("MemberConfigs");
+            });
+
+            modelBuilder.Entity("HC.WeChat.Products.Product", b => 
+            {
+                b.Property<Guid>("Id").ValueGeneratedOnAdd();
+                b.Property<string>("Specification").IsRequired().HasMaxLength(200);
+                b.Property<int?>("Type");
+                b.Property<decimal?>("Price");
+                b.Property<bool?>("IsRare");
+                b.Property<string>("PackageCode").HasMaxLength(50);
+                b.Property<string>("BarCode").HasMaxLength(50);
+                b.Property<int?>("SearchCount");
+                b.Property<bool?>("IsAction");
+                b.Property<DateTime>("CreationTime").IsRequired();
+                b.Property<int?>("TenantId");
+                b.Property<long?>("CreatorUserId");
+
+                b.HasKey("Id");
+
+                //b.HasIndex("TargetTenantId", "TargetUserId", "ReadState");
+
+                b.ToTable("Products");
+            });
+
+            modelBuilder.Entity("HC.WeChat.PurchaseRecords.PurchaseRecord", b => 
+            {
+                b.Property<Guid>("Id").ValueGeneratedOnAdd();
+                b.Property<Guid?>("ProductId");
+                b.Property<string>("Specification").HasMaxLength(200);
+                b.Property<int?>("Quantity");
+                b.Property<Guid?>("ShopId");
+                b.Property<string>("ShopName").HasMaxLength(200);
+                b.Property<string>("OpenId").IsRequired().HasMaxLength(50);
+                b.Property<int?>("TenantId");
+                b.Property<int?>("Integral");
+                b.Property<string>("Remark").HasMaxLength(500);
+                b.Property<DateTime>("CreationTime").IsRequired();
+
+                b.HasKey("Id");
+
+                //b.HasIndex("TargetTenantId", "TargetUserId", "ReadState");
+
+                b.ToTable("PurchaseRecords");
+            });
+
+            modelBuilder.Entity("HC.WeChat.Shops.Shop", b => 
+            {
+                b.Property<Guid>("Id").ValueGeneratedOnAdd();
+                b.Property<string>("Name").IsRequired().HasMaxLength(200);
+                b.Property<string>("Address").HasMaxLength(200);
+                b.Property<string>("Desc").HasMaxLength(500);
+                b.Property<Guid?>("RetailerId");
+                b.Property<string>("CoverPhoto").HasMaxLength(500);
+                b.Property<int?>("SaleTotal");
+                b.Property<int?>("ReadTotal");
+                b.Property<string>("Evaluation").HasMaxLength(100);
+                b.Property<decimal?>("Longitude");
+                b.Property<decimal?>("Latitude");
+                b.Property<int?>("Status");
+                b.Property<DateTime?>("AuditTime");
+                b.Property<DateTime>("CreationTime").IsRequired();
+                b.Property<int?>("TenantId");
+
+                b.HasKey("Id");
+
+                //b.HasIndex("TargetTenantId", "TargetUserId", "ReadState");
+
+                b.ToTable("Shops");
+            });
+
+            modelBuilder.Entity("HC.WeChat.ShopEvaluations.ShopEvaluation", b => 
+            {
+                b.Property<Guid>("Id").ValueGeneratedOnAdd();
+                b.Property<Guid?>("PurchaseRecordId");
+                b.Property<Guid>("ShopId").IsRequired();
+                b.Property<string>("OpenId").IsRequired().HasMaxLength(50);
+                b.Property<int?>("Evaluation");
+                b.Property<bool?>("IsCorrectQuantity");
+                b.Property<string>("Content").HasMaxLength(500);
+                b.Property<DateTime>("CreationTime").IsRequired();
+                b.Property<int?>("TenantId");
+
+                b.HasKey("Id");
+
+                //b.HasIndex("TargetTenantId", "TargetUserId", "ReadState");
+
+                b.ToTable("ShopEvaluations");
+            });
+
+            modelBuilder.Entity("HC.WeChat.ShopProducts.ShopProduct", b =>
+            {
+                b.Property<Guid>("Id").ValueGeneratedOnAdd();
+                b.Property<Guid>("ProductId").IsRequired();
+                b.Property<Guid>("ShopId").IsRequired();
+                b.Property<string>("Specification").HasMaxLength(200);
+
+                b.HasKey("Id");
+
+                //b.HasIndex("TargetTenantId", "TargetUserId", "ReadState");
+
+                b.ToTable("ShopProducts");
+            });
+
+            modelBuilder.Entity("HC.WeChat.StatisticalDetails.StatisticalDetail", b =>
+            {
+                b.Property<Guid>("Id").ValueGeneratedOnAdd();
+                b.Property<string>("OpenId").IsRequired().HasMaxLength(50);
+                b.Property<Guid>("ArticleId").IsRequired();
+                b.Property<int>("Type").IsRequired();
+                b.Property<DateTime>("CreationTime").IsRequired();
+                b.Property<int?>("TenantId");
+
+                b.HasKey("Id");
+
+                //b.HasIndex("TargetTenantId", "TargetUserId", "ReadState");
+
+                b.ToTable("StatisticalDetails");
             });
         }
     }

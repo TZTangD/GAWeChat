@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuService } from '../../../core/menu.service';
-import { META } from '../meta';
-import { EXAMPLE } from '../examples';
+//import { META } from '../meta';
+//import { EXAMPLE } from '../examples';
 
 @Component({
     selector: 'app-article',
@@ -25,19 +25,19 @@ export class ArticleComponent implements OnInit {
             this.router.navigateByUrl('/');
             return ;
         }
-        this.item = Object.assign({
+        /*this.item = Object.assign({
             name: this.menu.id,
             data: {},
             meta: {
                 title: this.menu.name,
                 subtitle: ''
             }
-        }, META.find(w => w.name === (this.menu.api || id)));
+        }, META.find(w => w.name === (this.menu.api || id)));*/
 
         // examples
-        const example = EXAMPLE[menu.example || this.menu.id];
+        /*const example = EXAMPLE[menu.example || this.menu.id];
         if (!!example) this.item.demo = example;
-        this.initHLJS();
+        this.initHLJS();*/
     }
 
     constructor(

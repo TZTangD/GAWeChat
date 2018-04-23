@@ -73,5 +73,32 @@ namespace HC.WeChat.WeChatUsers
         /// </summary>
         [StringLength(500)]
         public virtual string HeadImgUrl { get; set; }
+
+        /// <summary>
+        /// 用户绑定电话
+        /// </summary>
+        [StringLength(20)]
+        public virtual string Phone { get; set; }
+
+        /// <summary>
+        /// 会员卡条形码
+        /// </summary>
+        [StringLength(30)]
+        public virtual string MemberBarCode { get; set; }
+
+        /// <summary>
+        /// 用户总积分
+        /// </summary>
+        public virtual int? IntegralTotal { get; set; }
+
+        /// <summary>
+        /// 是否是店主 针对零售客户
+        /// </summary>
+        public virtual bool? IsShopkeeper { get; set; }
+
+        /// <summary>
+        /// 审核状态(枚举：审核通过、未审核) 非店主零售客户需审核
+        /// </summary>
+        public virtual int? Status { get; set; }
     }
 }

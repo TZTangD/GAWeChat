@@ -7,11 +7,11 @@ import { ExampleCoreModule } from '../../example/example.module';
 
 // region: components
 
-const COMPONENTS = [ ArticleComponent ];
+//const COMPONENTS = [ ArticleComponent ];
 
 const routes: Routes = [
     { path: '', redirectTo: 'button' },
-    { path: ':id', component: ArticleComponent },
+    //{ path: ':id', component: ArticleComponent },
 ];
 // endregion
 
@@ -23,7 +23,7 @@ const routes: Routes = [
         RouterModule.forChild(routes)
     ],
     declarations: [
-        ...COMPONENTS
+        //...COMPONENTS
     ]
 })
 export class ComponentsModule {

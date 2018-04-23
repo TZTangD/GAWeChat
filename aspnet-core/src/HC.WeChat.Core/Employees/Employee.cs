@@ -64,5 +64,11 @@ namespace HC.WeChat.Employees
         /// 租户ID
         /// </summary>
         public int? TenantId { get; set; }
+
+        /// <summary>
+        /// 绑定验证码
+        /// </summary>
+        [StringLength(50)]
+        public string VerificationCode { get; set; }
     }
 }
