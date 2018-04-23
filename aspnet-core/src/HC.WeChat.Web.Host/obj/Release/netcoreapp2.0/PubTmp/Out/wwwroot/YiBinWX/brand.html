@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+		<title>品牌展厅</title>
+		<link rel="stylesheet" href="static/css/base.css" />
+		<link href="static/css/swiper.3.1.2.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="static/css/base.css" />
+		<link rel="stylesheet" href="static/css/layer.css" />
+		<link rel="stylesheet" href="static/css/commons.css" />
+		<link rel="stylesheet" href="static/css/tobacco.css" />
+		<style>
+		.swiper-wrapper{padding:10px;}
+		.swiper-slide {
+		    background: #cacaca none repeat scroll 0 0;
+		    border-radius: 8px;
+		    color: #fff;
+		    font-family: "幼圆";
+		    font-size: 15px;
+		    font-weight: bold;
+		    text-align: center;
+		    /*padding: 1px 4px;*/
+		}
+		.slide-active{ background: #3cb0e4;}
+		</style>
+	</head>
+	<body style="background:#cce8ec;">
+		<!--页面整体-->
+		<div class="all_width">
+			<div class="header bg_green tc">
+				卷烟名品
+				<img src="static/img/brand/search_icon.png" class="search_icon pa search_result"/>
+			</div>
+			<!--列表-->
+			<ul class="all_width tobacco_list mt10">
+				<li onclick="javascript:window.location.href='search_shop.html'">
+					<img src="static/img/brand/brand_1.png" class="tobacco_box fl"/>
+					<div class="fl ml20 tobacco_detail">
+						<span class="tobacco_name">钻石(一品荷花)</span>
+						<!--参数-->
+						<ul class="tobacco_param">
+							<li>
+								烟型：<span>烤烟型</span>
+							</li>
+							<li>
+								包装形式：<span>条盒</span>
+							</li>
+							<li>
+								规格：<span>84mm</span>
+							</li>
+							<li>
+								零售指导价：<span>700</span>元
+							</li>
+						</ul>
+					</div>
+				</li>
+				<li class="pr">
+					<img src="static/img/brand/brand_2.png" class="tobacco_box fl"/>
+					<div class="fl ml20 tobacco_detail">
+						<span class="tobacco_name">钻石(软景泰)</span>
+						<!--参数-->
+						<ul class="tobacco_param">
+							<li>
+								烟型：<span>烤烟型</span>
+							</li>
+							<li>
+								包装形式：<span>条盒</span>
+							</li>
+							<li>
+								规格：<span>84mm</span>
+							</li>
+							<li>
+								零售指导价：<span>700</span>元
+							</li>
+						</ul>
+					</div>
+				</li>
+				<li class="pr">
+					<img src="static/img/brand/brand_3.png" class="tobacco_box fl"/>
+					<div class="fl ml20 tobacco_detail">
+						<span class="tobacco_name">娇子(软黄天子)</span>
+						<!--参数-->
+						<ul class="tobacco_param">
+							<li>
+								烟型：<span>烤烟型</span>
+							</li>
+							<li>
+								包装形式：<span>条盒</span>
+							</li>
+							<li>
+								规格：<span>84mm</span>
+							</li>
+							<li>
+								零售指导价：<span>700</span>元
+							</li>
+						</ul>
+					</div>
+				</li>
+				<li class="pr">
+					<img src="static/img/brand/brand_4.png" class="tobacco_box fl"/>
+					<div class="fl ml20 tobacco_detail">
+						<span class="tobacco_name">娇子(软黄天子)</span>
+						<!--参数-->
+						<ul class="tobacco_param">
+							<li>
+								烟型：<span>烤烟型</span>
+							</li>
+							<li>
+								包装形式：<span>条盒</span>
+							</li>
+							<li>
+								规格：<span>84mm</span>
+							</li>
+							<li>
+								零售指导价：<span>700</span>元
+							</li>
+						</ul>
+					</div>
+				</li>
+			</ul>
+			<!--品牌选择-->
+			<div class="pf brand_area">
+				<div class="triangle_up"></div>
+				<div class="swiper-container">
+				    <div class="swiper-wrapper">
+				        <div class="swiper-slide">河北中烟</div>
+				        <div class="swiper-slide">河南中烟</div>
+				        <div class="swiper-slide">云南中烟</div>
+				        <div class="swiper-slide">湖北中烟</div>
+				        <div class="swiper-slide">云南中烟</div>
+				        <div class="swiper-slide">湖南中烟</div>
+				        <div class="swiper-slide">河南中烟</div>
+				        <div class="swiper-slide">云南中烟</div>
+				        <div class="swiper-slide">云南中烟</div>
+				        <div class="swiper-slide">河北中烟</div>
+				        <div class="swiper-slide">河南中烟</div>
+				        <div class="swiper-slide">云南中烟</div>
+				    </div>
+				</div>
+			</div>
+		</div>
+		<!--搜索框-->
+		<div class="search_layer none">
+			<input type="text" class="fl layer_entry" />
+			<img class="fr search_icon" src="static/img/brand/search_icon.png" />
+		</div>
+		<script type="text/javascript" src="static/js/jquery.min.js" ></script>
+		<script type="text/javascript" src="static/js/swiper.3.1.2.min.js" ></script>
+		<script type="text/javascript" src="static/js/layer.js" ></script>
+		<script>
+			  var swiper = new Swiper('.swiper-container', {
+		        pagination: '.swiper-pagination',
+		        slidesPerView: 7,
+		        paginationClickable: true,
+		        spaceBetween: 12,
+		    });
+		     $(".swiper-wrapper>div").click(function(){
+		     	$(this).addClass("slide-active").siblings().removeClass("slide-active");
+		     });
+		     $(".search_result").click(function(){
+				layer.open({
+					  type: 1, 
+					  area:["100%",""],
+					  title:"",
+					  shade:0.8,
+					  shadeClose:true,
+					  content: $('.search_layer')
+					});
+			});
+			
+		</script>
+	</body>
+</html>

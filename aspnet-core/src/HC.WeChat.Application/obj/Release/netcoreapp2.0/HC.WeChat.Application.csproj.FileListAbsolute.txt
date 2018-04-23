@@ -1,0 +1,14 @@
+D:\mygit\HCWeChat\aspnet-core\src\HC.WeChat.Application\bin\Release\netcoreapp2.0\HC.WeChat.Application.deps.json
+D:\mygit\HCWeChat\aspnet-core\src\HC.WeChat.Application\bin\Release\netcoreapp2.0\HC.WeChat.Application.dll
+D:\mygit\HCWeChat\aspnet-core\src\HC.WeChat.Application\bin\Release\netcoreapp2.0\HC.WeChat.Application.pdb
+D:\mygit\HCWeChat\aspnet-core\src\HC.WeChat.Application\bin\Release\netcoreapp2.0\HC.WeChat.Core.dll
+D:\mygit\HCWeChat\aspnet-core\src\HC.WeChat.Application\bin\Release\netcoreapp2.0\HC.WeChat.Core.pdb
+D:\mygit\HCWeChat\aspnet-core\src\HC.WeChat.Application\obj\Release\netcoreapp2.0\HC.WeChat.Application.csprojResolveAssemblyReference.cache
+D:\mygit\HCWeChat\aspnet-core\src\HC.WeChat.Application\obj\Release\netcoreapp2.0\HC.WeChat.Application.csproj.CoreCompileInputs.cache
+D:\mygit\HCWeChat\aspnet-core\src\HC.WeChat.Application\obj\Release\netcoreapp2.0\HC.WeChat.Application.AssemblyInfoInputs.cache
+D:\mygit\HCWeChat\aspnet-core\src\HC.WeChat.Application\obj\Release\netcoreapp2.0\HC.WeChat.Application.AssemblyInfo.cs
+D:\mygit\HCWeChat\aspnet-core\src\HC.WeChat.Application\obj\Release\netcoreapp2.0\HC.WeChat.Application.csproj.CopyComplete
+D:\mygit\HCWeChat\aspnet-core\src\HC.WeChat.Application\obj\Release\netcoreapp2.0\HC.WeChat.Application.dll
+D:\mygit\HCWeChat\aspnet-core\src\HC.WeChat.Application\obj\Release\netcoreapp2.0\HC.WeChat.Application.pdb
+D:\mygit\HCWeChat\aspnet-core\src\HC.WeChat.Application\bin\Release\netcoreapp2.0\Abp.WeChat.Senparc.dll
+D:\mygit\HCWeChat\aspnet-core\src\HC.WeChat.Application\bin\Release\netcoreapp2.0\Abp.WeChat.Senparc.pdb

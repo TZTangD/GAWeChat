@@ -1,0 +1,144 @@
+*{color: #5d5c5c;}
+.all_width{width: 100%!important; height: auto; overflow: hidden;}
+.db{display: block;}
+.ov_show{overflow: visible;}
+.width_96{width: 96%;height: auto; overflow: hidden; margin: 0 auto;}
+.width_94{width: 94%;height: auto; overflow: hidden; margin: 0 auto;}
+.width_90{width: 90%;height: auto; overflow: hidden; margin: 0 auto;}
+.width_80{width: 80%;height: auto; overflow: hidden; margin: 0 auto;}
+.width_60{width: 60%;height: auto; overflow: hidden;}
+.width_42{width: 42%;height: auto; overflow: hidden;}
+.img_width{width: 100%; vertical-align: top;}
+.white_color{color: white;}
+/*背景灰*/
+.bg_gary{background: #ecf4f4;}
+/*背景白*/
+.bg_white{background: #fff;}
+/*header--黄*/
+.main_green{color:#148363;}
+.bg_green{background: #148363!important;}
+.bg_blue{background: #3cb0e6;}
+/*头部通用*/
+.header {
+    color: #fff;
+    font-size: 1.3em;
+    height: 40px;
+    line-height: 40px;
+}
+/*用户操作按钮*/
+.middel_btn {
+    border: 0 none;
+    border-radius: 3px !important;
+    color: #fff;
+    font-size: 1.05em;
+    line-height: 30px;
+    overflow: hidden;
+    width: 140px;
+}
+.cancel {
+    background: #c5c4c4 none repeat scroll 0 0;
+}
+.ok {
+    background: #50bb97 none repeat scroll 0 0;
+}
+.large_btn {
+    border: 0 none;
+    color: #fff;
+    display: block;
+    line-height: 32px;
+    margin: 0 auto;
+    width: 80%;
+}
+.border_radius{border-radius: 3px!important;}
+/*店铺星级*/
+.star{}
+.star>li {
+    float: left;
+    padding: 0;
+    width: 16px;
+}
+.star>li>img {
+    width: 100%;
+}
+/*店铺定位*/
+.location {
+    bottom: 6px;
+    padding: 0 5% 0 1%;
+    width: 94%;
+}
+.address_icon{
+    width: 26px;
+}
+.location_info {
+    color: #fff;
+}
+.location_info span {
+    color: #fff;
+    margin-left: 10px;
+}
+.location_btn {
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+    border: 1px solid #ececec;
+    color: #fff;
+    font-size: 0.85em;
+    padding: 0 3px;
+}
+/*店铺位置*/
+.fly_icon {
+    width: 50px;
+}
+/*信息列表*/
+.info_list{}
+.info_list > li {
+    border-bottom: 1px solid #c3c3c3;
+    height: auto;
+    line-height: 30px;
+    overflow: hidden;
+    width: 100%;
+}
+.info_list p {
+    color: #8b8b8b;
+    height: 30px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 80%;
+}
+.more_icon {
+    width: 30px;
+}
+
+.progressBar {
+    border: solid 2px #86A5AD;
+    background: white /*url('../img/loading.gif') no-repeat*/ 18px 35px;
+}
+
+.progressBar {
+    display: block;
+    width: 150px;
+    height: 30px;
+    top: 50%;
+    left: 50%;
+    margin-left: -74px;
+    margin-top: -14px;
+    padding: 10px 10px 10px 30px;
+    text-align: left;
+    line-height: 27px;
+    font-weight: bold;
+    position: fixed;
+    z-index: 2001;
+}
+
+.background {
+    display: block;
+    width: 100%;
+    height: 100%;
+    opacity: 0.4;
+    filter: alpha(opacity=40);
+    background: white; /*while*/
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 2000;
+    background-color: #666666;
+}   

@@ -1,0 +1,16 @@
+D:\mygit\HCWeChat\aspnet-core\src\HC.WeChat.EntityFrameworkCore\bin\Release\netcoreapp2.0\HC.WeChat.EntityFrameworkCore.dll.config
+D:\mygit\HCWeChat\aspnet-core\src\HC.WeChat.EntityFrameworkCore\bin\Release\netcoreapp2.0\HC.WeChat.EntityFrameworkCore.deps.json
+D:\mygit\HCWeChat\aspnet-core\src\HC.WeChat.EntityFrameworkCore\bin\Release\netcoreapp2.0\HC.WeChat.EntityFrameworkCore.runtimeconfig.json
+D:\mygit\HCWeChat\aspnet-core\src\HC.WeChat.EntityFrameworkCore\bin\Release\netcoreapp2.0\HC.WeChat.EntityFrameworkCore.runtimeconfig.dev.json
+D:\mygit\HCWeChat\aspnet-core\src\HC.WeChat.EntityFrameworkCore\bin\Release\netcoreapp2.0\HC.WeChat.EntityFrameworkCore.dll
+D:\mygit\HCWeChat\aspnet-core\src\HC.WeChat.EntityFrameworkCore\bin\Release\netcoreapp2.0\HC.WeChat.EntityFrameworkCore.pdb
+D:\mygit\HCWeChat\aspnet-core\src\HC.WeChat.EntityFrameworkCore\bin\Release\netcoreapp2.0\HC.WeChat.Core.dll
+D:\mygit\HCWeChat\aspnet-core\src\HC.WeChat.EntityFrameworkCore\bin\Release\netcoreapp2.0\HC.WeChat.Core.pdb
+D:\mygit\HCWeChat\aspnet-core\src\HC.WeChat.EntityFrameworkCore\obj\Release\netcoreapp2.0\HC.WeChat.EntityFrameworkCore.csprojResolveAssemblyReference.cache
+D:\mygit\HCWeChat\aspnet-core\src\HC.WeChat.EntityFrameworkCore\obj\Release\netcoreapp2.0\HC.WeChat.EntityFrameworkCore.dll.config
+D:\mygit\HCWeChat\aspnet-core\src\HC.WeChat.EntityFrameworkCore\obj\Release\netcoreapp2.0\HC.WeChat.EntityFrameworkCore.csproj.CoreCompileInputs.cache
+D:\mygit\HCWeChat\aspnet-core\src\HC.WeChat.EntityFrameworkCore\obj\Release\netcoreapp2.0\HC.WeChat.EntityFrameworkCore.AssemblyInfoInputs.cache
+D:\mygit\HCWeChat\aspnet-core\src\HC.WeChat.EntityFrameworkCore\obj\Release\netcoreapp2.0\HC.WeChat.EntityFrameworkCore.AssemblyInfo.cs
+D:\mygit\HCWeChat\aspnet-core\src\HC.WeChat.EntityFrameworkCore\obj\Release\netcoreapp2.0\HC.WeChat.EntityFrameworkCore.csproj.CopyComplete
+D:\mygit\HCWeChat\aspnet-core\src\HC.WeChat.EntityFrameworkCore\obj\Release\netcoreapp2.0\HC.WeChat.EntityFrameworkCore.dll
+D:\mygit\HCWeChat\aspnet-core\src\HC.WeChat.EntityFrameworkCore\obj\Release\netcoreapp2.0\HC.WeChat.EntityFrameworkCore.pdb
