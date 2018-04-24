@@ -36,37 +36,37 @@
                     "children": [
                         {
                             "text": "授权配置",
-                            "link": "/admin/authsetting",
+                            "link": "/wechat-manage/authsetting",
                             "translate": "wechat-configs"
                         },
                         {
                             "text": "自动回复",
-                            "link": "/admin/message",
+                            "link": "/wechat-manage/message",
                             "translate": "aut-res"
                         },
                         {
                             "text": "自定义菜单",
-                            "link": "/admin/message",
+                            "link": "/wechat-manage/customize-menu",
                             "translate": "customize-menu"
                         },
                         {
                             "text": "微信用户",
-                            "link": "/admin/wechat-user",
+                            "link": "/wechat-manage/wechat-user",
                             "translate": "wechat-user"
                         },
                         {
                             "text": "微信群发",
-                            "link": "/admin/message",
+                            "link": "/wechat-manage/wechat-mass",
                             "translate": "wechat-mass"
                         },
                         {
                             "text": "素材管理",
-                            "link": "/admin/message",
+                            "link": "/wechat-manage/material-management",
                             "translate": "material-management"
                         },
                         {
                             "text": "图片库",
-                            "link": "/admin/message",
+                            "link": "/wechat-manage/photo-warehouse",
                             "translate": "photo-warehouse"
                         }
                     ]
