@@ -29,10 +29,10 @@
             "group": true,
             "children": [
                 {
-                    "text": "微信设置",
-                    "translate": "weichat-setting",
-                    "icon": "anticon anticon-setting",
-                    "acl": "Admin",
+                    "text": "微信管理",
+                    "translate": "weichat-manager",
+                    "icon": "fa fa-wechat",
+                    "acl": "MarketingCenter",
                     "children": [
                         {
                             "text": "授权配置",
@@ -43,19 +43,31 @@
                             "text": "自动回复",
                             "link": "/admin/message",
                             "translate": "aut-res"
-                        }
-                    ]
-                },
-                {
-                    "text": "微信管理",
-                    "translate": "weichat-manager",
-                    "icon": "fa fa-wechat",
-                    "acl": "MarketingCenter",
-                    "children": [
+                        },
+                        {
+                            "text": "自定义菜单",
+                            "link": "/admin/message",
+                            "translate": "customize-menu"
+                        },
                         {
                             "text": "微信用户",
                             "link": "/admin/wechat-user",
                             "translate": "wechat-user"
+                        },
+                        {
+                            "text": "微信群发",
+                            "link": "/admin/message",
+                            "translate": "wechat-mass"
+                        },
+                        {
+                            "text": "素材管理",
+                            "link": "/admin/message",
+                            "translate": "material-management"
+                        },
+                        {
+                            "text": "图片库",
+                            "link": "/admin/message",
+                            "translate": "photo-warehouse"
                         }
                     ]
                 },
@@ -76,27 +88,16 @@
                             "reuse": false
                         },
                         {
-                            "text": "活动申请单",
+                            "text": "经验分享",
                             "link": "/admin/activity-form",
-                            "translate": "activity-form",
+                            "translate": "experience-share",
                             "reuse": false
                         },
                         {
-                            "text": "营销统计",
+                            "text": "投稿管理",
                             "link": "/admin/activity-query",
-                            "translate": "activity-query",
+                            "translate": "contribute-management",
                             "reuse": false
-                        },
-                        {
-                            "text": "邮寄查询",
-                            "link": "/admin/post-query",
-                            "translate": "post-query",
-                            "reuse": false
-                        },
-                        {
-                            "text": "问卷调查",
-                            "link": "/admin/user-question",
-                            "translate": "user-question"
                         }
                     ]
                 },
@@ -110,6 +111,30 @@
                             "link": "/admin/retail-customer",
                             "translate": "retail-client",
                             "reuse": false
+                        },
+                        {
+                            "text": "店铺管理",
+                            "link": "/admin/retail-customer",
+                            "translate": "store-management",
+                            "reuse": false
+                        },
+                        {
+                            "text": "商品管理",
+                            "link": "/admin/retail-customer",
+                            "translate": "commodity-management",
+                            "reuse": false
+                        },
+                        {
+                            "text": "档级货源",
+                            "link": "/admin/retail-customer",
+                            "translate": "source-goods-level",
+                            "reuse": false
+                        },
+                        {
+                            "text": "台账管理",
+                            "link": "/admin/retail-customer",
+                            "translate": "account-management",
+                            "reuse": false
                         }
                     ]
                 },
@@ -119,9 +144,36 @@
                     "icon": "fa fa-laptop",
                     "children": [
                         {
+                            "text": "商品查找",
+                            "link": "/admin/advise",
+                            "translate": "commodity-search"
+                        },
+                        {
                             "text": "意见反馈",
                             "link": "/admin/advise",
                             "translate": "advise"
+                        }
+                    ]
+                },
+                {
+                    "text": "会员管理",
+                    "translate": "member-management",
+                    "icon": "fa fa-laptop",
+                    "children":[
+                        {
+                            "text": "会员管理",
+                            "link": "/admin/advise",
+                            "translate": "member-management"
+                        },
+                        {
+                            "text": "积分查询",
+                            "link": "/admin/advise",
+                            "translate": "integral-search"
+                        },
+                        {
+                            "text": "会员设置",
+                            "link": "/admin/advise",
+                            "translate": "member-setting"
                         }
                     ]
                 }
@@ -134,7 +186,7 @@
             "acl": "Admin",
             "children": [
                 {
-                    "text": "权限管理",
+                    "text": "系统管理",
                     "translate": "admin",
                     "link": "/admin",
                     "icon": "fa fa-users",
@@ -150,10 +202,14 @@
                             "translate": "roles"
                         },
                         {
-                            "text": "租户",
+                            "text": "系统配置",
                             "link": "/admin/tenant",
-                            "translate": "tenants" ,
-                            "acl": "HostAdmin"
+                            "translate": "sys-config" 
+                        },
+                        {
+                            "text": "数据字典",
+                            "link": "/admin/tenant",
+                            "translate": "data-dictionary" 
                         }
                     ]
                 }
