@@ -145,12 +145,12 @@
                     "children": [
                         {
                             "text": "商品查找",
-                            "link": "/admin/advise",
+                            "link": "/consume-serve/commodity-search",
                             "translate": "commodity-search"
                         },
                         {
                             "text": "意见反馈",
-                            "link": "/admin/advise",
+                            "link": "/consume-serve/advise",
                             "translate": "advise"
                         }
                     ]

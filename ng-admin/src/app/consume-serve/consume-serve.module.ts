@@ -5,6 +5,8 @@ import { CommonModule } from "@angular/common";
 import { LayoutModule } from "../layout/layout.module";
 import { FileUploadModule } from "ng2-file-upload";
 import { SharedModule } from "@shared/shared.module";
+import { CommoditySearchComponent } from "./commodity-search/commodity-search.component";
+import { AdviseComponent } from "./advise/advise.component";
 
 @NgModule({
     imports: [
@@ -15,7 +17,8 @@ import { SharedModule } from "@shared/shared.module";
         ConsumeServeRoutingModule
     ],
     declarations: [
-
+        CommoditySearchComponent,
+        AdviseComponent,
     ],
     providers: [
         AppRouteGuard  
