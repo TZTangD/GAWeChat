@@ -162,17 +162,17 @@
                     "children":[
                         {
                             "text": "会员管理",
-                            "link": "/admin/advise",
+                            "link": "/member-manage/member-management",
                             "translate": "member-management"
                         },
                         {
                             "text": "积分查询",
-                            "link": "/admin/advise",
+                            "link": "/member-manage/integral-search",
                             "translate": "integral-search"
                         },
                         {
                             "text": "会员设置",
-                            "link": "/admin/advise",
+                            "link": "/member-manage/member-setting",
                             "translate": "member-setting"
                         }
                     ]
