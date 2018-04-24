@@ -1,5 +1,6 @@
 ﻿using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
+using HC.WeChat.WechatEnums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -25,7 +26,7 @@ namespace HC.WeChat.Products
         /// <summary>
         /// 产品类型（枚举：卷烟类、特产类）
         /// </summary>
-        public virtual int? Type { get; set; }
+        public virtual ProductTypeEnum? Type { get; set; }
 
         /// <summary>
         /// 指导零售价

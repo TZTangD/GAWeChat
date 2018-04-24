@@ -1,5 +1,6 @@
 ﻿using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
+using HC.WeChat.WechatEnums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -36,7 +37,7 @@ namespace HC.WeChat.ShopEvaluations
         /// <summary>
         /// 评价（枚举: 好=5、中=3、差=1）
         /// </summary>
-        public virtual int? Evaluation { get; set; }
+        public virtual ScoreLevelEmun? Evaluation { get; set; }
 
         /// <summary>
         /// 购买数量是否相符

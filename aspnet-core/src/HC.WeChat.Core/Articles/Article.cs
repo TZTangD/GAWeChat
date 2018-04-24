@@ -1,5 +1,6 @@
 ﻿using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
+using HC.WeChat.WechatEnums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -32,7 +33,7 @@ namespace HC.WeChat.Articles
         /// <summary>
         /// 文章类型（枚举：营销活动、经验分享）
         /// </summary>
-        public virtual int? Type { get; set; }
+        public virtual ArticleTypeEnum? Type { get; set; }
 
         /// <summary>
         /// 封面图片

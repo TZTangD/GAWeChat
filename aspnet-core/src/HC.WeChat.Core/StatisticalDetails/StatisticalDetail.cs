@@ -1,5 +1,6 @@
 ﻿using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
+using HC.WeChat.WechatEnums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -32,7 +33,7 @@ namespace HC.WeChat.StatisticalDetails
         /// 类型（枚举：阅读量、点赞）
         /// </summary>
         [Required]
-        public virtual int Type { get; set; }
+        public virtual CountTypeEnum Type { get; set; }
 
         /// <summary>
         /// 创建时间

@@ -130,4 +130,70 @@ namespace HC.WeChat.WechatEnums
         消费者 = 1,
         推荐人 = 2
     }
+    /// <summary>
+    /// 文章类型
+    /// </summary>
+    public enum ArticleTypeEnum
+    {
+        营销活动=1,
+        经验分享=2,
+    }
+    /// <summary>
+    /// 积分类型
+    /// </summary>
+    public enum IntegralTypeEnum
+    {
+        购买商品兑换=1,
+        评价商品获得=2,
+        抽奖消费=3
+    }
+    /// <summary>
+    /// 产品类型
+    /// </summary>
+    public enum ProductTypeEnum
+    {
+        卷烟类=1,
+        特产类2
+    }
+    /// <summary>
+    /// 评价等级
+    /// </summary>
+    public enum ScoreLevelEmun
+    {
+        好=5,
+        中=3,
+        差=1
+    }
+    /// <summary>
+    /// 计数类型
+    /// </summary>
+    public enum CountTypeEnum
+    {
+        阅读量=1,
+        点赞=2
+    }
+    /// <summary>
+    /// 处理状态
+    /// </summary>
+    public enum ProcessTypeEnum
+    {
+        未处理=1,
+        已处理=2
+    }
+    /// <summary>
+    /// 配置类型
+    /// </summary>
+    public enum DeployTypeEnum
+    {
+        积分配置 = 1
+    }
+    /// <summary>
+    /// 配置代码
+    /// </summary>
+    public enum DeployCodeEnum
+    {
+        商品购买=1,
+        商品评价=2,
+        店铺扫码兑换=3
+    }
 }

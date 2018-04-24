@@ -1,5 +1,6 @@
 ﻿using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
+using HC.WeChat.WechatEnums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -39,7 +40,7 @@ namespace HC.WeChat.IntegralDetails
         /// <summary>
         /// 积分类型(枚举：购买商品兑换、评价商品获得、抽奖消费)
         /// </summary>
-        public virtual int? Type { get; set; }
+        public virtual IntegralTypeEnum? Type { get; set; }
 
         /// <summary>
         /// 描述

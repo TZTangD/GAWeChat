@@ -1,5 +1,6 @@
 ﻿using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
+using HC.WeChat.WechatEnums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -18,12 +19,12 @@ namespace HC.WeChat.MemberConfigs
         /// <summary>
         /// 配置类型（枚举：积分配置）
         /// </summary>
-        public virtual int? Type { get; set; }
+        public virtual DeployTypeEnum? Type { get; set; }
 
         /// <summary>
         /// 配置代码（枚举：商品购买、商品评价、店铺扫码兑换）
         /// </summary>
-        public virtual int? Code { get; set; }
+        public virtual DeployCodeEnum? Code { get; set; }
 
         /// <summary>
         /// 配置值
