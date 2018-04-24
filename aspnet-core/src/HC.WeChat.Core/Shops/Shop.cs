@@ -1,5 +1,6 @@
 ﻿using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
+using HC.WeChat.WechatEnums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -74,7 +75,7 @@ namespace HC.WeChat.Shops
         /// <summary>
         /// 审核状态（枚举：提交申请、审核通过、审核未通过）
         /// </summary>
-        public virtual int? Status { get; set; }
+        public virtual ScoreLevelEmun? Status { get; set; }
 
         /// <summary>
         /// 审核时间

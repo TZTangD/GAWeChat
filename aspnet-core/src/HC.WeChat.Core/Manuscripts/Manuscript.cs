@@ -1,5 +1,6 @@
 ﻿using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
+using HC.WeChat.WechatEnums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -18,7 +19,7 @@ namespace HC.WeChat.Manuscripts
         /// <summary>
         /// 投稿类型（枚举：经验分享）
         /// </summary>
-        public virtual int? Type { get; set; }
+        public virtual ArticleTypeEnum? Type { get; set; }
 
         /// <summary>
         /// 投稿主题
@@ -53,7 +54,7 @@ namespace HC.WeChat.Manuscripts
         /// <summary>
         /// 处理状态（枚举：未处理、已处理）
         /// </summary>
-        public virtual int? Status { get; set; }
+        public virtual ProcessTypeEnum? Status { get; set; }
 
         /// <summary>
         /// 租户ID
