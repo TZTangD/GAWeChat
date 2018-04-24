@@ -22,6 +22,8 @@ import { UserAnswerComponent } from './marketing/user-answer/user-answer.compone
 import { AdviseComponent } from './consumer/advise/advise.component';
 import { ActivityViewComponent } from './marketing/activity-view/activity-view.component';
 import { PostInfoComponent } from './markeeting-serve/post-info/post-info.component';
+import { SysConfigComponent } from './sys-config/sys-config.component';
+import { DataDictionaryComponent } from './data-dictionary/data-dictionary.component';
 
 const routes: Routes = [
   {
@@ -49,6 +51,8 @@ const routes: Routes = [
       { path: 'advise', component: AdviseComponent, data: { translate: 'advise', permission: 'Pages' }, canActivate: [AppRouteGuard] },
       { path: 'activity-query', component: ActivityViewComponent, data: { translate: 'activity-query', permission: 'Pages' }, canActivate: [AppRouteGuard] },
       { path: 'post-query', component: PostInfoComponent, data: { translate: 'post-query', permission: 'Pages' }, canActivate: [AppRouteGuard] },
+      { path: 'sys-config', component: SysConfigComponent, data: { translate: 'sys-config', permission: 'Pages' }, canActivate: [AppRouteGuard] },
+      { path: 'data-dictionary', component: DataDictionaryComponent, data: { translate: 'data-dictionary', permission: 'Pages' }, canActivate: [AppRouteGuard] },
       
     ]
   }

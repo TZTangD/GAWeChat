@@ -203,12 +203,12 @@
                         },
                         {
                             "text": "系统配置",
-                            "link": "/admin/tenant",
+                            "link": "/admin/sys-config",
                             "translate": "sys-config" 
                         },
                         {
                             "text": "数据字典",
-                            "link": "/admin/tenant",
+                            "link": "/admin/data-dictionary",
                             "translate": "data-dictionary" 
                         }
                     ]
