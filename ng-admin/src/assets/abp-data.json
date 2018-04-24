@@ -78,24 +78,24 @@
                     "children": [
                         {
                             "text": "营销人员",
-                            "link": "/admin/employee",
+                            "link": "/marketting-serve/employee",
                             "translate": "market-user"
                         },
                         {
                             "text": "营销活动",
-                            "link": "/admin/activity-list",
+                            "link": "/marketting-serve/activity",
                             "translate": "market-active",
                             "reuse": false
                         },
                         {
                             "text": "经验分享",
-                            "link": "/admin/activity-form",
+                            "link": "/marketting-serve/experience-share",
                             "translate": "experience-share",
                             "reuse": false
                         },
                         {
                             "text": "投稿管理",
-                            "link": "/admin/activity-query",
+                            "link": "/marketting-serve/contribute-management",
                             "translate": "contribute-management",
                             "reuse": false
                         }
