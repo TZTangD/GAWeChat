@@ -18,6 +18,31 @@ const routes: Routes = [
         loadChildren: './admin/admin.module#AdminModule', //Lazy load account module
         data: { preload: true }
     },
+    {
+        path: 'consume-serve',
+        loadChildren: './consume-serve/consume-serve.module#ConsumeServeModule', //Lazy load account module
+        data: { preload: true }
+    },
+    {
+        path: 'customer-serve',
+        loadChildren: './customer-serve/customer-serve.module#CustomerServeModule', //Lazy load account module
+        data: { preload: true }
+    },
+    {
+        path: 'marketting-serve',
+        loadChildren: './marketting-serve/marketting-serve.module#MarkettingServeModule', //Lazy load account module
+        data: { preload: true }
+    },
+    {
+        path: 'member-manage',
+        loadChildren: './member-manage/member-manage.module#MemberManageModule', //Lazy load account module
+        data: { preload: true }
+    },
+    {
+        path: 'wechat-manage',
+        loadChildren: './wechat-manage/wechat-manage.module#WeChatManageModule', //Lazy load account module
+        data: { preload: true }
+    },
     { path: '**', redirectTo: 'home' }
 ];
 

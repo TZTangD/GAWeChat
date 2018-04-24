@@ -44,6 +44,8 @@ import { EditBanquetComponent } from './marketing/edit-banquet/edit-banquet.comp
 import { ActivityViewComponent } from './marketing/activity-view/activity-view.component';
 import { FileUploadModule } from 'ng2-file-upload';
 import { PostInfoComponent } from './markeeting-serve/post-info/post-info.component';
+import { SysConfigComponent } from './sys-config/sys-config.component';
+import { DataDictionaryComponent } from './data-dictionary/data-dictionary.component';
 
 @NgModule({
   imports: [
@@ -87,7 +89,9 @@ import { PostInfoComponent } from './markeeting-serve/post-info/post-info.compon
     AdviseComponent,
     EditBanquetComponent,
     ActivityViewComponent,
-    PostInfoComponent
+    PostInfoComponent,
+    SysConfigComponent,
+    DataDictionaryComponent
    ],
    providers: [ AppRouteGuard ]
 })

@@ -28,21 +28,21 @@ export class LoginComponent extends AppComponentBase implements OnInit {
       password: [null, Validators.required],
       rememberMe: [null]
     });
-    var tenancyId = Number(this.route.snapshot.paramMap.get('id'));
-    var tid = abp.multiTenancy.getTenantIdCookie();
-    console.log("tenancyId:"+tenancyId + " tid:" + tid);
+    //var tenancyId = Number(this.route.snapshot.paramMap.get('id'));
+    //var tid = abp.multiTenancy.getTenantIdCookie();
+    //console.log("tenancyId:"+tenancyId + " tid:" + tid);
     //alert(tenancyId)
     //if (tid ==  null || (tid != null && tenancyId != tid)) {
-      if(tenancyId == 1){
-        abp.multiTenancy.setTenantIdCookie(undefined);
-      } else if(tenancyId == 2){
-        abp.multiTenancy.setTenantIdCookie(2);
-      } else {
-        if (tid != 2) {
-          abp.multiTenancy.setTenantIdCookie(2);//默认宜宾
-          location.reload();
-        }
-      }
+      // if(tenancyId == 1){
+      //   abp.multiTenancy.setTenantIdCookie(undefined);
+      // } else if(tenancyId == 2){
+      //   abp.multiTenancy.setTenantIdCookie(2);
+      // } else {
+      //   if (tid != 2) {
+      //     abp.multiTenancy.setTenantIdCookie(2);//默认宜宾
+      //     location.reload();
+      //   }
+      // }
       //location.reload();
     //} 
   }
