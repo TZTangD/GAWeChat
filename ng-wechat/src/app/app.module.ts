@@ -9,7 +9,8 @@ import { AqmModule } from 'angular-qq-maps';
 
 import { SharedModule } from './shared/shared.module';
 import { LayoutModule } from './layout/layout.module';
-import { RoutesModule } from './routes/routes.module';
+//import { RoutesModule } from './routes/routes.module';
+import { WechatModule } from './wechat/wechat.module';
 import { CoreModule } from './core/core.module';
 import { AppComponent } from './app.component';
 import { JsonpModule } from '@angular/http';
@@ -22,7 +23,8 @@ import { JsonpModule } from '@angular/http';
         JsonpModule,
         CoreModule,
         SharedModule,
-        RoutesModule,
+        //RoutesModule,
+        WechatModule,
         LayoutModule,
         WeUiModule.forRoot(),
         NotifyModule.forRoot({

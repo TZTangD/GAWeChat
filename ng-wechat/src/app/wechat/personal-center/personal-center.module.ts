@@ -1,17 +1,17 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AngularSplitModule } from 'angular-split';
+import { PersonalComponent } from './personal/personal.component';
 import { SharedModule } from '../../shared/shared.module';
-import { ArticleComponent } from './article/article.component';
-import { ExampleCoreModule } from '../../example/example.module';
+import { ComponentsModule } from '../components/components.module';
 
 // region: components
 
-const COMPONENTS = [ ArticleComponent ];
+const COMPONENTS = [PersonalComponent];
 
 const routes: Routes = [
-    { path: '', redirectTo: 'button' },
-    //{ path: ':id', component: ArticleComponent },
+    { path: '', redirectTo: 'personal' },
+    { path: 'personal', component: PersonalComponent },
 ];
 // endregion
 
@@ -19,13 +19,13 @@ const routes: Routes = [
     imports: [
         SharedModule,
         AngularSplitModule,
-        ExampleCoreModule,
+        ComponentsModule,
         RouterModule.forChild(routes)
     ],
     declarations: [
         ...COMPONENTS
     ]
 })
-export class ComponentsModule {
+export class PersonalCenterModule {
 
 }
