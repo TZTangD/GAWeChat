@@ -108,31 +108,31 @@
                     "children": [
                         {
                             "text": "零售客户",
-                            "link": "/admin/retail-customer",
+                            "link": "/customer-serve/retail-customer",
                             "translate": "retail-client",
                             "reuse": false
                         },
                         {
                             "text": "店铺管理",
-                            "link": "/admin/retail-customer",
+                            "link": "/customer-serve/store-management",
                             "translate": "store-management",
                             "reuse": false
                         },
                         {
                             "text": "商品管理",
-                            "link": "/admin/retail-customer",
+                            "link": "/customer-serve/commodity-management",
                             "translate": "commodity-management",
                             "reuse": false
                         },
                         {
                             "text": "档级货源",
-                            "link": "/admin/retail-customer",
+                            "link": "/customer-serve/source-goods-level",
                             "translate": "source-goods-level",
                             "reuse": false
                         },
                         {
                             "text": "台账管理",
-                            "link": "/admin/retail-customer",
+                            "link": "/customer-serve/account-management",
                             "translate": "account-management",
                             "reuse": false
                         }
