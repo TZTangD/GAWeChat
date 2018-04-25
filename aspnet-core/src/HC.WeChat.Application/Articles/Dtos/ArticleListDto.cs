@@ -18,5 +18,6 @@ namespace HC.WeChat.Articles.Dtos
         public int? GoodTotal { get; set; }
         public int? TenantId { get; set; }
         public ArticleTypeEnum? Type { get; set; }
+        public virtual ArticlePushStatusEnum? PushStatus { get; set; }
     }
 }

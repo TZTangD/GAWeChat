@@ -62,6 +62,9 @@ namespace HC.WeChat.Articles
         /// </summary>
         public virtual int? TenantId { get; set; }
 
-        
+        /// <summary>
+        /// 发布状态（枚举：已发布、草稿）
+        /// </summary>
+        public virtual ArticlePushStatusEnum? PushStatus { get; set; }
     }
 }

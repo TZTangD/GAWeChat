@@ -158,7 +158,7 @@
                 {
                     "text": "会员管理",
                     "translate": "member-management",
-                    "icon": "fa fa-laptop",
+                    "icon": "anticon anticon-user",
                     "children":[
                         {
                             "text": "会员管理",
