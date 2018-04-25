@@ -4,7 +4,6 @@ import { AppComponentBase } from '@shared/app-component-base';
 import { FormGroup, FormBuilder, Validators, FormControl, AsyncValidatorFn, AbstractControl } from '@angular/forms';
 
 import { Observable } from 'rxjs/Observable';
-import { Employee } from '@shared/service-proxies/entity/employee';
 
 //import * as _ from "lodash";
 

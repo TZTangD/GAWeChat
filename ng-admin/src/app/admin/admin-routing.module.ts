@@ -3,34 +3,21 @@ import { Routes, RouterModule } from '@angular/router';
 
 // layout
 import { LayoutDefaultComponent } from '../layout/default/default.component';
-import { UsersComponent } from './users/users.component';
-import { RolesComponent } from './roles/roles.component';
-import { AppRouteGuard } from '@shared/auth/auth-route-guard';
-import { TenantComponent } from './tenant/tenant.component';
-import { AuthSettingComponent } from './weichat-setting/auth-setting/auth-setting.component';
-import { MessagesComponent } from './weichat-setting/messages/messages.component';
-import { ActivityFormComponent } from './marketing/activity-form/activity-form.component';
-import { EmployeesComponent } from './markeeting-serve/employees/employees.component';
-import { ActivityComponent } from './markeeting-serve/activity/activity.component';
-import { ActivityFormDetailComponent } from './marketing/activity-form-detail/activity-form-detail.component';
-import { ActivityListComponent } from './markeeting-serve/activity/activity-list.component';
-import { RetailCustomerComponent } from './customer-service/retail-customer/retail-customer.component';
-import { WechatUserComponent } from './wechat-manager/wechat-user/wechat-user.component';
-import { RetailCustomerDetailComponent } from './customer-service/retail-customer-detail/retail-customer-detail.component';
-import { UserQuestionComponent } from './marketing/user-question/user-question.component';
-import { UserAnswerComponent } from './marketing/user-answer/user-answer.component';
-import { AdviseComponent } from './consumer/advise/advise.component';
-import { ActivityViewComponent } from './marketing/activity-view/activity-view.component';
-import { PostInfoComponent } from './markeeting-serve/post-info/post-info.component';
-import { SysConfigComponent } from './sys-config/sys-config.component';
-import { DataDictionaryComponent } from './data-dictionary/data-dictionary.component';
 
 const routes: Routes = [
   {
     path: '',
     component: LayoutDefaultComponent,
     children: [
-      { path: '', redirectTo: 'users', pathMatch: 'full' },
+      { path: '', redirectTo: 'consumer', pathMatch: 'full' },
+      { path: 'consumer', loadChildren: './consumer/consumer.module#ConsumerModule' },
+      { path: 'customer', loadChildren: './customer/customer.module#CustomerModule' },
+      { path: 'marketting', loadChildren: './marketting/marketting.module#MarkettingModule' },
+      { path: 'member', loadChildren: './member/member.module#MemberModule' },
+      { path: 'wechat', loadChildren: './wechat/wechat.module#WeChatModule' },
+      { path: 'system', loadChildren: './system/system.module#SystemModule' },
+      
+      /*{ path: '', redirectTo: 'users', pathMatch: 'full' },
       { path: 'users', component: UsersComponent, data: { translate: 'users', permission: 'Pages.Users' }, canActivate: [AppRouteGuard] },
       { path: 'roles', component: RolesComponent, data: { translate: 'roles', permission: 'Pages.Roles' }, canActivate: [AppRouteGuard] },
       { path: 'tenant', component: TenantComponent, data: { translate: 'tenant', permission: 'Pages.Tenants' }, canActivate: [AppRouteGuard] },
@@ -52,7 +39,7 @@ const routes: Routes = [
       { path: 'activity-query', component: ActivityViewComponent, data: { translate: 'activity-query', permission: 'Pages' }, canActivate: [AppRouteGuard] },
       { path: 'post-query', component: PostInfoComponent, data: { translate: 'post-query', permission: 'Pages' }, canActivate: [AppRouteGuard] },
       { path: 'sys-config', component: SysConfigComponent, data: { translate: 'sys-config', permission: 'Pages' }, canActivate: [AppRouteGuard] },
-      { path: 'data-dictionary', component: DataDictionaryComponent, data: { translate: 'data-dictionary', permission: 'Pages' }, canActivate: [AppRouteGuard] },
+      { path: 'data-dictionary', component: DataDictionaryComponent, data: { translate: 'data-dictionary', permission: 'Pages' }, canActivate: [AppRouteGuard] },*/
       
     ]
   }

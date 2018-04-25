@@ -1,16 +1,17 @@
-import { Component, Injector, OnInit, ViewChild } from '@angular/core';
-import { NzMessageService } from 'ng-zorro-antd';
-import { Advise, Parameter } from '@shared/service-proxies/entity';
-import { AdviseService, PagedResultDtoOfAdvise } from '@shared/service-proxies/consumer-service';
-
+import { Component, OnInit, Injector } from '@angular/core';
 import { AppComponentBase } from '@shared/app-component-base';
+import { Parameter } from '@shared/service-proxies/entity';
+import { NzMessageService } from 'ng-zorro-antd';
+import { AdviseService, PagedResultDtoOfAdvise } from '@shared/service-proxies/consumer-service';
 import { Router } from '@angular/router';
+import { Advise } from '@shared/entity/consumer';
 
 @Component({
-    selector: 'app-page-advise',
-    templateUrl: './advise.component.html'
+    moduleId: module.id,
+    selector: 'advise',
+    templateUrl: 'advise.component.html',
 })
-export class AdviseComponent extends AppComponentBase implements OnInit {
+export class AdviseComponent extends AppComponentBase implements OnInit{
     data: Advise[] = [];
     loading = false;
     parameters: any = { beginDate: null, endDate: null };

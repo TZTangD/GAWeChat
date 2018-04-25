@@ -8,11 +8,11 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/finally';
 
 
-import { Employee, CreateEmployee } from "@shared/service-proxies/entity/employee";
 import { Observable } from 'rxjs/Observable';
 import { Injectable, Inject, Optional, InjectionToken } from '@angular/core';
 import { Http, Headers, ResponseContentType, Response } from '@angular/http';
 import { API_BASE_URL, SwaggerException } from '@shared/service-proxies/service-proxies';
+import { Employee } from '@shared/entity/marketting';
 // import * as moment from 'moment';
 
 

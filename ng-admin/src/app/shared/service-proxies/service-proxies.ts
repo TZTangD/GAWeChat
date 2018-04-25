@@ -4474,10 +4474,8 @@ export interface IPagedResultDtoOfActivity {
 }
 //#endregion
 import 'rxjs/add/operator/finally';
-import { AuthSetting } from '@shared/service-proxies/entity/auth-setting';
-import { Messagess } from '@shared/service-proxies/entity/messages';
-import { Subscribess } from '@shared/service-proxies/entity/subscribe';
-import { Employee } from '@shared/service-proxies/entity/employee';
 import { Activity } from '@shared/service-proxies/entity/acitivity';
 import { Parameter } from '@shared/service-proxies/entity';
+import { AuthSetting, Subscribess, Messagess } from '@shared/entity/wechat';
+import { Employee } from '@shared/entity/marketting';
 

@@ -194,4 +194,12 @@ namespace HC.WeChat.WechatEnums
         商品评价=2,
         店铺扫码兑换=3
     }
+    /// <summary>
+    /// 文章发布状态
+    /// </summary>
+    public enum ArticlePushStatusEnum
+    {
+        已发布=1,
+        草稿=2
+    }
 }
