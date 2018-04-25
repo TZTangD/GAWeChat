@@ -29,16 +29,16 @@ namespace HC.WeChat.Web.Host.Controllers
         {
             get
             {
-                if (HttpContext.Session.GetString("UserOpenId") == null)
+                if (HttpContext.Session.GetString("GAUserOpenId") == null)
                 {
                     return string.Empty;
                 }
-                return HttpContext.Session.GetString("UserOpenId");
+                return HttpContext.Session.GetString("GAUserOpenId");
             }
             set
             {
                 value = value ?? string.Empty;
-                HttpContext.Session.SetString("UserOpenId", value);
+                HttpContext.Session.SetString("GAUserOpenId", value);
             }
         }
 
@@ -64,9 +64,62 @@ namespace HC.WeChat.Web.Host.Controllers
             _appConfiguration = env.GetAppConfiguration();
         }
 
+        private void SetUserOpenId(string code)
+        {
+            if (string.IsNullOrEmpty(code))
+            {
+                return;
+            }
+            //如果userId为null 则需要通过code重新获取
+            if (string.IsNullOrEmpty(UserOpenId))
+            {
+                try
+                {
+                    var oauth = _weChatOAuthAppService.GetAccessTokenAsync(code).Result;
+                    UserOpenId = oauth.openid;
+                }
+                catch (Exception ex)
+                {
+                    Logger.ErrorFormat("GetAccessTokenAsync Exception:{0}", ex.Message);
+                }
+                //UserOpenId = code;
+            }
+        }
+
         public IActionResult Index()
         {
             return View();
         }
+
+        public IActionResult Authorization(GAAuthorizationPageEnum page)
+        {
+            var host = _appConfiguration["App:ServerRootAddress"];
+            switch (page)
+            {
+                case GAAuthorizationPageEnum.PersonalCenter:
+                    {
+                        var url = host + "/GAWX/PersonalCenter";
+                        ViewBag.PageUrl = _weChatOAuthAppService.GetAuthorizeUrl(url, "123", Senparc.Weixin.MP.OAuthScope.snsapi_base);
+                    }
+                    break;
+                default:
+                    break;
+            }
+            return View();
+        }
+
+        public IActionResult PersonalCenter(string code, string state)
+        {
+            //存储openId 避免重复提交
+            //SetUserOpenId(code);
+            //var tenantId = GetTenantId();
+
+            return Redirect("/gawechat/index.html#/center/personal?openId=1122&tenantId=3");
+        }
+    }
+
+    public enum GAAuthorizationPageEnum
+    {
+        PersonalCenter = 1
     }
 }
