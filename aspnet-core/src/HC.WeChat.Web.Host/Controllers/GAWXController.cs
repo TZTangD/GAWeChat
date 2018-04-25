@@ -94,16 +94,23 @@ namespace HC.WeChat.Web.Host.Controllers
         public IActionResult Authorization(GAAuthorizationPageEnum page)
         {
             var host = _appConfiguration["App:ServerRootAddress"];
+            var tenantId = GetTenantId();
             switch (page)
             {
                 case GAAuthorizationPageEnum.PersonalCenter:
                     {
+                        if (!string.IsNullOrEmpty(UserOpenId))//如果已获取当前openId 直接跳转到个人中心
+                        {
+                            return Redirect(string.Format("/gawechat/index.html#/center/personal/{0}/{1}", UserOpenId, tenantId ?? 0));
+                        }
                         var url = host + "/GAWX/PersonalCenter";
                         ViewBag.PageUrl = _weChatOAuthAppService.GetAuthorizeUrl(url, "123", Senparc.Weixin.MP.OAuthScope.snsapi_base);
                     }
                     break;
                 default:
-                    break;
+                    {
+                        return Redirect("/gawechat/index.html");
+                    }
             }
             return View();
         }
@@ -111,10 +118,11 @@ namespace HC.WeChat.Web.Host.Controllers
         public IActionResult PersonalCenter(string code, string state)
         {
             //存储openId 避免重复提交
-            //SetUserOpenId(code);
-            //var tenantId = GetTenantId();
+            SetUserOpenId(code);
+            var tenantId = GetTenantId();
+            //UserOpenId = "9A7C8776-A623-473F-AF29-10D3E79A2FAE";
 
-            return Redirect("/gawechat/index.html#/center/personal?openId=1122&tenantId=3");
+            return Redirect(string.Format("/gawechat/index.html#/center/personal/{0}/{1}", UserOpenId, tenantId ?? 0));
         }
     }
 

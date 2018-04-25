@@ -56,7 +56,6 @@ namespace HC.WeChat.ActivityForms
         private readonly IRepository<Retailer, Guid> _retailerRepository;
         private readonly IRepository<WeChatUser, Guid> _wechatuserRepository;
         private readonly IHostingEnvironment _hostingEnvironment;
-        private readonly IConfigurationRoot _appConfiguration;
 
         /// <summary>
         /// 构造函数
@@ -310,7 +309,7 @@ namespace HC.WeChat.ActivityForms
                 return new APIResultDto() { Code = 701, Msg = "当前用户无效" };
             }
 
-            if (user.UserType != UserTypeEnum.零售客户 && user.UserType != UserTypeEnum.客户经理)
+            if (user.UserType != UserTypeEnum.零售客户 && user.UserType != UserTypeEnum.内部员工)
             {
                 return new APIResultDto() { Code = 702, Msg = "当前用户类型不支持" };
             }
@@ -342,7 +341,7 @@ namespace HC.WeChat.ActivityForms
                     form.ManagerId = retailer.EmployeeId;
                     form.Status = FormStatusEnum.提交申请;
                 }
-                else if (user.UserType == UserTypeEnum.客户经理)
+                else if (user.UserType == UserTypeEnum.内部员工)
                 {
                     //单数限制
                     var mcount = _activityformRepository.GetAll()
@@ -440,12 +439,9 @@ namespace HC.WeChat.ActivityForms
             var roles = await UserManager.GetRolesAsync(user);
             if (roles.Contains("CustomerManager"))
             {
-                log.UserType = UserTypeEnum.客户经理;
+                log.UserType = UserTypeEnum.内部员工;
             }
-            else
-            {
-                log.UserType = UserTypeEnum.营销中心;
-            }
+           
 
             //log.UserType = user.EmployeeId.HasValue ? UserTypeEnum.客户经理 : UserTypeEnum.营销中心;
 
@@ -561,7 +557,7 @@ namespace HC.WeChat.ActivityForms
             using (CurrentUnitOfWork.SetTenantId(user.TenantId))
             {
                 var query = _activityformRepository.GetAll()
-                .WhereIf(user.UserType == UserTypeEnum.客户经理, a => a.ManagerId == user.UserId)
+                .WhereIf(user.UserType == UserTypeEnum.内部员工, a => a.ManagerId == user.UserId)
                 .WhereIf(user.UserType == UserTypeEnum.零售客户, a => a.CreationId == user.UserId)
                 .WhereIf(check, a => a.Status == FormStatusEnum.营销中心已审核)
                 .WhereIf(!check, a => a.Status == FormStatusEnum.初审通过 || a.Status == FormStatusEnum.提交申请 || a.Status == FormStatusEnum.资料回传已审核)
@@ -654,7 +650,7 @@ namespace HC.WeChat.ActivityForms
                             countDto.CompletedCount = await _activityformRepository.GetAll().Where(a => a.CreationId == user.UserId && a.Status == FormStatusEnum.营销中心已审核).CountAsync();
                         }
                         break;
-                    case UserTypeEnum.客户经理:
+                    case UserTypeEnum.内部员工:
                         {
                             countDto.OutstandingCount = await _activityformRepository.GetAll()
                                                             .Where(a => a.ManagerId == user.UserId)

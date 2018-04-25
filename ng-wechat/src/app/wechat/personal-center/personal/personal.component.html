@@ -1,12 +1,12 @@
 <Page [ngClass]="'badge'" [spacing]="false" [ftBottom]="true" [showTitle]="false" [showBindStaff]="true" >
-    <div class="weui-cells">
+    <div class="weui-cells" *ngIf="user" >
         <div class="weui-cell">
             <div class="weui-cell__hd" style="position: relative;margin-right: 10px;">
-                <img src="./assets/images/pic_160.png" style="width: 50px;display: block">
+                <img src="{{user.headImgUrl}}" style="width: 50px;display: block">
             </div>
             <div class="weui-cell__bd">
-                <p>Donald</p>
-                <p style="font-size: 13px; color: #888888;">零售客户</p>
+                <p>{{user.userName}}</p>
+                <p style="font-size: 13px; color: #888888;">{{user.userTypeName}}</p>
             </div>
             <div class="weui-cell__ft" ><img alt="" src="./assets/images/icon_nav_layout.png" style="height: 25px; margin-right: 18px;"></div>
         </div>
@@ -15,7 +15,7 @@
                 <span style="vertical-align: middle; font-size: 13px;">我的积分</span>
             </div>
             <div class="weui-cell__ft">
-                <span class="weui-badge" style="margin-left: 5px; background-color:goldenrod;">188</span>
+                <span class="weui-badge" style="margin-left: 5px; background-color:goldenrod;">{{user.integralTotal}}</span>
             </div>
         </div>
     </div>

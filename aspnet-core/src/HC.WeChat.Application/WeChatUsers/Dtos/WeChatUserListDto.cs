@@ -38,5 +38,15 @@ namespace HC.WeChat.WeChatUsers.Dtos
                 return BindStatus.ToString();
             }
         }
+
+        public string Phone { get; set; }
+
+        public string MemberBarCode { get; set; }
+
+        public int? IntegralTotal { get; set; }
+
+        public bool? IsShopkeeper { get; set; }
+
+        public int? Status { get; set; }
     }
 }

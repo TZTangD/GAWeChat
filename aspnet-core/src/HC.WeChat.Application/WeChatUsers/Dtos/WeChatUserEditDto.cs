@@ -61,6 +61,31 @@ namespace HC.WeChat.WeChatUsers.Dtos
 
         [StringLength(500)]
         public string HeadImgUrl { get; set; }
+
+        /// <summary>
+        /// 用户绑定电话
+        /// </summary>
+        public string Phone { get; set; }
+
+        /// <summary>
+        /// 会员卡条形码
+        /// </summary>
+        public string MemberBarCode { get; set; }
+
+        /// <summary>
+        /// 用户总积分
+        /// </summary>
+        public int? IntegralTotal { get; set; }
+
+        /// <summary>
+        /// 是否是店主 针对零售客户
+        /// </summary>
+        public bool? IsShopkeeper { get; set; }
+
+        /// <summary>
+        /// 审核状态(枚举：审核通过、未审核) 非店主零售客户需审核
+        /// </summary>
+        public int? Status { get; set; }
     }
 
     [AutoMapTo(typeof(WeChatUser))]
