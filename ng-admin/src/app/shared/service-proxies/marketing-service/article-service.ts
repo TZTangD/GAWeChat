@@ -11,7 +11,7 @@ import { Inject, Optional, Injectable, InjectionToken } from "@angular/core";
 import { Observable } from "rxjs/Observable";
 import { Http, Headers, ResponseContentType, Response } from "@angular/http";
 import { Parameter } from '@shared/service-proxies/entity';
-import { Article } from '@shared/service-proxies/entity/article';
+import { Article } from '@shared/entity/marketting';
 
 function throwException(message: string, status: number, response: string, headers: { [key: string]: any; }, result?: any): Observable<any> {
     if (result !== null && result !== undefined)

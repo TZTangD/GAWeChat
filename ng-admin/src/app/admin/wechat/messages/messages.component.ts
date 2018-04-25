@@ -1,11 +1,12 @@
 import { Component, OnInit, ViewChild, Injector } from '@angular/core';
 import { AppComponentBase } from '@shared/app-component-base';
-import { Messagess, Subscribess } from '@shared/service-proxies/entity';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { SubscribeServiceProxy, MessageServiceProxy, PagedResultDtoOfMessage } from '@shared/service-proxies/service-proxies';
 import { NzModalService } from 'ng-zorro-antd';
 import { CreateMessageComponent } from './create-message/create-message.component';
 import { EditMessageComponent } from './edit-message/edit-message.component';
+import { Subscribess } from '@shared/entity/wechat';
+import { Messagess } from '@shared/entity/wechat/messages';
 
 @Component({
     moduleId: module.id,

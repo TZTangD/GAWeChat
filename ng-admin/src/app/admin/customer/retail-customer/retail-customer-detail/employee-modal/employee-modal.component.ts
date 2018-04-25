@@ -1,7 +1,8 @@
 import { Component, Output, EventEmitter, OnInit } from '@angular/core';
-import { Employee, Parameter } from '@shared/service-proxies/entity';
+import { Parameter } from '@shared/service-proxies/entity';
 import { EmployeeServiceProxy } from '@shared/service-proxies/marketing-service';
 import { EmployeesServiceProxy, PagedResultDtoOfEmployee } from '@shared/service-proxies/service-proxies';
+import { Employee } from '@shared/entity/marketting';
 
 @Component({
     moduleId: module.id,

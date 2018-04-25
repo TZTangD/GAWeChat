@@ -1,9 +1,9 @@
 import { Component, OnInit, Output, EventEmitter, Injector } from '@angular/core';
 import { AppComponentBase } from '@shared/app-component-base';
-import { Employee } from '@shared/service-proxies/entity';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { EmployeeServiceProxy } from '@shared/service-proxies/marketing-service';
 import { NzModalService } from 'ng-zorro-antd';
+import { Employee } from '@shared/entity/marketting';
 
 @Component({
     moduleId: module.id,

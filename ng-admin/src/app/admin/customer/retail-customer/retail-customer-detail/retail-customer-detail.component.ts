@@ -1,11 +1,12 @@
 import { Component, OnInit, ViewChild, Injector } from '@angular/core';
 import { AppComponentBase } from '@shared/app-component-base';
-import { RetailCustomer, Employee } from '@shared/service-proxies/entity';
+import { RetailCustomer} from '@shared/service-proxies/entity';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { RetailCustomerServiceProxy } from '@shared/service-proxies/customer-service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzModalService } from 'ng-zorro-antd';
 import { EmployeeModalComponent } from './employee-modal/employee-modal.component';
+import { Employee } from '@shared/entity/marketting';
 
 @Component({
     moduleId: module.id,

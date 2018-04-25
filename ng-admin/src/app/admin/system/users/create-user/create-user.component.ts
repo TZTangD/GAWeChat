@@ -6,7 +6,7 @@ import { FormGroup, FormBuilder, Validators, FormControl, AsyncValidatorFn, Abst
 
 import { Observable } from 'rxjs/Observable';
 import { EmployeeModalComponent } from '../employee-modal/employee-modal.component';
-import { Employee } from '@shared/service-proxies/entity/employee';
+import { Employee } from '@shared/entity/marketting';
 
 //import * as _ from "lodash";
 

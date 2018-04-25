@@ -1,9 +1,9 @@
 import { Component, OnInit, Injector } from '@angular/core';
-import { WechatUser } from '@shared/service-proxies/entity/wechat-user';
 import { AppComponentBase } from '@shared/app-component-base';
 import { NzModalService } from 'ng-zorro-antd';
 import { Parameter } from '@shared/service-proxies/entity';
 import { WechatUserServiceProxy, PagedResultDtoOfWeChatUser } from '@shared/service-proxies/wechat-service';
+import { WechatUser } from '@shared/entity/wechat';
 
 @Component({
     moduleId: module.id,

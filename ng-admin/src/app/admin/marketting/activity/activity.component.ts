@@ -1,8 +1,8 @@
 import { Component, OnInit, Injector } from '@angular/core';
 import { AppComponentBase } from '@shared/app-component-base';
-import { Article } from '@shared/service-proxies/entity/article';
 import { ArticleServiceProxy, PagedResultDtoOfArticle } from '@shared/service-proxies/marketing-service';
 import { Parameter } from '@shared/service-proxies/entity';
+import { Article } from '@shared/entity/marketting';
 
 @Component({
     moduleId: module.id,

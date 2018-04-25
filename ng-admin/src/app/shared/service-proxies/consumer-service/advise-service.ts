@@ -6,12 +6,13 @@ import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/catch';
 
-import { Advise, Parameter, ApiResult } from "@shared/service-proxies/entity";
+import { Parameter, ApiResult } from "@shared/service-proxies/entity";
 import { Observable } from 'rxjs/Observable';
 import { Injectable, Inject, Optional, InjectionToken } from '@angular/core';
 import { Http, Headers, ResponseContentType, Response } from '@angular/http';
 // import * as moment from 'moment';
 import { API_BASE_URL, SwaggerException } from '@shared/service-proxies/service-proxies';
+import { Advise } from '@shared/entity/consumer';
 
 function throwException(message: string, status: number, response: string, headers: { [key: string]: any; }, result?: any): Observable<any> {
     if(result !== null && result !== undefined)

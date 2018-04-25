@@ -1,9 +1,10 @@
 import { Component, OnInit, Injector } from '@angular/core';
 import { AppComponentBase } from '@shared/app-component-base';
-import { Advise, Parameter } from '@shared/service-proxies/entity';
+import { Parameter } from '@shared/service-proxies/entity';
 import { NzMessageService } from 'ng-zorro-antd';
 import { AdviseService, PagedResultDtoOfAdvise } from '@shared/service-proxies/consumer-service';
 import { Router } from '@angular/router';
+import { Advise } from '@shared/entity/consumer';
 
 @Component({
     moduleId: module.id,

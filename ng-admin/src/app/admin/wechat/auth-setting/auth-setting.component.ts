@@ -2,8 +2,8 @@ import { Component, OnInit, Injector } from '@angular/core';
 import { AppComponentBase } from '@shared/app-component-base';
 import { AuthSettingServiceProxy } from '@shared/service-proxies/service-proxies';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthSetting } from '@shared/service-proxies/entity';
 import { NzModalService } from 'ng-zorro-antd';
+import { AuthSetting } from '@shared/entity/wechat';
 
 @Component({
     moduleId: module.id,

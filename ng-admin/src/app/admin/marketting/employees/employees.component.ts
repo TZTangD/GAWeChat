@@ -1,10 +1,11 @@
 import { Component, OnInit, ViewChild, Injector } from '@angular/core';
 import { AppComponentBase } from '@shared/app-component-base';
-import { Employee, Parameter } from '@shared/service-proxies/entity';
+import { Parameter } from '@shared/service-proxies/entity';
 import { EmployeesServiceProxy, PagedResultDtoOfEmployee } from '@shared/service-proxies/service-proxies';
 import { NzModalService } from 'ng-zorro-antd';
 import { EditEmployeeComponent } from './edit-employee/edit-employee.component';
 import { CreateEmployeeComponent } from './create-employee/create-employee.component';
+import { Employee } from '@shared/entity/marketting';
 
 @Component({
     moduleId: module.id,

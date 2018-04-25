@@ -1,9 +1,9 @@
 import { Component, OnInit, Injector, Output, EventEmitter } from '@angular/core';
 import { AppComponentBase } from '@shared/app-component-base';
 import { MessageServiceProxy } from '@shared/service-proxies/service-proxies';
-import { Messagess } from '@shared/service-proxies/entity/messages';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Message } from '@angular/compiler/src/i18n/i18n_ast';
+import { Messagess } from '@shared/entity/wechat/messages';
 
 @Component({
     moduleId: module.id,

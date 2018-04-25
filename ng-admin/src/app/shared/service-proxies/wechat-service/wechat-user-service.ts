@@ -13,8 +13,8 @@ import { Injectable, Inject, Optional, InjectionToken } from '@angular/core';
 import { Http, Headers, ResponseContentType, Response } from '@angular/http';
 import { Activity } from '@shared/service-proxies/entity/acitivity';
 import { API_BASE_URL, SwaggerException } from '@shared/service-proxies/service-proxies';
-import { WechatUser } from '@shared/service-proxies/entity/wechat-user';
 import { Parameter } from '@shared/service-proxies/entity';
+import { WechatUser } from '@shared/entity/wechat';
 // import * as moment from 'moment';
 
 
