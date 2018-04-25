@@ -1,8 +1,8 @@
 import { Component, OnInit, Injector } from '@angular/core';
-import { AppComponentBase } from '@shared/app-component-base';
-import { Parameter } from '@shared/service-proxies/entity';
 import { WechatUser } from '@shared/service-proxies/entity/wechat-user';
+import { AppComponentBase } from '@shared/app-component-base';
 import { NzModalService } from 'ng-zorro-antd';
+import { Parameter } from '@shared/service-proxies/entity';
 import { WechatUserServiceProxy, PagedResultDtoOfWeChatUser } from '@shared/service-proxies/wechat-service';
 
 @Component({
@@ -10,7 +10,7 @@ import { WechatUserServiceProxy, PagedResultDtoOfWeChatUser } from '@shared/serv
     selector: 'wechat-user',
     templateUrl: 'wechat-user.component.html',
 })
-export class WechatUserComponent extends AppComponentBase implements OnInit {
+export class WechatUserComponent extends AppComponentBase implements OnInit{
     search: any = { name: '', UserType: null };
     loading = false;
     weChatUsers: WechatUser[] = [];
