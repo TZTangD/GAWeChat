@@ -5,6 +5,7 @@ using Abp.Authorization;
 using Abp.AutoMapper;
 using Abp.Domain.Repositories;
 using Abp.Linq.Extensions;
+using System.Linq;
 
 using System.Linq.Dynamic.Core;
 using Microsoft.EntityFrameworkCore;
@@ -13,13 +14,16 @@ using HC.WeChat.Articles.Dtos;
 using HC.WeChat.Articles.DomainServices;
 using HC.WeChat.Articles;
 using System;
+using HC.WeChat.WechatEnums;
+using HC.WeChat.Authorization;
 
 namespace HC.WeChat.Articles
 {
     /// <summary>
     /// Article应用层服务的接口实现方法
     /// </summary>
-    [AbpAuthorize(ArticleAppPermissions.Article)]
+    //[AbpAuthorize(ArticleAppPermissions.Article)]
+    [AbpAuthorize(AppPermissions.Pages)]
     public class ArticleAppService : WeChatAppServiceBase, IArticleAppService
     {
         ////BCC/ BEGIN CUSTOM CODE SECTION
@@ -39,18 +43,23 @@ namespace HC.WeChat.Articles
         }
 
         /// <summary>
-        /// 获取Article的分页列表信息
+        /// 获取Article的分页列表信息（营销活动 ）
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
         public async Task<PagedResultDto<ArticleListDto>> GetPagedArticles(GetArticlesInput input)
         {
 
-            var query = _articleRepository.GetAll();
+            var query = _articleRepository.GetAll()
+                .Where(a => a.Type == ArticleTypeEnum.营销活动)
+                .WhereIf(!string.IsNullOrEmpty(input.Name),a=>a.Title.Contains(input.Name))
+                .WhereIf(!string.IsNullOrEmpty(input.Author),a=>a.Author.Contains(input.Author))
+                .WhereIf(input.Status.HasValue,a=>a.PushStatus==input.Status);
             //TODO:根据传入的参数添加过滤条件
             var articleCount = await query.CountAsync();
 
             var articles = await query
+                .OrderByDescending(a=>a.PushTime)
                 .OrderBy(input.Sorting)
                 .PageBy(input)
                 .ToListAsync();
@@ -134,7 +143,7 @@ namespace HC.WeChat.Articles
         /// <summary>
         /// 新增Article
         /// </summary>
-        [AbpAuthorize(ArticleAppPermissions.Article_CreateArticle)]
+        //[AbpAuthorize(ArticleAppPermissions.Article_CreateArticle)]
         protected virtual async Task<ArticleEditDto> CreateArticleAsync(ArticleEditDto input)
         {
             //TODO:新增前的逻辑判断，是否允许新增
@@ -147,15 +156,16 @@ namespace HC.WeChat.Articles
         /// <summary>
         /// 编辑Article
         /// </summary>
-        [AbpAuthorize(ArticleAppPermissions.Article_EditArticle)]
-        protected virtual async Task UpdateArticleAsync(ArticleEditDto input)
+        //[AbpAuthorize(ArticleAppPermissions.Article_EditArticle)]
+        protected virtual async Task<ArticleEditDto> UpdateArticleAsync(ArticleEditDto input)
         {
             //TODO:更新前的逻辑判断，是否允许更新
             var entity = await _articleRepository.GetAsync(input.Id.Value);
             input.MapTo(entity);
 
             // ObjectMapper.Map(input, entity);
-            await _articleRepository.UpdateAsync(entity);
+            var result = await _articleRepository.UpdateAsync(entity);
+            return result.MapTo<ArticleEditDto>();
         }
 
         /// <summary>
@@ -163,7 +173,7 @@ namespace HC.WeChat.Articles
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        [AbpAuthorize(ArticleAppPermissions.Article_DeleteArticle)]
+        //[AbpAuthorize(ArticleAppPermissions.Article_DeleteArticle)]
         public async Task DeleteArticle(EntityDto<Guid> input)
         {
 
@@ -174,11 +184,28 @@ namespace HC.WeChat.Articles
         /// <summary>
         /// 批量删除Article的方法
         /// </summary>
-        [AbpAuthorize(ArticleAppPermissions.Article_BatchDeleteArticles)]
+        //[AbpAuthorize(ArticleAppPermissions.Article_BatchDeleteArticles)]
         public async Task BatchDeleteArticlesAsync(List<Guid> input)
         {
             //TODO:批量删除前的逻辑判断，是否允许删除
             await _articleRepository.DeleteAsync(s => input.Contains(s.Id));
+        }
+
+        /// <summary>
+        /// 添加或者修改Article的方法
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task<ArticleEditDto> CreateOrUpdateArticleDto(ArticleEditDto input)
+        {
+            if (input.Id.HasValue)
+            {
+               return  await UpdateArticleAsync(input);
+            }
+            else
+            {
+                return await CreateArticleAsync(input);
+            }
         }
 
     }

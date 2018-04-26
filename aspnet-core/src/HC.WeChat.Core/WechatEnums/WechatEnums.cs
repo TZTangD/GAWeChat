@@ -201,7 +201,7 @@ namespace HC.WeChat.WechatEnums
     /// </summary>
     public enum ArticlePushStatusEnum
     {
-        已发布=1,
-        草稿=2
+        草稿 = 1,
+        已发布 =2
     }
 }

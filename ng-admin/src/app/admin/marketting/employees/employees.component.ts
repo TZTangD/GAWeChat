@@ -22,8 +22,10 @@ export class EmployeesComponent extends AppComponentBase implements OnInit{
         { text: '禁用', value: false, type: 'default' },
     ];
     positions = [
+        { text: '营销人员', value: 1 },
         { text: '客户经理', value: 2 },
-        { text: '营销人员', value: 3 },
+        { text: '营销中心', value: 3 },
+        { text: '机关人员', value: 4 },
     ];
     employees: Employee[] = [];
     //用于删除框的员工名称显示

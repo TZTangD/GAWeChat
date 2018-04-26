@@ -1,4 +1,4 @@
-export class Article implements IArticle{
+export class Article implements IArticle {
     id: string;
     title: string;
     author: string;
@@ -16,7 +16,8 @@ export class Article implements IArticle{
     deletionTime: Date;
     deleterUserId: number;
     pushStatus: number;
-    pushStatusName:string;
+    pushStatusName: string;
+    pushTime: string;
     constructor(data?: IArticle) {
         if (data) {
             for (var property in data) {
@@ -46,6 +47,7 @@ export class Article implements IArticle{
             this.deleterUserId = data["deleterUserId"];
             this.pushStatus = data["pushStatus"];
             this.pushStatusName = data["pushStatusName"];
+            this.pushTime = data["pushTime"];
 
         }
     }
@@ -75,6 +77,7 @@ export class Article implements IArticle{
         data["deletionTime"] = this.deletionTime;
         data["deleterUserId"] = this.deleterUserId;
         data["pushStatus"] = this.pushStatus;
+        data["pushTime"] = this.pushTime;
         return data;
     }
 
@@ -98,7 +101,7 @@ export class Article implements IArticle{
     }
 }
 
-export interface IArticle{
+export interface IArticle {
     id: string;
     title: string;
     author: string;

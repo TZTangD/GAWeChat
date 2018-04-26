@@ -28,7 +28,9 @@ namespace HC.WeChat.Migrations
                     LastModificationTime = table.Column<DateTime>(nullable: true),
                     LastModifierUserId = table.Column<long>(nullable: true),
                     DeletionTime = table.Column<DateTime>(nullable: true),
-                    DeleterUserId = table.Column<long>(nullable: true)
+                    DeleterUserId = table.Column<long>(nullable: true),
+                    PushTime = table.Column<DateTime>(nullable: true)
+
                 },
                 constraints: table =>
                 {

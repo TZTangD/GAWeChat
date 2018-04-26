@@ -1631,6 +1631,7 @@ namespace HC.WeChat.Migrations
                 b.Property<long?>("LastModifierUserId");
                 b.Property<DateTime?>("DeletionTime");
                 b.Property<long?>("DeleterUserId");
+                b.Property<DateTime?>("PushTime");
 
                 b.HasKey("Id");
 
