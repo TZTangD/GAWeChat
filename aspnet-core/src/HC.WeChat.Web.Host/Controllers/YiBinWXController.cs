@@ -143,7 +143,7 @@ namespace HC.WeChat.Web.Host.Controllers
             //var wuser = _weChatOAuthAppService.GetUserInfoAsync(oauth.access_token, oauth.openid).Result;
             user.NickName = user.NickName;
             //user.HeadImgUrl = wuser.headimgurl;
-            if (user.UserType == UserTypeEnum.零售客户 || user.UserType == UserTypeEnum.客户经理)
+            if (user.UserType == UserTypeEnum.零售客户 || user.UserType == UserTypeEnum.内部员工)
             {
                 var formCount = _activityFormAppService.GetActivityFormCountByUserAsync(user).Result;
                 ViewBag.OutstandingCount = formCount.OutstandingCount;

@@ -273,7 +273,7 @@ namespace HC.WeChat.ActivityBanquets
                 return new APIResultDto() { Code = 701, Msg = "当前用户无效" };
             }
 
-            if (user.UserType != UserTypeEnum.零售客户 && user.UserType != UserTypeEnum.客户经理)
+            if (user.UserType != UserTypeEnum.零售客户 && user.UserType != UserTypeEnum.内部员工)
             {
                 return new APIResultDto() { Code = 702, Msg = "当前用户类型不支持" };
             }

@@ -12,6 +12,7 @@ const COMPONENTS = [PersonalComponent];
 const routes: Routes = [
     { path: '', redirectTo: 'personal' },
     { path: 'personal', component: PersonalComponent },
+    { path: 'personal/:openId/:tenantId', component: PersonalComponent },
 ];
 // endregion
 

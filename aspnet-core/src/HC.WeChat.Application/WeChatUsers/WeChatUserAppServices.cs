@@ -19,6 +19,10 @@ using HC.WeChat.WechatEnums;
 using HC.WeChat.Retailers;
 using HC.WeChat.Employees;
 using System.Linq;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using HC.WeChat.Configuration;
+using Abp.Domain.Uow;
 
 namespace HC.WeChat.WeChatUsers
 {
@@ -33,6 +37,7 @@ namespace HC.WeChat.WeChatUsers
         private readonly IWeChatUserManager _wechatuserManager;
         private readonly IRepository<Retailer, Guid> _retailerRepository;
         private readonly IRepository<Employee, Guid> _employeeRepository;
+        private readonly IConfigurationRoot _appConfiguration;
 
         /// <summary>
         /// 构造函数
@@ -40,13 +45,15 @@ namespace HC.WeChat.WeChatUsers
         public WeChatUserAppService(IRepository<WeChatUser, Guid> wechatuserRepository,
        IWeChatUserManager wechatuserManager,
        IRepository<Retailer, Guid> retailerRepository,
-       IRepository<Employee, Guid> employeeRepository
+       IRepository<Employee, Guid> employeeRepository,
+       IHostingEnvironment hostingEnvironment
         )
         {
             _wechatuserRepository = wechatuserRepository;
             _wechatuserManager = wechatuserManager;
             _retailerRepository = retailerRepository;
             _employeeRepository = employeeRepository;
+
         }
 
         /// <summary>
@@ -219,10 +226,10 @@ namespace HC.WeChat.WeChatUsers
                     }
                     entity.UserId = retaliler.Id;
                 }
-                else if (input.UserType == UserTypeEnum.客户经理)
+                else if (input.UserType == UserTypeEnum.内部员工)
                 {
                     //验证客户经理
-                    var employee = _employeeRepository.GetAll().Where(e => e.IsAction && e.Name == input.UserName && e.Code == input.Code && e.Position == UserTypeEnum.客户经理).FirstOrDefault();
+                    var employee = _employeeRepository.GetAll().Where(e => e.IsAction && e.Name == input.UserName && e.Code == input.Code && e.Position == UserTypeEnum.内部员工).FirstOrDefault();
                     if (employee == null)
                     {
                         return new APIResultDto() { Code = 902, Msg = "客户经理验证未通过" };
@@ -246,9 +253,11 @@ namespace HC.WeChat.WeChatUsers
         }
 
         [AbpAllowAnonymous]
+        [UnitOfWork(isTransactional: false)]
         public async Task<WeChatUserListDto> GetWeChatUserAsync(string openId, int? tenantId)
         {
             var user = await _wechatuserManager.GetWeChatUserAsync(openId, tenantId);
+            user.HeadImgUrl = user.HeadImgUrl?? @"/gawechat/img/timg-4.jpeg";
             return user.MapTo<WeChatUserListDto>();
         }
 

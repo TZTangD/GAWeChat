@@ -199,7 +199,7 @@ namespace HC.WeChat.Employees
         {
             var query = _employeeRepository.GetAll()
                 .WhereIf(!string.IsNullOrEmpty(input.Filter), e => e.Name.Contains(input.Filter) ||e.Code.Contains(input.Filter))
-                .WhereIf(input.IsManger,e=>e.Position== UserTypeEnum.客户经理);
+                .WhereIf(input.IsManger,e=>e.Position== UserTypeEnum.内部员工);
             
             //TODO:根据传入的参数添加过滤条件
             var employeeCount = await query.CountAsync();

@@ -2,6 +2,7 @@ import { NgModule, LOCALE_ID } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
+import { HttpModule } from '@angular/http';
 
 import { WeUiModule } from 'ngx-weui';
 import { NotifyModule } from 'ngx-notify';
@@ -14,15 +15,18 @@ import { WechatModule } from './wechat/wechat.module';
 import { CoreModule } from './core/core.module';
 import { AppComponent } from './app.component';
 import { JsonpModule } from '@angular/http';
+import { ServiceModule } from './services/service.module';
 
 @NgModule({
     imports: [
         BrowserModule,
         BrowserAnimationsModule,
+        HttpModule,
         HttpClientModule,
         JsonpModule,
         CoreModule,
         SharedModule,
+        ServiceModule,
         //RoutesModule,
         WechatModule,
         LayoutModule,

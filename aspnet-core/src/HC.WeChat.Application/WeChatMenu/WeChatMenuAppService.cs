@@ -26,7 +26,7 @@ namespace HC.WeChat.WeChatMenu
         public WeChatMenuAppService(IWechatAppConfigAppService wechatAppConfigAppService)
         {
             _wechatAppConfigAppService = wechatAppConfigAppService;
-            TenantId = 2;
+            TenantId = null;
             AppConfig = _wechatAppConfigAppService.GetWechatAppConfig(TenantId).Result;
         }
 
