@@ -63,5 +63,12 @@ namespace HC.WeChat.Articles
         /// <param name="input"></param>
         /// <returns></returns>
         Task<ArticleEditDto> CreateOrUpdateArticleDto(ArticleEditDto input);
+
+        /// <summary>
+        /// 获取Article的分页列表信息(经验分享)
+        /// </summary>
+        /// <param name="input">查询条件</param>
+        /// <returns></returns>
+        Task<PagedResultDto<ArticleListDto>> GetPagedArticlesForExperience(GetArticlesInput input);
     }
 }

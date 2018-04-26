@@ -60,7 +60,8 @@ namespace HC.WeChat.Articles
 
             var articles = await query
                 .OrderByDescending(a=>a.PushTime)
-                .OrderBy(input.Sorting)
+                .ThenByDescending(a=>a.CreationTime)
+                .ThenBy(input.Sorting)
                 .PageBy(input)
                 .ToListAsync();
 
@@ -206,6 +207,39 @@ namespace HC.WeChat.Articles
             {
                 return await CreateArticleAsync(input);
             }
+        }
+
+        /// <summary>
+        /// 获取Article的分页列表信息(经验分享)
+        /// </summary>
+        /// <param name="input">查询条件</param>
+        /// <returns></returns>
+        public async Task<PagedResultDto<ArticleListDto>> GetPagedArticlesForExperience(GetArticlesInput input)
+        {
+
+            var query = _articleRepository.GetAll()
+                .Where(a => a.Type == ArticleTypeEnum.经验分享)
+                .WhereIf(!string.IsNullOrEmpty(input.Name), a => a.Title.Contains(input.Name))
+                .WhereIf(!string.IsNullOrEmpty(input.Author), a => a.Author.Contains(input.Author))
+                .WhereIf(input.Status.HasValue, a => a.PushStatus == input.Status);
+            //TODO:根据传入的参数添加过滤条件
+            var articleCount = await query.CountAsync();
+
+            var articles = await query
+                .OrderByDescending(a => a.PushTime)
+                .ThenByDescending(a=>a.CreationTime)
+                .ThenBy(input.Sorting)
+                .PageBy(input)
+                .ToListAsync();
+
+            //var articleListDtos = ObjectMapper.Map<List <ArticleListDto>>(articles);
+            var articleListDtos = articles.MapTo<List<ArticleListDto>>();
+
+            return new PagedResultDto<ArticleListDto>(
+                articleCount,
+                articleListDtos
+                );
+
         }
 
     }

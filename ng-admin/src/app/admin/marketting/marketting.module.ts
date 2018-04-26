@@ -10,6 +10,7 @@ import { ContributeManagementComponent } from "./contribute-management/contribut
 import { MarkettingRoutingModule } from "./marketting-routing.module";
 import { LayoutModule } from "../../layout/layout.module";
 import { ActivityDetailComponent } from "./activity/activity-detail/activity-detail.component";
+import { ExperienceDetailComponent } from "./experience-share/experience-detail/experience-detail.component";
 
 @NgModule({
     imports: [
@@ -24,6 +25,7 @@ import { ActivityDetailComponent } from "./activity/activity-detail/activity-det
         ActivityComponent,
         ActivityDetailComponent,
         ExperienceShareComponent,
+        ExperienceDetailComponent,
         ContributeManagementComponent,
     ],
     providers: [
