@@ -42,11 +42,11 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
             this.activityService.get(this.id).subscribe((result: Article) => {
                 this.article = result;
                 this.isDelete = true;
-                this.isPush = result.pushStatus === 2 ? false : true;
+                this.isPush = result.pushStatus === 1 ? false : true;
             });
         } else {
             //新增
-            this.article.pushStatus = 1;
+            this.article.pushStatus = 0;
             this.article.pushStatusName = '草稿';
             this.article.type = 1;//类型为活动
         }
@@ -63,7 +63,7 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
                 console.log(result);
                 this.article = result;
                 this.isDelete = true;
-                this.isPush = result.pushStatus === 2 ? false : true;
+                this.isPush = result.pushStatus === 1 ? false : true;
                 this.notify.info(this.l(this.successMsg));
             });
     }
@@ -85,7 +85,7 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
     }
     push() {
         //发布
-        this.article.pushStatus = 2;
+        this.article.pushStatus = 1;
         this.article.pushTime = this.dateFormat(new Date());
         this.save(true);
     }
