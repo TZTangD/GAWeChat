@@ -19,6 +19,8 @@ export class MemberCardComponent extends AppComponentBase implements OnInit {
     }
 
     ngOnInit() {
+        console.log("oid:" + this.settingsService.openId);
+        console.log("tid:" + this.settingsService.tenantId);
         this.generateBarcode('barcode','986625505077755904');
     }
 

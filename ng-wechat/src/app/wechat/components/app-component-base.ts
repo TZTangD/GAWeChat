@@ -1,11 +1,11 @@
 import { Injector, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
+import { SettingsService } from '../../services';
 
 export abstract class AppComponentBase {
 
     activatedRoute: ActivatedRoute;
-    openId: string;
-    tenantId: string;
+    settingsService: SettingsService;
 
     query: any = {
         pageIndex: 1,
@@ -17,12 +17,15 @@ export abstract class AppComponentBase {
 
     constructor(injector: Injector) {
         this.activatedRoute = injector.get(ActivatedRoute);
+        this.settingsService = injector.get(SettingsService);
         this.activatedRoute.params.subscribe((params: Params) => {
-            this.openId = params['openId'];
-            this.tenantId = params['tenantId'];
-
-            console.log('openId:' + this.openId);
-            console.log('tenantId:' + this.tenantId);
+            let openId = params['openId'];
+            let tenantId = params['tenantId'];
+            if(openId && tenantId){
+                this.settingsService.setUserId(openId, tenantId);
+            }
+            console.log('openId:' + openId);
+            console.log('tenantId:' + tenantId);
         });
     }
 }

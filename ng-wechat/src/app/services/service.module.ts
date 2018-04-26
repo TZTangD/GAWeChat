@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
 import { HttpClient } from './httpclient';
-import { WechatUserService } from './index';
+import { WechatUserService, SettingsService } from './index';
 
 @NgModule({
     providers: [
         HttpClient,
-        WechatUserService
+        WechatUserService,
+        SettingsService
     ]
 })
 export class ServiceModule { }
