@@ -31,7 +31,7 @@ export class ArticleServiceProxy {
     }
 
     /**
-     * 获取所有文章信息
+     * 获取所有文章信息(活动)
      */
     getAll(skipCount: number, maxResultCount: number, parameter: Parameter[]): Observable<PagedResultDtoOfArticle> {
         let url_ = this.baseUrl + "/api/services/app/Article/GetPagedArticles?";
@@ -73,6 +73,71 @@ export class ArticleServiceProxy {
     }
 
     protected processGetAll(response: Response): Observable<PagedResultDtoOfArticle> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? PagedResultDtoOfArticle.fromJS(resultData200) : new PagedResultDtoOfArticle();
+            return Observable.of(result200);
+        } else if (status === 401) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status === 403) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<PagedResultDtoOfArticle>(<any>null);
+    }
+
+    /**
+     *  获取所有文章信息(经验分享)
+     */
+    getExperienceAll(skipCount: number, maxResultCount: number, parameter: Parameter[]): Observable<PagedResultDtoOfArticle> {
+        let url_ = this.baseUrl + "/api/services/app/Article/GetPagedArticlesForExperience?";
+        if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&";
+        if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&";
+
+        if (parameter.length > 0) {
+            parameter.forEach(element => {
+                if (element.value !== undefined && element.value !== null) {
+                    url_ += element.key + "=" + encodeURIComponent("" + element.value) + "&";
+                }
+            });
+        }
+
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = {
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_) => {
+            return this.processGetExperienceAll(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processGetExperienceAll(response_);
+                } catch (e) {
+                    return <Observable<PagedResultDtoOfArticle>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<PagedResultDtoOfArticle>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processGetExperienceAll(response: Response): Observable<PagedResultDtoOfArticle> {
         const status = response.status;
 
         let _headers: any = response.headers ? response.headers.toJSON() : {};

@@ -38,7 +38,6 @@ namespace HC.WeChat.Articles
         /// <summary>
         /// 封面图片
         /// </summary>
-        [Required]
         [StringLength(500)]
         public virtual string CoverPhoto { get; set; }
 

@@ -37,7 +37,6 @@ namespace HC.WeChat.Articles.Dtos
         /// <summary>
         /// 封面图片
         /// </summary>
-        [Required]
         [StringLength(500)]
         public string CoverPhoto { get; set; }
         public string Content { get; set; }

@@ -56,10 +56,10 @@
         <thead nz-thead>
             <tr>
                 <th nz-th>
-                    <span>标题</span>
+                    <span>活动名称</span>
                 </th>
                 <th nz-th>
-                    <span>作者</span>
+                    <span>活动策划者</span>
                 </th>
                 <th nz-th>
                     <span>阅读量</span>
@@ -74,6 +74,9 @@
                     <span>发布状态</span>
                 </th>
                 <th nz-th>
+                    <span>发布时间</span>
+                </th>
+                <th nz-th>
                     <span>操作</span>
                 </th>
             </tr>
@@ -86,6 +89,7 @@
                 <td nz-td>{{article.goodTotal}}</td>
                 <!-- <td nz-td>{{activity.content}}</td> -->
                 <td nz-td>{{article.pushStatusName}}</td>
+                <td nz-td>{{article.pushTime | _date}}</td>
                 <td nz-td>
                     <a (click)="editActivity(article)">查看详情</a>
                     <!-- <span nz-table-divider></span>

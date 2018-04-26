@@ -12,11 +12,11 @@ import { NzModalService } from 'ng-zorro-antd';
     templateUrl: 'activity.component.html',
 })
 export class ActivityComponent extends AppComponentBase implements OnInit {
-    search: any = { status: 0 };
+    search: any = { status: 2};
     PushStatus = [
-        { text: '全部', value: 0 },
-        { text: '草稿', value: 1 },
-        { text: '已发布', value: 2 },
+        { text: '全部', value: 2 },
+        { text: '草稿', value: 0},
+        { text: '已发布', value: 1 },
     ];
     articles: Article[] = [];
     //用于删除显示
@@ -33,7 +33,7 @@ export class ActivityComponent extends AppComponentBase implements OnInit {
     refreshData(reset = false, search?: boolean) {
         if (reset) {
             this.query.pageIndex = 1;
-            this.search = { status: 0 };
+            this.search = { status: 2 };
         }
         if (search) {
             this.query.pageIndex = 1;
@@ -50,7 +50,7 @@ export class ActivityComponent extends AppComponentBase implements OnInit {
         var arry = [];
         arry.push(Parameter.fromJS({ key: 'Name', value: this.search.name }));
         arry.push(Parameter.fromJS({ key: 'Author', value: this.search.author }));
-        arry.push(Parameter.fromJS({ key: 'Status', value: this.search.status === 0 ? null : this.search.status }));
+        arry.push(Parameter.fromJS({ key: 'Status', value: this.search.status === 2 ? null : this.search.status }));
         return arry;
     }
 
