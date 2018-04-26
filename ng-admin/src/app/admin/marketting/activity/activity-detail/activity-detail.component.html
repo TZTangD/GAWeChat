@@ -1,0 +1,82 @@
+<!-- <pro-header></pro-header> -->
+<nz-card [nzBordered]="false">
+    <form nz-form [formGroup]="form" id="frm_create_activity">
+        <div nz-row>
+            <ng-template #deleteContent>
+                <h2>是否删除活动 {{article.title}}?</h2>
+            </ng-template>
+            <div nz-col [nzSpan]="16">
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSm]="4">
+                        <label for="pushStatus">活动状态</label>
+                    </div>
+                    <div nz-form-control nz-col [nzSm]="20" class="text-pink-light">
+                        {{article.pushStatusName}}
+                    </div>
+                </div>
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSm]="4">
+                        <label for="pushStatus">活动发布时间</label>
+                    </div>
+                    <div nz-form-control nz-col [nzSm]="20">
+                        {{article.pushTime|_date}}
+                    </div>
+                </div>
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSm]="4">
+                        <label for="title" nz-form-item-required>活动名称</label>
+                    </div>
+                    <div nz-form-control nz-col [nzSm]="20" nzHasFeedback [nzValidateStatus]="getFormControl('title')">
+                        <nz-input formControlName="title" [(ngModel)]="article.title" [nzId]="'title'"></nz-input>
+                        <div nz-form-explain *ngIf="getFormControl('title').dirty&&getFormControl('title').hasError('maxlength')">字符长度小于等于200</div>
+                        <div nz-form-explain *ngIf="getFormControl('title').dirty&&getFormControl('title').hasError('required')">请输入活动名称</div>
+                    </div>
+                </div>
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSm]="4">
+                        <label for="author" nz-form-item-required>活动策划者</label>
+                    </div>
+                    <div nz-form-control nz-col [nzSm]="20" nzHasFeedback [nzValidateStatus]="getFormControl('author')">
+                        <nz-input formControlName="author" [(ngModel)]="article.author" [nzId]="'author'"></nz-input>
+                        <div nz-form-explain *ngIf="getFormControl('author').dirty&&getFormControl('author').hasError('maxlength')">字符长度小于等于50</div>
+                        <div nz-form-explain *ngIf="getFormControl('author').dirty&&getFormControl('author').hasError('required')">请输入活动策划者</div>
+                    </div>
+                </div>
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSm]="4">
+                        <label for="content">活动内容</label>
+                    </div>
+                    <div nz-form-control nz-col [nzSm]="20" nzHasFeedback [nzValidateStatus]="getFormControl('content')">
+                        <nz-input nzType="textarea" nzRows="6" formControlName="content" [(ngModel)]="article.content" [nzId]="'content'"></nz-input>
+                        <div nz-form-explain *ngIf="getFormControl('content').dirty&&getFormControl('content').hasError('required')">内容不能为空</div>
+                    </div>
+                </div>
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSm]="4">
+                        <label for="coverPhoto">封面图片</label>
+                    </div>
+                    <div nz-form-control nz-col [nzSm]="20">
+                        <!-- nzHasFeedback  [nzValidateStatus]="getFormControl('coverPhoto')" -->
+                        <!-- <nz-input formControlName="coverPhoto" [(ngModel)]="article.coverPhoto" [nzId]="'coverPhoto'"></nz-input> -->
+                        <img src="{{article.coverPhoto}}">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <footer-toolbar errorCollect>
+        <button nz-button [nzType]="'primary'" (click)="save()" [nzSize]="'large'" [nzLoading]="isConfirmLoading">
+            {{l("保存")}}
+        </button>
+        <button nz-button *ngIf="isPush" [nzType]="'primary'" (click)="push()" [nzSize]="'large'" [nzLoading]="isConfirmLoading">
+            {{l("发布")}}
+        </button>
+        <button nz-button *ngIf="isDelete" [nzType]="'danger'" (click)="delete(deleteContent)" [nzSize]="'large'" [nzLoading]="isConfirmLoading">
+            {{l("删除")}}
+        </button>
+        <button nz-button [nzType]="'default'" (click)="return()" [nzSize]="'large'">
+            {{l("返回")}}
+        </button>
+        <!-- <a routerLink="../admin/retail-customer" routerLinkActive="ngOnInit">Heroes</a> -->
+    </footer-toolbar>
+</nz-card>

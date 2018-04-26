@@ -19,8 +19,10 @@ export class CreateEmployeeComponent extends AppComponentBase implements OnInit{
     employeec: Employee = new Employee();
     formc: FormGroup;
     positions = [
+        { text: '营销人员', value: 1 },
         { text: '客户经理', value: 2 },
-        { text: '营销人员', value: 3 },
+        { text: '营销中心', value: 3 },
+        { text: '机关人员', value: 4 },
     ]
     isCodeCValid: boolean=false;
     constructor(injector: Injector, private fb: FormBuilder, private employeeService: EmployeeServiceProxy,

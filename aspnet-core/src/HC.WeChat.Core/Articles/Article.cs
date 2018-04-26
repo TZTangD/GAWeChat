@@ -66,5 +66,10 @@ namespace HC.WeChat.Articles
         /// 发布状态（枚举：已发布、草稿）
         /// </summary>
         public virtual ArticlePushStatusEnum? PushStatus { get; set; }
+
+        /// <summary>
+        /// 发布时间
+        /// </summary>
+        public virtual DateTime? PushTime { get; set; }
     }
 }

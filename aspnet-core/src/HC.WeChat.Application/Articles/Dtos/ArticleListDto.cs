@@ -26,6 +26,8 @@ namespace HC.WeChat.Articles.Dtos
                 return PushStatus.ToString();
             }
         }
+        public DateTime? PushTime { get; set; }
+
 
     }
 }

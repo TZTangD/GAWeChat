@@ -56,5 +56,12 @@ namespace HC.WeChat.Articles
         /// 批量删除Article
         /// </summary>
         Task BatchDeleteArticlesAsync(List<Guid> input);
+
+        /// <summary>
+        /// 添加或者修改Article的方法
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        Task<ArticleEditDto> CreateOrUpdateArticleDto(ArticleEditDto input);
     }
 }

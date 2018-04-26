@@ -3,14 +3,17 @@ using HC.WeChat.Articles.Dtos.LTMAutoMapper;
 using HC.WeChat.Articles;
 using System;
 using HC.WeChat.WechatEnums;
+using Abp.Domain.Entities.Auditing;
+using Abp.AutoMapper;
 
 namespace HC.WeChat.Articles.Dtos
 {
-    public class ArticleEditDto
+    [AutoMapTo(typeof(Article))]
+    public class ArticleEditDto : FullAuditedEntity<Guid?>
     {
         ////BCC/ BEGIN CUSTOM CODE SECTION
         ////ECC/ END CUSTOM CODE SECTION
-        public Guid? Id { get; set; }
+        //public Guid? Id { get; set; }
 
         /// <summary>
         /// 标题
@@ -42,5 +45,14 @@ namespace HC.WeChat.Articles.Dtos
         public int? GoodTotal { get; set; }
         public int? TenantId { get; set; }
         public ArticlePushStatusEnum? PushStatus { get; set; }
+        public DateTime? PushTime { get; set; }
+
+        public string PushStatusName
+        {
+            get
+            {
+                return PushStatus.ToString();
+            }
+        }
     }
 }

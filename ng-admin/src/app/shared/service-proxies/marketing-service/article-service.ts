@@ -34,7 +34,7 @@ export class ArticleServiceProxy {
      * 获取所有文章信息
      */
     getAll(skipCount: number, maxResultCount: number, parameter: Parameter[]): Observable<PagedResultDtoOfArticle> {
-        let url_ = this.baseUrl + "/api/services/app/Article/GetPagedArticles??";
+        let url_ = this.baseUrl + "/api/services/app/Article/GetPagedArticles?";
         if (skipCount !== undefined)
             url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&";
         if (maxResultCount !== undefined)
@@ -93,6 +93,156 @@ export class ArticleServiceProxy {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Observable.of<PagedResultDtoOfArticle>(<any>null);
+    }
+
+    get(id: number): Observable<Article> {
+        let url_ = this.baseUrl + "/api/services/app/Article/GetArticleByIdAsync?";
+        if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = {
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_) => {
+            return this.processGet(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processGet(response_);
+                } catch (e) {
+                    return <Observable<Article>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<Article>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processGet(response: Response): Observable<Article> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? Article.fromJS(resultData200) : new Article();
+            return Observable.of(result200);
+        } else if (status === 401) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status === 403) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<Article>(<any>null);
+    }
+
+    update(input: Article): Observable<Article> {
+        let url_ = this.baseUrl + "/api/services/app/Article/CreateOrUpdateArticleDto";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ = {
+            body: content_,
+            method: "post",
+            headers: new Headers({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_) => {
+            return this.processUpdate(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processUpdate(response_);
+                } catch (e) {
+                    return <Observable<Article>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<Article>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processUpdate(response: Response): Observable<Article> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? Article.fromJS(resultData200) : new Article();
+            return Observable.of(result200);
+        } else if (status === 401) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status === 403) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<Article>(<any>null);
+    }
+
+    delete(id: string): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/Article/DeleteArticle?";
+        if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = {
+            method: "delete",
+            headers: new Headers({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_) => {
+            return this.processDelete(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processDelete(response_);
+                } catch (e) {
+                    return <Observable<void>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<void>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processDelete(response: Response): Observable<void> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            return Observable.of<void>(<any>null);
+        } else if (status === 401) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status === 403) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<void>(<any>null);
     }
 
 

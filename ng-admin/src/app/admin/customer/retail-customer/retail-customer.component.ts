@@ -69,10 +69,10 @@ export class RetailCustomerComponent extends AppComponentBase implements OnInit{
         return arry;
     }
     editRetail(retail: RetailCustomer) {
-        this.router.navigate(['admin/retail-detail', retail.id])
+        this.router.navigate(['admin/customer/retail-detail', retail.id])
     }
     /**
-     * 
+     * 删除零售户
      */
     delete(retail: RetailCustomer, TplContent) {
         this.modal.confirm({
@@ -88,6 +88,6 @@ export class RetailCustomerComponent extends AppComponentBase implements OnInit{
         })
     }
     createRetail() {
-        this.router.navigate(['admin/retail-detail']);
+        this.router.navigate(['admin/customer/retail-detail']);
     }
 }

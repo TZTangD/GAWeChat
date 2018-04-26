@@ -9,6 +9,7 @@ import { ExperienceShareComponent } from "./experience-share/experience-share.co
 import { ContributeManagementComponent } from "./contribute-management/contribute-management.component";
 import { MarkettingRoutingModule } from "./marketting-routing.module";
 import { LayoutModule } from "../../layout/layout.module";
+import { ActivityDetailComponent } from "./activity/activity-detail/activity-detail.component";
 
 @NgModule({
     imports: [
@@ -21,6 +22,7 @@ import { LayoutModule } from "../../layout/layout.module";
         CreateEmployeeComponent,
         EditEmployeeComponent,
         ActivityComponent,
+        ActivityDetailComponent,
         ExperienceShareComponent,
         ContributeManagementComponent,
     ],
