@@ -24,7 +24,8 @@
         ],
         "scripts": [
             "../node_modules/swiper/dist/js/swiper.js",
-            "../node_modules/g2-mobile/index.js"
+            "../node_modules/g2-mobile/index.js",
+            "../node_modules/jsbarcode/dist/JsBarcode.all.min.js"
         ],
         "environmentSource": "environments/environment.ts",
         "environments": {

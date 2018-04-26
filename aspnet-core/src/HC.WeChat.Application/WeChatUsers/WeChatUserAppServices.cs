@@ -37,7 +37,6 @@ namespace HC.WeChat.WeChatUsers
         private readonly IWeChatUserManager _wechatuserManager;
         private readonly IRepository<Retailer, Guid> _retailerRepository;
         private readonly IRepository<Employee, Guid> _employeeRepository;
-        private readonly IConfigurationRoot _appConfiguration;
 
         /// <summary>
         /// 构造函数
@@ -45,8 +44,7 @@ namespace HC.WeChat.WeChatUsers
         public WeChatUserAppService(IRepository<WeChatUser, Guid> wechatuserRepository,
        IWeChatUserManager wechatuserManager,
        IRepository<Retailer, Guid> retailerRepository,
-       IRepository<Employee, Guid> employeeRepository,
-       IHostingEnvironment hostingEnvironment
+       IRepository<Employee, Guid> employeeRepository
         )
         {
             _wechatuserRepository = wechatuserRepository;
@@ -208,7 +206,11 @@ namespace HC.WeChat.WeChatUsers
         [AbpAllowAnonymous]
         public async Task<APIResultDto> BindWeChatUserAsync(UserBindDto input)
         {
-            Logger.InfoFormat("UserBindDto:", Newtonsoft.Json.Linq.JObject.FromObject(input).ToString());
+            //if (string.IsNullOrEmpty(input.Phone))
+            //{
+            //    return new APIResultDto() { Code = 904, Msg = "绑定电话不能为空" };
+            //}
+            //Logger.InfoFormat("UserBindDto:", Newtonsoft.Json.Linq.JObject.FromObject(input).ToString());
             var entity = await _wechatuserManager.GetWeChatUserAsync(input.OpenId, input.TenantId);
             if (entity == null)
             {
@@ -219,36 +221,50 @@ namespace HC.WeChat.WeChatUsers
                 if (input.UserType == UserTypeEnum.零售客户)
                 {
                     //验证零售户
-                    var retaliler = _retailerRepository.GetAll().Where(r => r.IsAction && r.Name == input.UserName && r.LicenseKey == input.LicenseKey).FirstOrDefault();
+                    var retaliler = await _retailerRepository.GetAll().Where(r => r.IsAction && r.VerificationCode == input.VerificationCode && r.LicenseKey == input.LicenseKey).FirstOrDefaultAsync();
                     if (retaliler == null)
                     {
                         return new APIResultDto() { Code = 901, Msg = "零售户验证未通过" };
                     }
                     entity.UserId = retaliler.Id;
+                    entity.UserName = retaliler.Name;
+                    //检查是否是第一个绑定 是为店铺管理员 不是需要店铺管理员审核
+                    var isExistsBind = await _wechatuserRepository.GetAll().AnyAsync(r => r.UserId == retaliler.Id && r.UserType == UserTypeEnum.零售客户);
+                    if (!isExistsBind)
+                    {
+                        entity.IsShopkeeper = true;
+                        entity.Status = UserAuditStatus.已审核;
+                    }
+                    else
+                    {
+                        entity.IsShopkeeper = false;
+                        entity.Status = UserAuditStatus.未审核;
+                    }
                 }
                 else if (input.UserType == UserTypeEnum.内部员工)
                 {
                     //验证客户经理
-                    var employee = _employeeRepository.GetAll().Where(e => e.IsAction && e.Name == input.UserName && e.Code == input.Code && e.Position == UserTypeEnum.内部员工).FirstOrDefault();
+                    var employee = await _employeeRepository.GetAll().Where(e => e.IsAction && e.VerificationCode == input.VerificationCode && e.Code == input.Code).FirstOrDefaultAsync();
                     if (employee == null)
                     {
-                        return new APIResultDto() { Code = 902, Msg = "客户经理验证未通过" };
+                        return new APIResultDto() { Code = 902, Msg = "内部员工验证未通过" };
                     }
                     entity.UserId = employee.Id;
+                    entity.UserName = employee.Name;
                 }
                 else
                 {
                     return new APIResultDto() { Code = 903, Msg = "用户类型不支持" };
                 }
 
-                entity.UserName = input.UserName;
+                //entity.UserName = input.UserName;
                 entity.UserType = input.UserType;
                 entity.BindStatus = BindStatusEnum.已绑定;
                 entity.BindTime = DateTime.Now;
                 entity.OpenId = input.OpenId;
                 entity.TenantId = input.TenantId;
                 await _wechatuserManager.BindWeChatUserAsync(entity);
-                return new APIResultDto() { Code = 0, Msg = "绑定成功" };
+                return new APIResultDto() { Code = 0, Msg = "绑定成功", Data = entity.MapTo<WeChatUserListDto>() };
             }
         }
 
@@ -257,8 +273,9 @@ namespace HC.WeChat.WeChatUsers
         public async Task<WeChatUserListDto> GetWeChatUserAsync(string openId, int? tenantId)
         {
             var user = await _wechatuserManager.GetWeChatUserAsync(openId, tenantId);
-            user.HeadImgUrl = user.HeadImgUrl?? @"/gawechat/img/timg-4.jpeg";
-            return user.MapTo<WeChatUserListDto>();
+            var userDto = user.MapTo<WeChatUserListDto>();
+            userDto.HeadImgUrl = user.HeadImgUrl ?? @"/gawechat/img/timg-4.jpeg";
+            return userDto;
         }
 
         /// <summary>
@@ -277,6 +294,42 @@ namespace HC.WeChat.WeChatUsers
             {
                 await CreateWeChatUserAsync(input);
             }
+        }
+
+        [AbpAllowAnonymous]
+        public async Task<APIResultDto> BindMemberAsync(MemberBindDto input)
+        {
+            if (string.IsNullOrEmpty(input.Phone))
+            {
+                return new APIResultDto() { Code = 901, Msg = "绑定电话不能为空" };
+            }
+            using (CurrentUnitOfWork.SetTenantId(input.TenantId))
+            {
+                var entity = await _wechatuserManager.GetWeChatUserAsync(input.OpenId, input.TenantId);
+                if (entity == null)
+                {
+                    return new APIResultDto() { Code = 902, Msg = "用户不存在" };
+                }
+
+                entity.Phone = input.Phone;
+                entity.MemberBarCode = GenerateMemberBarCode();
+                if (entity.UserType == UserTypeEnum.消费者)
+                {
+                    entity.BindStatus = BindStatusEnum.已绑定;
+                    entity.BindTime = DateTime.Now;
+                }
+                await _wechatuserRepository.UpdateAsync(entity);
+                return new APIResultDto() { Code = 0, Msg = "绑定成功" , Data = entity.MapTo<WeChatUserListDto>() };
+            }
+        }
+
+        /// <summary>
+        /// 生成会员卡条形码
+        /// </summary>
+        private string GenerateMemberBarCode()
+        {
+            GenerateCode gserver = new GenerateCode(0, 0);
+            return gserver.nextId().ToString();
         }
     }
 }

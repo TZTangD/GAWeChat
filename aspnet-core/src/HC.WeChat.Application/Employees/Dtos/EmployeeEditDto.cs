@@ -32,10 +32,10 @@ namespace HC.WeChat.Employees.Dtos
 
 
         /// <summary>
-        /// 员工职位（枚举 客户经理、营销人员）
+        /// 员工职位
         /// </summary>
         [Required]
-        public UserTypeEnum Position { get; set; }
+        public UserPositionEnum Position { get; set; }
 
 
         /// <summary>

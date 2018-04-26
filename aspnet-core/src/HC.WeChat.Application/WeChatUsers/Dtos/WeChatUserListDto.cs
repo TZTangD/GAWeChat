@@ -43,10 +43,10 @@ namespace HC.WeChat.WeChatUsers.Dtos
 
         public string MemberBarCode { get; set; }
 
-        public int? IntegralTotal { get; set; }
+        public int IntegralTotal { get; set; }
 
         public bool? IsShopkeeper { get; set; }
 
-        public int? Status { get; set; }
+        public UserAuditStatus? Status { get; set; }
     }
 }

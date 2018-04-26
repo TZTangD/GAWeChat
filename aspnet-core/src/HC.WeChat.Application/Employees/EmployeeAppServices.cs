@@ -55,7 +55,7 @@ namespace HC.WeChat.Employees
             var query = _employeeRepository.GetAll()
                   .WhereIf(!string.IsNullOrEmpty(input.Filter) && input.Filter != "null", e => e.Name.Contains(input.Filter) || e.Code.Contains(input.Filter))
                   .WhereIf(input.Position.HasValue, e => e.Position == input.Position)
-                  .WhereIf(mid.HasValue,e=>e.Id==mid);
+                  .WhereIf(mid.HasValue, e => e.Id == mid);
             //TODO:根据传入的参数添加过滤条件
             var employeeCount = await query.CountAsync();
 
@@ -198,9 +198,9 @@ namespace HC.WeChat.Employees
         public async Task<PagedResultDto<EmployeeListDto>> GetPagedEmployeesModal(GetEmployeesInput input)
         {
             var query = _employeeRepository.GetAll()
-                .WhereIf(!string.IsNullOrEmpty(input.Filter), e => e.Name.Contains(input.Filter) ||e.Code.Contains(input.Filter))
-                .WhereIf(input.IsManger,e=>e.Position== UserTypeEnum.内部员工);
-            
+                .WhereIf(!string.IsNullOrEmpty(input.Filter), e => e.Name.Contains(input.Filter) || e.Code.Contains(input.Filter))
+                .WhereIf(input.IsManger, e => e.Position == UserPositionEnum.客户经理);
+
             //TODO:根据传入的参数添加过滤条件
             var employeeCount = await query.CountAsync();
             input.MaxResultCount = 10;

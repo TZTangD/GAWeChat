@@ -76,7 +76,7 @@ namespace HC.WeChat.WeChatUsers.DomainServices
                 {
                     user.NickName = nickName;
                     user.UserType = WechatEnums.UserTypeEnum.消费者;
-                    user.BindStatus = WechatEnums.BindStatusEnum.未绑定;
+                    //user.BindStatus = WechatEnums.BindStatusEnum.未绑定;
                     user.UserId = null;
                     user.UserName = user.NickName;
                     user.BindTime = DateTime.Now;
@@ -92,6 +92,7 @@ namespace HC.WeChat.WeChatUsers.DomainServices
                     user.UserType = WechatEnums.UserTypeEnum.消费者;
                     user.UserName = nickName;
                     user.HeadImgUrl = headImgUrl;
+                    user.IntegralTotal = 0;//积分默认为0
                     user.BindStatus = WechatEnums.BindStatusEnum.未绑定;
                     await _wechatuserRepository.InsertAsync(user);
                 }

@@ -12,13 +12,14 @@ namespace HC.WeChat.Employees.Dtos
         ////ECC/ END CUSTOM CODE SECTION
         public string Code { get; set; }
         public string Name { get; set; }
-        public UserTypeEnum Position { get; set; }
+        public UserPositionEnum Position { get; set; }
         public string Phone { get; set; }
         public string Company { get; set; }
         public string Department { get; set; }
         public bool IsAction { get; set; }
         public int? TenantId { get; set; }
-        public string PositionName {
+        public string PositionName
+        {
             get
             {
                 return this.Position.ToString();

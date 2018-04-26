@@ -21,7 +21,7 @@ namespace HC.WeChat.Employees.Dtos
         /// <summary>
         /// 职位
         /// </summary>
-        public UserTypeEnum? Position { get; set; }
+        public UserPositionEnum? Position { get; set; }
 
         /// <summary>
         /// 正常化排序使用

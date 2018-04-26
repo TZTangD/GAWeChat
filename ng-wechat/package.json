@@ -37,7 +37,9 @@
     "release:next": "bash ./build.sh && cd publish && npm publish --access public --tag next",
     "release": "bash ./build.sh && cd publish && npm publish --access public"
   },
-  "dependencies": {},
+  "dependencies": {
+    "jsbarcode": "^3.9.0"
+  },
   "devDependencies": {
     "@angular/animations": "^5.0.0",
     "@angular/cli": "^1.5.0",

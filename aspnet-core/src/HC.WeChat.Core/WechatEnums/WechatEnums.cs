@@ -24,8 +24,8 @@ namespace HC.WeChat.WechatEnums
     {
         订阅号 = 1,
         认证订阅号 = 2,
-        服务号=3,
-        认证服务号=4
+        服务号 = 3,
+        认证服务号 = 4
     }
 
     /// <summary>
@@ -35,7 +35,7 @@ namespace HC.WeChat.WechatEnums
     {
         草稿 = 1,
         已发布 = 2,
-        已下架=3
+        已下架 = 3
     }
 
     /// <summary>
@@ -60,6 +60,17 @@ namespace HC.WeChat.WechatEnums
         内部员工 = 2,
         消费者 = 4,
         取消关注 = 5
+    }
+
+    /// <summary>
+    /// 用户职位
+    /// </summary>
+    public enum UserPositionEnum
+    {
+        营销人员 = 1,
+        客户经理 = 2,
+        营销中心 = 3,
+        机关人员 = 4
     }
 
     /// <summary>
@@ -133,50 +144,50 @@ namespace HC.WeChat.WechatEnums
     /// </summary>
     public enum ArticleTypeEnum
     {
-        营销活动=1,
-        经验分享=2,
+        营销活动 = 1,
+        经验分享 = 2,
     }
     /// <summary>
     /// 积分类型
     /// </summary>
     public enum IntegralTypeEnum
     {
-        购买商品兑换=1,
-        评价商品获得=2,
-        抽奖消费=3
+        购买商品兑换 = 1,
+        评价商品获得 = 2,
+        抽奖消费 = 3
     }
     /// <summary>
     /// 产品类型
     /// </summary>
     public enum ProductTypeEnum
     {
-        卷烟类=1,
-        特产类2
+        卷烟类 = 1,
+        特产类 = 2
     }
     /// <summary>
     /// 评价等级
     /// </summary>
     public enum ScoreLevelEmun
     {
-        好=5,
-        中=3,
-        差=1
+        好 = 5,
+        中 = 3,
+        差 = 1
     }
     /// <summary>
     /// 计数类型
     /// </summary>
     public enum CountTypeEnum
     {
-        阅读量=1,
-        点赞=2
+        阅读量 = 1,
+        点赞 = 2
     }
     /// <summary>
-    /// 处理状态
+    /// 投稿表处理状态
     /// </summary>
     public enum ProcessTypeEnum
     {
-        未处理=1,
-        已处理=2
+        未处理 = 0,
+        已处理 = 1
     }
     /// <summary>
     /// 配置类型
@@ -190,16 +201,25 @@ namespace HC.WeChat.WechatEnums
     /// </summary>
     public enum DeployCodeEnum
     {
-        商品购买=1,
-        商品评价=2,
-        店铺扫码兑换=3
+        商品购买 = 1,
+        商品评价 = 2,
+        店铺扫码兑换 = 3
     }
     /// <summary>
     /// 文章发布状态
     /// </summary>
     public enum ArticlePushStatusEnum
     {
-        已发布=1,
-        草稿=2
+        草稿 = 0,
+        已发布 = 1
+    }
+
+    /// <summary>
+    /// 用户审核状态
+    /// </summary>
+    public enum UserAuditStatus
+    {
+        未审核 = 0, 
+        已审核 = 1
     }
 }

@@ -31,10 +31,14 @@ namespace HC.WeChat.Employees
         public string Name { get; set; }
 
         /// <summary>
-        /// 员工职位（枚举 客户经理、营销人员）
+        /// 员工职位（枚举 
+        /// 营销人员 = 1,
+        /// 客户经理 = 2,
+        /// 营销中心 = 3,
+        /// 机关人员 = 4）
         /// </summary>
         [Required]
-        public UserTypeEnum Position { get; set; }
+        public UserPositionEnum Position { get; set; }
 
         /// <summary>
         /// 员工电话

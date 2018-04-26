@@ -75,7 +75,7 @@ namespace HC.WeChat.WeChatUsers.Dtos
         /// <summary>
         /// 用户总积分
         /// </summary>
-        public int? IntegralTotal { get; set; }
+        public int IntegralTotal { get; set; }
 
         /// <summary>
         /// 是否是店主 针对零售客户
@@ -85,7 +85,7 @@ namespace HC.WeChat.WeChatUsers.Dtos
         /// <summary>
         /// 审核状态(枚举：审核通过、未审核) 非店主零售客户需审核
         /// </summary>
-        public int? Status { get; set; }
+        public UserAuditStatus? Status { get; set; }
     }
 
     [AutoMapTo(typeof(WeChatUser))]
@@ -95,7 +95,7 @@ namespace HC.WeChat.WeChatUsers.Dtos
 
         public UserTypeEnum UserType { get; set; }
 
-        public string UserName { get; set; }
+        //public string UserName { get; set; }
 
         public string LicenseKey { get; set; }
 
@@ -103,8 +103,24 @@ namespace HC.WeChat.WeChatUsers.Dtos
 
         public int? TenantId { get; set; }
 
-        public string NickName { get; set; }
+        //public string NickName { get; set; }
 
-        public string HeadImgUrl { get; set; }
+        //public string HeadImgUrl { get; set; }
+
+        public string VerificationCode { get; set; }
+
+        //public string Phone { get; set; }
+    }
+
+    /// <summary>
+    /// 会员绑定
+    /// </summary>
+    public class MemberBindDto
+    {
+        public string OpenId { get; set; }
+
+        public int? TenantId { get; set; }
+
+        public string Phone { get; set; }
     }
 }

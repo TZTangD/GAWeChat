@@ -89,7 +89,7 @@ namespace HC.WeChat.WeChatUsers
         /// <summary>
         /// 用户总积分
         /// </summary>
-        public virtual int? IntegralTotal { get; set; }
+        public virtual int IntegralTotal { get; set; }
 
         /// <summary>
         /// 是否是店主 针对零售客户
@@ -99,6 +99,6 @@ namespace HC.WeChat.WeChatUsers
         /// <summary>
         /// 审核状态(枚举：审核通过、未审核) 非店主零售客户需审核
         /// </summary>
-        public virtual int? Status { get; set; }
+        public virtual UserAuditStatus? Status { get; set; }
     }
 }

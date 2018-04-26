@@ -66,8 +66,11 @@ namespace HC.WeChat.WeChatUsers
         /// <summary>
         /// 添加或者修改WeChatUser的方法
         /// </summary>
-        /// <param name="input">微信用户实体</param>
-        /// <returns></returns>
         Task CreateOrUpdateWeChatUserDto(WeChatUserEditDto input);
+
+        /// <summary>
+        /// 绑定会员
+        /// </summary>
+        Task<APIResultDto> BindMemberAsync(MemberBindDto input);
     }
 }
