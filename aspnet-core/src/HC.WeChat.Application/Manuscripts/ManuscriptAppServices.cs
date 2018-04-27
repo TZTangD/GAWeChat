@@ -5,6 +5,7 @@ using Abp.Authorization;
 using Abp.AutoMapper;
 using Abp.Domain.Repositories;
 using Abp.Linq.Extensions;
+using System.Linq;
 
 using System.Linq.Dynamic.Core;
 using Microsoft.EntityFrameworkCore;
@@ -13,13 +14,15 @@ using HC.WeChat.Manuscripts.Dtos;
 using HC.WeChat.Manuscripts.DomainServices;
 using HC.WeChat.Manuscripts;
 using System;
+using HC.WeChat.Authorization;
 
 namespace HC.WeChat.Manuscripts
 {
     /// <summary>
     /// Manuscript应用层服务的接口实现方法
     /// </summary>
-    [AbpAuthorize(ManuscriptAppPermissions.Manuscript)]
+    //[AbpAuthorize(ManuscriptAppPermissions.Manuscript)]
+    [AbpAuthorize(AppPermissions.Pages)]
     public class ManuscriptAppService : WeChatAppServiceBase, IManuscriptAppService
     {
         ////BCC/ BEGIN CUSTOM CODE SECTION
@@ -46,12 +49,18 @@ namespace HC.WeChat.Manuscripts
         public async Task<PagedResultDto<ManuscriptListDto>> GetPagedManuscripts(GetManuscriptsInput input)
         {
 
-            var query = _manuscriptRepository.GetAll();
+            var query = _manuscriptRepository.GetAll()
+                .WhereIf(!string.IsNullOrEmpty(input.Title),m=>m.Title.Contains(input.Title))
+                .WhereIf(!string.IsNullOrEmpty(input.Name),m=>m.UserName.Contains(input.Name))
+                .WhereIf(!string.IsNullOrEmpty(input.Phone),m=>m.Phone.Contains(input.Phone))
+                .WhereIf(input.Status.HasValue,m=>m.Status==input.Status);
             //TODO:根据传入的参数添加过滤条件
             var manuscriptCount = await query.CountAsync();
 
             var manuscripts = await query
-                .OrderBy(input.Sorting)
+                .OrderBy(m=>m.Status)
+                .ThenByDescending(m=>m.CreationTime)
+                .ThenBy(input.Sorting)
                 .PageBy(input)
                 .ToListAsync();
 
@@ -134,7 +143,7 @@ namespace HC.WeChat.Manuscripts
         /// <summary>
         /// 新增Manuscript
         /// </summary>
-        [AbpAuthorize(ManuscriptAppPermissions.Manuscript_CreateManuscript)]
+        //[AbpAuthorize(ManuscriptAppPermissions.Manuscript_CreateManuscript)]
         protected virtual async Task<ManuscriptEditDto> CreateManuscriptAsync(ManuscriptEditDto input)
         {
             //TODO:新增前的逻辑判断，是否允许新增
@@ -147,15 +156,16 @@ namespace HC.WeChat.Manuscripts
         /// <summary>
         /// 编辑Manuscript
         /// </summary>
-        [AbpAuthorize(ManuscriptAppPermissions.Manuscript_EditManuscript)]
-        protected virtual async Task UpdateManuscriptAsync(ManuscriptEditDto input)
+        //[AbpAuthorize(ManuscriptAppPermissions.Manuscript_EditManuscript)]
+        protected virtual async Task<ManuscriptEditDto> UpdateManuscriptAsync(ManuscriptEditDto input)
         {
             //TODO:更新前的逻辑判断，是否允许更新
             var entity = await _manuscriptRepository.GetAsync(input.Id.Value);
             input.MapTo(entity);
 
             // ObjectMapper.Map(input, entity);
-            await _manuscriptRepository.UpdateAsync(entity);
+            var result = await _manuscriptRepository.UpdateAsync(entity);
+            return result.MapTo<ManuscriptEditDto>();
         }
 
         /// <summary>
@@ -163,7 +173,7 @@ namespace HC.WeChat.Manuscripts
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        [AbpAuthorize(ManuscriptAppPermissions.Manuscript_DeleteManuscript)]
+        //[AbpAuthorize(ManuscriptAppPermissions.Manuscript_DeleteManuscript)]
         public async Task DeleteManuscript(EntityDto<Guid> input)
         {
 
@@ -174,11 +184,29 @@ namespace HC.WeChat.Manuscripts
         /// <summary>
         /// 批量删除Manuscript的方法
         /// </summary>
-        [AbpAuthorize(ManuscriptAppPermissions.Manuscript_BatchDeleteManuscripts)]
+        //[AbpAuthorize(ManuscriptAppPermissions.Manuscript_BatchDeleteManuscripts)]
         public async Task BatchDeleteManuscriptsAsync(List<Guid> input)
         {
             //TODO:批量删除前的逻辑判断，是否允许删除
             await _manuscriptRepository.DeleteAsync(s => input.Contains(s.Id));
+        }
+
+        /// <summary>
+        /// 添加或者修改Manuscript的方法
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task<ManuscriptEditDto> CreateOrUpdateManuscriptDto(ManuscriptEditDto input)
+        {
+
+            if (input.Id.HasValue)
+            {
+               return await UpdateManuscriptAsync(input);
+            }
+            else
+            {
+               return await CreateManuscriptAsync(input);
+            }
         }
 
     }

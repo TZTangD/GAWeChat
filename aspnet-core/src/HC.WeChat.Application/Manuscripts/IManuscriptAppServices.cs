@@ -56,5 +56,12 @@ namespace HC.WeChat.Manuscripts
         /// 批量删除Manuscript
         /// </summary>
         Task BatchDeleteManuscriptsAsync(List<Guid> input);
+
+        /// <summary>
+        /// 添加或者修改Manuscript的方法
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        Task<ManuscriptEditDto> CreateOrUpdateManuscriptDto(ManuscriptEditDto input);
     }
 }

@@ -8,6 +8,7 @@ import { ExperienceShareComponent } from "./experience-share/experience-share.co
 import { ContributeManagementComponent } from "./contribute-management/contribute-management.component";
 import { ActivityDetailComponent } from "./activity/activity-detail/activity-detail.component";
 import { ExperienceDetailComponent } from "./experience-share/experience-detail/experience-detail.component";
+import { ContributeDetailComponent } from "./contribute-management/contribute-detail/contribute-detail.component";
 
 const routes: Routes = [
   { path: '', redirectTo: 'index', pathMatch: 'full' },
@@ -19,6 +20,8 @@ const routes: Routes = [
   { path: 'experience-detail', component: ExperienceDetailComponent, data: { translate: 'experience-share', permission: 'Pages' }, canActivate: [AppRouteGuard] },
   { path: 'experience-detail/:id', component: ExperienceDetailComponent, data: { translate: 'experience-share', permission: 'Pages' }, canActivate: [AppRouteGuard] },
   { path: 'contribute-management', component: ContributeManagementComponent, data: { translate: 'contribute-management', permission: 'Pages' }, canActivate: [AppRouteGuard] },
+  { path: 'contribute-detail/:id', component: ContributeDetailComponent, data: { translate: 'contribute-management', permission: 'Pages' }, canActivate: [AppRouteGuard] },
+  
 ];
 @NgModule({
   imports: [RouterModule.forChild(routes)],

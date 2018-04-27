@@ -1670,6 +1670,7 @@ namespace HC.WeChat.Migrations
                 b.Property<int?>("Status");
                 b.Property<int?>("TenantId");
                 b.Property<DateTime>("CreationTime").IsRequired();
+                b.Property<DateTime>("DealWithTime");
 
                 b.HasKey("Id");
 

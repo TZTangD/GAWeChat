@@ -11,6 +11,7 @@ import { MarkettingRoutingModule } from "./marketting-routing.module";
 import { LayoutModule } from "../../layout/layout.module";
 import { ActivityDetailComponent } from "./activity/activity-detail/activity-detail.component";
 import { ExperienceDetailComponent } from "./experience-share/experience-detail/experience-detail.component";
+import { ContributeDetailComponent } from "./contribute-management/contribute-detail/contribute-detail.component";
 
 @NgModule({
     imports: [
@@ -27,6 +28,7 @@ import { ExperienceDetailComponent } from "./experience-share/experience-detail/
         ExperienceShareComponent,
         ExperienceDetailComponent,
         ContributeManagementComponent,
+        ContributeDetailComponent,
     ],
     providers: [
         AppRouteGuard  
