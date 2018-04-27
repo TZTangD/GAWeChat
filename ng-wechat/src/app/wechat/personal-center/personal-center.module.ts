@@ -7,12 +7,16 @@ import { ComponentsModule } from '../components/components.module';
 
 import { MemberCardComponent } from './member-card/member-card.component';
 import { BindMemberComponent } from './bind-member/bind-member.component';
+import { BindRetailerComponent } from './bind-retailer/bind-retailer.component';
+import { ShopComponent } from './shop/shop.component';
 
 // region: components
 
 const COMPONENTS = [PersonalComponent, 
     MemberCardComponent, 
-    BindMemberComponent];
+    BindMemberComponent,
+    BindRetailerComponent,
+    ShopComponent];
 
 const routes: Routes = [
     { path: '', redirectTo: 'personal' },
@@ -21,6 +25,9 @@ const routes: Routes = [
     { path: 'member-card', component: MemberCardComponent },
     { path: 'member-card/:openId/:tenantId', component: MemberCardComponent },
     { path: 'bind-member', component: BindMemberComponent },
+    { path: 'bind-retailer', component: BindRetailerComponent },
+    { path: 'bind-retailer/:openId/:tenantId', component: BindRetailerComponent },
+    { path: 'shop', component: ShopComponent },
 ];
 // endregion
 

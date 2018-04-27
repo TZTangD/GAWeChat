@@ -37,5 +37,15 @@ export class WechatUserService {
       return result;
     });
   }
+
+  BindWeChatUserAsync(params: any): Observable<ApiResult<WechatUser>>{
+    return this.http.post('/api/services/app/WeChatUser/BindWeChatUserAsync', params).map(data => {
+      let result = new ApiResult<WechatUser>();
+      result.code = data.result.code;
+      result.msg = data.result.msg;
+      result.data = WechatUser.fromJS(data.result.data);
+      return result;
+    });
+  }
   
 }

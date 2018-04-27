@@ -1,0 +1,43 @@
+<Page [ngClass]="'input'" [title]="'零售客户绑定'" [showTitle]="false" [showBack]="false" [spacing]="false">
+    <div class="weui-media-box weui-media-box_small-appmsg">
+        <div class="weui-cells">
+            <a class="weui-cell weui-cell_access" href="javascript:;">
+                <div class="weui-cell__hd">
+                    <img src="./assets/images/icon_nav_dialog.png" alt="" style="width:20px;margin-right:5px;display:block">
+                </div>
+                <div class="weui-cell__bd weui-cell_primary">
+                    <p>零售客户绑定</p>
+                </div>
+            </a>
+
+        </div>
+    </div>
+    <form #f="ngForm" (ngSubmit)="onSave()">
+        <div class="weui-cells__title">绑定后可进行店铺、特色商品、店员管理</div>
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell weui-cell_warn">
+                <div class="weui-cell__hd">
+                    <label class="weui-label">专卖证</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" [(ngModel)]="res.licenseKey" name="licenseKey" weui-input="licenseKey" placeholder="请输入专卖证号" weui-required>
+                </div>
+            </div>
+            <div class="weui-cell weui-cell_warn">
+                <div class="weui-cell__hd">
+                    <label class="weui-label">验证码</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" [(ngModel)]="res.verificationCode" name="verificationCode" weui-input="verificationCode" placeholder="请输入验证码" weui-required>
+                </div>
+            </div>
+        </div>
+        <div class="weui-cells__tips">店员绑定，需店铺管理员审核</div>
+        <div class="weui-btn-area">
+            <button class="weui-btn weui-btn_primary" [disabled]="!f.form.valid || !f.form.dirty" [ngClass]="{'weui-btn_disabled': !f.form.valid || !f.form.dirty}">绑定</button>
+        </div>
+    </form>
+    <!--将对话框组件放在底部-->
+    <weui-toptips #toptips></weui-toptips>
+    <weui-toast #loading [type]="'loading'" [text]="'提交中...'"></weui-toast>
+</Page>
