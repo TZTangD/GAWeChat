@@ -18,5 +18,12 @@ namespace HC.WeChat.ShopEvaluations.Dtos
         public string Content { get; set; }
         public DateTime CreationTime { get; set; }
         public int? TenantId { get; set; }
+        public string EvaluationName
+        {
+            get
+            {
+                return Evaluation.ToString();
+            }
+        }
     }
 }

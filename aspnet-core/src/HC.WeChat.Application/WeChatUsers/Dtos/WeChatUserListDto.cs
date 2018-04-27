@@ -48,5 +48,13 @@ namespace HC.WeChat.WeChatUsers.Dtos
         public bool? IsShopkeeper { get; set; }
 
         public UserAuditStatus? Status { get; set; }
+
+        public string StatusName
+        {
+            get
+            {
+                return Status.ToString();
+            }
+        }
     }
 }

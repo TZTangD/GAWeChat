@@ -5,6 +5,7 @@ using Abp.Authorization;
 using Abp.AutoMapper;
 using Abp.Domain.Repositories;
 using Abp.Linq.Extensions;
+using System.Linq;
 
 using System.Linq.Dynamic.Core;
 using Microsoft.EntityFrameworkCore;
@@ -13,13 +14,15 @@ using HC.WeChat.Shops.Dtos;
 using HC.WeChat.Shops.DomainServices;
 using HC.WeChat.Shops;
 using System;
+using HC.WeChat.Authorization;
 
 namespace HC.WeChat.Shops
 {
     /// <summary>
     /// Shop应用层服务的接口实现方法
     /// </summary>
-    [AbpAuthorize(ShopAppPermissions.Shop)]
+    //[AbpAuthorize(ShopAppPermissions.Shop)]
+    [AbpAuthorize(AppPermissions.Pages)]
     public class ShopAppService : WeChatAppServiceBase, IShopAppService
     {
         ////BCC/ BEGIN CUSTOM CODE SECTION
@@ -46,12 +49,15 @@ namespace HC.WeChat.Shops
         public async Task<PagedResultDto<ShopListDto>> GetPagedShops(GetShopsInput input)
         {
 
-            var query = _shopRepository.GetAll();
+            var query = _shopRepository.GetAll()
+                .WhereIf(!string.IsNullOrEmpty(input.Name),s=>s.Name.Contains(input.Name))
+                .WhereIf(input.Status.HasValue,s=>s.Status==input.Status);
             //TODO:根据传入的参数添加过滤条件
             var shopCount = await query.CountAsync();
 
             var shops = await query
-                .OrderBy(input.Sorting)
+                .OrderByDescending(s=>s.CreationTime)
+                .ThenBy(input.Sorting)
                 .PageBy(input)
                 .ToListAsync();
 
@@ -134,7 +140,7 @@ namespace HC.WeChat.Shops
         /// <summary>
         /// 新增Shop
         /// </summary>
-        [AbpAuthorize(ShopAppPermissions.Shop_CreateShop)]
+        //[AbpAuthorize(ShopAppPermissions.Shop_CreateShop)]
         protected virtual async Task<ShopEditDto> CreateShopAsync(ShopEditDto input)
         {
             //TODO:新增前的逻辑判断，是否允许新增
@@ -147,15 +153,16 @@ namespace HC.WeChat.Shops
         /// <summary>
         /// 编辑Shop
         /// </summary>
-        [AbpAuthorize(ShopAppPermissions.Shop_EditShop)]
-        protected virtual async Task UpdateShopAsync(ShopEditDto input)
+        //[AbpAuthorize(ShopAppPermissions.Shop_EditShop)]
+        protected virtual async Task<ShopEditDto> UpdateShopAsync(ShopEditDto input)
         {
             //TODO:更新前的逻辑判断，是否允许更新
             var entity = await _shopRepository.GetAsync(input.Id.Value);
             input.MapTo(entity);
 
             // ObjectMapper.Map(input, entity);
-            await _shopRepository.UpdateAsync(entity);
+            entity = await _shopRepository.UpdateAsync(entity);
+            return entity.MapTo<ShopEditDto>();
         }
 
         /// <summary>
@@ -163,7 +170,7 @@ namespace HC.WeChat.Shops
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        [AbpAuthorize(ShopAppPermissions.Shop_DeleteShop)]
+        //[AbpAuthorize(ShopAppPermissions.Shop_DeleteShop)]
         public async Task DeleteShop(EntityDto<Guid> input)
         {
 
@@ -174,13 +181,30 @@ namespace HC.WeChat.Shops
         /// <summary>
         /// 批量删除Shop的方法
         /// </summary>
-        [AbpAuthorize(ShopAppPermissions.Shop_BatchDeleteShops)]
+        //[AbpAuthorize(ShopAppPermissions.Shop_BatchDeleteShops)]
         public async Task BatchDeleteShopsAsync(List<Guid> input)
         {
             //TODO:批量删除前的逻辑判断，是否允许删除
             await _shopRepository.DeleteAsync(s => input.Contains(s.Id));
         }
 
+        /// <summary>
+        /// 添加或者修改Shop的方法
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task<ShopEditDto> CreateOrUpdateShopDto(ShopEditDto input)
+        {
+
+            if (input.Id.HasValue)
+            {
+               return  await UpdateShopAsync(input);
+            }
+            else
+            {
+               return  await CreateShopAsync(input);
+            }
+        }
     }
 }
 

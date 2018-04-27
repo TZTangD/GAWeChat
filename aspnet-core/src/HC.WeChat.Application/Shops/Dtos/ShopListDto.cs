@@ -20,9 +20,16 @@ namespace HC.WeChat.Shops.Dtos
         public string Evaluation { get; set; }
         public decimal? Longitude { get; set; }
         public decimal? Latitude { get; set; }
-        public ScoreLevelEmun? Status { get; set; }
+        public CheckStaus? Status { get; set; }
         public DateTime? AuditTime { get; set; }
         public DateTime CreationTime { get; set; }
         public int? TenantId { get; set; }
+        public string StatusName
+        {
+            get
+            {
+                return Status.ToString();
+            }
+        }
     }
 }

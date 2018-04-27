@@ -2,6 +2,7 @@
 using HC.WeChat.Dto;
 using HC.WeChat.WechatEnums;
 using HC.WeChat.WeChatUsers;
+using System;
 
 namespace HC.WeChat.WeChatUsers.Dtos
 {
@@ -14,6 +15,36 @@ namespace HC.WeChat.WeChatUsers.Dtos
         /// </summary>
         public string Name { get; set; }
 
+        /// <summary>
+        /// 用户类型
+        /// </summary>
+        public UserTypeEnum? UserType { get; set; }
+
+        /// <summary>
+        /// 正常化排序使用
+        /// </summary>
+        public void Normalize()
+        {
+            if (string.IsNullOrEmpty(Sorting))
+            {
+                Sorting = "Id";
+            }
+        }
+
+    }
+
+    /// <summary>
+    /// 店员搜索条件
+    /// </summary>
+    public class GetShopWeChatUsersInput : PagedAndSortedInputDto, IShouldNormalize
+    {
+        ////BCC/ BEGIN CUSTOM CODE SECTION
+        ////ECC/ END CUSTOM CODE SECTION
+        /// <summary>
+        /// 模糊搜索使用的关键字
+        /// </summary>
+        public string Name { get; set; }
+        public Guid? ShopOwnerId { get; set; }
         /// <summary>
         /// 用户类型
         /// </summary>

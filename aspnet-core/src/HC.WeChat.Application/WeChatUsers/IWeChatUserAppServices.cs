@@ -72,5 +72,12 @@ namespace HC.WeChat.WeChatUsers
         /// 绑定会员
         /// </summary>
         Task<APIResultDto> BindMemberAsync(MemberBindDto input);
+
+        /// <summary>
+        /// 获取店员信息
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        Task<PagedResultDto<WeChatUserListDto>> GetPagedShopWeChatUsers(GetShopWeChatUsersInput input);
     }
 }

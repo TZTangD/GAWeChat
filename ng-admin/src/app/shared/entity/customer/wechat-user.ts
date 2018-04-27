@@ -1,4 +1,4 @@
-export class WechatUser implements IWechatUser {
+export class WeChatUser implements IWeChatUser {
     id: string;
     nickName: string;
     openId: string;
@@ -9,17 +9,14 @@ export class WechatUser implements IWechatUser {
     bindTime: Date;
     tenantId: number;
     unBindTime: Date;
-    headImgUrl: string;
-    userTypeName: string;
-    bindStatusName: string;
-
     phone: string;
     memberBarCode: string;
     integralTotal: number;
     isShopkeeper: boolean;
     status: number;
-    statusName: string;
-    constructor(data?: IWechatUser) {
+    headImgUrl: string;
+
+    constructor(data?: IWeChatUser) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -40,22 +37,18 @@ export class WechatUser implements IWechatUser {
             this.bindTime = data["bindTime"];
             this.tenantId = data["tenantId"];
             this.unBindTime = data["unBindTime"];
-            this.userTypeName = data["userTypeName"];
-            this.bindStatusName = data["bindStatusName"];
-
             this.phone = data["phone"];
             this.memberBarCode = data["memberBarCode"];
             this.integralTotal = data["integralTotal"];
             this.isShopkeeper = data["isShopkeeper"];
             this.status = data["status"];
-            this.statusName = data["statusName"];
-
+            this.headImgUrl = data["headImgUrl"];
 
         }
     }
 
-    static fromJS(data: any): WechatUser {
-        let result = new WechatUser();
+    static fromJS(data: any): WeChatUser {
+        let result = new WeChatUser();
         result.init(data);
         return result;
     }
@@ -72,7 +65,6 @@ export class WechatUser implements IWechatUser {
         data["bindTime"] = this.bindTime;
         data["tenantId"] = this.tenantId;
         data["unBindTime"] = this.unBindTime;
-
         data["phone"] = this.phone;
         data["memberBarCode"] = this.memberBarCode;
         data["integralTotal"] = this.integralTotal;
@@ -84,12 +76,13 @@ export class WechatUser implements IWechatUser {
 
     clone() {
         const json = this.toJSON();
-        let result = new WechatUser();
+        let result = new WeChatUser();
         result.init(json);
         return result;
     }
 }
-export interface IWechatUser {
+
+export interface IWeChatUser {
     id: string;
     nickName: string;
     openId: string;
@@ -100,11 +93,10 @@ export interface IWechatUser {
     bindTime: Date;
     tenantId: number;
     unBindTime: Date;
-    headImgUrl: string;
-
     phone: string;
     memberBarCode: string;
     integralTotal: number;
     isShopkeeper: boolean;
     status: number;
+    headImgUrl: string;
 }

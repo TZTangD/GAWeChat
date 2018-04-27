@@ -10,6 +10,8 @@ import { RetailCustomerServiceProxy } from '@shared/service-proxies/customer-ser
 import { AdviseService } from '@shared/service-proxies/consumer-service';
 import { WechatUserServiceProxy } from '@shared/service-proxies/wechat-service';
 import { ManuscriptServiceProxy } from '@shared/service-proxies/marketing-service/manuscript-service';
+import { ShopServiceProxy } from '@shared/service-proxies/customer-service/shop-service';
+import { ShopEvaluationServiceProxy } from '@shared/service-proxies/customer-service/shop-evaluation-service';
 
 @NgModule({
     providers: [
@@ -38,7 +40,9 @@ import { ManuscriptServiceProxy } from '@shared/service-proxies/marketing-servic
         UserAnswerService,
         AdviseService,
         ArticleServiceProxy,
-        ManuscriptServiceProxy
+        ManuscriptServiceProxy,
+        ShopServiceProxy,
+        ShopEvaluationServiceProxy,
     ]
 })
 export class ServiceProxyModule { }

@@ -331,6 +331,37 @@ namespace HC.WeChat.WeChatUsers
             GenerateCode gserver = new GenerateCode(0, 0);
             return gserver.nextId().ToString();
         }
+
+        /// <summary>
+        /// 获取店员信息
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task<PagedResultDto<WeChatUserListDto>> GetPagedShopWeChatUsers(GetShopWeChatUsersInput input)
+        {
+
+            var query = _wechatuserRepository.GetAll()
+                .Where(w=>w.UserId==input.ShopOwnerId)
+                .Where(w=>w.UserType== UserTypeEnum.零售客户);
+
+            //TODO:根据传入的参数添加过滤条件
+            var wechatuserCount = await query.CountAsync();
+
+            var wechatusers = await query
+                .OrderByDescending(w=>w.IsShopkeeper)
+                .ThenBy(input.Sorting)
+                .PageBy(input)
+                .ToListAsync();
+
+            //var wechatuserListDtos = ObjectMapper.Map<List <WeChatUserListDto>>(wechatusers);
+            var wechatuserListDtos = wechatusers.MapTo<List<WeChatUserListDto>>();
+
+            return new PagedResultDto<WeChatUserListDto>(
+                wechatuserCount,
+                wechatuserListDtos
+                );
+
+        }
     }
 }
 

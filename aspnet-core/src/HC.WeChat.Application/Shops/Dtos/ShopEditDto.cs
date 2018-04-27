@@ -51,7 +51,7 @@ namespace HC.WeChat.Shops.Dtos
         public string Evaluation { get; set; }
         public decimal? Longitude { get; set; }
         public decimal? Latitude { get; set; }
-        public ScoreLevelEmun? Status { get; set; }
+        public CheckStaus? Status { get; set; }
         public DateTime? AuditTime { get; set; }
 
 
@@ -61,5 +61,16 @@ namespace HC.WeChat.Shops.Dtos
         [Required]
         public DateTime CreationTime { get; set; }
         public int? TenantId { get; set; }
+
+        /// <summary>
+        /// 审核状态名字
+        /// </summary>
+        public string StatusName
+        {
+            get
+            {
+                return Status.ToString();
+            }
+        }
     }
 }

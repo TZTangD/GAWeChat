@@ -56,5 +56,12 @@ namespace HC.WeChat.Shops
         /// 批量删除Shop
         /// </summary>
         Task BatchDeleteShopsAsync(List<Guid> input);
+
+        /// <summary>
+        /// 添加或者修改Shop的方法
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        Task<ShopEditDto> CreateOrUpdateShopDto(ShopEditDto input);
     }
 }

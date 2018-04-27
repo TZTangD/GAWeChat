@@ -31,8 +31,8 @@ export class RetailCustomerServiceProxy {
 
 
     /**
-     * 通过消息id获取自动回复消息信息
-     * @param id 消息id
+     * 通过零售户id获取零售户信息
+     * @param id 零售户id
      */
     get(id: number): Observable<RetailCustomer> {
         let url_ = this.baseUrl + "/api/services/app/Retailer/GetRetailerByIdDtoAsync?";
@@ -86,7 +86,7 @@ export class RetailCustomerServiceProxy {
     }
 
     /**
-     * 新增或修改自动回复消息信息
+     * 新增或修改零售户信息
      * @param input 
      */
     update(input: RetailCustomer): Observable<RetailCustomer> {
@@ -193,7 +193,7 @@ export class RetailCustomerServiceProxy {
 
 
     /**
-     * 获取活动商品
+     * 获取零售户
      * @return Success
      */
     getAll(skipCount: number, maxResultCount: number, parameter: Parameter[]): Observable<PagedResultDtoOfRetailCustomer> {
