@@ -19,6 +19,7 @@ const routes: Routes = [
     { path: 'personal', component: PersonalComponent },
     { path: 'personal/:openId/:tenantId', component: PersonalComponent },
     { path: 'member-card', component: MemberCardComponent },
+    { path: 'member-card/:openId/:tenantId', component: MemberCardComponent },
     { path: 'bind-member', component: BindMemberComponent },
 ];
 // endregion

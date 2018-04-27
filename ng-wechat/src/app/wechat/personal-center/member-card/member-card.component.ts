@@ -15,32 +15,33 @@ export class MemberCardComponent extends AppComponentBase implements OnInit {
 
     user: WechatUser;
 
-    constructor(injector: Injector, private wechatUserService: WechatUserService, private router: Router) { 
+    constructor(injector: Injector, private wechatUserService: WechatUserService, private router: Router) {
         super(injector);
     }
 
     ngOnInit() {
-        this.settingsService.getUser().subscribe(result =>{
+        this.settingsService.getUser().subscribe(result => {
             this.user = result;
-            if(!this.user.phone || !this.user.memberBarCode){//没有电话号码和会员卡号 都需要重新绑定
+            if (!this.user || !this.user.phone || !this.user.memberBarCode) {//没有电话号码和会员卡号 都需要重新绑定
                 this.router.navigate(["/center/bind-member"]);
-            } 
-            this.generateBarcode('barcode', this.user.memberBarCode);
-        });      
+            } else {
+                this.generateBarcode('barcode', this.user.memberBarCode);
+            }
+        });
     }
 
     generateBarcode(id: string, code: string) {
         var barcode = document.getElementById(id),
-          options = {
-            format: 'CODE128',
-            displayValue: true,
-            background:'#FAFAFA',
-            fontSize: 20,
-            height: 100,
-            font: 'sans-serif'//,
-            //fontOptions: 'bold'
-          };
+            options = {
+                format: 'CODE128',
+                displayValue: true,
+                background: '#FAFAFA',
+                fontSize: 20,
+                height: 100,
+                font: 'sans-serif'//,
+                //fontOptions: 'bold'
+            };
         JsBarcode(barcode, code, options);
-      }
-    
+    }
+
 } 
