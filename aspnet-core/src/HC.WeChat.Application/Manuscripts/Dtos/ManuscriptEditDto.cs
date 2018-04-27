@@ -51,5 +51,21 @@ namespace HC.WeChat.Manuscripts.Dtos
         /// </summary>
         [Required]
         public DateTime CreationTime { get; set; }
+
+        /// <summary>
+        /// 处理时间
+        /// </summary>
+        public DateTime? DealWithTime { get; set; }
+
+        /// <summary>
+        /// 处理状态名字
+        /// </summary>
+        public string StatusName
+        {
+            get
+            {
+                return Status.ToString();
+            }
+        }
     }
 }

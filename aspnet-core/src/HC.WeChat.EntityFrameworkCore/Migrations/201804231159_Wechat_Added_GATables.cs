@@ -70,7 +70,9 @@ namespace HC.WeChat.Migrations
                     OpenId = table.Column<string>(maxLength: 50, nullable: true),
                     Status = table.Column<int>(nullable: true),
                     TenantId = table.Column<int>(nullable: true),
-                    CreationTime = table.Column<DateTime>(nullable: false)
+                    CreationTime = table.Column<DateTime>(nullable: false),
+                    DealWithTime = table.Column<DateTime>(nullable: true)
+
                 },
                 constraints: table =>
                 {

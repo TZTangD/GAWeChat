@@ -1,0 +1,93 @@
+<!-- <pro-header></pro-header> -->
+<nz-card [nzBordered]="false" nzTitle="投稿详情">
+        <nz-card [nzBordered]="false">
+            <form nz-form [formGroup]="form" id="frm_create_activity">
+                <div nz-row>
+                    <!-- <ng-template #deleteContent>
+                        <h2>是否删除活动 {{manuscript.title}}?</h2>
+                    </ng-template> -->
+                    <ng-template #dealWithContent>
+                        <h2>是否标记稿件 {{manuscript.title}} 为已处理?</h2>
+                    </ng-template>
+                    <div nz-col [nzSpan]="16">
+                        <div nz-form-item nz-row>
+                            <div nz-form-label nz-col [nzSm]="4">
+                                <label for="title">投稿主题</label>
+                            </div>
+                            <div nz-form-control nz-col [nzSm]="20" >
+                                {{manuscript.title}}
+                            </div>
+                        </div>
+                        <div nz-form-item nz-row>
+                            <div nz-form-label nz-col [nzSm]="4">
+                                <label for="type">投稿类型</label>
+                            </div>
+                            <div nz-form-control nz-col [nzSm]="20">
+                                {{manuscript.type}}
+                            </div>
+                        </div>
+                        <div nz-form-item nz-row>
+                                <div nz-form-label nz-col [nzSm]="4">
+                                    <label for="creationTime">投稿时间</label>
+                                </div>
+                                <div nz-form-control nz-col [nzSm]="20">
+                                    {{manuscript.creationTime | _date}}
+                                </div>
+                            </div>
+                        <div nz-form-item nz-row>
+                                <div nz-form-label nz-col [nzSm]="4">
+                                    <label for="userName">用户姓名</label>
+                                </div>
+                                <div nz-form-control nz-col [nzSm]="20">
+                                    {{manuscript.userName}}
+                                </div>
+                            </div>
+                        <div nz-form-item nz-row>
+                            <div nz-form-label nz-col [nzSm]="4">
+                                <label for="phone" >联系电话</label>
+                            </div>
+                            <div nz-form-control nz-col [nzSm]="20">
+                                {{manuscript.phone}}
+                            </div>
+                        </div>
+                        <div nz-form-item nz-row>
+                            <div nz-form-label nz-col [nzSm]="4">
+                                <label for="statusName" >处理状态</label>
+                            </div>
+                            <div nz-form-control nz-col [nzSm]="20">
+                                {{manuscript.statusName}}
+                            </div>
+                        </div>
+                        <div nz-form-item nz-row *ngIf="isShowTime">
+                            <div nz-form-label nz-col [nzSm]="4">
+                                <label for="author" >处理时间</label>
+                            </div>
+                            <div nz-form-control nz-col [nzSm]="20">
+                                {{manuscript.dealWithTime | _date}}
+                            </div>
+                        </div>
+                        <div nz-form-item nz-row>
+                            <div nz-form-label nz-col [nzSm]="4">
+                                <label for="content">投稿内容</label>
+                            </div>
+                            <div nz-form-control nz-col [nzSm]="20" nzHasFeedback [nzValidateStatus]="getFormControl('content')">
+                                <nz-input [nzDisabled]="true" nzType="textarea" nzRows="6" formControlName="content" [(ngModel)]="manuscript.content" [nzId]="'content'"></nz-input>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <footer-toolbar errorCollect>
+                <button nz-button *ngIf="isHandle" [nzType]="'primary'" (click)="save(dealWithContent)" [nzSize]="'large'" [nzLoading]="isConfirmLoading">
+                    {{l("标记为已处理")}}
+                </button>
+                <!-- <button nz-button  [nzType]="'danger'" (click)="delete(deleteContent)" [nzSize]="'large'" [nzLoading]="isConfirmLoading">
+                    {{l("删除")}}
+                </button> -->
+                <button nz-button [nzType]="'default'" (click)="return()" [nzSize]="'large'">
+                    {{l("返回")}}
+                </button>
+                <!-- <a routerLink="../admin/retail-customer" routerLinkActive="ngOnInit">Heroes</a> -->
+            </footer-toolbar>
+        </nz-card>
+    </nz-card>

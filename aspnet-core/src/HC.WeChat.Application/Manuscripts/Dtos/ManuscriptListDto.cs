@@ -19,5 +19,13 @@ namespace HC.WeChat.Manuscripts.Dtos
         public ProcessTypeEnum? Status { get; set; }
         public int? TenantId { get; set; }
         public DateTime CreationTime { get; set; }
+        public string StatusName
+        {
+            get
+            {
+                return Status.ToString();
+            }
+        }
+        public DateTime? DealWithTime { get; set; }
     }
 }

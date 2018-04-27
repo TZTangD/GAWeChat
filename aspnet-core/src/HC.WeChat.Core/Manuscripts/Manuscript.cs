@@ -66,5 +66,11 @@ namespace HC.WeChat.Manuscripts
         /// </summary>
         [Required]
         public virtual DateTime CreationTime { get; set; }
+        
+        /// <summary>
+        /// 处理时间
+        /// </summary>
+        public virtual DateTime? DealWithTime { get; set; }
+
     }
 }

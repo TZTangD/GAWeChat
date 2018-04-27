@@ -7,3 +7,4 @@ export * from './activity-form-service';
 export * from './user-question-service';
 export * from './user-answer-service';
 export * from './article-service';
+export * from './manuscript-service';
