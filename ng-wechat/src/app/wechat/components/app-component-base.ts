@@ -21,7 +21,7 @@ export abstract class AppComponentBase {
         this.activatedRoute.params.subscribe((params: Params) => {
             let openId = params['openId'];
             let tenantId = params['tenantId'];
-            if(openId && tenantId){
+            if(openId){
                 this.settingsService.setUserId(openId, tenantId);
             }
             console.log('openId:' + openId);

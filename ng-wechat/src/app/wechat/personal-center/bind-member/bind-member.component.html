@@ -1,20 +1,21 @@
-<Page [ngClass]="'input'" [title]="'会员绑定'" [subTitle]="'绑定手机号立即成为会员'" [showTitle]="true" [spacing]="false">
+<Page [ngClass]="'input'" [title]="'手机号绑定'" [subTitle]="'绑定手机号立即成为会员'" [showTitle]="false" [showBack]="true" [backUrl]="['/center/personal']" [spacing]="false">
     <form #f="ngForm" (ngSubmit)="onSave()">
+        <div class="weui-cells__title">绑定或修改手机号，绑定手机号立即成为会员</div>
         <div class="weui-cells weui-cells_form">
             <div class="weui-cell weui-cell_warn">
                 <div class="weui-cell__hd">
                     <label class="weui-label">手机号</label>
                 </div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" type="tel" [(ngModel)]="res.phone" name="phone" placeholder="请输入手机号"
-                        weui-input="phone" weui-required>
+                    <input class="weui-input" type="tel" [(ngModel)]="res.phone" name="phone" placeholder="请输入手机号" weui-input="mobile" weui-required>
                 </div>
             </div>
         </div>
         <div class="weui-btn-area">
-            <button class="weui-btn weui-btn_primary"
-                [disabled]="!f.form.valid || !f.form.dirty"
-                [ngClass]="{'weui-btn_disabled': !f.form.valid || !f.form.dirty}">绑定</button>
+            <button class="weui-btn weui-btn_primary" [disabled]="!f.form.valid || !f.form.dirty" [ngClass]="{'weui-btn_disabled': !f.form.valid || !f.form.dirty}">绑定</button>
         </div>
     </form>
+    <!--将对话框组件放在底部-->
+    <weui-toptips #toptips></weui-toptips>
+    <weui-toast #loading [type]="'loading'" [text]="'提交中...'"></weui-toast>
 </Page>

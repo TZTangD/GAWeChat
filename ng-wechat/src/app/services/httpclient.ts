@@ -66,7 +66,7 @@ export class HttpClient {
 
   request(url: string, method: RequestMethod, body?: any, showLoading?: boolean): Observable<any> {
     //let headers = new Headers();
-
+    
     let headers = new Headers({
         "Content-Type": "application/json",
         "Accept": "application/json"
@@ -76,7 +76,10 @@ export class HttpClient {
     options.headers = headers;
     options.url = url;
     options.method = method;
-    //options.body = body;
+    if(body){
+        const content_ = JSON.stringify(body);
+        options.body = content_;
+    }
     //options.withCredentials = true;
 
     let request = new Request(options);

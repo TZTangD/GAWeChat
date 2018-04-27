@@ -274,7 +274,6 @@ namespace HC.WeChat.WeChatUsers
         {
             var user = await _wechatuserManager.GetWeChatUserAsync(openId, tenantId);
             var userDto = user.MapTo<WeChatUserListDto>();
-            userDto.HeadImgUrl = user.HeadImgUrl ?? @"/gawechat/img/timg-4.jpeg";
             return userDto;
         }
 
@@ -312,7 +311,7 @@ namespace HC.WeChat.WeChatUsers
                 }
 
                 entity.Phone = input.Phone;
-                entity.MemberBarCode = GenerateMemberBarCode();
+                entity.MemberBarCode = entity.MemberBarCode?? GenerateMemberBarCode();
                 if (entity.UserType == UserTypeEnum.消费者)
                 {
                     entity.BindStatus = BindStatusEnum.已绑定;

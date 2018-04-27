@@ -1,6 +1,11 @@
-import { Component, ViewEncapsulation, Injector } from '@angular/core';
+import { Component, ViewEncapsulation, Injector, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { AppComponentBase } from '../../components/app-component-base';
+import { WechatUserService } from '../../../services';
+import { Router } from '@angular/router';
+
+import { ToptipsComponent, ToptipsService } from "ngx-weui/toptips";
+import { ToastComponent } from "ngx-weui/toast";
 
 @Component({
     selector: 'wechat-bind-member',
@@ -11,12 +16,32 @@ import { AppComponentBase } from '../../components/app-component-base';
 export class BindMemberComponent extends AppComponentBase {
 
     res: any = {};
+    @ViewChild('toptips') toptips: ToptipsComponent;
+    @ViewChild('loading') loadingToast: ToastComponent;
 
-    constructor(injector: Injector) { 
+    constructor(injector: Injector, 
+        private wechatUserService: WechatUserService, 
+        private router: Router, 
+        private srv: ToptipsService) { 
         super(injector);
     }
 
     onSave() {
-        alert('请求数据：' + JSON.stringify(this.res));
+        this.res.openId = this.settingsService.openId;
+        if(this.settingsService.tenantId){
+            this.res.tenantId = this.settingsService.tenantId;
+        }
+        
+        this.loadingToast._showd = true;
+        this.wechatUserService.BindMemberAsync(this.res).subscribe(result => {
+            this.loadingToast.onHide();
+            if(result.code == 0){//成功
+                this.srv['success']('绑定成功');
+                this.settingsService.setUser(result.data);
+                this.router.navigate(["/center/member-card"]);
+            } else {//失败
+                this.srv['warn'](result.msg);
+            }
+        });
     }
 }
