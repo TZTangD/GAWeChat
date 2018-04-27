@@ -25,11 +25,6 @@ export class PersonalComponent extends AppComponentBase implements OnInit {
     }
 
     goShowCard(){
-        //alert(this.user.phone)
-        if(!this.user.phone || this.user.phone == null || this.user.phone == ''){
-            this.router.navigate(["/center/bind-member"]);
-        } else {
-            this.router.navigate(["/center/member-card"]);
-        }
+        this.router.navigate(["/center/member-card"]);
     }
 } 
