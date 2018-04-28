@@ -1,7 +1,7 @@
 import { Component, ViewEncapsulation, Injector, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { AppComponentBase } from '../../components/app-component-base';
-import { WechatUserService } from '../../../services';
+import { AppComponentBase } from '../../../components/app-component-base';
+import { WechatUserService } from '../../../../services';
 import { Router } from '@angular/router';
 
 import { ToptipsComponent, ToptipsService } from "ngx-weui/toptips";

@@ -1,0 +1,31 @@
+<Page [ngClass]="'icons'" [spacing]="false" [showTitle]="false">
+    <div class="weui-cells">
+        <div class="weui-cell">
+            <div class="icon-box">
+                <i class="weui-icon-waiting weui-icon_msg"></i>
+                <div class="icon-box__ctn">
+                    <h3 class="icon-box__title">等待审核</h3>
+                    <p class="icon-box__desc">等待店铺管理员审核</p>
+                </div>
+            </div>
+        </div>
+        <div class="weui-cell" *ngIf="user" style="font-size: 14px;" >
+            <div class="weui-cell__bd">
+                <p>绑定用户名</p>
+            </div>
+            <div class="weui-cell__ft">{{user.nickName}}</div>
+        </div>
+        <div class="weui-cell" *ngIf="user" style="font-size: 14px;" >
+            <div class="weui-cell__bd">
+                <p>绑定用户类型</p>
+            </div>
+            <div class="weui-cell__ft">{{user.userTypeName}}</div>
+        </div>
+        <div class="weui-cell" *ngIf="user" style="font-size: 14px;" >
+            <div class="weui-cell__bd">
+                <p>绑定时间</p>
+            </div>
+            <div class="weui-cell__ft">{{user.bindTime | date:'yyyy-MM-dd HH:mm'}}</div>
+        </div>
+    </div>
+</Page>

@@ -1,6 +1,5 @@
 import { Component, ViewEncapsulation, OnInit, Injector } from '@angular/core';
 import { AppComponentBase } from '../../components/app-component-base';
-import { AppConsts } from '../../../services';
 import { WechatUser } from '../../../services/model';
 import { Router } from '@angular/router';
 

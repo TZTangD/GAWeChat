@@ -1,19 +1,19 @@
 import { Component, ViewEncapsulation, Injector, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { AppComponentBase } from '../../components/app-component-base';
-import { WechatUserService } from '../../../services';
+import { AppComponentBase } from '../../../components/app-component-base';
+import { WechatUserService } from '../../../../services';
 import { Router } from '@angular/router';
 
 import { ToptipsComponent, ToptipsService } from "ngx-weui/toptips";
 import { ToastComponent } from "ngx-weui/toast";
 
 @Component({
-    selector: 'wechat-bind-retailer',
-    templateUrl: './bind-retailer.component.html',
-    styleUrls: [ './bind-retailer.component.scss' ],
+    selector: 'wechat-bind-member',
+    templateUrl: './bind-member.component.html',
+    styleUrls: [ './bind-member.component.scss' ],
     encapsulation: ViewEncapsulation.None
 })
-export class BindRetailerComponent extends AppComponentBase {
+export class BindMemberComponent extends AppComponentBase {
 
     res: any = {};
     @ViewChild('toptips') toptips: ToptipsComponent;
@@ -31,15 +31,14 @@ export class BindRetailerComponent extends AppComponentBase {
         if(this.settingsService.tenantId){
             this.res.tenantId = this.settingsService.tenantId;
         }
-        this.res.userType = 1;//零售客户
         
         this.loadingToast._showd = true;
-        this.wechatUserService.BindWeChatUserAsync(this.res).subscribe(result => {
+        this.wechatUserService.BindMemberAsync(this.res).subscribe(result => {
             this.loadingToast.onHide();
             if(result.code == 0){//成功
                 this.srv['success']('绑定成功');
                 this.settingsService.setUser(result.data);
-                this.router.navigate(["/center/shop"]);
+                this.router.navigate(["/center/member-card"]);
             } else {//失败
                 this.srv['warn'](result.msg);
             }
