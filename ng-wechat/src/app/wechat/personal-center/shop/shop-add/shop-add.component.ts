@@ -1,20 +1,19 @@
 import { Component, ViewEncapsulation, Injector, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/timer';
-import { AppComponentBase } from '../../components/app-component-base';
-import { WechatUser, UserType, Shop } from '../../../services/model';
+import { AppComponentBase } from '../../../components/app-component-base';
+import { WechatUser, UserType } from '../../../../services/model';
 import { Router } from '@angular/router';
 
 @Component({
-    selector: 'wechat-shop',
-    templateUrl: './shop.component.html',
-    styleUrls: [ './shop.component.scss' ],
+    selector: 'wechat-shop-add',
+    templateUrl: './shop-add.component.html',
+    styleUrls: [ './shop-add.component.scss' ],
     encapsulation: ViewEncapsulation.None
 })
-export class ShopComponent extends AppComponentBase implements OnInit {
-
+export class ShopAddComponent extends AppComponentBase implements OnInit {
+    showAddInfo: boolean = true;
     user: WechatUser;
-    shop: Shop;
 
     res: any = {
         cho2: true,
@@ -45,11 +44,6 @@ export class ShopComponent extends AppComponentBase implements OnInit {
                 } else {
                     if(!this.user.isShopkeeper && this.user.status == 0){//不是店主 且 未审核
                         this.router.navigate(["/center/wait-audit"]);
-                    }else {
-
-                         if(!this.shop){//如果没有店铺 需要新增
-                            this.router.navigate(["/center/shop-add"]);
-                         }
                     }
                 }
             }

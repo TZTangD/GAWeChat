@@ -61,5 +61,7 @@ namespace HC.WeChat.Shops.Dtos
         [Required]
         public DateTime CreationTime { get; set; }
         public int? TenantId { get; set; }
+
+        public string Tel { get; set; }
     }
 }

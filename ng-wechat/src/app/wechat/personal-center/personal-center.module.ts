@@ -11,6 +11,7 @@ import { BindRetailerComponent } from './personal/bind-retailer/bind-retailer.co
 import { ShopComponent } from './shop/shop.component';
 import { BindStaffComponent } from './personal/bind-staff/bind-staff.component';
 import { WaitAuditComponent } from './shop/wait-audit/wait-audit.component';
+import { ShopAddComponent } from './shop/shop-add/shop-add.component';
 
 // region: components
 
@@ -20,7 +21,8 @@ const COMPONENTS = [PersonalComponent,
     BindRetailerComponent,
     ShopComponent,
     BindStaffComponent,
-    WaitAuditComponent];
+    WaitAuditComponent,
+    ShopAddComponent];
 
 const routes: Routes = [
     { path: '', redirectTo: 'personal' },
@@ -35,6 +37,7 @@ const routes: Routes = [
     { path: 'shop/:openId/:tenantId', component: ShopComponent },
     { path: 'bind-staff', component: BindStaffComponent },
     { path: 'wait-audit', component: WaitAuditComponent },
+    { path: 'shop-add', component: ShopAddComponent },
 ];
 // endregion
 
