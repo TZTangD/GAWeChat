@@ -31,31 +31,21 @@ namespace HC.WeChat.Shops
         ////ECC/ END CUSTOM CODE SECTION
         private readonly IRepository<Shop, Guid> _shopRepository;
         private readonly IShopManager _shopManager;
-<<<<<<< HEAD
         private readonly IRepository<Retailer, Guid> _retailerRepository;
-=======
         private readonly IWeChatUserManager _wechatuserManager;
->>>>>>> a2f49cc942b726315a34c52a7ae1d2a889d31063
 
         /// <summary>
         /// 构造函数
         /// </summary>
         public ShopAppService(IRepository<Shop, Guid> shopRepository
-<<<<<<< HEAD
       , IShopManager shopManager, IRepository<Retailer, Guid> retailerRepository
-=======
-        , IShopManager shopManager
         , IWeChatUserManager wechatuserManager
->>>>>>> a2f49cc942b726315a34c52a7ae1d2a889d31063
         )
         {
             _shopRepository = shopRepository;
             _shopManager = shopManager;
-<<<<<<< HEAD
             _retailerRepository = retailerRepository;
-=======
             _wechatuserManager = wechatuserManager;
->>>>>>> a2f49cc942b726315a34c52a7ae1d2a889d31063
         }
 
         /// <summary>
@@ -176,10 +166,8 @@ namespace HC.WeChat.Shops
         /// 新增Shop
         /// </summary>
         //[AbpAuthorize(ShopAppPermissions.Shop_CreateShop)]
-<<<<<<< HEAD
-=======
+
         [AbpAllowAnonymous]
->>>>>>> a2f49cc942b726315a34c52a7ae1d2a889d31063
         protected virtual async Task<ShopEditDto> CreateShopAsync(ShopEditDto input)
         {
             //TODO:新增前的逻辑判断，是否允许新增
@@ -193,12 +181,8 @@ namespace HC.WeChat.Shops
         /// 编辑Shop
         /// </summary>
         //[AbpAuthorize(ShopAppPermissions.Shop_EditShop)]
-<<<<<<< HEAD
-        protected virtual async Task<ShopEditDto> UpdateShopAsync(ShopEditDto input)
-=======
         [AbpAllowAnonymous]
         protected virtual async Task UpdateShopAsync(ShopEditDto input)
->>>>>>> a2f49cc942b726315a34c52a7ae1d2a889d31063
         {
             //TODO:更新前的逻辑判断，是否允许更新
             var entity = await _shopRepository.GetAsync(input.Id.Value);
@@ -206,7 +190,7 @@ namespace HC.WeChat.Shops
 
             // ObjectMapper.Map(input, entity);
             entity = await _shopRepository.UpdateAsync(entity);
-            return entity.MapTo<ShopEditDto>();
+            entity.MapTo<ShopEditDto>();
         }
 
         /// <summary>
@@ -232,7 +216,7 @@ namespace HC.WeChat.Shops
             await _shopRepository.DeleteAsync(s => input.Contains(s.Id));
         }
 
-<<<<<<< HEAD
+
         /// <summary>
         /// 添加或者修改Shop的方法
         /// </summary>
@@ -243,11 +227,11 @@ namespace HC.WeChat.Shops
             var entity = new ShopEditDto();
             if (input.Id.HasValue)
             {
-                entity = await UpdateShopAsync(input);
+                 await UpdateShopAsync(input);
             }
             else
             {
-                entity = await CreateShopAsync(input);
+                 await CreateShopAsync(input);
             }
             //return await GetShopByIdRetailerAsync(entity.Id);
 
@@ -344,7 +328,6 @@ namespace HC.WeChat.Shops
         }
 
       
-=======
         [AbpAllowAnonymous]
         public async Task<ShopListDto> GetShopByOpenId(int? tenantId, string openId)
         {
@@ -355,7 +338,6 @@ namespace HC.WeChat.Shops
                 return shop.MapTo<ShopListDto>();
             }
         }
->>>>>>> a2f49cc942b726315a34c52a7ae1d2a889d31063
     }
 }
 
