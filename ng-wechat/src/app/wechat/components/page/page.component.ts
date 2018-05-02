@@ -7,11 +7,21 @@ import { Component, Input, ViewEncapsulation } from '@angular/core';
         <h1 class="page__title" [innerHTML]="title"></h1>
         <p class="page__desc" [innerHTML]="subTitle"></p>
     </div>
+    <div class="weui-cells" *ngIf="showBack" style="margin-top:0px;">
+    <div class="weui-cell">
+        <div class="weui-cell__hd">
+        <i class="iconfont icon-left"></i>
+        </div>
+        <div class="weui-cell__bd">
+        <a [routerLink]="backUrl" style="color:#353535;text-decoration:none; " > {{title}}</a>
+        </div>
+    </div>
+    </div>
     <div class="page__bd" [ngClass]="{'page__bd_spacing': spacing}"><ng-content></ng-content></div>
     <div class="page__ft" [ngClass]="{'j_bottom': ftBottom}" *ngIf="!noBottom">
     <div class="weui-footer">
         <p class="weui-footer__links" *ngIf="showBindStaff">
-        <a href="javascript:void(0);" class="weui-footer__link">员工绑定</a>
+        <a [routerLink]="['/center/bind-staff']" class="weui-footer__link">员工绑定</a>
         </p>
         <p class="weui-footer__text">广安烟草 | 渠江烟语</p>
     </div>
@@ -32,4 +42,6 @@ export class PageComponent {
     @Input() noBottom: boolean = false;
     @Input() showTitle: boolean = true;
     @Input() showBindStaff: boolean = false;
+    @Input() showBack: boolean = false;
+    @Input() backUrl: string;
 }

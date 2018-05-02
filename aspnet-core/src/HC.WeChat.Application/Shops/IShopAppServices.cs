@@ -77,5 +77,13 @@ namespace HC.WeChat.Shops
         /// <param name="input"></param>
         /// <returns></returns>
         Task<ShopListDto> GetShopByIdRetailerAsync(Guid? input);
+        /// 微信端保存和添加店铺
+        /// </summary>
+        Task WechatCreateOrUpdateShop(CreateOrUpdateShopInput input);
+
+        /// <summary>
+        /// 通过微信用户获取店铺信息
+        /// </summary>
+        Task<ShopListDto> GetShopByOpenId(int? tenantId, string openId);
     }
 }

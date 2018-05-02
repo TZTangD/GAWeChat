@@ -75,5 +75,6 @@ namespace HC.WeChat.Shops.Dtos
         //        return Status.ToString();
         //    }
         //}
+        public string Tel { get; set; }
     }
 }

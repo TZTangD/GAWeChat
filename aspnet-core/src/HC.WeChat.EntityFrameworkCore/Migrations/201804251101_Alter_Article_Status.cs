@@ -5,7 +5,7 @@ using System.Text;
 
 namespace HC.WeChat.Migrations
 {
-  public partial class Alter_Article_Status: Migration
+    public partial class Alter_Article_Status : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -19,6 +19,16 @@ namespace HC.WeChat.Migrations
              table: "Articles",
              nullable: true);
 
+            migrationBuilder.AddColumn<string>(
+              name: "Tel",
+              table: "Shops",
+              nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+             name: "PhotoUrl",
+             table: "Products",
+             nullable: true);
+
         }
         protected override void Down(MigrationBuilder migrationBuilder)
         {
@@ -30,6 +40,14 @@ namespace HC.WeChat.Migrations
             migrationBuilder.DropColumn(
               name: "PushStatus",
               table: "Articles");
+
+            migrationBuilder.DropColumn(
+              name: "Tel",
+              table: "Shops");
+
+            migrationBuilder.DropColumn(
+            name: "PhotoUrl",
+            table: "Products");
         }
     }
 }

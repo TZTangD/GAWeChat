@@ -21,8 +21,23 @@ namespace HC.WeChat.WeChatUsers.Dtos
         public DateTime? BindTime { get; set; }
         public int? TenantId { get; set; }
         public DateTime? UnBindTime { get; set; }
-        
-        public string HeadImgUrl { get; set; }
+
+        private string _headImgUrl;
+        public string HeadImgUrl
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_headImgUrl))
+                {
+                    return @"/gawechat/img/timg-4.jpeg";
+                }
+                return _headImgUrl;
+            }
+            set
+            {
+                _headImgUrl = value;
+            }
+        }
 
         public string UserTypeName
         {

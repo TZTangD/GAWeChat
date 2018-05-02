@@ -19,6 +19,9 @@ export class SettingsService {
     constructor(private wechatUserService: WechatUserService) { }
 
     setUserId(oid: string, tid: string){
+        if(tid == '0'){
+            tid = null;
+        }
         this.openId = oid;
         this.tenantId = tid;
     }
@@ -35,9 +38,9 @@ export class SettingsService {
             //return this.user;
             return Observable.of(this.user);
         }
-        if(this.openId && this.tenantId){
+        if(this.openId){
             return this.wechatUserService.GetWeChatUserAsync(this.openId, this.tenantId).map(data => { 
-                this.setUser(WechatUser.fromJS(data.result));
+                this.setUser(data);
                 return this.user;
             })
         }

@@ -1,6 +1,5 @@
 import { Component, ViewEncapsulation, OnInit, Injector } from '@angular/core';
 import { AppComponentBase } from '../../components/app-component-base';
-import { AppConsts } from '../../../services';
 import { WechatUser } from '../../../services/model';
 import { Router } from '@angular/router';
 
@@ -13,23 +12,26 @@ import { Router } from '@angular/router';
 export class PersonalComponent extends AppComponentBase implements OnInit {
 
     user: WechatUser;
+    phone: string = '';
 
-    constructor(injector: Injector, private router: Router) { 
+    constructor(injector: Injector, private router: Router) {
         super(injector);
     }
 
     ngOnInit() {
         this.settingsService.getUser().subscribe(result => {
             this.user = result;
+            if (this.user && this.user.phone) {
+                this.phone = this.user.phone.substr(0,3) + '****' + this.user.phone.substr(7);
+            }
         });
     }
 
-    goShowCard(){
-        alert(this.user.phone)
-        if(!this.user.phone || this.user.phone == null || this.user.phone == ''){
-            this.router.navigate(["/center/bind-member"]);
-        } else {
-            this.router.navigate(["/center/member-card"]);
-        }
+    goShowCard() {
+        this.router.navigate(["/center/member-card"]);
+    }
+
+    goBindPhone(){
+        this.router.navigate(["/center/bind-member"]);
     }
 } 

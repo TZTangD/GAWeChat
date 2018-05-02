@@ -1,6 +1,6 @@
 export class ApiResult<T> {
-    Code: number;
-    Message: string;
-    Data: T;
+    code: number;
+    msg: string;
+    data: T;
   }
   

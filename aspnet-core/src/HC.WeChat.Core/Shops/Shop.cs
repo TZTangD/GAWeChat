@@ -92,5 +92,7 @@ namespace HC.WeChat.Shops
         /// 租户ID
         /// </summary>
         public virtual int? TenantId { get; set; }
+
+        public virtual string Tel { get; set; }
     }
 }

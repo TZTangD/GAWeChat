@@ -1,0 +1,98 @@
+<Page [ngClass]="'icons'" [spacing]="false" [showTitle]="false" *ngIf="showAddInfo">
+    <div class="weui-cells">
+        <div class="weui-cell">
+            <div class="icon-box">
+                <i class="weui-icon-info weui-icon_msg"></i>
+                <div class="icon-box__ctn">
+                    <h3 class="icon-box__title">提示</h3>
+                    <p class="icon-box__desc">您还没有添加店铺信息，请点击新增店铺添加店铺</p>
+                </div>
+            </div>
+
+        </div>
+        <div class="weui-cell">
+            <button weui-button (click)="showAddInfo = false">新增店铺</button>
+        </div>
+    </div>
+</Page>
+<Page [ngClass]="'input'" [showTitle]="true" [title]="title" [subTitle]="'维护自己的店铺信息'" [spacing]="false" *ngIf="!showAddInfo">
+    <form #f="ngForm" (ngSubmit)="onSave()">
+        <div class="weui-cells__title">店铺信息</div>
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__hd">
+                    <label class="weui-label">店铺名称</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" [(ngModel)]="res.name" name="name" placeholder="请输入店铺名称" weui-input="name" weui-required>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd">
+                    <label class="weui-label">店铺电话</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="tel" [(ngModel)]="res.tel" name="tel" placeholder="请输入店铺电话" weui-input="tel" weui-required>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd">
+                    <label class="weui-label">店铺地址</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" [(ngModel)]="res.address" name="address" placeholder="定位店铺地址" weui-input="address"
+                        weui-required>
+                </div>
+                <div class="weui-cell__ft">
+                    <button type="button" class="weui-vcode-btn">重新定位</button>
+                </div>
+            </div>
+            <div class="weui-cells__title">店铺描述</div>
+            <div class="weui-cells weui-cells_form">
+                <div class="weui-cell">
+                    <div class="weui-cell__bd">
+                        <textarea class="weui-textarea" placeholder="请输入店铺描述信息" rows="3" [(ngModel)]="res.desc" name="desc" weui-textarea weui-cn="2"
+                            maxlength="500"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <div class="weui-uploader">
+                        <div class="weui-uploader__hd">
+                            <p class="weui-uploader__title">店铺形象</p>
+                            <div class="weui-uploader__info">{{uploader?.uploadedCount}}/{{uploader?.queue?.length}}</div>
+                        </div>
+                        <div class="weui-uploader__bd">
+                            <ul class="weui-uploader__files">
+                                <li class="weui-uploader__file" *ngFor="let item of uploader.queue"
+                                    [weui-thumb]="item._file"
+                                    (click)="onGallery(item)"
+                                    [ngClass]="{'weui-uploader__file_status': item.isError}">
+                                    <div class="weui-uploader__file-content" *ngIf="item.isUploading">{{item.progress}}%</div>
+                                    <div class="weui-uploader__file-content" *ngIf="item.isError">
+                                        <i class="weui-icon-warn"></i>
+                                    </div>
+                                </li>
+                            </ul>
+                            <div class="weui-uploader__input-box">
+                                <input class="weui-uploader__input" type="file" accept="image/*" multiple
+                                    [weui-uploader-file]="uploader">
+                            </div>
+                        </div>
+                    </div>
+                    <weui-gallery [imgs]="img" [(show)]="imgShow" (delete)="onDel($event)"></weui-gallery>
+                </div>
+            </div>
+        </div>
+        
+        <label for="weuiAgree" class="weui-agree">
+            <span class="weui-agree__text">
+                店铺信息提交后需等待营销中心审核，审核通过后可维护商品信息，消费者可以在附近店铺和特色商品进行查找
+            </span>
+        </label>
+        <div class="weui-btn-area">
+            <button class="weui-btn weui-btn_primary" [disabled]="!f.form.valid || !f.form.dirty" [ngClass]="{'weui-btn_disabled': !f.form.valid || !f.form.dirty}">提交</button>
+        </div>
+    </form>
+</Page>

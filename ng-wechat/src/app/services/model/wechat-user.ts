@@ -16,7 +16,7 @@ export class WechatUser implements IWechatUser {
     memberBarCode: string;
     integralTotal: number;
     isShopkeeper: boolean;
-    status: string;
+    status: number;
 
     constructor(data?: IWechatUser) {
         if (data) {
@@ -100,6 +100,11 @@ export interface IWechatUser {
     memberBarCode: string;
     integralTotal: number;
     isShopkeeper: boolean;
-    status: string;
+    status: number;
+}
 
+export enum UserType {
+    Retailer = 1,
+    Staff = 2,
+    Consumer = 4
 }

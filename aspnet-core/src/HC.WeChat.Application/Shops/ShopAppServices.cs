@@ -16,6 +16,7 @@ using HC.WeChat.Shops;
 using System;
 using HC.WeChat.Authorization;
 using HC.WeChat.Retailers;
+using HC.WeChat.WeChatUsers.DomainServices;
 
 namespace HC.WeChat.Shops
 {
@@ -30,18 +31,31 @@ namespace HC.WeChat.Shops
         ////ECC/ END CUSTOM CODE SECTION
         private readonly IRepository<Shop, Guid> _shopRepository;
         private readonly IShopManager _shopManager;
+<<<<<<< HEAD
         private readonly IRepository<Retailer, Guid> _retailerRepository;
+=======
+        private readonly IWeChatUserManager _wechatuserManager;
+>>>>>>> a2f49cc942b726315a34c52a7ae1d2a889d31063
 
         /// <summary>
         /// 构造函数
         /// </summary>
         public ShopAppService(IRepository<Shop, Guid> shopRepository
+<<<<<<< HEAD
       , IShopManager shopManager, IRepository<Retailer, Guid> retailerRepository
+=======
+        , IShopManager shopManager
+        , IWeChatUserManager wechatuserManager
+>>>>>>> a2f49cc942b726315a34c52a7ae1d2a889d31063
         )
         {
             _shopRepository = shopRepository;
             _shopManager = shopManager;
+<<<<<<< HEAD
             _retailerRepository = retailerRepository;
+=======
+            _wechatuserManager = wechatuserManager;
+>>>>>>> a2f49cc942b726315a34c52a7ae1d2a889d31063
         }
 
         /// <summary>
@@ -125,11 +139,8 @@ namespace HC.WeChat.Shops
         /// <summary>
         /// 添加或者修改Shop的公共方法
         /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
         public async Task CreateOrUpdateShop(CreateOrUpdateShopInput input)
         {
-
             if (input.Shop.Id.HasValue)
             {
                 await UpdateShopAsync(input.Shop);
@@ -140,10 +151,35 @@ namespace HC.WeChat.Shops
             }
         }
 
+        [AbpAllowAnonymous]
+        public async Task WechatCreateOrUpdateShop(CreateOrUpdateShopInput input)
+        {
+            using (CurrentUnitOfWork.SetTenantId(input.TenantId))
+            {
+                if (input.Shop.Id.HasValue)
+                {
+                    input.Shop.Status = WechatEnums.ShopAuditStatus.提交申请;
+                    await UpdateShopAsync(input.Shop);
+                }
+                else
+                {
+                    var user = await _wechatuserManager.GetWeChatUserAsync(input.OpenId, input.TenantId);
+                    input.Shop.TenantId = input.TenantId;
+                    input.Shop.RetailerId = user.UserId;
+                    input.Shop.Status = WechatEnums.ShopAuditStatus.提交申请;
+                    await CreateShopAsync(input.Shop);
+                }
+            }
+        }
+
         /// <summary>
         /// 新增Shop
         /// </summary>
         //[AbpAuthorize(ShopAppPermissions.Shop_CreateShop)]
+<<<<<<< HEAD
+=======
+        [AbpAllowAnonymous]
+>>>>>>> a2f49cc942b726315a34c52a7ae1d2a889d31063
         protected virtual async Task<ShopEditDto> CreateShopAsync(ShopEditDto input)
         {
             //TODO:新增前的逻辑判断，是否允许新增
@@ -157,7 +193,12 @@ namespace HC.WeChat.Shops
         /// 编辑Shop
         /// </summary>
         //[AbpAuthorize(ShopAppPermissions.Shop_EditShop)]
+<<<<<<< HEAD
         protected virtual async Task<ShopEditDto> UpdateShopAsync(ShopEditDto input)
+=======
+        [AbpAllowAnonymous]
+        protected virtual async Task UpdateShopAsync(ShopEditDto input)
+>>>>>>> a2f49cc942b726315a34c52a7ae1d2a889d31063
         {
             //TODO:更新前的逻辑判断，是否允许更新
             var entity = await _shopRepository.GetAsync(input.Id.Value);
@@ -191,6 +232,7 @@ namespace HC.WeChat.Shops
             await _shopRepository.DeleteAsync(s => input.Contains(s.Id));
         }
 
+<<<<<<< HEAD
         /// <summary>
         /// 添加或者修改Shop的方法
         /// </summary>
@@ -302,6 +344,18 @@ namespace HC.WeChat.Shops
         }
 
       
+=======
+        [AbpAllowAnonymous]
+        public async Task<ShopListDto> GetShopByOpenId(int? tenantId, string openId)
+        {
+            using (CurrentUnitOfWork.SetTenantId(tenantId))
+            {
+                var user = await _wechatuserManager.GetWeChatUserAsync(openId, tenantId);
+                var shop = await _shopRepository.GetAll().Where(s => s.RetailerId == user.UserId).FirstOrDefaultAsync();
+                return shop.MapTo<ShopListDto>();
+            }
+        }
+>>>>>>> a2f49cc942b726315a34c52a7ae1d2a889d31063
     }
 }
 
