@@ -13,13 +13,15 @@ using HC.WeChat.PurchaseRecords.Dtos;
 using HC.WeChat.PurchaseRecords.DomainServices;
 using HC.WeChat.PurchaseRecords;
 using System;
+using HC.WeChat.Authorization;
 
 namespace HC.WeChat.PurchaseRecords
 {
     /// <summary>
     /// PurchaseRecord应用层服务的接口实现方法
     /// </summary>
-    [AbpAuthorize(PurchaseRecordAppPermissions.PurchaseRecord)]
+    //[AbpAuthorize(PurchaseRecordAppPermissions.PurchaseRecord)]
+    [AbpAuthorize(AppPermissions.Pages)]
     public class PurchaseRecordAppService : WeChatAppServiceBase, IPurchaseRecordAppService
     {
         ////BCC/ BEGIN CUSTOM CODE SECTION
@@ -134,7 +136,7 @@ namespace HC.WeChat.PurchaseRecords
         /// <summary>
         /// 新增PurchaseRecord
         /// </summary>
-        [AbpAuthorize(PurchaseRecordAppPermissions.PurchaseRecord_CreatePurchaseRecord)]
+        //[AbpAuthorize(PurchaseRecordAppPermissions.PurchaseRecord_CreatePurchaseRecord)]
         protected virtual async Task<PurchaseRecordEditDto> CreatePurchaseRecordAsync(PurchaseRecordEditDto input)
         {
             //TODO:新增前的逻辑判断，是否允许新增
@@ -147,7 +149,7 @@ namespace HC.WeChat.PurchaseRecords
         /// <summary>
         /// 编辑PurchaseRecord
         /// </summary>
-        [AbpAuthorize(PurchaseRecordAppPermissions.PurchaseRecord_EditPurchaseRecord)]
+        //[AbpAuthorize(PurchaseRecordAppPermissions.PurchaseRecord_EditPurchaseRecord)]
         protected virtual async Task UpdatePurchaseRecordAsync(PurchaseRecordEditDto input)
         {
             //TODO:更新前的逻辑判断，是否允许更新
@@ -163,7 +165,7 @@ namespace HC.WeChat.PurchaseRecords
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        [AbpAuthorize(PurchaseRecordAppPermissions.PurchaseRecord_DeletePurchaseRecord)]
+        //[AbpAuthorize(PurchaseRecordAppPermissions.PurchaseRecord_DeletePurchaseRecord)]
         public async Task DeletePurchaseRecord(EntityDto<Guid> input)
         {
 
@@ -174,7 +176,7 @@ namespace HC.WeChat.PurchaseRecords
         /// <summary>
         /// 批量删除PurchaseRecord的方法
         /// </summary>
-        [AbpAuthorize(PurchaseRecordAppPermissions.PurchaseRecord_BatchDeletePurchaseRecords)]
+        //[AbpAuthorize(PurchaseRecordAppPermissions.PurchaseRecord_BatchDeletePurchaseRecords)]
         public async Task BatchDeletePurchaseRecordsAsync(List<Guid> input)
         {
             //TODO:批量删除前的逻辑判断，是否允许删除

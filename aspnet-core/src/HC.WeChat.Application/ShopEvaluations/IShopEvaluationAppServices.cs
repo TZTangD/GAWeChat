@@ -56,5 +56,12 @@ namespace HC.WeChat.ShopEvaluations
         /// 批量删除ShopEvaluation
         /// </summary>
         Task BatchDeleteShopEvaluationsAsync(List<Guid> input);
+
+        /// <summary>
+        /// 获取ShopEvaluation的分页列表信息联合购买记录表
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        Task<PagedResultDto<ShopEvaluationListDto>> GetPagedShopEvaluationsByPurchaseRecord(GetShopEvaluationsInput input);
     }
 }

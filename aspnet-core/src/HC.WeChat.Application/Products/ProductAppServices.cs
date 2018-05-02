@@ -13,13 +13,15 @@ using HC.WeChat.Products.Dtos;
 using HC.WeChat.Products.DomainServices;
 using HC.WeChat.Products;
 using System;
+using HC.WeChat.Authorization;
 
 namespace HC.WeChat.Products
 {
     /// <summary>
     /// Product应用层服务的接口实现方法
     /// </summary>
-    [AbpAuthorize(ProductAppPermissions.Product)]
+    //[AbpAuthorize(ProductAppPermissions.Product)]
+    [AbpAuthorize(AppPermissions.Pages)]
     public class ProductAppService : WeChatAppServiceBase, IProductAppService
     {
         ////BCC/ BEGIN CUSTOM CODE SECTION
@@ -134,7 +136,7 @@ namespace HC.WeChat.Products
         /// <summary>
         /// 新增Product
         /// </summary>
-        [AbpAuthorize(ProductAppPermissions.Product_CreateProduct)]
+        //[AbpAuthorize(ProductAppPermissions.Product_CreateProduct)]
         protected virtual async Task<ProductEditDto> CreateProductAsync(ProductEditDto input)
         {
             //TODO:新增前的逻辑判断，是否允许新增
@@ -147,7 +149,7 @@ namespace HC.WeChat.Products
         /// <summary>
         /// 编辑Product
         /// </summary>
-        [AbpAuthorize(ProductAppPermissions.Product_EditProduct)]
+        //[AbpAuthorize(ProductAppPermissions.Product_EditProduct)]
         protected virtual async Task UpdateProductAsync(ProductEditDto input)
         {
             //TODO:更新前的逻辑判断，是否允许更新
@@ -163,7 +165,7 @@ namespace HC.WeChat.Products
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        [AbpAuthorize(ProductAppPermissions.Product_DeleteProduct)]
+        //[AbpAuthorize(ProductAppPermissions.Product_DeleteProduct)]
         public async Task DeleteProduct(EntityDto<Guid> input)
         {
 
@@ -174,7 +176,7 @@ namespace HC.WeChat.Products
         /// <summary>
         /// 批量删除Product的方法
         /// </summary>
-        [AbpAuthorize(ProductAppPermissions.Product_BatchDeleteProducts)]
+        //[AbpAuthorize(ProductAppPermissions.Product_BatchDeleteProducts)]
         public async Task BatchDeleteProductsAsync(List<Guid> input)
         {
             //TODO:批量删除前的逻辑判断，是否允许删除

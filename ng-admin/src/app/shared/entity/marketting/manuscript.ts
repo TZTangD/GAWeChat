@@ -10,7 +10,8 @@ export class Manuscript implements IManuscript {
     tenantId: number;
     creationTime: Date;
     statusName: string;
-    dealWithTime:string;
+    dealWithTime: string;
+    typeName: string;
     constructor(data?: IManuscript) {
         if (data) {
             for (var property in data) {
@@ -34,6 +35,7 @@ export class Manuscript implements IManuscript {
             this.creationTime = data["creationTime"];
             this.statusName = data["statusName"];
             this.dealWithTime = data["dealWithTime"];
+            this.typeName = data["typeName"];
 
         }
     }

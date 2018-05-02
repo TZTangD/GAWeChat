@@ -11,7 +11,7 @@ import { SwaggerException, API_BASE_URL } from '@shared/service-proxies/service-
 import { Http, Headers, ResponseContentType, Response } from '@angular/http';
 import { Inject, Optional, Injectable, InjectionToken } from '@angular/core';
 import { Parameter } from '@shared/service-proxies/entity';
-import { Shop } from '@shared/entity/customer/shop';
+import { ShopEvaluation } from '@shared/entity/customer';
 
 function throwException(message: string, status: number, response: string, headers: { [key: string]: any; }, result?: any): Observable<any> {
     if (result !== null && result !== undefined)
@@ -33,7 +33,7 @@ export class ShopEvaluationServiceProxy {
      * 获取所有店铺评价信息
      */
     getAll(skipCount: number, maxResultCount: number, parameter: Parameter[]): Observable<PagedResultDtoOfShopEvaluation> {
-        let url_ = this.baseUrl + "/api/services/app/ShopEvaluation/GetPagedShopEvaluations?";
+        let url_ = this.baseUrl + "/api/services/app/ShopEvaluation/GetPagedShopEvaluationsByPurchaseRecord?";
         if (skipCount !== undefined)
             url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&";
         if (maxResultCount !== undefined)
@@ -97,7 +97,7 @@ export class ShopEvaluationServiceProxy {
 
 export class PagedResultDtoOfShopEvaluation implements IPagedResultDtoOfShopEvaluation {
     totalCount: number;
-    items: Shop[];
+    items: ShopEvaluation[];
 
     constructor(data?: IPagedResultDtoOfShopEvaluation) {
         if (data) {
@@ -114,7 +114,7 @@ export class PagedResultDtoOfShopEvaluation implements IPagedResultDtoOfShopEval
             if (data["items"] && data["items"].constructor === Array) {
                 this.items = [];
                 for (let item of data["items"])
-                    this.items.push(Shop.fromJS(item));
+                    this.items.push(ShopEvaluation.fromJS(item));
             }
         }
     }
@@ -146,5 +146,5 @@ export class PagedResultDtoOfShopEvaluation implements IPagedResultDtoOfShopEval
 
 export interface IPagedResultDtoOfShopEvaluation {
     totalCount: number;
-    items: Shop[];
+    items: ShopEvaluation[];
 }

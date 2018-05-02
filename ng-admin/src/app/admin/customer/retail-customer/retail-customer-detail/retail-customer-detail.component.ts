@@ -138,6 +138,6 @@ export class RetailCustomerDetailComponent extends AppComponentBase implements O
      * 返回
      */
     Return() {
-        this.router.navigate(['admin/retail-customer']);
+        this.router.navigate(['admin/customer/retail-customer']);
     }
 }

@@ -3,9 +3,11 @@ using HC.WeChat.Shops.Dtos.LTMAutoMapper;
 using HC.WeChat.Shops;
 using System;
 using HC.WeChat.WechatEnums;
+using Abp.AutoMapper;
 
 namespace HC.WeChat.Shops.Dtos
 {
+    //[AutoMapFrom(typeof(Shop))]
     public class ShopEditDto
     {
         ////BCC/ BEGIN CUSTOM CODE SECTION
@@ -33,6 +35,7 @@ namespace HC.WeChat.Shops.Dtos
         [StringLength(500)]
         public string Desc { get; set; }
         public Guid? RetailerId { get; set; }
+        //public string RetailerName { get; set; }
 
 
         /// <summary>
@@ -51,7 +54,7 @@ namespace HC.WeChat.Shops.Dtos
         public string Evaluation { get; set; }
         public decimal? Longitude { get; set; }
         public decimal? Latitude { get; set; }
-        public CheckStaus? Status { get; set; }
+        public ShopAuditStatus? Status { get; set; }
         public DateTime? AuditTime { get; set; }
 
 
@@ -65,12 +68,12 @@ namespace HC.WeChat.Shops.Dtos
         /// <summary>
         /// 审核状态名字
         /// </summary>
-        public string StatusName
-        {
-            get
-            {
-                return Status.ToString();
-            }
-        }
+        //public string StatusName
+        //{
+        //    get
+        //    {
+        //        return Status.ToString();
+        //    }
+        //}
     }
 }

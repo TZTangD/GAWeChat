@@ -66,18 +66,20 @@
             </div>
         </form>
         <footer-toolbar errorCollect>
-            <button nz-button [nzType]="'primary'" (click)="save()" [nzSize]="'large'" [nzLoading]="isConfirmLoading">
-                {{l("保存")}}
-            </button>
-            <button nz-button *ngIf="isPush" [nzType]="'primary'" (click)="push()" [nzSize]="'large'" [nzLoading]="isConfirmLoading">
-                {{l("发布")}}
+            <button nz-button [nzType]="'default'" (click)="return()" [nzSize]="'large'">
+                {{l("返回")}}
             </button>
             <button nz-button *ngIf="isDelete" [nzType]="'danger'" (click)="delete(deleteContent)" [nzSize]="'large'" [nzLoading]="isConfirmLoading">
                 {{l("删除")}}
             </button>
-            <button nz-button [nzType]="'default'" (click)="return()" [nzSize]="'large'">
-                {{l("返回")}}
+            <button nz-button *ngIf="isPush" [nzType]="'primary'" (click)="push()" [nzSize]="'large'" [nzLoading]="isConfirmLoading">
+                {{l("发布")}}
             </button>
+            <button nz-button [nzType]="'primary'" (click)="save()" [nzSize]="'large'" [nzLoading]="isConfirmLoading">
+                {{l("保存")}}
+            </button>
+
+
             <!-- <a routerLink="../admin/retail-customer" routerLinkActive="ngOnInit">Heroes</a> -->
         </footer-toolbar>
     </nz-card>

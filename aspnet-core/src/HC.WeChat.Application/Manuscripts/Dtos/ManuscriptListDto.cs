@@ -27,5 +27,12 @@ namespace HC.WeChat.Manuscripts.Dtos
             }
         }
         public DateTime? DealWithTime { get; set; }
+        public string TypeName
+        {
+            get
+            {
+                return Type.ToString();
+            }
+        }
     }
 }

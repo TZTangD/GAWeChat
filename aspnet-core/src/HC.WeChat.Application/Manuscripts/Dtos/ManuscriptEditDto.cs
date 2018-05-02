@@ -67,5 +67,12 @@ namespace HC.WeChat.Manuscripts.Dtos
                 return Status.ToString();
             }
         }
+        public string TypeName
+        {
+            get
+            {
+                return Type.ToString();
+            }
+        }
     }
 }

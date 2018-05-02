@@ -32,7 +32,7 @@ export class ShopServiceProxy {
      * 获取所有店铺信息
      */
     getAll(skipCount: number, maxResultCount: number, parameter: Parameter[]): Observable<PagedResultDtoOfShop> {
-        let url_ = this.baseUrl + "/api/services/app/Shop/GetPagedShops?";
+        let url_ = this.baseUrl + "/api/services/app/Shop/GetPagedShopsByRetailer?";
         if (skipCount !== undefined)
             url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&";
         if (maxResultCount !== undefined)
@@ -98,7 +98,7 @@ export class ShopServiceProxy {
      * @param id 店铺id
      */
     get(id: number): Observable<Shop> {
-        let url_ = this.baseUrl + "/api/services/app/Shop/GetShopByIdAsync?";
+        let url_ = this.baseUrl + "/api/services/app/Shop/GetShopByIdRetailerAsync?";
         if (id !== undefined)
             url_ += "Id=" + encodeURIComponent("" + id) + "&";
         url_ = url_.replace(/[?&]$/, "");

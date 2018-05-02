@@ -255,12 +255,13 @@
     </div>
 </form>
 <footer-toolbar errorCollect>
-    <button nz-button [nzType]="'primary'" (click)="saveSub()" [nzSize]="'large'" [nzLoading]="isConfirmLoading">
-        {{l("保存")}}
-    </button>
     <button nz-button [nzType]="'primary'" (click)="Return()" [nzSize]="'large'">
         {{l("返回")}}
     </button>
+    <button nz-button [nzType]="'primary'" (click)="saveSub()" [nzSize]="'large'" [nzLoading]="isConfirmLoading">
+        {{l("保存")}}
+    </button>
+
     <!-- <a routerLink="../admin/retail-customer" routerLinkActive="ngOnInit">Heroes</a> -->
 </footer-toolbar>
 <employee-modal #selectEmployeeModal (modalSelect)="getSelectData($event)"></employee-modal>

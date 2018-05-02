@@ -14,13 +14,14 @@ namespace HC.WeChat.Shops.Dtos
         public string Address { get; set; }
         public string Desc { get; set; }
         public Guid? RetailerId { get; set; }
+        public string RetailerName{ get; set; }
         public string CoverPhoto { get; set; }
         public int? SaleTotal { get; set; }
         public int? ReadTotal { get; set; }
         public string Evaluation { get; set; }
         public decimal? Longitude { get; set; }
         public decimal? Latitude { get; set; }
-        public CheckStaus? Status { get; set; }
+        public ShopAuditStatus? Status { get; set; }
         public DateTime? AuditTime { get; set; }
         public DateTime CreationTime { get; set; }
         public int? TenantId { get; set; }

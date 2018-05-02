@@ -14,7 +14,7 @@ namespace HC.WeChat.Shops.Dtos
         /// </summary>
         public string Filter { get; set; }
         public string Name { get; set; }
-        public CheckStaus? Status { get; set; }
+        public ShopAuditStatus? Status { get; set; }
         /// <summary>
         /// 正常化排序使用
         /// </summary>

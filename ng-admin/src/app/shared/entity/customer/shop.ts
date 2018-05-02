@@ -11,10 +11,12 @@ export class Shop implements IShop {
     longitude: Number;
     latitude: Number;
     status: number;
-    auditTime: Date;
+    auditTime: string ;
     creationTime: Date;
     tenantId: number;
     statusName: string;
+    retailerName: string;
+    statusType: string;
     constructor(data?: IShop) {
         if (data) {
             for (var property in data) {
@@ -42,6 +44,7 @@ export class Shop implements IShop {
             this.creationTime = data["creationTime"];
             this.tenantId = data["tenantId"];
             this.statusName = data["statusName"];
+            this.retailerName = data["retailerName"];
 
         }
     }
@@ -92,7 +95,7 @@ export interface IShop {
     longitude: Number;
     latitude: Number;
     status: number;
-    auditTime: Date;
+    auditTime: string;
     creationTime: Date;
     tenantId: number;
 }

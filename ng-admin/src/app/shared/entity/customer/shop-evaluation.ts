@@ -1,6 +1,8 @@
 export class ShopEvaluation implements IShopEvaluation {
     id: string;
     purchaseRecordId: string;
+    specification: string;
+    quantity: number;
     shopId: string;
     openId: string;
     evaluation: number;
@@ -9,6 +11,7 @@ export class ShopEvaluation implements IShopEvaluation {
     creationTime: Date;
     tenantId: number;
     evaluationName: string;
+    nickName: string;
     constructor(data?: IShopEvaluation) {
         if (data) {
             for (var property in data) {
@@ -23,6 +26,8 @@ export class ShopEvaluation implements IShopEvaluation {
             this.id = data["id"];
             this.purchaseRecordId = data["purchaseRecordId"];
             this.shopId = data["shopId"];
+            this.specification = data["specification"];
+            this.quantity = data["quantity"];
             this.openId = data["openId"];
             this.evaluation = data["evaluation"];
             this.isCorrectQuantity = data["isCorrectQuantity"];
@@ -30,6 +35,7 @@ export class ShopEvaluation implements IShopEvaluation {
             this.creationTime = data["creationTime"];
             this.tenantId = data["tenantId"];
             this.evaluationName = data["evaluationName"];
+            this.nickName = data["nickName"];
             
         }
     }

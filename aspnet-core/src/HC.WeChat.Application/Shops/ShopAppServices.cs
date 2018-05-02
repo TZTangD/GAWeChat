@@ -15,6 +15,7 @@ using HC.WeChat.Shops.DomainServices;
 using HC.WeChat.Shops;
 using System;
 using HC.WeChat.Authorization;
+using HC.WeChat.Retailers;
 
 namespace HC.WeChat.Shops
 {
@@ -29,16 +30,18 @@ namespace HC.WeChat.Shops
         ////ECC/ END CUSTOM CODE SECTION
         private readonly IRepository<Shop, Guid> _shopRepository;
         private readonly IShopManager _shopManager;
+        private readonly IRepository<Retailer, Guid> _retailerRepository;
 
         /// <summary>
         /// 构造函数
         /// </summary>
         public ShopAppService(IRepository<Shop, Guid> shopRepository
-      , IShopManager shopManager
+      , IShopManager shopManager, IRepository<Retailer, Guid> retailerRepository
         )
         {
             _shopRepository = shopRepository;
             _shopManager = shopManager;
+            _retailerRepository = retailerRepository;
         }
 
         /// <summary>
@@ -193,18 +196,112 @@ namespace HC.WeChat.Shops
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<ShopEditDto> CreateOrUpdateShopDto(ShopEditDto input)
+        public async Task CreateOrUpdateShopDto(ShopEditDto input)
         {
-
+            var entity = new ShopEditDto();
             if (input.Id.HasValue)
             {
-               return  await UpdateShopAsync(input);
+                entity = await UpdateShopAsync(input);
             }
             else
             {
-               return  await CreateShopAsync(input);
+                entity = await CreateShopAsync(input);
             }
+            //return await GetShopByIdRetailerAsync(entity.Id);
+
         }
+
+        /// <summary>
+        /// 获取Shop的分页列表信息(连接零售客户表)
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task<PagedResultDto<ShopListDto>> GetPagedShopsByRetailer(GetShopsInput input)
+        {
+
+            var queryShop = _shopRepository.GetAll()
+                .WhereIf(!string.IsNullOrEmpty(input.Name), s => s.Name.Contains(input.Name))
+                .WhereIf(input.Status.HasValue, s => s.Status == input.Status);
+            var queryRetailer = _retailerRepository.GetAll();
+            var query = from s in queryShop
+                        join r in queryRetailer on s.RetailerId equals r.Id into queryS
+                        from sr in queryS.DefaultIfEmpty()
+                        select new ShopListDto
+                        {
+                            Id = s.Id,
+                            Name = s.Name,
+                            Address = s.Address,
+                            Desc = s.Desc,
+                            RetailerId = s.RetailerId,
+                            CoverPhoto = s.CoverPhoto,
+                            SaleTotal = s.SaleTotal,
+                            ReadTotal = s.ReadTotal,
+                            Evaluation = s.Evaluation,
+                            Longitude = s.Longitude,
+                            Latitude = s.Latitude,
+                            Status = s.Status,
+                            AuditTime = s.AuditTime,
+                            CreationTime = s.CreationTime,
+                            TenantId = s.TenantId,
+                            RetailerName = sr != null ? sr.Name : "",
+                        };
+
+            //TODO:根据传入的参数添加过滤条件
+            var shopCount = await query.CountAsync();
+
+            var shops = await query
+                .OrderByDescending(s => s.CreationTime)
+                .ThenBy(input.Sorting)
+                .PageBy(input)
+                .ToListAsync();
+
+            //var shopListDtos = ObjectMapper.Map<List <ShopListDto>>(shops);
+            var shopListDtos = shops.MapTo<List<ShopListDto>>();
+
+            return new PagedResultDto<ShopListDto>(
+                shopCount,
+                shopListDtos
+                );
+
+        }
+
+        /// <summary>
+        /// 获取单个店铺信息（连接零售客户表）
+        /// </summary>
+        /// <param name="input">零售户Id</param>
+        /// <returns></returns>
+        public async Task<ShopListDto> GetShopByIdRetailerAsync(Guid? id)
+        {
+            var queryShop = _shopRepository.GetAll()
+                .Where(s => s.Id == id);
+
+            var queryRetailer = _retailerRepository.GetAll();
+            var entity = await (from s in queryShop
+                                join r in queryRetailer on s.RetailerId equals r.Id into queryS
+                                from sr in queryS.DefaultIfEmpty()
+                                select new ShopListDto
+                                {
+                                    Id = s.Id,
+                                    Name = s.Name,
+                                    Address = s.Address,
+                                    Desc = s.Desc,
+                                    RetailerId = s.RetailerId,
+                                    CoverPhoto = s.CoverPhoto,
+                                    SaleTotal = s.SaleTotal,
+                                    ReadTotal = s.ReadTotal,
+                                    Evaluation = s.Evaluation,
+                                    Longitude = s.Longitude,
+                                    Latitude = s.Latitude,
+                                    Status = s.Status,
+                                    AuditTime = s.AuditTime,
+                                    CreationTime = s.CreationTime,
+                                    TenantId = s.TenantId,
+                                    RetailerName = sr != null ? sr.Name : ""
+                                }).SingleOrDefaultAsync();
+            return entity;
+        }
+
+      
     }
 }
 

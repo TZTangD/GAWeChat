@@ -30,8 +30,9 @@
                     </div>
                 </div>
             </form>
-            <nz-table #nzTable [nzAjaxData]="messagess" [nzTotal]="query.total" [(nzPageIndex)]="query.pageIndex" [(nzPageSize)]="query.pageSize" [nzLoading]="loading"
-                [nzShowSizeChanger]="true" [nzShowTotal]="'true'" (nzPageIndexChange)="getMessgeAll()" (nzPageSizeChange)="getMessgeAll()">
+            <nz-table #nzTable [nzAjaxData]="messagess" [nzTotal]="query.total" [(nzPageIndex)]="query.pageIndex" [(nzPageSize)]="query.pageSize"
+                [nzLoading]="loading" [nzShowSizeChanger]="true" [nzShowTotal]="'true'" (nzPageIndexChange)="getMessgeAll()"
+                (nzPageSizeChange)="getMessgeAll()">
                 <thead nz-thead>
                     <tr>
                         <th nz-th>
@@ -92,13 +93,14 @@
             </div>
 
             <div nz-form-item nz-row>
-                <div nz-form-label nz-col [nzSm]="7">
-                    <button nz-button [nzType]="'primary'" [nzSize]="'large'" type="submit" [nzLoading]="isConfirmLoading">
-                        保存
-                    </button>
+                <div  nz-col [nzOffset]="4" [nzSm]="7">
                     <button nz-button [nzType]="'default'" [nzSize]="'large'" type="button" (click)="deletes(deletesContent)">
                         删除回复
                     </button>
+                    <button nz-button [nzType]="'primary'" [nzSize]="'large'" type="submit" [nzLoading]="isConfirmLoading">
+                        保存
+                    </button>
+
                 </div>
             </div>
         </form>

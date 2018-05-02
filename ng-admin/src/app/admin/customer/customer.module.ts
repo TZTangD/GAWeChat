@@ -11,6 +11,7 @@ import { SourceGoodsLevelComponent } from "./source-goods-level/source-goods-lev
 import { AccountManagementComponent } from "./account-management/account-management.component";
 import { LayoutModule } from "../../layout/layout.module";
 import { CustomerRoutingModule } from "./customer-routing.module";
+import { StoreDetailComponent } from "./store-management/store-detail/store-detail.component";
 
 @NgModule({
     imports: [
@@ -23,6 +24,7 @@ import { CustomerRoutingModule } from "./customer-routing.module";
         RetailCustomerDetailComponent,
         EmployeeModalComponent,
         StoreManagementComponent,
+        StoreDetailComponent,
         CommodityManagementComponent,
         SourceGoodsLevelComponent,
         AccountManagementComponent,

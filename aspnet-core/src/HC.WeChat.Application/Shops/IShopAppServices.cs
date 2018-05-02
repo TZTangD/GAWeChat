@@ -62,6 +62,20 @@ namespace HC.WeChat.Shops
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task<ShopEditDto> CreateOrUpdateShopDto(ShopEditDto input);
+        Task CreateOrUpdateShopDto(ShopEditDto input);
+
+        /// <summary>
+        /// 获取Shop的分页列表信息(连接零售客户表)
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        Task<PagedResultDto<ShopListDto>> GetPagedShopsByRetailer(GetShopsInput input);
+
+        /// <summary>
+        /// 获取单个店铺信息（连接零售客户表）
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        Task<ShopListDto> GetShopByIdRetailerAsync(Guid? input);
     }
 }
