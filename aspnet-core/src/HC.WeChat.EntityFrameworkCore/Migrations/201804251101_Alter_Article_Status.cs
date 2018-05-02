@@ -24,6 +24,11 @@ namespace HC.WeChat.Migrations
               table: "Shops",
               nullable: true);
 
+            migrationBuilder.AddColumn<string>(
+             name: "PhotoUrl",
+             table: "Products",
+             nullable: true);
+
         }
         protected override void Down(MigrationBuilder migrationBuilder)
         {
@@ -39,6 +44,10 @@ namespace HC.WeChat.Migrations
             migrationBuilder.DropColumn(
               name: "Tel",
               table: "Shops");
+
+            migrationBuilder.DropColumn(
+            name: "PhotoUrl",
+            table: "Products");
         }
     }
 }

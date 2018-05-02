@@ -21,5 +21,7 @@ namespace HC.WeChat.Products.Dtos
         public DateTime CreationTime { get; set; }
         public int? TenantId { get; set; }
         public long? CreatorUserId { get; set; }
+
+        public string PhotoUrl { get; set; }
     }
 }

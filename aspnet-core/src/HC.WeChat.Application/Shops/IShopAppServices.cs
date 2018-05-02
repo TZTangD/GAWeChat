@@ -56,5 +56,15 @@ namespace HC.WeChat.Shops
         /// 批量删除Shop
         /// </summary>
         Task BatchDeleteShopsAsync(List<Guid> input);
+
+        /// <summary>
+        /// 微信端保存和添加店铺
+        /// </summary>
+        Task WechatCreateOrUpdateShop(CreateOrUpdateShopInput input);
+
+        /// <summary>
+        /// 通过微信用户获取店铺信息
+        /// </summary>
+        Task<ShopListDto> GetShopByOpenId(int? tenantId, string openId);
     }
 }

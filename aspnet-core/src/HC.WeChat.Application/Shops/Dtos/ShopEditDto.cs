@@ -51,7 +51,7 @@ namespace HC.WeChat.Shops.Dtos
         public string Evaluation { get; set; }
         public decimal? Longitude { get; set; }
         public decimal? Latitude { get; set; }
-        public ScoreLevelEmun? Status { get; set; }
+        public ShopAuditStatus? Status { get; set; }
         public DateTime? AuditTime { get; set; }
 
 

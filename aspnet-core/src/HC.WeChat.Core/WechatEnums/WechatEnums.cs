@@ -222,4 +222,14 @@ namespace HC.WeChat.WechatEnums
         未审核 = 0, 
         已审核 = 1
     }
+
+    /// <summary>
+    /// 店铺审核状态
+    /// </summary>
+    public enum ShopAuditStatus
+    {
+        提交申请 = 1,
+        审核通过 = 2,
+        审核未通过 = 0
+    }
 }

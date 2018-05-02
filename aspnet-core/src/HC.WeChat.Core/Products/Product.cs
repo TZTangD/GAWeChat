@@ -75,5 +75,10 @@ namespace HC.WeChat.Products
         /// 创建人
         /// </summary>
         public virtual long? CreatorUserId { get; set; }
+
+        /// <summary>
+        /// 产品图片
+        /// </summary>
+        public virtual string PhotoUrl { get; set; }
     }
 }

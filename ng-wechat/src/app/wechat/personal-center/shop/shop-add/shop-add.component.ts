@@ -2,8 +2,11 @@ import { Component, ViewEncapsulation, Injector, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/timer';
 import { AppComponentBase } from '../../../components/app-component-base';
-import { WechatUser, UserType } from '../../../../services/model';
-import { Router } from '@angular/router';
+import { WechatUser, UserType, Shop } from '../../../../services/model';
+import { Router, Params } from '@angular/router';
+import { UploaderOptions, FileItem, Uploader, UploaderHeaders } from 'ngx-weui';
+import { ShopService } from '../../../../services';
+import { ToptipsService } from "ngx-weui/toptips";
 
 @Component({
     selector: 'wechat-shop-add',
@@ -15,50 +18,112 @@ export class ShopAddComponent extends AppComponentBase implements OnInit {
     showAddInfo: boolean = true;
     user: WechatUser;
 
-    res: any = {
-        cho2: true,
-        worldpost: '1',
-        contact: '1',
-        country: '1',
-        agree: true
-    };
+    res: any = {};
 
-    radio: any[] = [
-        { id: 1, name: 'asdf1' },
-        { id: 2, name: 'asdf2' }
-    ];
-    checkbox: any[] = [ 'A', 'B' ];
+    img: any;
+    imgShow: boolean = false;
+    title: string = '新增店铺';
 
-    constructor(injector: Injector, private router: Router) {
+    uploader: Uploader = new Uploader(<UploaderOptions>{
+        url: './upload.php',
+        headers: [
+            { name: 'auth', value: 'test' }
+        ],
+        params: {
+            a: 1,
+            b: new Date(),
+            c: 'test',
+            d: 12.123
+        },
+        onFileQueued: function() {
+            console.log('onFileQueued', arguments);
+        },
+        onFileDequeued: function() {
+            console.log('onFileDequeued', arguments);
+        },
+        onStart: function() {
+            console.log('onStart', arguments);
+        },
+        onCancel: function() {
+            console.log('onCancel', arguments);
+        },
+        onFinished: function() {
+            console.log('onFinished', arguments);
+        },
+        onUploadStart: function() {
+            console.log('onUploadStart', arguments);
+        },
+        onUploadProgress: function() {
+            console.log('onUploadProgress', arguments);
+        },
+        onUploadSuccess: function() {
+            console.log('onUploadSuccess', arguments);
+        },
+        onUploadError: function() {
+            console.log('onUploadError', arguments);
+        },
+        onUploadComplete: function() {
+            console.log('onUploadComplete', arguments);
+        },
+        onUploadCancel: function() {
+            console.log('onUploadCancel', arguments);
+        },
+        onError: function() {
+            console.log('onError', arguments);
+        }
+    });
+
+    constructor(injector: Injector, private router: Router, 
+        private shopService: ShopService,
+        private srv: ToptipsService) {
         super(injector);
-        this.res.radio = this.radio[0];
-        this.res.checkbox = [ this.checkbox[0] ];
     }
 
     ngOnInit() {
         this.settingsService.getUser().subscribe(result => {
             this.user = result;
-            if (this.user) {
-                if(this.user.userType != UserType.Retailer){ //不是零售客户需先绑定
-                    this.router.navigate(["/center/bind-retailer"]);
-                } else {
-                    if(!this.user.isShopkeeper && this.user.status == 0){//不是店主 且 未审核
-                        this.router.navigate(["/center/wait-audit"]);
-                    }
-                }
+        });
+        this.shopService.GetShopByOpenId(this.WUserParams).subscribe(result => {
+            if(result){
+                this.res = result.toJSON();
+                this.showAddInfo = false;
+                this.title = '修改店铺';
             }
         });
+        /*
+        this.activatedRoute.params.subscribe((params: Params) => {
+            let shop = params['shop'];
+            console.table(shop);
+            if(shop){//编辑
+                this.res = shop;
+                this.showAddInfo = false;
+            }
+        });*/
     }
 
-    onAddCheckbox() {
-        this.checkbox.push(String.fromCharCode(65 + this.checkbox.length));
+    onGallery(item: any) {
+        this.img = [{ file: item._file, item: item }];
+        this.imgShow = true;
     }
 
-    onSendCode(): Observable<boolean> {
-        return Observable.timer(1000).map((v, i) => true);
+    onDel(item: any) {
+        console.log(item);
+        this.uploader.removeFromQueue(item.item);
     }
 
     onSave() {
-        alert('请求数据：' + JSON.stringify(this.res));
+        //alert('请求数据：' + JSON.stringify(this.res));
+        this.shopService.WechatCreateOrUpdateShop({ 
+            shop : this.res, 
+            tenantId: this.settingsService.tenantId, 
+            openId: this.settingsService.openId 
+        }).subscribe(data =>{
+            if(data){
+                this.srv['success']('保存成功');
+                this.router.navigate(["/center/shop"]);
+            } else {
+                this.srv['warn']('保存失败');
+            }
+        });
     }
 }

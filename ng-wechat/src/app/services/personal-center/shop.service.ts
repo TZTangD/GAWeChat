@@ -16,5 +16,16 @@ import { Shop, ApiResult } from '../model/index';
 @Injectable()
 export class ShopService {
   constructor(private http: HttpClient) { }
-  
+
+  WechatCreateOrUpdateShop(params: any): Observable<boolean>{
+    return this.http.post('/api/services/app/Shop/WechatCreateOrUpdateShop', params).map(data => {
+        return <boolean>data.success;
+    });
+  }
+
+  GetShopByOpenId(params: any): Observable<Shop>{
+    return this.http.get('/api/services/app/Shop/GetShopByOpenId', params).map(data => {
+        return Shop.fromJS(data.result);
+    });
+  }
 }

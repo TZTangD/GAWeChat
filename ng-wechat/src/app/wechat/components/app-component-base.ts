@@ -24,8 +24,19 @@ export abstract class AppComponentBase {
             if(openId){
                 this.settingsService.setUserId(openId, tenantId);
             }
-            console.log('openId:' + openId);
-            console.log('tenantId:' + tenantId);
+            //console.log('openId:' + openId);
+            //console.log('tenantId:' + tenantId);
         });
+    }
+
+    get WUserParams() {
+        var params: any = {};
+        if(this.settingsService.tenantId){
+            params.tenantId = this.settingsService.tenantId;
+        }
+        if(this.settingsService.openId){
+            params.openId = this.settingsService.openId;
+        }
+        return params;
     }
 }
