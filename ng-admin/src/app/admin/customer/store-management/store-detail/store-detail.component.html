@@ -35,17 +35,16 @@
             </div>
         </div>
     </ng-template>
-    <ng-template #extra>
+    <!-- <ng-template #extra>
         <div nz-row>
-
-            <!-- <div nz-col nzXs="24" *ngIf="shop.coverPhoto" nzSm="12">
+            <div nz-col nzXs="24" *ngIf="shop.coverPhoto" nzSm="12">
                 <img class="img" src="shop.coverPhoto">
-            </div> -->
-            <!-- <div nz-col nzXs="24"  nzSm="12">
+            </div>
+            <div nz-col nzXs="24"  nzSm="12">
                 <img class="img" src="https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png">
-            </div> -->
+            </div>
         </div>
-    </ng-template>
+    </ng-template> -->
     <ng-template #tab>
         <nz-tabset [nzSize]="'default'">
             <nz-tab>
@@ -160,7 +159,7 @@
     </ng-template>
 </pro-header>
 
-<nz-card [nzBordered]="false" nzTitle="评价详情" class="mb-lg" *ngIf="false">
+<!-- <nz-card [nzBordered]="false" nzTitle="评价详情" class="mb-lg" *ngIf="false">
     <desc-list class="mb-lg">
         <desc-list-item term="微信昵称">{{evaluation.nickName}}</desc-list-item>
         <desc-list-item term="产品规格">{{evaluation.specification}}</desc-list-item>
@@ -169,9 +168,8 @@
         <desc-list-item term="购买数量是否相符">{{evaluation.isCorrectQuantity}} </desc-list-item>
         <desc-list-item term="评价时间">{{evaluation.creationTime}} </desc-list-item>
         <desc-list-item term="评价内容">{{evaluation.content}}</desc-list-item>
-        <!-- <nz-input [nzDisabled]="true" nzType="textarea" nzRows="6" formControlName="content" [(ngModel)]="manuscript.content" [nzId]="'content'"></nz-input> -->
     </desc-list>
-</nz-card>
+</nz-card> -->
 <!-- </nz-card> -->
 <footer-toolbar>
     <button nz-button [nzType]="'default'" (click)="return()" [nzSize]="'large'">

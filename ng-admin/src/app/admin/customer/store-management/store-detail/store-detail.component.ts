@@ -97,7 +97,7 @@ export class StoreDetailComponent extends AppComponentBase implements OnInit {
             this.loading = false;
             this.shopEmployees = result.items;
             this.query.total = result.totalCount;
-        })
+        });
     }
     getParameter(): Parameter[] {
         var arry = [];
@@ -110,8 +110,7 @@ export class StoreDetailComponent extends AppComponentBase implements OnInit {
             this.loadingE = false;
             this.shopEvaluations = result.items;
             this.queryE.total = result.totalCount;
-
-        })
+        });
     }
     getParameterEvaluation(): Parameter[] {
         var arry = [];
@@ -159,6 +158,5 @@ export class StoreDetailComponent extends AppComponentBase implements OnInit {
     }
     return() {
         this.router.navigate(['admin/customer/store-management']);
-
     }
 }
