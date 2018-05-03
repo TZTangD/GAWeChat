@@ -1,8 +1,8 @@
 import { Component, OnInit, Injector } from '@angular/core';
-import { Shop, ShopEvaluation } from '@shared/entity/customer';
+import { Shop, ShopEvaluation, ShopProduct } from '@shared/entity/customer';
 import { WechatUser } from '@shared/entity/wechat';
 import { AppComponentBase } from '@shared/app-component-base';
-import { ShopServiceProxy, ShopEvaluationServiceProxy, PagedResultDtoOfShopEvaluation } from '@shared/service-proxies/customer-service';
+import { ShopServiceProxy, ShopEvaluationServiceProxy, PagedResultDtoOfShopEvaluation, ShopProductsServiceProxy, PagedResultDtoOfShopProduct } from '@shared/service-proxies/customer-service';
 import { WechatUserServiceProxy, PagedResultDtoOfWeChatUser } from '@shared/service-proxies/wechat-service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Parameter } from '@shared/service-proxies/entity';
@@ -25,14 +25,29 @@ export class StoreDetailComponent extends AppComponentBase implements OnInit {
         status: -1,
         statusList: []
     };
+    //特色商品
+    querySP: any = {
+        pageIndex: 1,
+        pageSize: 5,
+        skipCount: function () { return (this.pageIndex - 1) * this.pageSize; },
+        total: 0,
+    };
     shop: Shop = new Shop();
     shopEmployees: WechatUser[] = [];
     shopEvaluations: ShopEvaluation[] = [];
+    shopProducts: ShopProduct[] = [];
     loading = false;
     loadingE = false;
+    loadingSP = false;
     shopName = '';
     id: number;
     evaluation: ShopEvaluation;
+
+    //图片放大
+    previewImage = ''
+    previewVisible = false;
+    imgWidth: number = 550;
+    defalutImg = './assets/img/tobacco.jpg';
     //评价
 
     low: number = 0;
@@ -49,6 +64,7 @@ export class StoreDetailComponent extends AppComponentBase implements OnInit {
     evaluationShow: string;
     constructor(injector: Injector, private shopService: ShopServiceProxy, private shopEvaluationService: ShopEvaluationServiceProxy,
         private weChatService: WechatUserServiceProxy, private Acroute: ActivatedRoute, private modal: NzModalService,
+        private shopProductService: ShopProductsServiceProxy, 
         private router: Router) {
         super(injector);
         this.id = this.Acroute.snapshot.params['id'];
@@ -88,6 +104,7 @@ export class StoreDetailComponent extends AppComponentBase implements OnInit {
             this.shopName = '店铺名：' + this.shop.name + '  状态：' + this.shop.statusName;
             this.refreshData();
             this.refreshDataE();
+            this.getShopProducts();
 
         });
     }
@@ -159,4 +176,32 @@ export class StoreDetailComponent extends AppComponentBase implements OnInit {
     return() {
         this.router.navigate(['admin/customer/store-management']);
     }
+    /**
+     * 获取特色商品信息
+     */
+    getShopProducts() {
+        this.loadingSP = true;
+        this.shopProductService.getAll(this.querySP.skipCount(), this.querySP.pageSize, this.getParameteShopProduct()).subscribe((result: PagedResultDtoOfShopProduct) => {
+            this.loadingSP = false;
+            this.shopProducts = result.items;
+            this.querySP.total = result.totalCount;
+
+        })
+    }
+    getParameteShopProduct(): Parameter[] {
+        var arry = [];
+        arry.push(Parameter.fromJS({ key: 'ShopId', value: this.shop.id }));
+        return arry;
+    }
+
+    handlePreview = (url: string) => {
+        if (!url) {
+            this.previewImage = this.defalutImg;
+        }
+        else {
+            this.previewImage = url;
+        }
+        this.previewVisible = true;
+    }
+
 }

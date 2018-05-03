@@ -183,6 +183,24 @@ namespace HC.WeChat.Products
             await _productRepository.DeleteAsync(s => input.Contains(s.Id));
         }
 
+        /// <summary>
+        /// 添加或者修改Product的方法
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task CreateOrUpdateProductDto(ProductEditDto input)
+        {
+
+            if (input.Id.HasValue)
+            {
+                await UpdateProductAsync(input);
+            }
+            else
+            {
+                await CreateProductAsync(input);
+            }
+        }
+
     }
 }
 

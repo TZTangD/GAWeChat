@@ -5,6 +5,7 @@ using Abp.Authorization;
 using Abp.AutoMapper;
 using Abp.Domain.Repositories;
 using Abp.Linq.Extensions;
+using System.Linq;
 
 using System.Linq.Dynamic.Core;
 using Microsoft.EntityFrameworkCore;
@@ -13,29 +14,35 @@ using HC.WeChat.ShopProducts.Dtos;
 using HC.WeChat.ShopProducts.DomainServices;
 using HC.WeChat.ShopProducts;
 using System;
+using HC.WeChat.Products;
+using HC.WeChat.Authorization;
 
 namespace HC.WeChat.ShopProducts
 {
     /// <summary>
     /// ShopProduct应用层服务的接口实现方法
     /// </summary>
-    [AbpAuthorize(ShopProductAppPermissions.ShopProduct)]
+    //[AbpAuthorize(ShopProductAppPermissions.ShopProduct)]
+    [AbpAuthorize(AppPermissions.Pages)]
     public class ShopProductAppService : WeChatAppServiceBase, IShopProductAppService
     {
         ////BCC/ BEGIN CUSTOM CODE SECTION
         ////ECC/ END CUSTOM CODE SECTION
         private readonly IRepository<ShopProduct, Guid> _shopproductRepository;
         private readonly IShopProductManager _shopproductManager;
+        private readonly IRepository<Product, Guid> _productRepository;
 
         /// <summary>
         /// 构造函数
         /// </summary>
         public ShopProductAppService(IRepository<ShopProduct, Guid> shopproductRepository
-      , IShopProductManager shopproductManager
+      , IShopProductManager shopproductManager, IRepository<Product, Guid> productRepository
+
         )
         {
             _shopproductRepository = shopproductRepository;
             _shopproductManager = shopproductManager;
+            _productRepository = productRepository;
         }
 
         /// <summary>
@@ -134,7 +141,7 @@ namespace HC.WeChat.ShopProducts
         /// <summary>
         /// 新增ShopProduct
         /// </summary>
-        [AbpAuthorize(ShopProductAppPermissions.ShopProduct_CreateShopProduct)]
+        //[AbpAuthorize(ShopProductAppPermissions.ShopProduct_CreateShopProduct)]
         protected virtual async Task<ShopProductEditDto> CreateShopProductAsync(ShopProductEditDto input)
         {
             //TODO:新增前的逻辑判断，是否允许新增
@@ -147,7 +154,7 @@ namespace HC.WeChat.ShopProducts
         /// <summary>
         /// 编辑ShopProduct
         /// </summary>
-        [AbpAuthorize(ShopProductAppPermissions.ShopProduct_EditShopProduct)]
+        //[AbpAuthorize(ShopProductAppPermissions.ShopProduct_EditShopProduct)]
         protected virtual async Task UpdateShopProductAsync(ShopProductEditDto input)
         {
             //TODO:更新前的逻辑判断，是否允许更新
@@ -163,7 +170,7 @@ namespace HC.WeChat.ShopProducts
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        [AbpAuthorize(ShopProductAppPermissions.ShopProduct_DeleteShopProduct)]
+        //[AbpAuthorize(ShopProductAppPermissions.ShopProduct_DeleteShopProduct)]
         public async Task DeleteShopProduct(EntityDto<Guid> input)
         {
 
@@ -174,11 +181,75 @@ namespace HC.WeChat.ShopProducts
         /// <summary>
         /// 批量删除ShopProduct的方法
         /// </summary>
-        [AbpAuthorize(ShopProductAppPermissions.ShopProduct_BatchDeleteShopProducts)]
+        //[AbpAuthorize(ShopProductAppPermissions.ShopProduct_BatchDeleteShopProducts)]
         public async Task BatchDeleteShopProductsAsync(List<Guid> input)
         {
             //TODO:批量删除前的逻辑判断，是否允许删除
             await _shopproductRepository.DeleteAsync(s => input.Contains(s.Id));
+        }
+
+
+        /// <summary>
+        /// 添加或者修改ShopProduct的方法
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task CreateOrUpdateShopProductDto(ShopProductEditDto input)
+        {
+
+            if (input.Id.HasValue)
+            {
+                await UpdateShopProductAsync(input);
+            }
+            else
+            {
+                await CreateShopProductAsync(input);
+            }
+        }
+
+        /// <summary>
+        /// 获取ShopProduct的分页列表信息连接Product表
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task<PagedResultDto<ShopProductListDto>> GetPagedShopProductsReferProducts(GetShopProductsInput input)
+        {
+
+            var querySP = _shopproductRepository.GetAll()
+                .Where(sp=>sp.ShopId==input.ShopId);
+            var queryP = _productRepository.GetAll()
+                .Where(p => p.IsRare == true);
+            var query = from sp in querySP
+                        join p in queryP on sp.ProductId equals p.Id 
+                        select new ShopProductListDto
+                        {
+                            Id = sp.Id,
+                            ProductId = sp.ProductId,
+                            ShopId = sp.ShopId,
+                            Specification = p.Specification,
+                            Type = p.Type,
+                            Price = p.Price,
+                            PackageCode = p.PackageCode,
+                            BarCode = p.BarCode,
+                            PhotoUrl = p.PhotoUrl
+                        };
+            //TODO:根据传入的参数添加过滤条件
+            var shopproductCount = await query.CountAsync();
+
+            var shopproducts = await query
+                .OrderBy(sp=>sp.Specification)
+                .ThenBy(input.Sorting)
+                .PageBy(input)
+                .ToListAsync();
+
+            //var shopproductListDtos = ObjectMapper.Map<List <ShopProductListDto>>(shopproducts);
+            var shopproductListDtos = shopproducts.MapTo<List<ShopProductListDto>>();
+
+            return new PagedResultDto<ShopProductListDto>(
+                shopproductCount,
+                shopproductListDtos
+                );
+
         }
 
     }

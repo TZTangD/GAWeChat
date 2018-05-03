@@ -22,3 +22,17 @@
 // .img{
 //     width:100%;
 // }
+:host ::ng-deep .ant-card-meta-title {
+    margin-bottom: 4px;
+}
+:host ::ng-deep nz-list nz-card {
+    margin-bottom: 0 !important;
+}
+:host ::ng-deep .card-item-content {
+    display: flex;
+    margin-top: 16px;
+    margin-bottom: -4px;
+    line-height: 20px;
+    height: 20px;
+    justify-content: space-between;
+}
