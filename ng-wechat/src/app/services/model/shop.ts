@@ -15,6 +15,7 @@ export class Shop implements IShop {
     creationTime: Date;
     tenantId: number;
     tel: string;
+    evaluationArry: string[];
 
     constructor(data?: IShop) {
         if (data) {
