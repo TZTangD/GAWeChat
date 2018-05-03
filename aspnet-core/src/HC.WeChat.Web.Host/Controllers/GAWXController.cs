@@ -93,6 +93,7 @@ namespace HC.WeChat.Web.Host.Controllers
 
         public IActionResult Authorization(GAAuthorizationPageEnum page)
         {
+            //UserOpenId = "9A7C8776-A623-473F-AF29-10D3E79A2FAE";
             var host = _appConfiguration["App:ServerRootAddress"];
             var tenantId = GetTenantId();
             switch (page)

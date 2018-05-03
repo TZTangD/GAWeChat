@@ -9,22 +9,22 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="weui-cell" *ngIf="shop" style="font-size: 14px;">
-        <div class="weui-cell__bd">
-            <p>店铺名称</p>
+        <div class="weui-cell" *ngIf="shop" style="font-size: 14px;">
+            <div class="weui-cell__bd">
+                <p>店铺名称</p>
+            </div>
+            <div class="weui-cell__ft">{{shop.name}}</div>
         </div>
-        <div class="weui-cell__ft">{{shop.name}}</div>
-    </div>
-    <div class="weui-cell" *ngIf="shop" style="font-size: 14px;">
-        <div class="weui-cell__bd">
-            <p>提交时间</p>
+        <div class="weui-cell" *ngIf="shop" style="font-size: 14px;">
+            <div class="weui-cell__bd">
+                <p>提交时间</p>
+            </div>
+            <div class="weui-cell__ft">{{shop.creationTime | date:'yyyy-MM-dd HH:mm'}}</div>
         </div>
-        <div class="weui-cell__ft">{{shop.creationTime | date:'yyyy-MM-dd HH:mm'}}</div>
-    </div>
-    <div class="weui-cell">
-        <button weui-button (click)="goEditShop()">修改店铺</button>
-    </div>
+        <div class="weui-cell">
+            <button weui-button (click)="goEditShop()">修改店铺</button>
+        </div>
+    </div> 
 </Page>
 <Page [ngClass]="'list'" [subTitle]="'表单输入'" [showTitle]="false" [spacing]="false" *ngIf="shop && shop.status == 2">
     <div class="weui-cells" style="margin-top: 0px;">

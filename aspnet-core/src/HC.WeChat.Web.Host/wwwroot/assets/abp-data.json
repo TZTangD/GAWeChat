@@ -1,7 +1,7 @@
 {
     "app": {
-        "name": "宜宾微信平台",
-        "description": "宜宾微信平台"
+        "name": "广安微信平台",
+        "description": "广安微信平台"
     },
     "user": {
         "name": "Admin",
@@ -36,37 +36,37 @@
                     "children": [
                         {
                             "text": "授权配置",
-                            "link": "/wechat-manage/authsetting",
+                            "link": "/admin/wechat/authsetting",
                             "translate": "wechat-configs"
                         },
                         {
                             "text": "自动回复",
-                            "link": "/wechat-manage/message",
+                            "link": "/admin/wechat/message",
                             "translate": "aut-res"
                         },
                         {
                             "text": "自定义菜单",
-                            "link": "/wechat-manage/customize-menu",
+                            "link": "/admin/wechat/customize-menu",
                             "translate": "customize-menu"
                         },
                         {
                             "text": "微信用户",
-                            "link": "/wechat-manage/wechat-user",
+                            "link": "/admin/wechat/wechat-user",
                             "translate": "wechat-user"
                         },
                         {
                             "text": "微信群发",
-                            "link": "/wechat-manage/wechat-mass",
+                            "link": "/admin/wechat/wechat-mass",
                             "translate": "wechat-mass"
                         },
                         {
                             "text": "素材管理",
-                            "link": "/wechat-manage/material-management",
+                            "link": "/admin/wechat/material-management",
                             "translate": "material-management"
                         },
                         {
                             "text": "图片库",
-                            "link": "/wechat-manage/photo-warehouse",
+                            "link": "/admin/wechat/photo-warehouse",
                             "translate": "photo-warehouse"
                         }
                     ]
@@ -78,24 +78,24 @@
                     "children": [
                         {
                             "text": "营销人员",
-                            "link": "/marketting-serve/employee",
+                            "link": "/admin/marketting/employee",
                             "translate": "market-user"
                         },
                         {
                             "text": "营销活动",
-                            "link": "/marketting-serve/activity",
+                            "link": "/admin/marketting/activity",
                             "translate": "market-active",
                             "reuse": false
                         },
                         {
                             "text": "经验分享",
-                            "link": "/marketting-serve/experience-share",
+                            "link": "/admin/marketting/experience-share",
                             "translate": "experience-share",
                             "reuse": false
                         },
                         {
                             "text": "投稿管理",
-                            "link": "/marketting-serve/contribute-management",
+                            "link": "/admin/marketting/contribute-management",
                             "translate": "contribute-management",
                             "reuse": false
                         }
@@ -108,31 +108,31 @@
                     "children": [
                         {
                             "text": "零售客户",
-                            "link": "/customer-serve/retail-customer",
+                            "link": "/admin/customer/retail-customer",
                             "translate": "retail-client",
                             "reuse": false
                         },
                         {
                             "text": "店铺管理",
-                            "link": "/customer-serve/store-management",
+                            "link": "/admin/customer/store-management",
                             "translate": "store-management",
                             "reuse": false
                         },
                         {
                             "text": "商品管理",
-                            "link": "/customer-serve/commodity-management",
+                            "link": "/admin/customer/commodity-management",
                             "translate": "commodity-management",
                             "reuse": false
                         },
                         {
                             "text": "档级货源",
-                            "link": "/customer-serve/source-goods-level",
+                            "link": "/admin/customer/source-goods-level",
                             "translate": "source-goods-level",
                             "reuse": false
                         },
                         {
                             "text": "台账管理",
-                            "link": "/customer-serve/account-management",
+                            "link": "/admin/customer/account-management",
                             "translate": "account-management",
                             "reuse": false
                         }
@@ -145,12 +145,12 @@
                     "children": [
                         {
                             "text": "商品查找",
-                            "link": "/consume-serve/commodity-search",
+                            "link": "/admin/consumer/commodity-search",
                             "translate": "commodity-search"
                         },
                         {
                             "text": "意见反馈",
-                            "link": "/consume-serve/advise",
+                            "link": "/admin/consumer/advise",
                             "translate": "advise"
                         }
                     ]
@@ -158,21 +158,21 @@
                 {
                     "text": "会员管理",
                     "translate": "member-management",
-                    "icon": "fa fa-laptop",
+                    "icon": "anticon anticon-user",
                     "children":[
                         {
                             "text": "会员管理",
-                            "link": "/member-manage/member-management",
+                            "link": "/admin/member/member-management",
                             "translate": "member-management"
                         },
                         {
                             "text": "积分查询",
-                            "link": "/member-manage/integral-search",
+                            "link": "/admin/member/integral-search",
                             "translate": "integral-search"
                         },
                         {
                             "text": "会员设置",
-                            "link": "/member-manage/member-setting",
+                            "link": "/admin/member/member-setting",
                             "translate": "member-setting"
                         }
                     ]
@@ -193,22 +193,22 @@
                     "children": [
                         {
                             "text": "用户",
-                            "link": "/admin/users",
+                            "link": "/admin/system/users",
                             "translate": "users"
                         },
                         {
                             "text": "角色",
-                            "link": "/admin/roles",
+                            "link": "/admin/system/roles",
                             "translate": "roles"
                         },
                         {
                             "text": "系统配置",
-                            "link": "/admin/sys-config",
+                            "link": "/admin/system/sys-config",
                             "translate": "sys-config" 
                         },
                         {
                             "text": "数据字典",
-                            "link": "/admin/data-dictionary",
+                            "link": "/admin/system/data-dictionary",
                             "translate": "data-dictionary" 
                         }
                     ]
