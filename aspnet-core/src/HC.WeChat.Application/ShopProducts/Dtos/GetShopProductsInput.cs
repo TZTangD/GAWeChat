@@ -1,6 +1,7 @@
 ﻿using Abp.Runtime.Validation;
 using HC.WeChat.Dto;
 using HC.WeChat.ShopProducts;
+using System;
 
 namespace HC.WeChat.ShopProducts.Dtos
 {
@@ -12,7 +13,10 @@ namespace HC.WeChat.ShopProducts.Dtos
         /// 模糊搜索使用的关键字
         /// </summary>
         public string Filter { get; set; }
-
+        /// <summary>
+        /// 店铺Id
+        /// </summary>
+        public Guid? ShopId { get; set; }
         /// <summary>
         /// 正常化排序使用
         /// </summary>

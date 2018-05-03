@@ -56,5 +56,12 @@ namespace HC.WeChat.Products
         /// 批量删除Product
         /// </summary>
         Task BatchDeleteProductsAsync(List<Guid> input);
+
+        /// <summary>
+        /// 添加或者修改Product的方法
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        Task CreateOrUpdateProductDto(ProductEditDto input);
     }
 }

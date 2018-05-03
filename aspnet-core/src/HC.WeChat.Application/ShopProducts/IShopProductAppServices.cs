@@ -56,5 +56,19 @@ namespace HC.WeChat.ShopProducts
         /// 批量删除ShopProduct
         /// </summary>
         Task BatchDeleteShopProductsAsync(List<Guid> input);
+
+        /// <summary>
+        /// 添加或者修改ShopProduct的方法
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        Task CreateOrUpdateShopProductDto(ShopProductEditDto input);
+
+        /// <summary>
+        /// 获取ShopProduct的分页列表信息连接Product表
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        Task<PagedResultDto<ShopProductListDto>> GetPagedShopProductsReferProducts(GetShopProductsInput input);
     }
 }
