@@ -47,8 +47,4 @@ export class ShopComponent extends AppComponentBase implements OnInit {
             }
         });
     }
-
-    goEditShop(){
-        this.router.navigate(["/center/shop-add"]);
-    }
 }

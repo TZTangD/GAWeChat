@@ -3,13 +3,13 @@ using Abp.Application.Services.Dto;
 using HC.WeChat.Shops.Dtos.LTMAutoMapper;
 using HC.WeChat.Shops;
 using HC.WeChat.WechatEnums;
+using Abp.AutoMapper;
 
 namespace HC.WeChat.Shops.Dtos
 {
+    [AutoMapFrom(typeof(Shop))]
     public class ShopListDto : EntityDto<Guid>
     {
-        ////BCC/ BEGIN CUSTOM CODE SECTION
-        ////ECC/ END CUSTOM CODE SECTION
         public string Name { get; set; }
         public string Address { get; set; }
         public string Desc { get; set; }

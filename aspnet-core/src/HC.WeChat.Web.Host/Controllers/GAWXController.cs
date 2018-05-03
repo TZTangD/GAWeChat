@@ -107,6 +107,26 @@ namespace HC.WeChat.Web.Host.Controllers
                         ViewBag.PageUrl = _weChatOAuthAppService.GetAuthorizeUrl(url, "123", Senparc.Weixin.MP.OAuthScope.snsapi_base);
                     }
                     break;
+                case GAAuthorizationPageEnum.MemberCard:
+                    {
+                        if (!string.IsNullOrEmpty(UserOpenId))
+                        {
+                            return Redirect(string.Format(GAAuthorizationPageUrl.MemberCardUrl, UserOpenId, tenantId ?? 0));
+                        }
+                        var url = host + "/GAWX/MemberCard";
+                        ViewBag.PageUrl = _weChatOAuthAppService.GetAuthorizeUrl(url, "123", Senparc.Weixin.MP.OAuthScope.snsapi_base);
+                    }
+                    break;
+                case GAAuthorizationPageEnum.MyShop:
+                    {
+                        if (!string.IsNullOrEmpty(UserOpenId))
+                        {
+                            return Redirect(string.Format(GAAuthorizationPageUrl.MyShopUrl, UserOpenId, tenantId ?? 0));
+                        }
+                        var url = host + "/GAWX/MyShop";
+                        ViewBag.PageUrl = _weChatOAuthAppService.GetAuthorizeUrl(url, "123", Senparc.Weixin.MP.OAuthScope.snsapi_base);
+                    }
+                    break;
                 default:
                     {
                         return Redirect("/gawechat/index.html");
@@ -114,7 +134,9 @@ namespace HC.WeChat.Web.Host.Controllers
             }
             return View();
         }
-
+        /// <summary>
+        /// 个人中心
+        /// </summary>
         public IActionResult PersonalCenter(string code, string state)
         {
             //存储openId 避免重复提交
@@ -124,15 +146,46 @@ namespace HC.WeChat.Web.Host.Controllers
 
             return Redirect(string.Format(GAAuthorizationPageUrl.PersonalCenterUrl, UserOpenId, tenantId ?? 0));
         }
+
+        /// <summary>
+        /// 会员卡
+        /// </summary>
+        public IActionResult MemberCard(string code, string state)
+        {
+            //存储openId 避免重复提交
+            SetUserOpenId(code);
+            var tenantId = GetTenantId();
+            //UserOpenId = "9A7C8776-A623-473F-AF29-10D3E79A2FAE";
+
+            return Redirect(string.Format(GAAuthorizationPageUrl.MemberCardUrl, UserOpenId, tenantId ?? 0));
+        }
+
+        /// <summary>
+        /// 我的店铺
+        /// </summary>
+        public IActionResult MyShop(string code, string state)
+        {
+            //存储openId 避免重复提交
+            SetUserOpenId(code);
+            var tenantId = GetTenantId();
+            //UserOpenId = "9A7C8776-A623-473F-AF29-10D3E79A2FAE";
+
+            return Redirect(string.Format(GAAuthorizationPageUrl.MyShopUrl, UserOpenId, tenantId ?? 0));
+        }
     }
 
     public enum GAAuthorizationPageEnum
     {
-        PersonalCenter = 1
+        PersonalCenter = 1,
+        MemberCard = 2,
+        ScanIntegral = 3,
+        MyShop = 4
     }
 
     public class GAAuthorizationPageUrl
     {
         public static string PersonalCenterUrl = "/gawechat/index.html#/center/personal/{0}/{1}";
+        public static string MemberCardUrl = "/gawechat/index.html#/center/member-card/{0}/{1}";
+        public static string MyShopUrl = "/gawechat/index.html#/center/shop/{0}/{1}";
     }
 }
