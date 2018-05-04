@@ -189,6 +189,18 @@ namespace HC.WeChat.Products
         }
 
         /// <summary>
+        /// 通过指定id获取ProductListDto信息
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task<ProductListDto> GetProductByIdDtoAsync(EntityDto<Guid> input)
+        {
+            var entity = await _productRepository.GetAll().Where(p=>p.Id==input.Id).FirstOrDefaultAsync();
+            return entity.MapTo<ProductListDto>();
+        }
+
+
+        /// <summary>
         /// 添加或者修改Product的方法
         /// </summary>
         /// <param name="input"></param>

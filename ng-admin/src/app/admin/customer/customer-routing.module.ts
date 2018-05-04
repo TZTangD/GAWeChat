@@ -9,6 +9,7 @@ import { CommodityManagementComponent } from "./commodity-management/commodity-m
 import { SourceGoodsLevelComponent } from "./source-goods-level/source-goods-level.component";
 import { AccountManagementComponent } from "./account-management/account-management.component";
 import { StoreDetailComponent } from "./store-management/store-detail/store-detail.component";
+import { CommodityDetailComponent } from "./commodity-management/commodity-detail/commodity-detail.component";
 
 const routes: Routes = [
   { path: '', redirectTo: 'retail-customer', pathMatch: 'full' },
@@ -18,6 +19,8 @@ const routes: Routes = [
   { path: 'store-management', component: StoreManagementComponent, data: { translate: 'store-management', permission: 'Pages' }, canActivate: [AppRouteGuard] },
   { path: 'store-detail/:id', component: StoreDetailComponent, data: { translate: 'store-detail', permission: 'Pages' }, canActivate: [AppRouteGuard] },
   { path: 'commodity-management', component: CommodityManagementComponent, data: { translate: 'commodity-management', permission: 'Pages' }, canActivate: [AppRouteGuard] },
+  { path: 'commodity-detail', component: CommodityDetailComponent, data: { translate: 'commodity-detail', permission: 'Pages' }, canActivate: [AppRouteGuard] },
+  { path: 'commodity-detail/:id', component: CommodityDetailComponent, data: { translate: 'commodity-detail', permission: 'Pages' }, canActivate: [AppRouteGuard] },
   { path: 'source-goods-level', component: SourceGoodsLevelComponent, data: { translate: 'source-goods-level', permission: 'Pages' }, canActivate: [AppRouteGuard] },
   { path: 'account-management', component: AccountManagementComponent, data: { translate: 'account-management', permission: 'Pages' }, canActivate: [AppRouteGuard] },
 ];

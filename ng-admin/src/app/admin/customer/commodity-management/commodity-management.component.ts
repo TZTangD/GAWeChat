@@ -4,6 +4,7 @@ import { ProductsServiceProxy, PagedResultDtoOfProducts } from '@shared/service-
 import { Products } from '@shared/entity/customer';
 import { Parameter } from '@shared/service-proxies/entity';
 import { NzModalService } from 'ng-zorro-antd';
+import { Router } from '@angular/router';
 
 @Component({
     moduleId: module.id,
@@ -35,7 +36,8 @@ export class CommodityManagementComponent extends AppComponentBase implements On
     defalutImg = './assets/img/tobacco.jpg';
     //用于删除显示
     productName = '';
-    constructor(injector: Injector, private productsService: ProductsServiceProxy, private modal: NzModalService) {
+    constructor(injector: Injector, private productsService: ProductsServiceProxy, private modal: NzModalService,
+        private router: Router) {
         super(injector);
     }
     ngOnInit(): void {
@@ -103,6 +105,15 @@ export class CommodityManagementComponent extends AppComponentBase implements On
                 })
             }
         });
+    }
+
+    editProduct(product: Products) {
+        this.router.navigate(['admin/customer/commodity-detail', product.id])
+    }
+    
+    createProduct() {
+        this.router.navigate(['admin/customer/commodity-detail'])
+
     }
 
 }

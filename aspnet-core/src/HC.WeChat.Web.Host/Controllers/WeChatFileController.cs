@@ -192,5 +192,42 @@ namespace HC.WeChat.Web.Host.Controllers
         }
 
 
+        [RequestFormSizeLimit(valueCountLimit: 2147483647)]
+        [HttpPost]
+        public async Task<IActionResult> MarketingInfoPosts(IFormFile[] image)
+        {
+            //var files = Request.Form.Files;
+            string webRootPath = _hostingEnvironment.WebRootPath;
+            string contentRootPath = _hostingEnvironment.ContentRootPath;
+            var imageName = "";
+            foreach (var formFile in image)
+            {
+                if (formFile.Length > 0)
+                {
+                    //string fileExt = Path.GetExtension(formFile.FileName); //文件扩展名，不含“.”
+                    long fileSize = formFile.Length; //获得文件大小，以字节为单位
+                    //var i = 0;
+                    //fileName = fileName + new DateTime().ToString("yyMMddHH") + i++.ToString();
+                    //string newFileName = fileName + fileExt; //新的文件名
+                    var fileDire = webRootPath + "/upload/product/";
+                    if (!Directory.Exists(fileDire))
+                    {
+                        Directory.CreateDirectory(fileDire);
+                    }
+
+                    var filePath = fileDire + formFile.FileName;
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await formFile.CopyToAsync(stream);
+                    }
+                    imageName = filePath.Substring(webRootPath.Length) ;
+                }
+            }
+
+            return Ok(new{ imageName});
+        }
+
+
     }
 }

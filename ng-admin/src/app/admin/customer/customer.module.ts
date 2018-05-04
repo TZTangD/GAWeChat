@@ -12,6 +12,7 @@ import { AccountManagementComponent } from "./account-management/account-managem
 import { LayoutModule } from "../../layout/layout.module";
 import { CustomerRoutingModule } from "./customer-routing.module";
 import { StoreDetailComponent } from "./store-management/store-detail/store-detail.component";
+import { CommodityDetailComponent } from "./commodity-management/commodity-detail/commodity-detail.component";
 
 @NgModule({
     imports: [
@@ -26,8 +27,10 @@ import { StoreDetailComponent } from "./store-management/store-detail/store-deta
         StoreManagementComponent,
         StoreDetailComponent,
         CommodityManagementComponent,
+        CommodityDetailComponent,
         SourceGoodsLevelComponent,
         AccountManagementComponent,
+        
     ],
     providers: [
         AppRouteGuard  

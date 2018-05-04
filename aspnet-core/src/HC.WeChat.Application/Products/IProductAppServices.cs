@@ -63,5 +63,12 @@ namespace HC.WeChat.Products
         /// <param name="input"></param>
         /// <returns></returns>
         Task CreateOrUpdateProductDto(ProductEditDto input);
+
+        /// <summary>
+        /// 通过指定id获取ProductListDto信息
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        Task<ProductListDto> GetProductByIdDtoAsync(EntityDto<Guid> input);
     }
 }

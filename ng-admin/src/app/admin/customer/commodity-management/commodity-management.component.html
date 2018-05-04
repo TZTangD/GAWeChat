@@ -44,7 +44,7 @@
             <div nz-col [nzSpan]="6" class="mb-md" [class.text-right]="'true'">
                 <button nz-button type="submit" [nzType]="'primary'" [nzLoading]="loading" [nzSize]="'large'">查询</button>
                 <button nz-button type="reset" (click)="refreshData(true)" [nzSize]="'large'" class="mx-sm">重置</button>
-                <button nz-button (click)="createRetail()" [nzType]="'primary'" [nzSize]="'large'">
+                <button nz-button type="button" (click)="createProduct()" [nzType]="'primary'" [nzSize]="'large'">
                     <i class="anticon anticon-plus"></i>
                     <span>新建</span>
                 </button>
@@ -106,7 +106,7 @@
                     <nz-badge [nzStatus]="product.activeType" [nzText]="product.activeText"></nz-badge>
                 </td>
                 <td nz-td>
-                    <a (click)="editRetail(product)">详情</a>
+                    <a (click)="editProduct(product)">详情</a>
                     <span nz-table-divider></span>
                     <a (click)="delete(product,deleteContent)">删除</a>
                 </td>
