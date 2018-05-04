@@ -148,7 +148,7 @@ namespace HC.WeChat.Shops
             {
                 if (input.Shop.Id.HasValue)
                 {
-                    input.Shop.Status = WechatEnums.ShopAuditStatus.提交申请;
+                    input.Shop.Status = WechatEnums.ShopAuditStatus.提交申请;                  
                     await UpdateShopAsync(input.Shop);
                 }
                 else
@@ -157,6 +157,9 @@ namespace HC.WeChat.Shops
                     input.Shop.TenantId = input.TenantId;
                     input.Shop.RetailerId = user.UserId;
                     input.Shop.Status = WechatEnums.ShopAuditStatus.提交申请;
+                    input.Shop.ReadTotal = 0;
+                    input.Shop.SaleTotal = 0;
+                    input.Shop.Evaluation = "0,0,0";
                     await CreateShopAsync(input.Shop);
                 }
             }

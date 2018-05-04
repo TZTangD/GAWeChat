@@ -25,7 +25,14 @@ export class ShopService {
 
   GetShopByOpenId(params: any): Observable<Shop>{
     return this.http.get('/api/services/app/Shop/GetShopByOpenId', params).map(data => {
-        return Shop.fromJS(data.result);
+        if(data.result){
+          let rel = Shop.fromJS(data.result);
+          rel.evaluationArry = rel.evaluation.split(',');
+          return rel;
+        } else {
+          return null;
+        }
+       
     });
   }
 }

@@ -18,7 +18,7 @@ import { Component, Input, ViewEncapsulation } from '@angular/core';
     </div>
     </div>
     <div class="page__bd" [ngClass]="{'page__bd_spacing': spacing}"><ng-content></ng-content></div>
-    <div class="page__ft" [ngClass]="{'j_bottom': ftBottom}" *ngIf="!noBottom">
+    <div class="page__ft" *ngIf="!noBottom">
     <div class="weui-footer">
         <p class="weui-footer__links" *ngIf="showBindStaff">
         <a [routerLink]="['/center/bind-staff']" class="weui-footer__link">员工绑定</a>
