@@ -12,7 +12,9 @@ export class Products implements IProducts {
     tenantId: number;
     creatorUserId: number;
     photoUrl: string;
-
+    typeName: string;
+    activeText: string;
+    activeType: string;
     constructor(data?: IProducts) {
         if (data) {
             for (var property in data) {
@@ -37,6 +39,8 @@ export class Products implements IProducts {
             this.tenantId = data["tenantId"];
             this.creatorUserId = data["creatorUserId"];
             this.photoUrl = data["photoUrl"];
+            this.typeName = data["typeName"];
+
         }
     }
 

@@ -1,1 +1,125 @@
-<!--component html goes here -->
+<pro-header></pro-header>
+<nz-card [nzBordered]="false">
+    <form nz-form (ngSubmit)="refreshData(false,true)" [nzLayout]="'inline'">
+        <div nz-row [nzGutter]="24">
+            <ng-template #deleteContent>
+                <h2>是否删除商品 {{productName}}?</h2>
+            </ng-template>
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label>
+                        <label>规格</label>
+                    </div>
+                    <div nz-form-control class="flex-1">
+                        <nz-input [(ngModel)]="search.name" name="name" [nzSize]="'large'" [nzPlaceHolder]="'请输入规格'" nzId="name"></nz-input>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label>
+                        <label>类型</label>
+                    </div>
+                    <div nz-form-control class="flex-1">
+                        <nz-select name="type" [nzPlaceHolder]="'请选择类型'" [(ngModel)]="search.type" [nzShowSearch]="true" nzSize="large">
+                            <nz-option *ngFor="let i of types" [nzLabel]="i.text" [nzValue]="i.value">
+                            </nz-option>
+                        </nz-select>
+                        <!-- <nz-input [(ngModel)]="search.position" name="position" [nzSize]="'large'" [nzPlaceHolder]="'请输入员工名或员工编码'" nzId="position"></nz-input> -->
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label>
+                        <label>是否是特色商品</label>
+                    </div>
+                    <div nz-form-control class="flex-1">
+                        <nz-select name="isRare" [nzPlaceHolder]="'请选择是否是特色商品'" [(ngModel)]="search.isRare" [nzShowSearch]="true" nzSize="large">
+                            <nz-option *ngFor="let i of isRares" [nzLabel]="i.text" [nzValue]="i.value">
+                            </nz-option>
+                        </nz-select>
+                        <!-- <nz-input [(ngModel)]="search.position" name="position" [nzSize]="'large'" [nzPlaceHolder]="'请输入员工名或员工编码'" nzId="position"></nz-input> -->
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="6" class="mb-md" [class.text-right]="'true'">
+                <button nz-button type="submit" [nzType]="'primary'" [nzLoading]="loading" [nzSize]="'large'">查询</button>
+                <button nz-button type="reset" (click)="refreshData(true)" [nzSize]="'large'" class="mx-sm">重置</button>
+                <button nz-button (click)="createRetail()" [nzType]="'primary'" [nzSize]="'large'">
+                    <i class="anticon anticon-plus"></i>
+                    <span>新建</span>
+                </button>
+            </div>
+        </div>
+    </form>
+    <nz-table #nzTable [nzAjaxData]="products" [nzTotal]="query.total" [(nzPageIndex)]="query.pageIndex" [(nzPageSize)]="query.pageSize"
+        [nzLoading]="loading" [nzShowTotal]="'true'" [nzShowSizeChanger]="true" (nzPageIndexChange)="refreshData()" (nzPageSizeChange)="refreshData()">
+        <thead nz-thead>
+            <tr>
+                <th nz-th>
+                    <span>产品图片</span>
+                </th>
+                <th nz-th>
+                    <span>规格</span>
+                </th>
+                <th nz-th>
+                    <span>类型</span>
+                </th>
+                <th nz-th>
+                    <span>零售价(元/包)</span>
+                </th>
+                <th nz-th>
+                    <span>是否是特色商品</span>
+                </th>
+                <th nz-th>
+                    <span>包码</span>
+                </th>
+                <th nz-th>
+                    <span>条码</span>
+                </th>
+                <th nz-th>
+                    <span>搜索次数</span>
+                </th>
+                <th nz-th>
+                    <span>是否启用</span>
+                </th>
+                <th nz-th>
+                    <span>操作</span>
+                </th>
+            </tr>
+        </thead>
+        <tbody nz-tbody>
+            <tr nz-tbody-tr *ngFor="let product of nzTable.data">
+                <td nz-td>
+                    <nz-avatar [nzSrc]="(product.photoUrl===null||product.photoUrl===''?defalutImg:product.photoUrl)" style="width:80px;height: 80px;"
+                        (click)="handlePreview(product.photoUrl)" [nzSize]="'large'" [nzShape]="'square'"></nz-avatar>
+
+                </td>
+                <td nz-td>{{product.specification}}</td>
+                <td nz-td>{{product.typeName}}</td>
+                <td nz-td>{{product.price}}</td>
+                <td nz-td>{{product.isRare==true?"是":"否"}}</td>
+                <td nz-td>{{product.packageCode}}</td>
+                <td nz-td>{{product.barCode}}</td>
+                <td nz-td>{{product.searchCount}}</td>
+                <!-- <td nz-td>{{product.isAction}}</td> -->
+                <td nz-td>
+                    <nz-badge [nzStatus]="product.activeType" [nzText]="product.activeText"></nz-badge>
+                </td>
+                <td nz-td>
+                    <a (click)="editRetail(product)">详情</a>
+                    <span nz-table-divider></span>
+                    <a (click)="delete(product,deleteContent)">删除</a>
+                </td>
+            </tr>
+        </tbody>
+    </nz-table>
+</nz-card>
+<nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null" [nzWidth]="imgWidth" (nzOnCancel)="previewVisible=false">
+    <ng-template #modalContent>
+        <img [src]="previewImage" [ngStyle]="{ 'width': '100%' }" />
+    </ng-template>
+</nz-modal>
+<!-- <edit-employee-modal #editEmployeeModal (modalSave)="refreshData()"></edit-employee-modal>
+<create-employee-modal #createEmployeeModal (modalSave)="refreshData()"></create-employee-modal> -->

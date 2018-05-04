@@ -247,7 +247,8 @@ namespace HC.WeChat.Shops
 
             var queryShop = _shopRepository.GetAll()
                 .WhereIf(!string.IsNullOrEmpty(input.Name), s => s.Name.Contains(input.Name))
-                .WhereIf(input.Status.HasValue, s => s.Status == input.Status);
+                .WhereIf(input.Status.HasValue, s => s.Status == input.Status)
+                .WhereIf(!string.IsNullOrEmpty(input.Tel), s => s.Tel.Contains(input.Tel));
             var queryRetailer = _retailerRepository.GetAll();
             var query = from s in queryShop
                         join r in queryRetailer on s.RetailerId equals r.Id into queryS
@@ -269,6 +270,7 @@ namespace HC.WeChat.Shops
                             AuditTime = s.AuditTime,
                             CreationTime = s.CreationTime,
                             TenantId = s.TenantId,
+                            Tel = s.Tel,
                             RetailerName = sr != null ? sr.Name : "",
                         };
 
@@ -322,6 +324,7 @@ namespace HC.WeChat.Shops
                                     AuditTime = s.AuditTime,
                                     CreationTime = s.CreationTime,
                                     TenantId = s.TenantId,
+                                    Tel = s.Tel,
                                     RetailerName = sr != null ? sr.Name : ""
                                 }).SingleOrDefaultAsync();
             return entity;

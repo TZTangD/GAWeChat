@@ -5,6 +5,7 @@ using Abp.Authorization;
 using Abp.AutoMapper;
 using Abp.Domain.Repositories;
 using Abp.Linq.Extensions;
+using System.Linq;
 
 using System.Linq.Dynamic.Core;
 using Microsoft.EntityFrameworkCore;
@@ -48,12 +49,16 @@ namespace HC.WeChat.Products
         public async Task<PagedResultDto<ProductListDto>> GetPagedProducts(GetProductsInput input)
         {
 
-            var query = _productRepository.GetAll();
+            var query = _productRepository.GetAll()
+                .WhereIf(!string.IsNullOrEmpty(input.Name),p=>p.Specification.Contains(input.Name))
+                .WhereIf(input.Type.HasValue,p=>p.Type==input.Type)
+                .WhereIf(input.IsRare.HasValue,p=>p.IsRare==input.IsRare);
             //TODO:根据传入的参数添加过滤条件
             var productCount = await query.CountAsync();
 
             var products = await query
-                .OrderBy(input.Sorting)
+                .OrderBy(p=>p.Specification)
+                .ThenBy(input.Sorting)
                 .PageBy(input)
                 .ToListAsync();
 
