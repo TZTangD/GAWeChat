@@ -10,8 +10,6 @@ namespace HC.WeChat.ShopProducts.Dtos
     [AutoMapFrom(typeof(ShopProduct))]
     public class ShopProductListDto : EntityDto<Guid>
     {
-        ////BCC/ BEGIN CUSTOM CODE SECTION
-        ////ECC/ END CUSTOM CODE SECTION
         public Guid ProductId { get; set; }
         public Guid ShopId { get; set; }
         public string Specification { get; set; }

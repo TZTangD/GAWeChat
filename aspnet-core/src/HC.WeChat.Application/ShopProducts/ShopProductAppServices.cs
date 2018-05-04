@@ -16,6 +16,7 @@ using HC.WeChat.ShopProducts;
 using System;
 using HC.WeChat.Products;
 using HC.WeChat.Authorization;
+using HC.WeChat.Dto;
 
 namespace HC.WeChat.ShopProducts
 {
@@ -218,7 +219,7 @@ namespace HC.WeChat.ShopProducts
             var querySP = _shopproductRepository.GetAll()
                 .Where(sp=>sp.ShopId==input.ShopId);
             var queryP = _productRepository.GetAll()
-                .Where(p => p.IsRare == true);
+                .Where(p => p.IsRare == true && p.IsAction == true);
             var query = from sp in querySP
                         join p in queryP on sp.ProductId equals p.Id 
                         select new ShopProductListDto
@@ -252,6 +253,61 @@ namespace HC.WeChat.ShopProducts
 
         }
 
+        /// <summary>
+        /// 根据店铺Id 获取特色商品
+        /// </summary>
+        [AbpAllowAnonymous]
+        public async Task<List<ShopProductListDto>> GetShopProductsByShopId(Guid shopId, int? tenantId)
+        {
+            using (CurrentUnitOfWork.SetTenantId(tenantId))
+            {
+                var query = from s in _shopproductRepository.GetAll().Where(s => s.ShopId == shopId)
+                            join p in _productRepository.GetAll().Where(p => p.IsRare == true && p.IsAction == true) on s.ProductId equals p.Id
+                            select new ShopProductListDto
+                            {
+                                Id = p.Id,
+                                ProductId = s.ProductId,
+                                ShopId = s.ShopId,
+                                Specification = p.Specification,
+                                Type = p.Type,
+                                Price = p.Price,
+                                PackageCode = p.PackageCode,
+                                BarCode = p.BarCode,
+                                PhotoUrl = p.PhotoUrl
+                            };
+                return await query.OrderBy(q => q.Type).ThenBy(q => q.Specification).ToListAsync();
+            }
+        }
+
+        /// <summary>
+        /// 保存店铺产品
+        /// </summary>
+        [AbpAllowAnonymous]
+        public async Task<APIResultDto> SaveShopProducts(BatchSaveShopProductDto input)
+        {
+            using (CurrentUnitOfWork.SetTenantId(input.TenantId))
+            {
+                var currentProducts = await _shopproductRepository.GetAll().Where(s => s.ShopId == input.ShopId).ToListAsync();
+                //删除
+                var deleteIds = currentProducts.Where(c => !input.ProductIds.Contains(c.ProductId)).Select(c => c.Id).ToArray();
+                await _shopproductRepository.DeleteAsync(s => deleteIds.Contains(s.Id));
+                //新增
+                var cpIds = currentProducts.Select(c => c.ProductId).ToArray();
+                var addIds = input.ProductIds.Where(p => !cpIds.Contains(p)).ToArray();
+                foreach (var pid in addIds)
+                {
+                    await _shopproductRepository.InsertAsync(new ShopProduct() { ProductId = pid, ShopId = input.ShopId });
+                }
+
+                await CurrentUnitOfWork.SaveChangesAsync();
+
+                APIResultDto result = new APIResultDto();
+                result.Code = 0;
+                result.Msg = "提交数据成功";
+                result.Data = await GetShopProductsByShopId(input.ShopId, input.TenantId);
+                return result;
+            }
+        }
     }
 }
 

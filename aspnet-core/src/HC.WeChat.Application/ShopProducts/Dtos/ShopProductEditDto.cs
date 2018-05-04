@@ -2,6 +2,7 @@
 using HC.WeChat.ShopProducts.Dtos.LTMAutoMapper;
 using HC.WeChat.ShopProducts;
 using System;
+using System.Collections.Generic;
 
 namespace HC.WeChat.ShopProducts.Dtos
 {
@@ -30,5 +31,12 @@ namespace HC.WeChat.ShopProducts.Dtos
         /// </summary>
         [StringLength(200)]
         public string Specification { get; set; }
+    }
+
+    public class BatchSaveShopProductDto
+    {
+        public Guid ShopId { get; set; }
+        public int? TenantId { get; set; }
+        public List<Guid> ProductIds { get; set; }
     }
 }

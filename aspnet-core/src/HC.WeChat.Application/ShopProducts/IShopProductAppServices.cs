@@ -5,6 +5,7 @@ using Abp.Application.Services.Dto;
 using HC.WeChat.ShopProducts.Dtos;
 using HC.WeChat.ShopProducts;
 using System;
+using HC.WeChat.Dto;
 
 namespace HC.WeChat.ShopProducts
 {
@@ -70,5 +71,15 @@ namespace HC.WeChat.ShopProducts
         /// <param name="input"></param>
         /// <returns></returns>
         Task<PagedResultDto<ShopProductListDto>> GetPagedShopProductsReferProducts(GetShopProductsInput input);
+
+        /// <summary>
+        /// 根据店铺Id获取特色商品
+        /// </summary>
+        Task<List<ShopProductListDto>> GetShopProductsByShopId(Guid shopId, int? tenantId);
+
+        /// <summary>
+        /// 保存店铺商品
+        /// </summary>
+        Task<APIResultDto> SaveShopProducts(BatchSaveShopProductDto input);
     }
 }

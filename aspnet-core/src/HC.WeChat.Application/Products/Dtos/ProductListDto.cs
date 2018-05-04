@@ -3,13 +3,14 @@ using Abp.Application.Services.Dto;
 using HC.WeChat.Products.Dtos.LTMAutoMapper;
 using HC.WeChat.Products;
 using HC.WeChat.WechatEnums;
+using Abp.AutoMapper;
+using System.Collections.Generic;
 
 namespace HC.WeChat.Products.Dtos
 {
+    [AutoMapFrom(typeof(Product))]
     public class ProductListDto : EntityDto<Guid>
     {
-        ////BCC/ BEGIN CUSTOM CODE SECTION
-        ////ECC/ END CUSTOM CODE SECTION
         public string Specification { get; set; }
         public ProductTypeEnum? Type { get; set; }
         public decimal? Price { get; set; }
@@ -23,5 +24,18 @@ namespace HC.WeChat.Products.Dtos
         public long? CreatorUserId { get; set; }
 
         public string PhotoUrl { get; set; }
+    }
+
+    public class RareProductDto
+    {
+        /// <summary>
+        /// 卷烟类
+        /// </summary>
+        public List<ProductListDto> CigaretteProducts { get; set; }
+
+        /// <summary>
+        /// 特产类
+        /// </summary>
+        public List<ProductListDto> SpecialProducts { get; set; }
     }
 }
