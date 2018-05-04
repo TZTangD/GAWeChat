@@ -13,7 +13,7 @@ import { NzModalService } from 'ng-zorro-antd';
 export class CommodityManagementComponent extends AppComponentBase implements OnInit {
     loading = false;
     status = [
-        { text: '启用', value: false, type: 'success' },
+        { text: '启用', value: true, type: 'success' },
         { text: '禁用', value: false, type: 'default' },
     ];
     isRares = [
@@ -44,7 +44,7 @@ export class CommodityManagementComponent extends AppComponentBase implements On
     refreshData(reset = false, search?: boolean) {
         if (reset) {
             this.query.pageIndex = 1;
-            this.search = { isRares: 0, types: 0 };
+            this.search = { isRare: 0, type: 0 };
         }
         if (search) {
             this.query.pageIndex = 1;
@@ -55,9 +55,9 @@ export class CommodityManagementComponent extends AppComponentBase implements On
             let status = 0;
             this.products = result.items.map(i => {
                 if (i.isAction) {
-                    status = 1;
-                } else {
                     status = 0;
+                } else {
+                    status = 1;
                 }
                 const statusItem = this.status[status];
                 i.activeText = statusItem.text;
@@ -72,7 +72,7 @@ export class CommodityManagementComponent extends AppComponentBase implements On
         var arry = [];
         arry.push(Parameter.fromJS({ key: 'Name', value: this.search.name }));
         arry.push(Parameter.fromJS({ key: 'Type', value: this.search.type === 0 ? null : this.search.type }));
-        arry.push(Parameter.fromJS({ key: 'IsRare', value: this.search.isRare == 0 ? null : this.search.IsRare }));
+        arry.push(Parameter.fromJS({ key: 'IsRare', value: this.search.isRare === 0 ? null : this.search.isRare }));
         return arry;
     }
     handlePreview = (url: string) => {

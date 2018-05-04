@@ -14,6 +14,9 @@
                     </ng-template>
                     <div nz-col [nzSpan]="8" class="mb-md">
                         <div nz-form-item class="d-flex">
+                            <div nz-form-label>
+                                <label>关键字</label>
+                            </div>
                             <div nz-form-control class="flex-1">
                                 <nz-input [(ngModel)]="mesText" name="no" [nzSize]="'large'" [nzPlaceHolder]="'请输入关键字'" nzId="no"></nz-input>
                             </div>
@@ -93,7 +96,7 @@
             </div>
 
             <div nz-form-item nz-row>
-                <div  nz-col [nzOffset]="4" [nzSm]="7">
+                <div nz-col [nzOffset]="4" [nzSm]="7">
                     <button nz-button [nzType]="'default'" [nzSize]="'large'" type="button" (click)="deletes(deletesContent)">
                         删除回复
                     </button>
