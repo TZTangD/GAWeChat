@@ -92,6 +92,62 @@ export class ProductsServiceProxy {
         }
         return Observable.of<PagedResultDtoOfProducts>(<any>null);
     }
+
+    /**
+     * 获取单个商品信息
+     * @param id 商品id
+     */
+    get(id: number): Observable<Products> {
+        let url_ = this.baseUrl + "/api/services/app/Product/GetProductByIdDtoAsync?";
+        if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = {
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_) => {
+            return this.processGet(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processGet(response_);
+                } catch (e) {
+                    return <Observable<Products>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<Products>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processGet(response: Response): Observable<Products> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? Products.fromJS(resultData200) : new Products();
+            return Observable.of(result200);
+        } else if (status === 401) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status === 403) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<Products>(<any>null);
+    }
+
      /**
      * 新增或修改产品信息
      * @param input 

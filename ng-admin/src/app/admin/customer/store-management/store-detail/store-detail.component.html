@@ -15,7 +15,7 @@
         <!-- <img class="img" src="https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png"> -->
         <div nz-row>
             <div nz-col nzXs="24" nzSm="8" *ngIf="shop.coverPhoto">
-                <img class="img" src="shop.coverPhoto">
+                <img class="img ng-star-inserted"  src="shop.coverPhoto">
                 <!-- <img class="img ng-star-inserted" src="https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png"> -->
             </div>
             <div nz-col nzXs="24" nzSm="16">
@@ -26,11 +26,11 @@
                     <desc-list-item term="零售客户">{{shop.retailerName}}</desc-list-item>
                     <desc-list-item term="店铺销量">{{shop.saleTotal}}</desc-list-item>
                     <desc-list-item term="店铺浏览量">{{shop.readTotal}}</desc-list-item>
+                    <desc-list-item term="店铺电话">{{shop.tel}}</desc-list-item>
                     <desc-list-item term="经度">{{shop.longitude}}</desc-list-item>
                     <desc-list-item term="纬度">{{shop.latitude}}</desc-list-item>
                     <desc-list-item term="审核时间">{{shop.auditTime|_date}}</desc-list-item>
                     <desc-list-item term="评价描述">{{evaluationShow}}</desc-list-item>
-
                 </desc-list>
             </div>
         </div>

@@ -12,7 +12,7 @@ import { MaterialManagementComponent } from "./material-management/material-mana
 import { PhotoWarehouseComponent } from "./photo-warehouse/photo-warehouse.component";
 
 const routes: Routes = [
-  { path: '', redirectTo: 'index', pathMatch: 'full' },
+  { path: '', redirectTo: 'authsetting', pathMatch: 'full' },
   { path: 'authsetting', component: AuthSettingComponent, data: { translate: 'authsetting', permission: 'Pages' }, canActivate: [AppRouteGuard] },
   { path: 'message', component: MessagesComponent, data: { translate: 'message', permission: 'Pages' }, canActivate: [AppRouteGuard] },
   { path: 'wechat-user', component: WechatUserComponent, data: { translate: 'wechat-user', permission: 'Pages' }, canActivate: [AppRouteGuard] },

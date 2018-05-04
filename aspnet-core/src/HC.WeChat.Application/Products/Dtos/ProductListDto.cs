@@ -24,6 +24,13 @@ namespace HC.WeChat.Products.Dtos
         public long? CreatorUserId { get; set; }
 
         public string PhotoUrl { get; set; }
+        public string TypeName
+        {
+            get
+            {
+                return Type.ToString();
+            }
+        }
     }
 
     public class RareProductDto

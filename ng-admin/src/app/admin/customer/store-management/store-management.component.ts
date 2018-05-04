@@ -57,6 +57,7 @@ export class StoreManagementComponent extends AppComponentBase implements OnInit
     getParameter(): Parameter[] {
         var arry = [];
         arry.push(Parameter.fromJS({ key: 'Name', value: this.search.name }));
+        arry.push(Parameter.fromJS({ key: 'Tel', value: this.search.tel }));
         arry.push(Parameter.fromJS({ key: 'Status', value: this.search.status === 4 ? null : this.search.status }));
         return arry;
     }

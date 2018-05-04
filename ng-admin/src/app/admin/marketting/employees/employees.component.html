@@ -7,6 +7,9 @@
             </ng-template>
             <div nz-col [nzSpan]="8" class="mb-md">
                 <div nz-form-item class="d-flex">
+                    <div nz-form-label>
+                        <label>员工名/员工编码</label>
+                    </div>
                     <div nz-form-control class="flex-1">
                         <nz-input [(ngModel)]="search.name" name="name" [nzSize]="'large'" [nzPlaceHolder]="'请输入员工名或员工编码'" nzId="name"></nz-input>
                     </div>
@@ -14,6 +17,9 @@
             </div>
             <div nz-col [nzSpan]="8" class="mb-md">
                 <div nz-form-item class="d-flex">
+                    <div nz-form-label>
+                        <label>职位</label>
+                    </div>
                     <div nz-form-control class="flex-1">
                         <nz-select name="position" [nzPlaceHolder]="'请选择职位'" [(ngModel)]="search.position" [nzShowSearch]="true" nzSize="large">
                             <nz-option *ngFor="let i of positions" [nzLabel]="i.text" [nzValue]="i.value">
