@@ -18,60 +18,39 @@ export class ShopAddComponent extends AppComponentBase implements OnInit {
     showAddInfo: boolean = true;
     user: WechatUser;
 
-    res: any = {};
+    res: any = { };
+    coverPhoto: string = '';
 
     img: any;
     imgShow: boolean = false;
     title: string = '新增店铺';
 
     uploader: Uploader = new Uploader(<UploaderOptions>{
-        url: AppConsts.remoteServiceBaseUrl + '/WeChatFile/FilesPosts',
-        /*headers: [
-            { name: 'Content-Type', value: 'application/x-www-form-urlencoded'}
-        ],*/
-        method: 'POST',
-        params: {
-            folder: 'shop',
-        },
-        /*types: [
-            'jpg','png'
-        ],*/
-        //auto: true,
-        onFileQueued: function(file: FileItem) {
-            console.log('onFileQueued', arguments);
-        },
-        onFileDequeued: function() {
-            console.log('onFileDequeued', arguments);
-        },
-        onStart: function() {
-            console.log('onStart', arguments);
-        },
-        onCancel: function() {
-            console.log('onCancel', arguments);
-        },
-        onFinished: function() {
-            console.log('onFinished', arguments);
-        },
-        onUploadStart: function() {
-            console.log('onUploadStart', arguments);
-        },
-        onUploadProgress: function() {
-            console.log('onUploadProgress', arguments);
-        },
-        onUploadSuccess: function(file: FileItem, response: string) {
-            console.log('onUploadSuccess' + response, arguments);
-        },
-        onUploadError: function() {
-            console.log('onUploadError', arguments);
-        },
+        url: AppConsts.remoteServiceBaseUrl + '/WeChatFile/FilesPosts?folder=shop',
+        auto: true,
+        limit: 1,
+        /*onUploadSuccess(file: FileItem, response: string) {
+            console.log('onUploadSuccess-' + response, arguments);
+            //console.table(file);
+            //console.table(arguments);
+            let data = JSON.parse(response);
+            if(data && data.success == true){
+                this.coverPhoto = data.result;
+            }
+        },*/
+        onUploadSuccess: ((file: FileItem, response: string) => {
+            console.log('onUploadSuccess-' + response);
+            //console.table(file);
+            //console.table(arguments);
+            let data = JSON.parse(response);
+            if(data && data.success == true){
+                this.coverPhoto = data.result;
+            }
+        }),
         onUploadComplete: function(file: FileItem, response: string) {
-            console.log('onUploadComplete' + response, arguments);
-        },
-        onUploadCancel: function() {
-            console.log('onUploadCancel', arguments);
-        },
-        onError: function() {
-            console.log('onError', arguments);
+            console.log('onUploadComplete-' + response, arguments);
+            //console.table(file);
+            //console.table(arguments);  
         }
     });
 
@@ -115,11 +94,16 @@ export class ShopAddComponent extends AppComponentBase implements OnInit {
     onDel(item: any) {
         console.log(item);
         this.uploader.removeFromQueue(item.item);
+        this.coverPhoto = '';
     }
 
     onSave() {
         //alert('请求数据：' + JSON.stringify(this.res));
-        if(this.res.coverPhoto){
+        if(this.coverPhoto != ''){
+            this.res.coverPhoto = this.coverPhoto;
+        }
+        //console.table(this.res);
+        if(!this.res.coverPhoto || this.res.coverPhoto == ''){
             this.srv['warn']('请上传店铺形象');
             return;
         }
