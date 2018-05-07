@@ -1,0 +1,108 @@
+{
+    "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+    "project": {
+        "name": "ng-alain"
+    },
+    "apps": [{
+        "root": "src",
+        "outDir": "dist",
+        "assets": [
+            "assets",
+            "favicon.ico",
+            {
+                "glob": "abp.signalr.js",
+                "input": "../node_modules/abp-web-resources/Abp/Framework/scripts/libs/",
+                "output": "./assets/abp/"
+            }
+        ],
+        "index": "index.html",
+        "main": "main.ts",
+        "polyfills": "polyfills.ts",
+        "test": "test.ts",
+        "tsconfig": "tsconfig.app.json",
+        "testTsconfig": "tsconfig.spec.json",
+        "prefix": "app",
+        "styles": [
+            "styles.less",
+            "../node_modules/toastr/build/toastr.css",
+            "../node_modules/sweetalert/dist/sweetalert.css"
+        ],
+        "scripts": [
+            "../node_modules/@antv/g2/dist/g2.min.js",
+            "../node_modules/@antv/data-set/dist/data-set.min.js",
+            "../node_modules/@antv/g2-plugin-slider/dist/g2-plugin-slider.min.js",
+            "../node_modules/jquery/dist/jquery.min.js",
+            "../node_modules/moment/min/moment.min.js",
+            "../node_modules/signalr/jquery.signalR.js",
+            "../node_modules/toastr/toastr.js",
+            "../node_modules/sweetalert/dist/sweetalert.min.js",
+            "../node_modules/abp-web-resources/Abp/Framework/scripts/abp.js",
+            "../node_modules/abp-web-resources/Abp/Framework/scripts/libs/abp.jquery.js",
+            "../node_modules/abp-web-resources/Abp/Framework/scripts/libs/abp.toastr.js",
+            "../node_modules/abp-web-resources/Abp/Framework/scripts/libs/abp.blockUI.js",
+            "../node_modules/abp-web-resources/Abp/Framework/scripts/libs/abp.spin.js",
+            "../node_modules/abp-web-resources/Abp/Framework/scripts/libs/abp.sweet-alert.js",
+            "../node_modules/abp-web-resources/Abp/Framework/scripts/libs/abp.moment.js"
+        ],
+        "environmentSource": "environments/environment.ts",
+        "environments": {
+            "dev": "environments/environment.ts",
+            "prod": "environments/environment.prod.ts",
+            "hmr": "environments/environment.hmr.ts",
+            "chore": "environments/environment.chore.ts"
+        }
+    }],
+    "e2e": {
+        "protractor": {
+            "config": "./protractor.conf.js"
+        }
+    },
+    "lint": [{
+            "project": "src/tsconfig.app.json",
+            "exclude": "**/node_modules/**"
+        },
+        {
+            "project": "src/tsconfig.spec.json",
+            "exclude": "**/node_modules/**"
+        },
+        {
+            "project": "e2e/tsconfig.e2e.json",
+            "exclude": "**/node_modules/**"
+        }
+    ],
+    "test": {
+        "karma": {
+            "config": "./karma.conf.js"
+        }
+    },
+    "defaults": {
+        "styleExt": "less",
+        "class": {
+            "spec": false
+        },
+        "component": {
+            "flat": false,
+            "spec": false,
+            "inlineStyle": true,
+            "inlineTemplate": false
+        },
+        "directive": {
+            "spec": false
+        },
+        "guard": {
+            "spec": false
+        },
+        "interface": {
+            "prefix": "I"
+        },
+        "module": {
+            "spec": false
+        },
+        "pipe": {
+            "spec": true
+        },
+        "service": {
+            "spec": false
+        }
+    }
+}

@@ -1,0 +1,156 @@
+<Page [ngClass]="'icons'" [spacing]="false" [showTitle]="false" *ngIf="shop && shop.status == 1">
+    <div class="weui-cells">
+        <div class="weui-cell">
+            <div class="icon-box">
+                <i class="weui-icon-waiting weui-icon_msg"></i>
+                <div class="icon-box__ctn">
+                    <h3 class="icon-box__title">等待审核</h3>
+                    <p class="icon-box__desc">店铺等待营销中心审核</p>
+                </div>
+            </div>
+        </div>
+        <div class="weui-cell" *ngIf="shop" style="font-size: 14px;">
+            <div class="weui-cell__bd">
+                <p>店铺名称</p>
+            </div>
+            <div class="weui-cell__ft">{{shop.name}}</div>
+        </div>
+        <div class="weui-cell" *ngIf="shop" style="font-size: 14px;">
+            <div class="weui-cell__bd">
+                <p>提交时间</p>
+            </div>
+            <div class="weui-cell__ft">{{shop.creationTime | date:'yyyy-MM-dd HH:mm'}}</div>
+        </div>
+        <div class="weui-cell">
+            <button weui-button (click)="goEditShop()">修改店铺</button>
+        </div>
+    </div>
+</Page>
+<Page [ngClass]="'list'" [subTitle]="'表单输入'" [showTitle]="false" [spacing]="false" *ngIf="shop && shop.status == 2">
+    <div class="weui-cells" style="margin-top: 0px;">
+        <div class="weui-cell">
+            <div style="text-align: center; width: 100%;">
+                <img src="{{shop.coverPhoto}}" style="width:100%;">
+            </div>
+        </div>
+        <div class="weui-cell" *ngIf="shop" style="font-size: 14px;">
+            <div class="weui-cell__hd">
+                <img src="./assets/images/shop/network-o-3.png" alt="" style="width:24px;margin-right:5px;display:block">
+            </div>
+            <div class="weui-cell__bd">
+                <p>{{shop.name}}</p>
+            </div>
+            <div class="weui-cell__ft">
+                <p>
+                    <img class="weui-icon-h18" src="./assets/images/shop/wave.png" alt="人气">人气：{{shop.readTotal}}
+                    <img class="weui-icon-h18" alt="销量" src="./assets/images/shop/trend-chart-2.png">销量：{{shop.saleTotal}}</p>
+            </div>
+        </div>
+        <div class="weui-cell">
+            <weui-navbar style="width:100%;">
+                <weui-tab heading="店铺信息">
+                    <div class="weui-panel weui-panel_access">
+                        <div class="weui-panel__hd">店铺介绍</div>
+                        <div class="weui-panel__bd">
+                            <div class="weui-panel__hd">
+                                <p>{{shop.desc}}</p>
+                            </div>
+                        </div>
+                        <div class="weui-cells">
+                            <div class="weui-cell">
+                                <div class="weui-cell__hd">
+                                    <img src="./assets/images/shop/PDA-o.png" alt="" style="width:24px;margin-right:5px;display:block">
+                                </div>
+                                <div class="weui-cell__bd weui-cell_primary" style="font-size: 14px;">
+                                    <p>{{shop.tel}}</p>
+                                </div>
+                                <a class="weui-cell__ft weui-cell_access" href="tel:{{shop.tel}}">
+                                    <img class="weui-icon-h18" src="./assets/images/shop/phone-r-o.png" alt="">
+                                </a>
+                            </div>
+                            <div class="weui-cell">
+                                <div class="weui-cell__hd">
+                                    <img src="./assets/images/shop/map-2-o.png" alt="" style="width:24px;margin-right:5px;display:block">
+                                </div>
+                                <div class="weui-cell__bd weui-cell_primary" style="font-size: 14px;">
+                                    <p>{{shop.address}}</p>
+                                </div>
+                                <a class="weui-cell__ft weui-cell_access" href="#">
+                                    <img class="weui-icon-h18" src="./assets/images/shop/navigation-o.png" alt="">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="weui-cells__title">店铺评价</div>
+                        <div class="weui-cells">
+                            <div class="weui-cell">
+                                <div class="weui-cell__bd weui-cell_primary" style="font-size: 14px;">
+                                    <img class="weui-icon-h18" src="./assets/images/shop/service-o.png" alt="">好（{{shop.evaluationArry[0]}}）
+                                    <img class="weui-icon-h18" src="./assets/images/shop/service-o-2.png" alt="">中（{{shop.evaluationArry[1]}}）
+                                    <img class="weui-icon-h18" src="./assets/images/shop/service-o-3.png" alt="">差（{{shop.evaluationArry[2]}}）
+                                </div>
+                            </div>
+                            <div class="weui-cell">
+                                <button weui-button [weui-plain]="true" (click)="goEditShop()">修改店铺</button>
+                            </div>
+                        </div>
+                    </div>
+                </weui-tab>
+                <weui-tab heading="特色商品" (select)="onSelectProducts()">
+                    <div class="weui-panel weui-panel_access">
+                        <div class="weui-panel__hd">商品列表</div>
+                        <weui-loadmore type="line" *ngIf="!shopProducts || shopProducts.length == 0"></weui-loadmore>
+                        <div class="weui-panel__bd" *ngIf="shopProducts">
+                            <div class="weui-media-box weui-media-box_appmsg" *ngFor="let sp of shopProducts">
+                                <div class="weui-media-box__hd">
+                                    <img class="weui-media-box__thumb" src="{{sp.photoUrl}}" alt="">
+                                </div>
+                                <div class="weui-media-box__bd">
+                                    <h4 class="weui-media-box__title">{{sp.specification}}</h4>
+                                    <p class="weui-media-box__desc">{{sp.typeName}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="weui-cells">
+                            <div class="weui-cell">
+                                <button weui-button [weui-plain]="true" type="button" (click)="onProductPopup()">新增商品</button>
+                            </div>
+                        </div>
+                    </div>
+                    <weui-popup #product [config]="{is_full: true}">
+                        <div class="weui-cells__title">卷烟类</div>
+                        <div class="weui-cells weui-cells_checkbox">
+                            <label class="weui-cell weui-check__label" for="checkbox-{{c.id}}" *ngFor="let c of cigaretteProducts; let index = index">
+                                <div class="weui-cell__hd">
+                                    <input type="checkbox" class="weui-check" [weui-checklist]="shopProductIds" name="cigarette" [weui-value]="c.id" id="checkbox-{{c.id}}">
+                                    <i class="weui-icon-checked"></i>
+                                </div>
+                                <div class="weui-cell__bd">
+                                    <p>{{c.specification}}</p>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="weui-cells__title">特产类</div>
+                        <div class="weui-cells weui-cells_checkbox">
+                            <label class="weui-cell weui-check__label" for="checkbox-{{s.id}}" *ngFor="let s of specialProducts; let index = index">
+                                <div class="weui-cell__hd">
+                                    <input type="checkbox" class="weui-check" [weui-checklist]="shopProductIds" name="special" [weui-value]="s.id" id="checkbox-{{s.id}}">
+                                    <i class="weui-icon-checked"></i>
+                                </div>
+                                <div class="weui-cell__bd">
+                                    <p>{{s.specification}}</p>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="weui-cells__title">请选择上面特色商品，然后提交</div>
+                        <div class="weui-cell">
+                            <div class="weui-media-box__bd" style="width: 100%;">
+                                <button weui-button type="button" (click)="save()" >提交</button>
+                                <button weui-button [weui-type]="'default'" type="button" (click)="productPopup.close()" >取消</button>
+                            </div>
+                        </div>
+                    </weui-popup>
+                </weui-tab>
+            </weui-navbar>
+        </div>
+    </div>
+</Page>

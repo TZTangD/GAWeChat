@@ -1,0 +1,254 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+		<title>问卷调查</title>
+		<link rel="stylesheet" href="static/css/base.css" />
+		<link rel="stylesheet" href="static/css/commons.css" />
+		<link rel="stylesheet" href="static/css/tobacco.css" />
+	</head>
+	<body class="bg_gary">
+		<!--页面整体-->
+		<div class="all_width">
+			<!--通用头部-->
+			<div class="header bg_blue tc">
+				卷烟零售户问卷调查表
+			</div>
+			<!--问卷内容-->
+			<div class="survey_warp">
+				<!--问卷导读-->
+				<div class="explain">
+					<span class="db">尊敬的客户：</span>
+					<p>
+						为了更好地了解您的经营状况，倾听您的心声，加强我们的沟通，以便于我们能不断地提高服务质量，更好地为您服务，特制作本调查表，希望您能予以配合填写，谢谢您的合作。（请在您选择的选项后方框内打“√”）
+					</p>
+				</div>
+				<!--填写个人信息-->
+				<div class="all_width mt5">
+					<div class="fl">
+						<label class="survey_key fl">客户姓名：</label>
+						<input type="text" class="survey_value fl ml5" />
+					</div>
+					<div class="fl">
+						<label class="survey_key fl">电话号码：</label>
+						<input type="tel" class="survey_value fl ml5" />
+					</div>
+				</div>
+				<!--地址-->
+				<div class="all_width">
+					<label class="survey_key fl">地址：</label>
+					<input type="text" class="survey_value fl ml5" style="width: 81%;" />
+				</div>
+				<!--问题列表-->
+				<ul class="survey_list mt20">
+					<li>
+						<p>您所开的烟店地处什么位置?</p>
+						<ul class="answer all_width mt5">
+							<li>
+								<span>城市</span>
+								<img src="static/img/question/check_true.png" class="check_icon" data-check='ture'/>
+							</li>
+							<li>
+								<span>乡镇</span>
+								<img src="static/img/question/check_false.png" class="check_icon"  data-check='false'/>
+							</li>
+							<li>
+								<span>郊区</span>
+								<img src="static/img/question/check_false.png" class="check_icon" data-check='false' />
+							</li>
+							<li>
+								<span>农村</span>
+								<img src="static/img/question/check_false.png" class="check_icon" data-check='false' />
+							</li>
+						</ul>
+					</li>
+					<li>
+						<p>您经营卷烟零售有多长时间??</p>
+						<ul class="answer all_width mt5">
+							<li>
+								<span>1年或1年以内</span>
+								<img src="static/img/question/check_true.png" class="check_icon"/>
+							</li>
+							<li>
+								<span>1～5年</span>
+								<img src="static/img/question/check_false.png" class="check_icon" />
+							</li>
+							<li>
+								<span>5年以上</span>
+								<img src="static/img/question/check_false.png" class="check_icon" />
+							</li>
+						</ul>
+					</li>
+					<li>
+						<p>您每月卷烟销量有多少?</p>
+						<ul class="answer all_width mt5">
+							<li>
+								<span>20条以下</span>
+								<img src="static/img/question/check_true.png" class="check_icon"/>
+							</li>
+							<li>
+								<span>20～70条</span>
+								<img src="static/img/question/check_false.png" class="check_icon" />
+							</li>
+							<li>
+								<span>70～150条</span>
+								<img src="static/img/question/check_false.png" class="check_icon" />
+							</li>
+							<li>
+								<span>150条以上</span>
+								<img src="static/img/question/check_false.png" class="check_icon" />
+							</li>
+						</ul>
+					</li>
+					<li>
+						<p>您每月销售的卷烟中哪种档次的卷烟销量较大?</p>
+						<ul class="answer all_width mt5">
+							<li>
+								<span>30元以下</span>
+								<img src="static/img/question/check_true.png" class="check_icon"/>
+							</li>
+							<li>
+								<span>30～80元</span>
+								<img src="static/img/question/check_false.png" class="check_icon" />
+							</li>
+							<li>
+								<span>80元以上</span>
+								<img src="static/img/question/check_false.png" class="check_icon" />
+							</li>
+						</ul>
+					</li>
+					<li>
+						<p>您所售卷烟中哪些牌号卷烟销量较大，请依次填写?</p>
+						<ul class="answer all_width mt5">
+							<li>
+								<span>30元以下</span>
+								<img src="static/img/question/check_true.png" class="check_icon"/>
+							</li>
+							<li>
+								<span>30～80元</span>
+								<img src="static/img/question/check_false.png" class="check_icon" />
+							</li>
+							<li>
+								<span>80元以上</span>
+								<img src="static/img/question/check_false.png" class="check_icon" />
+							</li>
+						</ul>
+					</li>
+					<li>
+						<p>烟草公司的访销员每周到你户访销几次?</p>
+						<ul class="answer all_width mt5">
+							<li>
+								<span>一次</span>
+								<img src="static/img/question/check_true.png" class="check_icon"/>
+							</li>
+							<li>
+								<span>两次</span>
+								<img src="static/img/question/check_false.png" class="check_icon" />
+							</li>
+							<li>
+								<span>两次以上</span>
+								<img src="static/img/question/check_false.png" class="check_icon" />
+							</li>
+							<li>
+								<span>不走访</span>
+								<img src="static/img/question/check_false.png" class="check_icon" />
+							</li>
+						</ul>
+					</li>
+					<li>
+						<p>您认为我们访销员一周上门访销几次为好?</p>
+						<ul class="answer all_width mt5">
+							<li>
+								<span>一次</span>
+								<img src="static/img/question/check_true.png" class="check_icon"/>
+							</li>
+							<li>
+								<span>两次</span>
+								<img src="static/img/question/check_false.png" class="check_icon" />
+							</li>
+							<li>
+								<span>三次</span>
+								<img src="static/img/question/check_false.png" class="check_icon" />
+							</li>
+							<li>
+								<span>无所谓</span>
+								<img src="static/img/question/check_false.png" class="check_icon" />
+							</li>
+						</ul>
+					</li>
+					<li>
+						<p>您对我们上门访销员、市场经理的服务态度是否满意?</p>
+						<ul class="answer all_width mt5">
+							<li>
+								<span>满意</span>
+								<img src="static/img/question/check_true.png" class="check_icon"/>
+							</li>
+							<li>
+								<span>基本满意</span>
+								<img src="static/img/question/check_false.png" class="check_icon" />
+							</li>
+							<li>
+								<span>不满意</span>
+								<img src="static/img/question/check_false.png" class="check_icon" />
+							</li>
+						</ul>
+					</li>
+					<li>
+						<p>您对我们配送员、驾驶员的服务态度是否满意?</p>
+						<ul class="answer all_width mt5">
+							<li>
+								<span>满意</span>
+								<img src="static/img/question/check_true.png" class="check_icon"/>
+							</li>
+							<li>
+								<span>基本满意</span>
+								<img src="static/img/question/check_false.png" class="check_icon" />
+							</li>
+							<li>
+								<span>不满意</span>
+								<img src="static/img/question/check_false.png" class="check_icon" />
+							</li>
+						</ul>
+					</li>
+					<li>
+						<p>访销员每次上门访销时做些什么工作?</p>
+						<ul class="answer all_width mt5">
+							<li>
+								<span>完成定单</span>
+								<img src="static/img/question/check_true.png" class="check_icon"/>
+							</li>
+							<li>
+								<span>市场管理</span>
+								<img src="static/img/question/check_false.png" class="check_icon" />
+							</li>
+							<li>
+								<span>询问信息</span>
+								<img src="static/img/question/check_false.png" class="check_icon" />
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+			<!--提交按钮-->
+			<input type="button" value="提交调查表" class="large_btn ok mt20" />
+			<p class="survey_tips mt20 mb20">感谢您对我们工作的支持!　宜宾市公司</p>
+		</div>
+		<script type="text/javascript" src="static/js/jquery.min.js" ></script>
+		<script>
+			$('.answer>li>img').click(function(){
+				var checked=$(this).attr("data-check");
+				if(checked=='ture')
+				{
+					$(this).attr("src","static/img/question/check_false.png");
+					$(this).attr("data-check",'false');
+				}
+				else
+				{
+					$(this).attr("src","static/img/question/check_true.png");
+					$(this).attr("data-check",'ture');
+				}
+			});
+		</script>
+	</body>
+</html>

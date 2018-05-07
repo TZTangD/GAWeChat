@@ -1,0 +1,101 @@
+<!--component html goes here -->
+<pro-header></pro-header>
+<nz-card [nzBordered]="false">
+    <form nz-form (ngSubmit)="refreshData(false,true)" [nzLayout]="'inline'">
+        <div nz-row [nzGutter]="24">
+            <ng-template #deleteContent>
+                <h2>是否删除文章 {{articleTitle}}?</h2>
+            </ng-template>
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label>
+                        <label for="name">经验标题</label>
+                    </div>
+                    <div nz-form-control class="flex-1">
+                        <nz-input [(ngModel)]="search.name" name="name" [nzSize]="'large'" [nzPlaceHolder]="'请输入经验标题'" nzId="name"></nz-input>
+                    </div>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label>
+                        <label for="author">经验作者</label>
+                    </div>
+                    <div nz-form-control class="flex-1">
+                        <nz-input [(ngModel)]="search.author" name="author" [nzSize]="'large'" [nzPlaceHolder]="'请输入经验作者'" nzId="author"></nz-input>
+                    </div>
+                </div>
+            </div>
+
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <div nz-form-item class="d-flex">
+                    <div nz-form-label>
+                        <label>发布状态</label>
+                    </div>
+                    <div nz-form-control class="flex-1">
+                        <nz-select [nzPlaceHolder]="'请选择经验状态'" name="status" [(ngModel)]="search.status" [nzShowSearch]="true" nzSize="large">
+                            <nz-option *ngFor="let i of PushStatus" [nzLabel]="i.text" [nzValue]="i.value">
+                            </nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+            </div>
+            <!-- </div> -->
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <button nz-button type="submit" [nzType]="'primary'" [nzLoading]="loading" [nzSize]="'large'">查询</button>
+                <button nz-button type="reset" (click)="refreshData(true)" [nzSize]="'large'" class="mx-sm">重置</button>
+                <button nz-button type="button" (click)="createArticle()" [nzType]="'primary'" [nzSize]="'large'">
+                    <i class="anticon anticon-plus"></i>
+                    <span>新建</span>
+                </button>
+            </div>
+        </div>
+    </form>
+    <nz-table #nzTable [nzAjaxData]="articles" [nzTotal]="query.total" [(nzPageIndex)]="query.pageIndex" [(nzPageSize)]="query.pageSize"
+        [nzLoading]="loading" [nzShowTotal]="'true'" [nzShowSizeChanger]="true" (nzPageIndexChange)="refreshData()" (nzPageSizeChange)="refreshData()">
+        <thead nz-thead>
+            <tr>
+                <th nz-th>
+                    <span>标题</span>
+                </th>
+                <th nz-th>
+                    <span>作者</span>
+                </th>
+                <th nz-th>
+                    <span>阅读量</span>
+                </th>
+                <th nz-th>
+                    <span>点赞数</span>
+                </th>
+                <!-- <th nz-th>
+                    <span>活动内容</span>
+                </th> -->
+                <th nz-th>
+                    <span>发布状态</span>
+                </th>
+                <th nz-th>
+                    <span>发布时间</span>
+                </th>
+                <th nz-th>
+                    <span>操作</span>
+                </th>
+            </tr>
+        </thead>
+        <tbody nz-tbody>
+            <tr nz-tbody-tr *ngFor="let article of nzTable.data">
+                <td nz-td>{{article.title}}</td>
+                <td nz-td>{{article.author}}</td>
+                <td nz-td>{{article.readTotal }}</td>
+                <td nz-td>{{article.goodTotal}}</td>
+                <!-- <td nz-td>{{activity.content}}</td> -->
+                <td nz-td>{{article.pushStatusName}}</td>
+                <td nz-td>{{article.pushTime | _date}}</td>
+                <td nz-td>
+                    <a (click)="editArticle(article)">查看详情</a>
+                    <!-- <span nz-table-divider></span>
+                   <a (click)="delete(article,deleteContent)">删除</a> -->
+                </td>
+            </tr>
+        </tbody>
+    </nz-table>
+</nz-card>

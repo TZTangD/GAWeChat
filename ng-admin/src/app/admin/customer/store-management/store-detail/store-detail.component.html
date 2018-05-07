@@ -1,0 +1,225 @@
+<!-- <nz-card [nzBordered]="false" nzTitle="店铺详情"> -->
+<ng-template #checkContent>
+    <h2>是否审核店铺 {{shop.name}}?</h2>
+</ng-template>
+<pro-header [title]="shopName">
+    <!-- <ng-template #logo>
+            <img src="https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png">
+        </ng-template> -->
+    <ng-template #action>
+        <!-- <button nz-button [nzType]="'danger'" (click)="check(3)" *ngIf="shop.status == 1" [nzSize]="'large'">关闭店铺</button> -->
+        <button nz-button [nzType]="'danger'" (click)="check(0,checkContent)" *ngIf="shop.status == 1" [nzSize]="'large'">审核不通过</button>
+        <button nz-button [nzType]="'primary'" (click)="check(2,checkContent)" *ngIf="shop.status == 1" [nzSize]="'large'">审核通过</button>
+    </ng-template>
+    <ng-template #content>
+        <!-- <img class="img" src="https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png"> -->
+        <div nz-row>
+            <div nz-col nzXs="24" nzSm="8" *ngIf="shop.coverPhoto">
+                <img class="img ng-star-inserted"  src="shop.coverPhoto">
+                <!-- <img class="img ng-star-inserted" src="https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png"> -->
+            </div>
+            <div nz-col nzXs="24" nzSm="16">
+                <desc-list size="small" col="3">
+                    <desc-list-item term="店铺名称">{{shop.name}}</desc-list-item>
+                    <desc-list-item term="店铺地址">{{shop.address}}</desc-list-item>
+                    <desc-list-item term="店铺描述">{{shop.desc}}</desc-list-item>
+                    <desc-list-item term="零售客户">{{shop.retailerName}}</desc-list-item>
+                    <desc-list-item term="店铺销量">{{shop.saleTotal}}</desc-list-item>
+                    <desc-list-item term="店铺浏览量">{{shop.readTotal}}</desc-list-item>
+                    <desc-list-item term="店铺电话">{{shop.tel}}</desc-list-item>
+                    <desc-list-item term="经度">{{shop.longitude}}</desc-list-item>
+                    <desc-list-item term="纬度">{{shop.latitude}}</desc-list-item>
+                    <desc-list-item term="审核时间">{{shop.auditTime|_date}}</desc-list-item>
+                    <desc-list-item term="评价描述">{{evaluationShow}}</desc-list-item>
+                </desc-list>
+            </div>
+        </div>
+    </ng-template>
+    <!-- <ng-template #extra>
+        <div nz-row>
+            <div nz-col nzXs="24" *ngIf="shop.coverPhoto" nzSm="12">
+                <img class="img" src="shop.coverPhoto">
+            </div>
+            <div nz-col nzXs="24"  nzSm="12">
+                <img class="img" src="https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png">
+            </div>
+        </div>
+    </ng-template> -->
+    <ng-template #tab>
+        <nz-tabset [nzSize]="'default'">
+            <nz-tab>
+
+                <ng-template #nzTabHeading>特色产品</ng-template>
+                <nz-table #nzTable3 [nzAjaxData]="shopProducts" [nzTotal]="querySP.total" [(nzPageIndex)]="querySP.pageIndex" [(nzPageSize)]="querySP.pageSize"
+                    [nzLoading]="loadingSP" [nzShowTotal]="'true'" [nzShowSizeChanger]="true" (nzPageIndexChange)="getShopProducts()"
+                    (nzPageSizeChange)="getShopProducts()">
+                    <thead nz-thead>
+                        <tr>
+                            <th nz-th>
+                                <span>封面图</span>
+                            </th>
+                            <th nz-th>
+                                <span>规格</span>
+                            </th>
+                            <th nz-th>
+                                <span>类型</span>
+                            </th>
+                            <th nz-th>
+                                <span>价格(包)</span>
+                            </th>
+                            <!-- <th nz-th>
+                                <span>包码</span>
+                            </th>
+                            <th nz-th>
+                                <span>条码</span>
+                            </th> -->
+                        </tr>
+                    </thead>
+                    <tbody nz-tbody>
+                        <tr nz-tbody-tr *ngFor="let shopProduct of nzTable3.data">
+                            <td nz-td>
+                                    <nz-avatar [nzSrc]="(shopProduct.photoUrl===null||shopProduct.photoUrl===''?defalutImg:shopProduct.photoUrl)" style="width:80px;height: 80px;" (click)="handlePreview(shopProduct.photoUrl)" [nzSize]="'large'" [nzShape]="'square'"></nz-avatar>
+                            </td>
+                            <td nz-td>{{shopProduct.specification }}</td>
+                            <td nz-td>{{shopProduct.typeName}}</td>
+                            <td nz-td>{{shopProduct.price}}</td>
+                            <!-- <td nz-td>{{shopProduct.packageCode}}</td>
+                            <td nz-td>{{shopProduct.barCode}}</td> -->
+                        </tr>
+                    </tbody>
+                </nz-table>
+                <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null" [nzWidth]="imgWidth" (nzOnCancel)="previewVisible=false">
+                        <ng-template #modalContent>
+                            <img [src]="previewImage" [ngStyle]="{ 'width': '100%' }" />
+                        </ng-template>
+                </nz-modal>
+            </nz-tab>
+            <nz-tab>
+                <ng-template #nzTabHeading>店铺人员</ng-template>
+                <nz-table #nzTable1 [nzAjaxData]="shopEmployees" [nzTotal]="query.total" [(nzPageIndex)]="query.pageIndex" [(nzPageSize)]="query.pageSize"
+                    [nzLoading]="loading" [nzShowTotal]="'true'" [nzShowSizeChanger]="true" (nzPageIndexChange)="refreshData()"
+                    (nzPageSizeChange)="refreshData()">
+                    <thead nz-thead>
+                        <tr>
+                            <th nz-th>
+                                <span>微信昵称</span>
+                            </th>
+                            <th nz-th>
+                                <span>店铺角色</span>
+                            </th>
+                            <!-- <th nz-th>
+                                <span>零售用户</span>
+                            </th>
+                            <th nz-th>
+                                <span>绑定状态</span>
+                            </th>
+                            <th nz-th>
+                                <span>绑定时间</span>
+                            </th> -->
+                            <th nz-th>
+                                <span>绑定电话</span>
+                            </th>
+                            <th nz-th>
+                                <span>审核状态</span>
+                            </th>
+                            <!-- <th nz-th>
+                                <span>会员卡条形码</span>
+                            </th>
+                            <th nz-th>
+                                <span>用户总积分</span>
+                            </th> -->
+                        </tr>
+                    </thead>
+                    <tbody nz-tbody>
+                        <tr nz-tbody-tr *ngFor="let shopEmployee of nzTable1.data">
+                            <td nz-td>{{shopEmployee.nickName}}</td>
+                            <td nz-td>{{shopEmployee.isShopkeeper == true? '店铺管理员':'店员'}}</td>
+                            <!-- <td nz-td>{{shopEmployee.userName}}</td> -->
+                            <!-- <td nz-td>{{shopEmployee.bindStatusName}}</td> -->
+                            <!-- <td nz-td>{{shopEmployee.bindTime | _date}}</td> -->
+                            <td nz-td>{{shopEmployee.phone}}</td>
+                            <td nz-td>{{shopEmployee.statusName}}</td>
+                            <!-- <td nz-td>{{shopEmployee.memberBarCode}}</td> -->
+                            <!-- <td nz-td>{{shopEmployee.integralTotal}}</td> -->
+                        </tr>
+                    </tbody>
+                </nz-table>
+            </nz-tab>
+            <nz-tab>
+                <nz-card [nzBordered]="false">
+                    <ng-template #nzTabHeading>店铺评价</ng-template>
+                    <standard-form-row block style="padding-bottom: 9px;">
+                        <div nz-form-item>
+                            <div nz-form-control>
+                                <nz-checkable-tag *ngFor="let i of evaluations; let idx=index" [nzColor]="evaluationSearch == i.id? '' : i.color" [nzChecked]="i.value"
+                                    (nzChange)="changeCategory($event,idx, i.id)">
+                                    {{i.text}}
+                                </nz-checkable-tag>
+                            </div>
+                        </div>
+                    </standard-form-row>
+                    <nz-table #nzTable2 [nzAjaxData]="shopEvaluations" [nzTotal]="queryE.total" [(nzPageIndex)]="queryE.pageIndex" [(nzPageSize)]="queryE.pageSize"
+                        [nzLoading]="loadingE" [nzShowTotal]="'true'" [nzShowSizeChanger]="true" (nzPageIndexChange)="refreshDataE()"
+                        (nzPageSizeChange)="refreshDataE()">
+                        <thead nz-thead>
+                            <tr>
+                                <th nz-th>
+                                    <span>微信用户名</span>
+                                </th>
+                                <th nz-th>
+                                    <span>产品规格</span>
+                                </th>
+                                <th nz-th>
+                                    <span>购买数量</span>
+                                </th>
+                                <th nz-th>
+                                    <span>评价等级</span>
+                                </th>
+                                <th nz-th>
+                                    <span>购买数量是否相符</span>
+                                </th>
+                                <th nz-th>
+                                    <span>评价时间</span>
+                                </th>
+                                <!-- <th nz-th>
+                                <span>操作</span>
+                            </th> -->
+                            </tr>
+                        </thead>
+                        <tbody nz-tbody>
+                            <tr nz-tbody-tr *ngFor="let evaluation of nzTable2.data">
+                                <td nz-td>{{evaluation.nickName}}</td>
+                                <td nz-td>{{evaluation.specification}}</td>
+                                <td nz-td>{{evaluation.quantity}}</td>
+                                <td nz-td>{{evaluation.evaluationName}}</td>
+                                <td nz-td>{{evaluation.isCorrectQuantity== true? '是':'否'}}</td>
+                                <td nz-td>{{evaluation.creationTime|_date}}</td>
+                                <!-- <td nz-td>
+                                <a (click)="editShopEvalustion(evaluation)">详情</a>
+                            </td> -->
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </nz-card>
+            </nz-tab>
+        </nz-tabset>
+    </ng-template>
+</pro-header>
+
+<!-- <nz-card [nzBordered]="false" nzTitle="评价详情" class="mb-lg" *ngIf="false">
+    <desc-list class="mb-lg">
+        <desc-list-item term="微信昵称">{{evaluation.nickName}}</desc-list-item>
+        <desc-list-item term="产品规格">{{evaluation.specification}}</desc-list-item>
+        <desc-list-item term="购买数量">{{evaluation.quantity}}</desc-list-item>
+        <desc-list-item term="评价等级">{{evaluation.evaluation}}</desc-list-item>
+        <desc-list-item term="购买数量是否相符">{{evaluation.isCorrectQuantity}} </desc-list-item>
+        <desc-list-item term="评价时间">{{evaluation.creationTime}} </desc-list-item>
+        <desc-list-item term="评价内容">{{evaluation.content}}</desc-list-item>
+    </desc-list>
+</nz-card> -->
+<!-- </nz-card> -->
+<footer-toolbar>
+    <button nz-button [nzType]="'default'" (click)="return()" [nzSize]="'large'">
+        {{l("返回")}}
+    </button>
+</footer-toolbar>

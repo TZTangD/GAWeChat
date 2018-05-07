@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+		<title>用户绑定</title>
+		<link rel="stylesheet" href="static/css/base.css" />
+		<link rel="stylesheet" href="static/css/commons.css" />
+		<link rel="stylesheet" href="static/css/shop.css" />
+	</head>
+	<body class="bg_gary">
+		<!--页面整体-->
+		<div class="all_width">
+			<!--用户类型选择-->
+			<ul class="user_type all_width">
+				<li class="user_active">消费者用户</li>
+				<li>零售用户</li>
+				<li>营销人员</li>
+			</ul>
+			<div class="all_width bind_contain">
+				<!--消费者用户-->
+				<div class="all_width">
+					<ul class="bind_area all_width">
+						<li>
+							<input type="tel" placeholder="请输入电话" />
+						</li>
+						<li>
+							<input type="text" placeholder="请输入年龄" />
+						</li>
+						<li>
+							<select>
+								<option>男</option>
+								<option>女</option>
+							</select>
+						</li>
+						<li>
+							<input type="text" placeholder="请输入烟龄" />
+						</li>
+					</ul>
+					<input type="button" value="立即绑定" class="ok middel_btn mt20 center db"/>
+				</div>
+				<!--零售商户绑定输入-->
+				<div class="all_width none">
+					<ul class="bind_area all_width">
+						<li>
+							<input type="text" placeholder="请输入客户代码" />
+						</li>
+						<li>
+							<input type="text" placeholder="请输入店名" />
+						</li>
+						<li>
+							<input type="tel" placeholder="请输入电话" />
+						</li>
+					</ul>
+					<input type="button" value="立即绑定" class="ok middel_btn mt20 center db"/>
+				</div>
+				<!--营销人员绑定-->
+				<div class="all_width none">
+					<ul class="bind_area all_width">
+						<li>
+							<input type="text" placeholder="请输入账号" />
+						</li>
+						<li>
+							<input type="text" placeholder="请输入姓名" />
+						</li>
+						<li>
+							<input type="text" placeholder="请输入您在职的单位" />
+						</li>
+					</ul>
+					<input type="button" value="立即绑定" class="ok middel_btn mt20 center db"/>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript" src="static/js/jquery.min.js" ></script>
+		<script>
+			//		tab内容切换
+			$('.user_type>li').click(function(){
+				$(this).addClass("user_active").siblings().removeClass();//removeClass就是删除当前其他类；只有当前对象有addClass("selected")；siblings()意思就是当前对象的同级元素，removeClass就是删除；
+				$(".bind_contain>div").hide().eq($('.user_type>li').index(this)).show();
+			}); 
+		</script>
+	</body>
+</html>

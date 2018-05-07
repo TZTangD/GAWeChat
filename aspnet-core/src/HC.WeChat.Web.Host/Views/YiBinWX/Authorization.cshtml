@@ -1,0 +1,50 @@
+﻿
+@{
+    ViewData["Title"] = "宜宾烟草";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+    <title>宜宾烟草</title>
+    <style type="text/css">
+        .progressBar {
+            width: 100%;
+            height: 30px;
+            line-height: 27px;
+            font-weight: bold;
+            text-align: center;
+            color: #138363;
+        }
+
+        .background {
+            width: 100%;
+            height: 100%;
+            opacity: 0.4;
+            filter: alpha(opacity=40);
+            background: white; /*while*/
+            z-index: 2000;
+            background-color: #ecf4f4;
+            padding-top:200px;
+        }
+        .bg_gary {
+            background-color: #ecf4f4;
+        }
+    </style>
+</head>
+<body class="bg_gary">
+    <div id="background" class="background"></div>
+    <div id="progressBar" class="progressBar">
+        <img src="~/YiBinWX/static/img/await.gif" /><br />
+        页面正在加载，请稍等...
+    </div>
+    <a style="display:none" href="@ViewBag.PageUrl">
+        <input type="button" id="btnGoPageUrl" />
+    </a>
+    <script language="javascript" type="text/javascript">
+        document.getElementById("btnGoPageUrl").click();
+    </script>
+</body>
+</html>
+

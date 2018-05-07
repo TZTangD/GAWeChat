@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+		<title>信息动态</title>
+		<link rel="stylesheet" href="static/css/base.css" />
+		<link rel="stylesheet" href="static/css/commons.css" />
+		<link rel="stylesheet" href="static/css/shop.css" />
+	</head>
+	<body class="bg_gary">
+		<!--页面整体-->
+		<div class="all_width">
+			<!--用户类型选择-->
+			<ul class="user_type all_width trend_type">
+				<li class="user_active">新品讯息</li>
+				<li>营销信息</li>
+			</ul>
+			<!--内容主体-->
+			<div class="all_width trend_contain">
+				<!--新品讯息-->
+				<div class="mt20 trend_tab">
+					<img src="static/img/trend/trend.jpg" class="img_width mt10"/>
+					<!--列表标题-->
+					<h1 class="news_title">新品讯息列表</h1>
+					<!--信息列表-->
+					<ul class="all_width info_list">
+						<li onclick="javascript:window.location.href='market_table.html'">
+							<p class="fl hot_news">2016新品上市时间表</p>
+							<img src="static/img/trend/more.png" class="more_icon fr"/>
+						</li>
+						<li>
+							<p class="fl">2016新品上市时间表</p>
+							<img src="static/img/trend/more.png" class="more_icon fr"/>
+						</li>
+					</ul>
+				</div>
+				<!--营销信息-->
+				<div class="bg_white trend_tab none">
+					<!--列表标题-->
+					<h1 class="news_title mt20">销售信息内容列表</h1>
+					<!--销访日程安排-->
+					<!--<p class="mt20"><span>8</span>月份销访日程安排(<span>24</span>天、<span>23</span>)个批次</p>-->
+					<!--表格显示-->
+					<!--<table class="mt15 all_width sale_table">
+						<tr>
+							<th>星期日</th>
+							<th>星期一</th>
+							<th>星期二</th>
+							<th>星期三</th>
+							<th>星期四</th>
+							<th>星期五</th>
+							<th>星期五</th>
+						</tr>
+						<tr>
+							<td></td>
+							<td>8月1日</td>
+							<td>8月2日</td>
+							<td>8月3日</td>
+							<td>8月4日</td>
+							<td>8月5日</td>
+							<td>8月6日</td>
+						</tr>
+						<tr>
+							<td><span>9</span>、<span>32</span></td>
+							<td><span>21</span>、<span>1</span></td>
+							<td><span>4</span></td>
+							<td><span>3</span></td>
+							<td><span>6</span></td>
+							<td><span>停访</span></td>
+							<td><span>1</span></td>
+						</tr>
+					</table>-->
+					<!--信息列表-->
+					<ul class="all_width info_list mt5">
+						<li onclick="javascript:window.location.href='market_table.html'">
+							<p class="fl">2016新品上市时间表</p>
+							<img src="static/img/trend/more.png" class="more_icon fr"/>
+						</li>
+						<li>
+							<p class="fl">2016新品上市时间表</p>
+							<img src="static/img/trend/more.png" class="more_icon fr"/>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript" src="static/js/jquery.min.js" ></script>
+		<script>
+			//		tab内容切换
+			$('.user_type>li').click(function(){
+				$(this).addClass("user_active").siblings().removeClass();//removeClass就是删除当前其他类；只有当前对象有addClass("selected")；siblings()意思就是当前对象的同级元素，removeClass就是删除；
+				$(".trend_contain>div").hide().eq($('.user_type>li').index(this)).show();
+			}); 
+		</script>
+	</body>
+</html>

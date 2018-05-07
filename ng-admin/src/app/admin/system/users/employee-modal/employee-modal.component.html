@@ -1,0 +1,54 @@
+<nz-modal [nzVisible]="emodalVisible" [nzTitle]="'选择员工'" [nzConfirmLoading]="eloading" [nzContent]="employeeContent" [nzFooter]="employeeFooter"
+    (nzOnCancel)="handleeCancel($event)" style="width: 520px;">
+    <ng-template #employeeContent>
+        <nz-card [nzBordered]="false" *ngIf="emodalVisible">
+            <form nz-form (ngSubmit)="refreshData()" [nzLayout]="'inline'">
+                <div nz-row [nzGutter]="24">
+                    <div nz-col [nzSpan]="8" class="mb-md">
+                        <div nz-form-item class="d-flex">
+                            <div nz-form-control class="flex-1">
+                                <!-- <nz-input  [nzType]="'search'" [(ngModel)]="q.no" name="no" [nzSize]="'large'" [nzPlaceHolder]="'请输入员工名或员工编码'" nzId="no" style="width: 420px;"></nz-input> -->
+                                <nz-input [nzType]="'search'" [(ngModel)]="q.no" name="no" (nzOnSearch)="refreshData()" [nzSize]="'large'" [nzPlaceHolder]="'请输入员工名或员工编码'"
+                                    nzId="no" style="width: 420px;"></nz-input>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <nz-table #nzTable [nzAjaxData]="employee" [nzIsPagination]="false" [nzScroll]="{y: '200' }" [nzLoading]="eloading"
+                [nzShowSizeChanger]="true">
+                <thead nz-thead>
+                    <tr>
+                        <!-- <th nz-th>
+                            <span>操作</span>
+                        </th> -->
+                        <th nz-th>
+                            <span>员工编码</span>
+                        </th>
+                        <th nz-th>
+                            <span>姓名</span>
+                        </th>
+                        <th nz-th>
+                            <span>职位</span>
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody nz-tbody>
+                    <tr nz-tbody-tr *ngFor="let employee of nzTable.data">
+                        <td nz-td>
+                            <a (click)="SelectEmployee(employee)">{{employee.code}}</a>
+                        </td>
+                        <!-- <td nz-td>{{employee.code}}</td> -->
+                        <td nz-td>{{employee.name}}</td>
+                        <td nz-td>{{employee.positionName}}</td>
+
+                    </tr>
+                </tbody>
+            </nz-table>
+        </nz-card>
+    </ng-template>
+    <ng-template #employeeFooter>
+
+    </ng-template>
+</nz-modal>

@@ -1,0 +1,219 @@
+{
+    "app": {
+        "name": "广安微信平台",
+        "description": "广安微信平台"
+    },
+    "user": {
+        "name": "Admin",
+        "avatar": "./assets/img/zorro.svg",
+        "email": "cipchk@qq.com"
+    },
+    "menu": [
+        {
+            "text": "主导航",
+            "translate": "main_navigation",
+            "group": true,
+            "children": [
+                {
+                    "text": "工作台",
+                    "translate": "home",
+                    "link": "/home/index",
+                    "icon": "fa fa-home",
+                    "reuse": false
+                }
+            ]
+        },
+        {
+            "text": "微信平台",
+            "translate": "wechat",
+            "group": true,
+            "children": [
+                {
+                    "text": "微信管理",
+                    "translate": "weichat-manager",
+                    "icon": "fa fa-wechat",
+                    "acl": "MarketingCenter",
+                    "children": [
+                        {
+                            "text": "授权配置",
+                            "link": "/admin/wechat/authsetting",
+                            "translate": "wechat-configs"
+                        },
+                        {
+                            "text": "自动回复",
+                            "link": "/admin/wechat/message",
+                            "translate": "aut-res"
+                        },
+                        {
+                            "text": "自定义菜单",
+                            "link": "/admin/wechat/customize-menu",
+                            "translate": "customize-menu"
+                        },
+                        {
+                            "text": "微信用户",
+                            "link": "/admin/wechat/wechat-user",
+                            "translate": "wechat-user"
+                        },
+                        {
+                            "text": "微信群发",
+                            "link": "/admin/wechat/wechat-mass",
+                            "translate": "wechat-mass"
+                        },
+                        {
+                            "text": "素材管理",
+                            "link": "/admin/wechat/material-management",
+                            "translate": "material-management"
+                        },
+                        {
+                            "text": "图片库",
+                            "link": "/admin/wechat/photo-warehouse",
+                            "translate": "photo-warehouse"
+                        }
+                    ]
+                },
+                {
+                    "text": "营销服务",
+                    "translate": "market-serve",
+                    "icon": "anticon anticon-shop",
+                    "children": [
+                        {
+                            "text": "营销人员",
+                            "link": "/admin/marketting/employee",
+                            "translate": "market-user"
+                        },
+                        {
+                            "text": "营销活动",
+                            "link": "/admin/marketting/activity",
+                            "translate": "market-active",
+                            "reuse": false
+                        },
+                        {
+                            "text": "经验分享",
+                            "link": "/admin/marketting/experience-share",
+                            "translate": "experience-share",
+                            "reuse": false
+                        },
+                        {
+                            "text": "投稿管理",
+                            "link": "/admin/marketting/contribute-management",
+                            "translate": "contribute-management",
+                            "reuse": false
+                        }
+                    ]
+                },
+                {
+                    "text": "客户服务",
+                    "translate": "client-serve",
+                    "icon": "anticon anticon-customer-service",
+                    "children": [
+                        {
+                            "text": "零售客户",
+                            "link": "/admin/customer/retail-customer",
+                            "translate": "retail-client",
+                            "reuse": false
+                        },
+                        {
+                            "text": "店铺管理",
+                            "link": "/admin/customer/store-management",
+                            "translate": "store-management",
+                            "reuse": false
+                        },
+                        {
+                            "text": "商品管理",
+                            "link": "/admin/customer/commodity-management",
+                            "translate": "commodity-management",
+                            "reuse": false
+                        },
+                        {
+                            "text": "档级货源",
+                            "link": "/admin/customer/source-goods-level",
+                            "translate": "source-goods-level",
+                            "reuse": false
+                        },
+                        {
+                            "text": "台账管理",
+                            "link": "/admin/customer/account-management",
+                            "translate": "account-management",
+                            "reuse": false
+                        }
+                    ]
+                },
+                {
+                    "text": "消费服务",
+                    "translate": "consume-serve",
+                    "icon": "fa fa-laptop",
+                    "children": [
+                        {
+                            "text": "商品查找",
+                            "link": "/admin/consumer/commodity-search",
+                            "translate": "commodity-search"
+                        },
+                        {
+                            "text": "意见反馈",
+                            "link": "/admin/consumer/advise",
+                            "translate": "advise"
+                        }
+                    ]
+                },
+                {
+                    "text": "会员管理",
+                    "translate": "member-management",
+                    "icon": "anticon anticon-user",
+                    "children":[
+                        {
+                            "text": "会员管理",
+                            "link": "/admin/member/member-management",
+                            "translate": "member-management"
+                        },
+                        {
+                            "text": "积分查询",
+                            "link": "/admin/member/integral-search",
+                            "translate": "integral-search"
+                        },
+                        {
+                            "text": "会员设置",
+                            "link": "/admin/member/member-setting",
+                            "translate": "member-setting"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "text": "系统",
+            "translate": "system",
+            "group": true,
+            "acl": "Admin",
+            "children": [
+                {
+                    "text": "系统管理",
+                    "translate": "admin",
+                    "link": "/admin",
+                    "icon": "fa fa-users",
+                    "children": [
+                        {
+                            "text": "用户",
+                            "link": "/admin/system/users",
+                            "translate": "users"
+                        },
+                        {
+                            "text": "角色",
+                            "link": "/admin/system/roles",
+                            "translate": "roles"
+                        },
+                        {
+                            "text": "系统配置",
+                            "link": "/admin/system/sys-config",
+                            "translate": "sys-config" 
+                        },
+                        {
+                            "text": "数据字典",
+                            "link": "/admin/system/data-dictionary",
+                            "translate": "data-dictionary" 
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

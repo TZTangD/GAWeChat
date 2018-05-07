@@ -1,0 +1,23 @@
+<form *ngIf="modalVisible" #changeTenantForm="ngForm" novalidate (ngSubmit)="save()">
+    <nz-modal [nzVisible]="modalVisible" [nzTitle]="'选择租户'" [nzConfirmLoading]="loading" [nzContent]="modalContent" [nzFooter]="modalFooter"
+        (nzOnCancel)="handleCancel($event)">
+        <ng-template #modalContent>
+            <div nz-form-item nz-row>
+                <!-- <div nz-form-label nz-col [nzSm]="4">
+                    <label for="description" nz-form-item-required>角色描述</label>
+                </div> -->
+                <div nz-form-control nz-col [nzSm]="20" nzHasFeedback>
+                    <nz-input  type="text" name="TenancyName" class="form-control" nzPlaceHolder="请输入租户名"  [(ngModel)]="tenancyName" maxlength="64"></nz-input>
+                </div>
+            </div>
+        </ng-template>
+        <ng-template #modalFooter>
+            <button nz-button [nzType]="'default'" [nzSize]="'large'" type="button" (click)="handleCancel($event)">
+                    {{l("取消")}}
+                </button>
+                <button nz-button [nzType]="'primary'" [nzSize]="'large'" type="submit" [nzLoading]="isConfirmLoading">
+                    {{l("保存")}}
+                </button>
+        </ng-template>
+    </nz-modal>
+</form>

@@ -1,0 +1,368 @@
+/*
+作者：1835839488@qq.com
+时间：2016-08-08
+描述：建议反馈
+*/
+
+.advise_area {
+    height: auto;
+    margin: -75px auto 0;
+    overflow: hidden;
+    width: 90%;
+}
+/*透明背景*/
+.opacity_bg {
+    background-color: rgba(250, 250, 250, 0.8);
+    z-index: 2147483647;
+}
+/*标题*/
+.advise_warp {
+    border-bottom: 1px solid #cacaca;
+    height: auto;
+    overflow: hidden;
+    padding: 5px 5%;
+    width: 90%;
+}
+.entry_key {
+    color: #757575;
+    font-size: 1.1em;
+}
+.entry_value {
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+    border: 0 none;
+    line-height: 20px;
+}
+/*内容输入框*/
+.contain_entry {
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+    border: 0 none;
+    height: 100px;
+    width: 100%;
+}
+.file_upload {
+    height: auto;
+    overflow: hidden;
+    padding: 10px 5% 0px;
+    width: 90%;
+}
+.file_upload img {
+    border-radius: 8px;
+    height: 50px;
+    overflow: hidden;
+    width: 50px;
+    margin-right: 10px;
+}
+.upload_tips {
+    color: #c5c4c4;
+    display: inline-block;
+    font-size: 0.9em;
+    padding: 0 5% 10px;
+    width: 90%;
+}
+.advise_tips {
+    color: #7d7d7e;
+    line-height: 24px;
+    margin: 25% auto 0;
+    width: 80%;
+}
+select.entry_value {
+    background: #52ba97 none repeat scroll 0 0;
+    color: #fff;
+    margin: 3px 0;
+    padding: 2px 10px;
+    text-align: left;
+    text-indent: 0;
+}
+/*用户操作按钮*/
+/*
+作者：1835839488@qq.com
+时间：2016-08-08
+描述：在线调研
+*/
+.survey_warp {
+    background: #fff none repeat scroll 0 0;
+    border: 1px solid #c5c2c4;
+    margin: 3px auto 0;
+    padding: 10px 3%;
+    width: 90%;
+}
+.survey_title {
+    color: #080808;
+    font-size: 1.15em;
+    padding: 3px 0;
+    text-align: center;
+    width: 100%;
+}
+/*问卷内容*/
+.explain {
+    border-bottom: 1px solid #cacaca;
+    padding-bottom: 10px;
+}
+.explain span {
+    color: #565656;
+}
+.explain p {
+    color: #565656;
+    line-height: 22px;
+    text-indent: 26px;
+}
+/*填写个人信息*/
+.survey_key {
+    color: #b4b4b4;
+    line-height: 20px;
+}
+.survey_value {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-color: -moz-use-text-color -moz-use-text-color #9c9c9c;
+    border-image: none;
+    border-style: none none solid;
+    border-width: medium medium 1px;
+    line-height: 20px;
+    width: 80px;
+}
+/*问题列表*/
+.survey_list {
+    height: auto;
+    list-style-type: decimal;
+    margin: 0 auto;
+    width: 90%;
+}
+.survey_list li {
+    height: auto;
+    width: 100%;
+    margin-top: 20px;
+}
+.survey_list li p {
+    color: #000;
+}
+.answer li {
+    float: left;
+    padding-right: 15px;
+    width: auto;
+    margin: 0;
+}
+.answer li:last-child{ padding-right: 0;}
+/*.answer li:nth-child(2n+1){margin-left: 0;}*/
+.answer li span {
+    color: #000;
+}
+.check_icon {
+    display: inline-block;
+    margin-top: 0;
+    vertical-align: middle;
+    width: 26px;
+}
+
+.survey_tips {
+    color: #6ad18c;
+    text-align: center;
+}
+/*用户操作按钮*/
+/*
+作者：1835839488@qq.com
+时间：2016-08-08
+描述：信息查询
+*/
+.search_warp{}
+
+.search_warp li {
+    background: #fff none repeat scroll 0 0;
+    float: left;
+    height: 100px;
+    margin-right: 1%;
+    margin-top: 1%;
+    padding: 65px 0;
+    width: 49.5%;
+}
+.search_warp li:nth-child(2n) {
+    margin-right: 0;
+}
+.bulk_icon {
+    display: block;
+    margin: 0 auto;
+    width: 45px;
+}
+.search_warp li span {
+    color: #330100;
+    display: block;
+    font-size: 1em;
+    margin: 5px auto 0;
+    text-align: center;
+    width: 58px;
+}
+.go_icon {
+    bottom: 8px;
+    right: 8px;
+    width: 26px;
+}
+/*
+作者：1835839488@qq.com
+时间：2016-08-09
+描述：掌上店铺
+*/
+.header_icon {
+    margin-top: 2px;
+    width: 30px;
+}
+/*店铺banner*/
+/*商家列表*/
+.shop_area {
+    border-top: 4px solid #51bb97;
+}
+/*附近商家*/
+.shop_title {
+    padding: 4px 2%;
+    width: 96%;
+}
+/*列表*/
+.shop_list{}
+.shop_list>li {
+    background: #fff none repeat scroll 0 0;
+    height: auto;
+    margin-top: 8px;
+    overflow: hidden;
+    padding: 15px 2%;
+    width: 96%;
+}
+.shop_list>li:first-child{margin-top: 0;}
+/*店铺信息*/
+.shop_pic {
+    width: 80px;
+}
+.shop_info {
+    vertical-align: top;
+}
+/*店铺名称*/
+.shop_name {
+    color: #363636;
+    display: block;
+    font-size: 1.1em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 110px;
+}
+.shop_far {
+    color: #666666;
+    font-size: 0.9em;
+    margin-top: 27px;
+}
+.shop_far span {
+    color: #666666;
+    font-size: 1em;
+}
+/*
+作者：1835839488@qq.com
+时间：2016-08-09
+描述：卷烟名品
+*/
+/*列表*/
+.search_icon {
+    right: 10px;
+    top: 8px;
+    width: 26px;
+}
+.tobacco_list{margin-bottom: 100px;}
+.tobacco_list > li {
+	background: #fff;
+    border-radius: 15px;
+    height: auto;
+    margin: 10px auto 0;
+    overflow: hidden;
+    padding: 15px 0 15px 12%;
+    width: 80%;
+}
+/*推荐图标*/
+.hot_icon {
+    left: 0;
+    top: 0;
+    width: 50px;
+}
+.tobacco_box {
+    width: 55px;
+}
+.tobacco_detail {
+    width: 70%;
+}
+.tobacco_name {
+    color: #d13c31;
+    display: block;
+    font-size: 1.1em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 110px;
+}
+/*参数*/
+.tobacco_param {
+    clear: both;
+    height: auto;
+    margin-top: 10px;
+    overflow: hidden;
+}
+.tobacco_param>li {
+    float: left;
+    font-size: 0.85em;
+    margin-left: 5%;
+}
+.tobacco_param li:nth-child(2n+1){margin-left: 0;}
+.tobacco_param li span {
+    font-size: 1em;
+}
+.brand_area {
+    background: #fff none repeat scroll 0 0;
+    height: auto;
+    width: 100%;
+}
+/*搜索框*/
+.search_layer {
+    height: auto;
+    overflow: hidden;
+    padding: 3px 2%;
+    width: 94%;
+}
+.layer_entry {
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+    border: 1px solid #ececec;
+    border-radius: 13px !important;
+    line-height: 26px;
+    width: 89%;
+    text-indent:10px;
+}
+.layui-layer{top: 0!important;}
+.triangle_up {
+    border-bottom: 8px solid #fff;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    height: 0;
+    left: 50%;
+    margin-bottom: 0;
+    margin-left: -4px;
+    margin-top: 0;
+    position: absolute;
+    top: -7px;
+    width: 0;
+}
+/*
+作者：1835839488@qq.com
+时间：2016-08-26
+描述:信息动态
+*/
+.survey_contain {
+    background: #fff none repeat scroll 0 0;
+    height: auto;
+    margin: 0 auto;
+    overflow: hidden;
+    padding: 10px 3%;
+    width: 87%;
+}
+.warp_title {
+    border-bottom: 1px solid #c3c3c3;
+    color: #3baee6;
+    font-size: 1.05em;
+    font-weight: bold;
+    line-height: 30px;
+}

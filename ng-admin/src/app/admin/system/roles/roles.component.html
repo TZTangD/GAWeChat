@@ -1,0 +1,43 @@
+<pro-header></pro-header>
+<nz-card [nzBordered]="false">
+    <div nz-row [nzGutter]="24">
+        <ng-template #modelContent>
+            <h2>是否删除角色{{roleName}}?</h2>
+        </ng-template>
+        <div nz-col [nzSpan]="6" [nzOffset]="18" class="mb-md" [class.text-right]="'true'">
+            <button nz-button [nzType]="'primary'" (click)="createRole()" [nzSize]="'large'">
+                <i class="anticon anticon-plus"></i>
+                <span>新建</span>
+            </button>
+        </div>
+    </div>
+    <nz-table #nzTable [nzAjaxData]="roles" [nzTotal]="q.total" [(nzPageIndex)]="q.pi" [(nzPageSize)]="q.ps" [nzLoading]="loading"
+        [nzShowSizeChanger]="true" [nzShowTotal]="'true'" (nzPageIndexChange)="refreshData()" (nzPageSizeChange)="refreshData()">
+        <thead nz-thead>
+            <tr>
+                <th nz-th>
+                    <span>角色名</span>
+                </th>
+                <th nz-th>
+                    <span>角色显示</span>
+                </th>
+                <th nz-th>
+                    <span>操作</span>
+                </th>
+            </tr>
+        </thead>
+        <tbody nz-tbody>
+            <tr nz-tbody-tr *ngFor="let role of nzTable.data">
+                <td nz-td>{{role.name}}</td>
+                <td nz-td>{{role.displayName}}</td>
+                <td nz-td>
+                    <a (click)="editRole(role)">编辑</a>
+                    <span nz-table-divider></span>
+                    <a (click)="delete(role,modelContent)">删除</a>
+                </td>
+            </tr>
+        </tbody>
+    </nz-table>
+</nz-card>
+<create-role-modal #createRoleModal (modalSave)="refreshData()"></create-role-modal>
+<edit-role-modal #editRoleModal (modalSave)="refreshData()"></edit-role-modal>

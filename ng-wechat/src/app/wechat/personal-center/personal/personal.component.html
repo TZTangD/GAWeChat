@@ -1,0 +1,77 @@
+<Page [ngClass]="'badge'" [spacing]="false" [ftBottom]="true" [showTitle]="false" [showBindStaff]="true">
+    <div class="weui-cells" *ngIf="user">
+        <div class="weui-cell">
+            <div class="weui-cell__hd" style="position: relative;margin-right: 10px;">
+                <img src="{{user.headImgUrl}}" style="width: 50px;display: block">
+            </div>
+            <div class="weui-cell__bd">
+                <p>{{user.nickName}}</p>
+                <p style="font-size: 13px; color: #888888;">{{user.userTypeName}}</p>
+            </div>
+            <div class="weui-cell__ft">
+                <img alt="" (click)="goShowCard()" src="./assets/images/icon_nav_layout.png" style="height: 25px; margin-right: 12px;">
+            </div>
+        </div>
+        <div class="weui-cell weui-cell_access">
+            <div class="weui-cell__bd">
+                <span style="vertical-align: middle; font-size: 13px;">我的积分</span>
+            </div>
+            <div class="weui-cell__ft">
+                <span class="weui-badge" style="margin-left: 5px; background-color:goldenrod;">{{user.integralTotal}}</span>
+            </div>
+        </div>
+    </div>
+    <div class="weui-cells">
+        <div class="weui-cells__title">个人信息</div>
+        <div class="weui-cell weui-cell_access">
+            <div class="weui-cell__bd">
+                <span style="vertical-align: middle">购买记录</span>
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cell weui-cell_access">
+            <div class="weui-cell__bd">
+                <span style="vertical-align: middle">店铺评价</span>
+                <span class="weui-badge" style="margin-left: 5px;">6</span>
+            </div>
+            <div class="weui-cell__ft" style="font-size: 13px;">评价送积分</div>
+        </div>
+        <div class="weui-cell weui-cell_access" (click)="goBindPhone()">
+            <div class="weui-cell__bd">
+                <span style="vertical-align: middle">换绑手机</span>
+            </div>
+            <div class="weui-cell__ft" style="font-size: 13px;">{{phone}}</div>
+        </div>
+    </div>
+    <div class="weui-cells">
+        <div class="weui-cells__title">零售客户</div>
+        <div class="weui-cell weui-cell_access">
+            <div class="weui-cell__bd">
+                <span style="vertical-align: middle">档级货源</span>
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cell weui-cell_access">
+            <div class="weui-cell__bd">
+                <span style="vertical-align: middle">我的台账</span>
+            </div>
+            <div class="weui-cell__ft" style="font-size: 13px;"></div>
+        </div>
+        <div class="weui-cell weui-cell_access">
+            <div class="weui-cell__bd">
+                <span style="vertical-align: middle">店员管理</span>
+            </div>
+            <div class="weui-cell__ft" style="font-size: 13px;"></div>
+        </div>
+    </div>
+    <div class="weui-cells">
+        <div class="weui-cell weui-cell_access">
+            <div class="weui-cell__bd">
+                <span style="vertical-align: middle">意见反馈</span>
+            </div>
+        </div>
+    </div>
+
+</Page>

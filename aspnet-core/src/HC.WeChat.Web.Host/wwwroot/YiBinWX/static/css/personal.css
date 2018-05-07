@@ -1,0 +1,547 @@
+/*
+作者：1835839488@qq.com
+时间：2016-08-09
+描述：个人中心
+*/
+/*个人中心头部*/
+.personal_head {
+    background: #a0d6c6 none repeat scroll 0 0;
+    padding: 30px 0 20px;
+}
+/*头像*/
+.personal_header {
+    border: 5px solid #148262;
+    border-radius: 50%;
+    display: block;
+    height: 60px;
+    margin: 0 auto;
+    width: 60px;
+}
+.personal_id {
+    color: #330100;
+    font-size: 1.05em;
+    margin-top: 10px;
+    text-align: center;
+}
+.personal_id span {
+    color: #330100;
+    font-size: 1em;
+}
+/*个人信息功能链接*/
+.personal_link{}
+.personal_link li {
+    background: #fff none repeat scroll 0 0;
+    border-bottom: 1px solid #f8f8f8;
+    height: auto;
+    overflow: hidden;
+    padding: 8px 5%;
+    width: 90%;
+}
+.menu_icon {
+    display: block;
+    float: left;
+    width: 26px;
+}
+.menu_txt {
+    color: #212121;
+    float: left;
+    font-size: 0.9em;
+    margin-left: 5px;
+    margin-top: 5px;
+}
+.arrow_icon {
+    margin-top: 5px;
+    width: 18px;
+}
+/*
+作者：1835839488@qq.com
+时间：2016-08-09
+描述：积分查询
+*/
+/*积分主体内容*/
+/*积分累计*/
+.count_title {
+    color: #f9bb13;
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-bottom: 5px;
+    text-align: center;
+}
+.point_count {
+    background: #fff none repeat scroll 0 0;
+    height: auto;
+    margin-top: 10px;
+    overflow: hidden;
+    padding: 30px 0 10px;
+}
+.point_number {
+    background: rgba(0, 0, 0, 0) url("../img/index/point_bg.png") no-repeat scroll 0 0 / 100% 100%;
+    color: #fff;
+    font-family: arial;
+    font-size: 3.4em;
+    font-weight: bold;
+    height: 80px;
+    letter-spacing: 18px;
+    line-height: 80px;
+    margin: 0 auto;
+    text-align: right;
+    width: 200px;
+}
+/*分店铺积分显示*/
+.point_list{margin-bottom: 110px;}
+.point_list li {
+    height: auto;
+    margin-top: 25px;
+    overflow: hidden;
+    width: 100%;
+}
+.point_list li:first-child{margin-top: 0;}
+.point_shop {
+    background: #f9bb13 none repeat scroll 0 0;
+    color: #fff;
+    line-height: 20px;
+    text-align: center;
+}
+.point_table {
+    height: 135px;
+    overflow-y: scroll;
+    width: 100%;
+}
+.point_view {
+    background: #fff none repeat scroll 0 0;
+    height: auto;
+    text-align: center;
+    width: 100%;
+}
+.point_table tr{}
+.point_table tr th {
+    background: #138363 none repeat scroll 0 0;
+    color: #fff;
+    line-height: 26px;
+    text-align: center;
+}
+.point_table tr td {
+    border-bottom: 1px solid #cacaca;
+    color: #595858;
+    padding: 8px 0;
+}
+/*总积分*/
+.point_total {
+    background: #138363 none repeat scroll 0 0;
+    color: #fff;
+    font-size: 1em;
+    height: auto;
+    overflow: hidden;
+    padding: 3px 3%;
+    text-align: right;
+    width: 94%;
+}
+.point_total > p {
+    color: #fff;
+    font-size: 0.85em;
+}
+.point_total span {
+    color: #fff;
+    font-size: 1em;
+}
+.point_control {
+    background: #fff none repeat scroll 0 0;
+    bottom: 0;
+    padding: 20px 0;
+    position: fixed;
+}
+/*
+作者：1835839488@qq.com
+时间：2016-08-09
+描述：我的评价
+*/
+.judge_main {
+    background: #fff none repeat scroll 0 0;
+    margin-top: 10px;
+}
+/*评价列表*/
+.judge_list{background: #fff;}
+.judge_list > li {
+    border-bottom: 1px solid #eef2f5;
+    height: auto;
+    overflow: hidden;
+    padding: 13px 3% 15px;
+    width: 94%;
+}
+.judge_header {
+    border-radius: 50%;
+    height: 60px;
+    width: 60px;
+}
+/*昵称*/
+.judge_name{}
+/*评价内容*/
+.judge_contain {
+    clear: both;
+    color: #595758;
+    width: 100%;
+}
+/*日期*/
+.judge_time {
+    right: 10px;
+    top: 0px;
+}
+/*删除操作*/
+.delete_icon {
+    bottom: 0px;
+    right: 10px;
+    width: 30px;
+}
+/*商家回复*/
+.judge_reply {
+    border-top: 1px solid #eef2f5;
+    color: #f9bb13;
+    margin-top: 20px;
+    padding: 8px 0 0;
+    text-align: center;
+    width: 100%;
+}
+.judge_reply span{}
+/*
+作者：1835839488@qq.com
+时间：2016-08-10
+描述:店铺信息
+*/
+/*信息修改*/
+.shop_update {
+    background: #fff none repeat scroll 0 0;
+    margin-top: 8px;
+}
+.shop_update > li {
+    border-bottom: 1px solid #f7f7f7;
+    height: auto;
+    overflow: hidden;
+    padding: 9px 3%;
+    width: 94%;
+}
+.info_icon {
+    width: 26px;
+}
+.info_key {
+    color: #232323;
+    font-size: 1.05em;
+}
+.info_entry {
+    border: 0 none;
+    color: #909090;
+    line-height: 20px;
+    text-indent: 5px;
+}
+/*
+作者：1835839488@qq.com
+时间：2016-08-10
+描述:会员管理
+*/
+/*会员列表*/
+.member_list {
+    background: #fff none repeat scroll 0 0;
+    text-align: center;
+    margin-top: 10px;
+}
+.member_list tr th {
+    background: #50bb97 none repeat scroll 0 0;
+    color: #fff;
+    padding: 5px 0;
+    text-align: center;
+}
+.member_list tr td {
+    border-bottom: 4px solid #eef3fa;
+    padding: 8px 0;
+}
+/*添加会员*/
+.add_member {
+    background: #fff none repeat scroll 0 0;
+    height: auto;
+    overflow: hidden;
+    width: 100%;
+    padding-bottom: 15px;
+}
+.add_title {
+    background: #50bb97 none repeat scroll 0 0;
+    color: #fff;
+    line-height: 30px;
+    text-align: center;
+}
+.member_entry {
+    background: #edf2f5 none repeat scroll 0 0;
+    border: 0 none;
+    display: block;
+    line-height: 30px;
+    margin: 20px auto 0;
+    text-align: center;
+    width: 90%;
+}
+.add_btn {
+    border: 0 none;
+    border-radius: 3px !important;
+    color: #fff;
+    display: block;
+    line-height: 30px;
+    margin: 20px auto 0;
+    width: 200px;
+}
+/*
+作者：1835839488@qq.com
+时间：2016-08-10
+描述:评价管理
+*/
+/*tab切换*/
+.tab_nav {
+    height: auto;
+    overflow: hidden;
+    width: 100%;
+}
+.tab_nav li {
+    color: #898989;
+    float: left;
+    line-height: 36px;
+    font-size: 1.05em;
+    text-align: center;
+    width: 50%;
+}
+.tab_active{
+	color: #f9ba13!important;
+	border-bottom: 3px solid #f9ba13;
+	}
+/*评论列表*/
+.tab_contain {
+    background: #fff none repeat scroll 0 0;
+}
+/*.回复按钮*/
+.reply_btn {
+    background: #f9ba13 none repeat scroll 0 0;
+    border-radius: 3px;
+    color: #fff;
+    display: block;
+    float: right;
+    font-size: 0.85em;
+    padding: 0 8px;
+}
+/*商家删除评论*/
+.shop_delete {
+    bottom: 10px;
+}
+/*评论回复*/
+.judge_title{background: #f9ba13!important;}
+/*
+作者：1835839488@qq.com
+时间：2016-08-10
+描述:添加积分
+*/
+.point_main {
+    background: #fff none repeat scroll 0 0;
+    margin-top: 10px;
+    min-height: 300px;
+    padding-bottom: 50px;
+}
+.point_icon {
+    display: block;
+    margin: 30px auto 1px;
+    width: 80px;
+}
+.point_new {
+    color: #f9ba13;
+    display: inline-block;
+    text-align: center;
+    width: 100%;
+}
+/*添加积分列表*/
+.point_area {
+    height: auto;
+    margin: 10px auto 0;
+    overflow: hidden;
+    width: 96%;
+}
+.point_area li {
+    border: 2px solid #138363;
+    height: auto;
+    line-height: 24px;
+    margin-top: 8px;
+    overflow: hidden;
+    padding: 4px 5px;
+}
+.coustom_select {
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+    border: 0 none;
+    line-height: 22px;
+}
+.brand_entry {
+    border: 0 none;
+    color: #138363;
+    text-align: center;
+    width: 40%;
+}
+/*数量加减*/
+.number_control{}
+.num_view {
+    line-height: 22px;
+    padding: 0 10px;
+}
+.num {
+	background-size: 100% 100% !important;
+    border: 0 none;
+    width: 20px;
+}
+.num_reduce{background: url("../img/shop/num_reduce.png");}
+.num_add{background: url("../img/shop/num_add.png");}
+/*积分显示*/
+.point_sum {
+    color: #138363;
+}
+.point_sum label {
+    color: #138363;
+}
+/*添加*/
+.add_icon {
+    display: block;
+    margin: 25px auto 0;
+    width: 24px;
+}
+/*
+作者：1835839488@qq.com
+时间：2016-08-10
+描述:积分查询
+*/
+/*查询条件*/
+.select_term {
+    border-bottom: 2px solid #edf2f5;
+    padding: 4px 5px;
+    width: auto !important;
+}
+/*.日期选择*/
+.date_select {
+    background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+    border: 1px solid #f9ba13;
+    font-size: 0.9em;
+    height: 20px;
+    line-height: 20px;
+    padding: 0 5px;
+    margin-left: 3px;
+}
+.search_icon {
+    width: 26px;
+}
+/*积分显示*/
+.point_account {
+    color: #f9ba13;
+    display: inline-block;
+    font-size: 1.1em;
+    font-weight: bold;
+    margin: 12px auto 0;
+    text-align: right;
+    width: 96%;
+}
+.account_num {
+    background: rgba(0, 0, 0, 0) url("../img/index/point_bg.png") no-repeat scroll 0 0 / 100% 100%;
+    color: #fff;
+    float: right;
+    font-size: 1.7em;
+    font-weight: bold;
+    height: 44px;
+    letter-spacing: 11px;
+    line-height: 44px;
+    margin-top: 5px;
+    text-align: right;
+    width: 115px;
+}
+/*
+作者：1835839488@qq.com
+时间：2016-08-11
+描述:个人基础信息
+*/
+.basic_main{margin-top: -34px!important; position: relative;}
+/*信息展示*/
+.basic_title {
+    background: #01c86b none repeat scroll 0 0;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    color: #fff;
+    line-height: 34px;
+    text-align: center;
+}
+/*可编辑信息展示*/
+.basic_edit {
+    background: #fff none repeat scroll 0 0;
+    padding-bottom: 30px;
+}
+.eidt_header {
+    border: 1px solid #a7adb9;
+    border-radius: 50%;
+    height: 70px;
+    width: 70px;
+}
+.edit_basic {
+    height: auto;
+    overflow: hidden;
+    width: 69%;
+}
+.edit_basic li {
+    height: auto;
+    overflow: hidden;
+    padding: 6px 0;
+    width: 100%;
+}
+.edit_key {
+    background: #01c86b none repeat scroll 0 0;
+    border-radius: 12px;
+    color: #fff;
+    font-size: 0.9em;
+    letter-spacing: 3px;
+    padding: 2px 7px;
+}
+.edit_value {
+    border: medium none;
+    color: #333;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 60%;
+}
+/*不可编辑信息展示*/
+.basic_view {
+    background: #fff none repeat scroll 0 0;
+    width: 100%;
+}
+.basic_view tr td {
+    border-bottom: 1px solid #ececec;
+    padding: 10px 0;
+    text-align: center;
+}
+.basic_view tr td:nth-child(2n+1) {
+    text-align: left;
+    text-indent: 10px;
+    width: 38%;
+}
+.comfirm_btn {
+    border: 0 none;
+    color: #fff;
+    font-size: 1.2em;
+    letter-spacing: 8px;
+    line-height: 34px;
+    width: 100%;
+}
+.triangle_up {
+    border-bottom: 8px solid #3fc56b;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    height: 0;
+    margin: 0 auto;
+    width: 0;
+}
+.triangle_down {
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 8px solid #01c86b;
+    margin: 0 auto;
+}
+.basic_fixd {
+    background: #fff none repeat scroll 0 0;
+    margin-top: 10px;
+}
