@@ -63,10 +63,7 @@ export class CommodityDetailComponent extends AppComponentBase implements OnInit
             if (result.photoUrl) {
                 // this.photo = this.host + result.photoUrl;
                 this.product.showPhotoUrl = this.host + result.photoUrl;
-                
-            } else {
-                this.photo = '';
-            }
+            } 
 
             if (!this.product.id) {
                 this.product.init({ isAction: true });

@@ -5,12 +5,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ArticleServiceProxy } from '@shared/service-proxies/marketing-service';
 import { Article } from '@shared/entity/marketting';
 import { ResourceLoader } from '@angular/compiler';
-import { NzModalService } from 'ng-zorro-antd';
+import { NzModalService, UploadFile } from 'ng-zorro-antd';
+import { AppConsts } from '@shared/AppConsts';
 
 @Component({
     moduleId: module.id,
     selector: 'activity-detail',
     templateUrl: 'activity-detail.component.html',
+    styleUrls: ['activity-detail.component.scss']
 })
 export class ActivityDetailComponent extends AppComponentBase implements OnInit {
     form: FormGroup;
@@ -21,7 +23,10 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
     isPush = true;
     isDelete = false;
     successMsg = '';
-    cardTitle='';
+    cardTitle = '';
+
+    host = '';
+    actionUrl = '';
     constructor(injector: Injector, private fb: FormBuilder, private actRouter: ActivatedRoute,
         private activityService: ArticleServiceProxy, private router: Router, private modal: NzModalService) {
         super(injector);
@@ -36,6 +41,8 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
             content: [null],
         });
         this.getSingleActivity();
+        this.host = AppConsts.remoteServiceBaseUrl;
+        this.actionUrl = this.host + '/WeChatFile/MarketingInfoPosts?fileName=activity';
     }
 
     getSingleActivity() {
@@ -44,14 +51,17 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
                 this.article = result;
                 this.isDelete = true;
                 this.isPush = result.pushStatus === 1 ? false : true;
-                this.cardTitle='编辑活动';
+                this.cardTitle = '编辑活动';
+                if (result.coverPhoto) {
+                    this.article.showCoverPhoto = this.host + this.article.coverPhoto;
+                }
             });
         } else {
             //新增
             this.article.pushStatus = 0;
             this.article.pushStatusName = '草稿';
             this.article.type = 1;//类型为活动
-            this.cardTitle='新增活动';
+            this.cardTitle = '新增活动';
         }
     }
 
@@ -62,13 +72,14 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
         this.activityService.update(this.article)
             .finally(() => { this.isConfirmLoading = false; })
             .subscribe((result: Article) => {
-                console.log('保存返回');
-                console.log(result);
                 this.article = result;
+                if (result.coverPhoto) {
+                    this.article.showCoverPhoto = this.host + this.article.coverPhoto;
+                }
                 this.isDelete = true;
                 this.isPush = result.pushStatus === 1 ? false : true;
                 this.notify.info(this.l(this.successMsg));
-                this.cardTitle='编辑活动';
+                this.cardTitle = '编辑活动';
             });
     }
 
@@ -79,10 +90,6 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
         }
         if (this.form.valid) {
             this.isConfirmLoading = true;
-            //新增时
-            if (!this.article.id) {
-                this.article.coverPhoto = './assets/img/weixin.jpg';//测试 图片能上传时删除
-            }
             this.successMsg = isPulish === false ? '保存成功！' : '发布成功！';
             this.saveActivity();
         }
@@ -108,5 +115,27 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
     }
     return() {
         this.router.navigate(['admin/marketting/activity']);
+    }
+
+    private getBase64(img: File, callback: (img: any) => void) {
+        const reader = new FileReader();
+        reader.addEventListener('load', () => callback(reader.result));
+        reader.readAsDataURL(img);
+    }
+
+    //图片上传返回
+    handleChange(info: { file: UploadFile }): void {
+        console.table(info);
+
+        if (info.file.status === 'error') {
+            this.notify.error('上传图片异常，请重试');
+        }
+        if (info.file.status === 'done') {
+            this.getBase64(info.file.originFileObj, (img: any) => {
+                this.article.showCoverPhoto = img;
+            });
+            this.article.coverPhoto = info.file.response.result.imageName;
+            this.notify.success('上传图片完成');
+        }
     }
 }
