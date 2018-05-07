@@ -194,7 +194,7 @@ namespace HC.WeChat.Web.Host.Controllers
 
         [RequestFormSizeLimit(valueCountLimit: 2147483647)]
         [HttpPost]
-        public async Task<IActionResult> MarketingInfoPosts(IFormFile[] image, Guid fileName)
+        public async Task<IActionResult> MarketingInfoPosts(IFormFile[] image, string fileName, Guid name)
         {
             //var files = Request.Form.Files;
             string webRootPath = _hostingEnvironment.WebRootPath;
@@ -208,15 +208,15 @@ namespace HC.WeChat.Web.Host.Controllers
                     long fileSize = formFile.Length; //获得文件大小，以字节为单位
                     //var i = 0;
                     //fileName = fileName + new DateTime().ToString("yyMMddHH") + i++.ToString();
-                    fileName = fileName == Guid.Empty ? Guid.NewGuid() : fileName;
-                    string newFileName = fileName + fileExt; //新的文件名
-                    var fileDire = webRootPath + "/upload/product/";
+                    name = name == Guid.Empty ? Guid.NewGuid() : name;
+                    string newName = name + fileExt; //新的文件名
+                    var fileDire = webRootPath +string.Format("/upload/{0}/",fileName) ;
                     if (!Directory.Exists(fileDire))
                     {
                         Directory.CreateDirectory(fileDire);
                     }
 
-                    var filePath = fileDire + newFileName;
+                    var filePath = fileDire + newName;
 
                     using (var stream = new FileStream(filePath, FileMode.Create))
                     {

@@ -53,6 +53,7 @@ export class CommodityDetailComponent extends AppComponentBase implements OnInit
         });
         this.getSingleProdct();
         this.host = AppConsts.remoteServiceBaseUrl;
+        this.actionUrl=this.host + '/WeChatFile/MarketingInfoPosts?fileName=product';
     }
 
     getSingleProdct() {
@@ -69,9 +70,9 @@ export class CommodityDetailComponent extends AppComponentBase implements OnInit
 
             if (!this.product.id) {
                 this.product.init({ isAction: true });
-                this.actionUrl=this.host + '/WeChatFile/MarketingInfoPosts';
-            }else{
-                this.actionUrl=this.host + '/WeChatFile/MarketingInfoPosts?fileName='+this.product.id;
+            }
+            else{
+                // this.actionUrl=this.host + '/WeChatFile/MarketingInfoPosts?fileName=product&name='+this.product.id;
             }
         });
     }
