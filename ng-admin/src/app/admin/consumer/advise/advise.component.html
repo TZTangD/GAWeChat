@@ -37,6 +37,9 @@
                 <th nz-th>
                     <span>提交时间</span>
                 </th>
+                <th nz-th>
+                    <span>操作</span>
+                </th>
             </tr>
         </thead>
         <tbody nz-tbody>
@@ -46,6 +49,9 @@
                 <td nz-td>{{item.phone}}</td>
                 <td nz-td>{{item.content}}</td>
                 <td nz-td>{{item.creationTime | _date}}</td>
+                <td nz-td>
+                    <a (click)="adviseDetail(item)">详情</a>
+                </td>
             </tr>
         </tbody>
     </nz-table>

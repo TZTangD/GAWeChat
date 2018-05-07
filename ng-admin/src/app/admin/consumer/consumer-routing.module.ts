@@ -5,11 +5,14 @@ import { CommoditySearchComponent } from "./commodity-search/commodity-search.co
 import { AppRouteGuard } from "@shared/auth/auth-route-guard";
 import { AdviseComponent } from "./advise/advise.component";
 import { LayoutDefaultComponent } from "../../layout/default/default.component";
+import { AdviseDetailComponent } from "./advise/advise-detail/advise-detail.component";
 
 const routes: Routes = [
   { path: '', redirectTo: 'commodity-search', pathMatch: 'full' },
   { path: 'commodity-search', component: CommoditySearchComponent, data: { translate: 'commodity-search', permission: 'Pages' }, canActivate: [AppRouteGuard] },
   { path: 'advise', component: AdviseComponent, data: { translate: 'advise', permission: 'Pages' }, canActivate: [AppRouteGuard] },
+  { path: 'advise-detail/:id', component: AdviseDetailComponent, data: { translate: 'advise-detail', permission: 'Pages' }, canActivate: [AppRouteGuard] },
+  
 ];
 
 @NgModule({

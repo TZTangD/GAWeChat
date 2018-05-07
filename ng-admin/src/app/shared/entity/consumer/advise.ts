@@ -69,6 +69,12 @@ export class Advise implements IAdvise {
         result.init(json);
         return result;
     }
+    getPhotoUrls(): string[]{
+        if (this.photoUrl == '' || this.photoUrl == null || this.photoUrl == undefined) {
+            return [];
+        }
+        return this.photoUrl.split(',');
+    }
 }
 export interface IAdvise {
     id: string;
