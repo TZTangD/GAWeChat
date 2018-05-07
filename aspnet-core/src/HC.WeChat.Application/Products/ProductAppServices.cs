@@ -15,6 +15,7 @@ using HC.WeChat.Products.DomainServices;
 using HC.WeChat.Products;
 using System;
 using HC.WeChat.Authorization;
+using System.Linq;
 
 namespace HC.WeChat.Products
 {
@@ -207,7 +208,6 @@ namespace HC.WeChat.Products
         /// <returns></returns>
         public async Task CreateOrUpdateProductDto(ProductEditDto input)
         {
-
             if (input.Id.HasValue)
             {
                 await UpdateProductAsync(input);
@@ -218,6 +218,22 @@ namespace HC.WeChat.Products
             }
         }
 
+        /// <summary>
+        /// 获取特色商品
+        /// </summary>
+        [AbpAllowAnonymous]
+        public async Task<RareProductDto> GetRareProduct(int? tenantId)
+        {
+            using (CurrentUnitOfWork.SetTenantId(tenantId))
+            {
+                var query = _productRepository.GetAll().Where(p => p.IsRare == true && p.IsAction == true);
+
+                RareProductDto data = new RareProductDto();
+                data.CigaretteProducts = (await query.Where(q => q.Type == WechatEnums.ProductTypeEnum.卷烟类).OrderBy(q => q.Specification).ToListAsync()).MapTo<List<ProductListDto>>();
+                data.SpecialProducts = (await query.Where(q => q.Type == WechatEnums.ProductTypeEnum.特产类).OrderBy(q => q.Specification).ToListAsync()).MapTo<List<ProductListDto>>();
+                return data;
+            }
+        }
     }
 }
 

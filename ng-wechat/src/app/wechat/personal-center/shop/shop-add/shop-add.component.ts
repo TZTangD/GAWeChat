@@ -5,7 +5,7 @@ import { AppComponentBase } from '../../../components/app-component-base';
 import { WechatUser, UserType, Shop } from '../../../../services/model';
 import { Router, Params } from '@angular/router';
 import { UploaderOptions, FileItem, Uploader, UploaderHeaders } from 'ngx-weui';
-import { ShopService } from '../../../../services';
+import { ShopService, AppConsts } from '../../../../services';
 import { ToptipsService } from "ngx-weui/toptips";
 
 @Component({
@@ -25,17 +25,19 @@ export class ShopAddComponent extends AppComponentBase implements OnInit {
     title: string = '新增店铺';
 
     uploader: Uploader = new Uploader(<UploaderOptions>{
-        url: './upload.php',
-        headers: [
-            { name: 'auth', value: 'test' }
-        ],
+        url: AppConsts.remoteServiceBaseUrl + '/WeChatFile/FilesPosts',
+        /*headers: [
+            { name: 'Content-Type', value: 'application/x-www-form-urlencoded'}
+        ],*/
+        method: 'POST',
         params: {
-            a: 1,
-            b: new Date(),
-            c: 'test',
-            d: 12.123
+            folder: 'shop',
         },
-        onFileQueued: function() {
+        /*types: [
+            'jpg','png'
+        ],*/
+        //auto: true,
+        onFileQueued: function(file: FileItem) {
             console.log('onFileQueued', arguments);
         },
         onFileDequeued: function() {
@@ -56,14 +58,14 @@ export class ShopAddComponent extends AppComponentBase implements OnInit {
         onUploadProgress: function() {
             console.log('onUploadProgress', arguments);
         },
-        onUploadSuccess: function() {
-            console.log('onUploadSuccess', arguments);
+        onUploadSuccess: function(file: FileItem, response: string) {
+            console.log('onUploadSuccess' + response, arguments);
         },
         onUploadError: function() {
             console.log('onUploadError', arguments);
         },
-        onUploadComplete: function() {
-            console.log('onUploadComplete', arguments);
+        onUploadComplete: function(file: FileItem, response: string) {
+            console.log('onUploadComplete' + response, arguments);
         },
         onUploadCancel: function() {
             console.log('onUploadCancel', arguments);
@@ -80,6 +82,10 @@ export class ShopAddComponent extends AppComponentBase implements OnInit {
     }
 
     ngOnInit() {
+        //alert(this.id)
+        if(this.id && this.id == '1'){
+            this.showAddInfo = false;
+        }
         this.settingsService.getUser().subscribe(result => {
             this.user = result;
         });
@@ -113,6 +119,10 @@ export class ShopAddComponent extends AppComponentBase implements OnInit {
 
     onSave() {
         //alert('请求数据：' + JSON.stringify(this.res));
+        if(this.res.coverPhoto){
+            this.srv['warn']('请上传店铺形象');
+            return;
+        }
         this.shopService.WechatCreateOrUpdateShop({ 
             shop : this.res, 
             tenantId: this.settingsService.tenantId, 

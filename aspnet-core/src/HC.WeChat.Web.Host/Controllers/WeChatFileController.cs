@@ -126,7 +126,7 @@ namespace HC.WeChat.Web.Host.Controllers
             {
                 await data.CopyToAsync(stream);
             }
-            return Ok(new { msg = "OK"});
+            return Ok(new { msg = "OK" });
         }
 
         [AbpAllowAnonymous]
@@ -222,13 +222,45 @@ namespace HC.WeChat.Web.Host.Controllers
                     {
                         await formFile.CopyToAsync(stream);
                     }
-                    imageName = filePath.Substring(webRootPath.Length) ;
+                    imageName = filePath.Substring(webRootPath.Length);
                 }
             }
 
-            return Ok(new{ imageName});
+            return Ok(new { imageName });
         }
 
+        [RequestFormSizeLimit(valueCountLimit: 2147483647)]
+        [HttpPost]
+        [AbpAllowAnonymous]
+        public async Task<IActionResult> FilesPosts(IFormFile[] files, string folder)
+        {
+            string webRootPath = _hostingEnvironment.WebRootPath;
+            string contentRootPath = _hostingEnvironment.ContentRootPath;
+            var saveUrl = "";
+            foreach (var formFile in files)
+            {
+                if (formFile.Length > 0)
+                {
+                    string fileExt = Path.GetExtension(formFile.FileName); //文件扩展名，不含“.”
+                    long fileSize = formFile.Length; //获得文件大小，以字节为单位
+                    string fileName = Guid.NewGuid().ToString();
+                    string newFileName = fileName + fileExt; //新的文件名
+                    var fileDire = webRootPath + string.Format("/upload/{0}/", folder);
+                    if (!Directory.Exists(fileDire))
+                    {
+                        Directory.CreateDirectory(fileDire);
+                    }
 
+                    var filePath = fileDire + newFileName;
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await formFile.CopyToAsync(stream);
+                    }
+                    saveUrl = filePath.Substring(webRootPath.Length);
+                }
+            }
+            return Ok();
+        }
     }
 }
