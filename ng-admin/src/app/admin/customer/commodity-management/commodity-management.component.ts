@@ -5,6 +5,7 @@ import { Products } from '@shared/entity/customer';
 import { Parameter } from '@shared/service-proxies/entity';
 import { NzModalService } from 'ng-zorro-antd';
 import { Router } from '@angular/router';
+import { AppConsts } from '@shared/AppConsts';
 
 @Component({
     moduleId: module.id,
@@ -33,15 +34,18 @@ export class CommodityManagementComponent extends AppComponentBase implements On
     previewImage = ''
     previewVisible = false;
     imgWidth: number = 550;
-    defalutImg = './assets/img/tobacco.jpg';
-    //用于删除显示
+    defalutImg = '/upload/product/tobacco.jpg';
     productName = '';
+
+    host = '';
     constructor(injector: Injector, private productsService: ProductsServiceProxy, private modal: NzModalService,
         private router: Router) {
         super(injector);
     }
     ngOnInit(): void {
         this.refreshData();
+        this.host = AppConsts.remoteServiceBaseUrl;
+        this.defalutImg = this.host + this.defalutImg;
     }
     refreshData(reset = false, search?: boolean) {
         if (reset) {
@@ -56,6 +60,7 @@ export class CommodityManagementComponent extends AppComponentBase implements On
             this.loading = false;
             let status = 0;
             this.products = result.items.map(i => {
+                i.showPhotoUrl = this.host + i.photoUrl;
                 if (i.isAction) {
                     status = 0;
                 } else {
@@ -110,7 +115,7 @@ export class CommodityManagementComponent extends AppComponentBase implements On
     editProduct(product: Products) {
         this.router.navigate(['admin/customer/commodity-detail', product.id])
     }
-    
+
     createProduct() {
         this.router.navigate(['admin/customer/commodity-detail'])
 

@@ -18,6 +18,7 @@ export class Article implements IArticle {
     pushStatus: number;
     pushStatusName: string;
     pushTime: string;
+    showCoverPhoto: string;
     constructor(data?: IArticle) {
         if (data) {
             for (var property in data) {

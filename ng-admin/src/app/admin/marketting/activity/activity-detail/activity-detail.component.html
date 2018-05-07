@@ -57,9 +57,12 @@
                             <label for="coverPhoto">封面图片</label>
                         </div>
                         <div nz-form-control nz-col [nzSm]="20">
-                            <!-- nzHasFeedback  [nzValidateStatus]="getFormControl('coverPhoto')" -->
-                            <!-- <nz-input formControlName="coverPhoto" [(ngModel)]="article.coverPhoto" [nzId]="'coverPhoto'"></nz-input> -->
-                            <img src="{{article.coverPhoto}}">
+                            <!-- <img src="{{article.coverPhoto}}"> -->
+                            <nz-upload class="avatar-uploader" nzAction="{{actionUrl}}" [nzName]="'image'" [nzShowUploadList]="false" (nzChange)="handleChange($event)">
+                                <i *ngIf="!article.showCoverPhoto" class="anticon anticon-plus avatar-uploader-trigger"></i>
+                                <img *ngIf="article.showCoverPhoto" [src]="article.showCoverPhoto" class="avatar">
+                            </nz-upload>
+                            
                         </div>
                     </div>
                 </div>
