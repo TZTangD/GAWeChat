@@ -12,6 +12,7 @@ import { ShopComponent } from './shop/shop.component';
 import { BindStaffComponent } from './personal/bind-staff/bind-staff.component';
 import { WaitAuditComponent } from './shop/wait-audit/wait-audit.component';
 import { ShopAddComponent } from './shop/shop-add/shop-add.component';
+import { ScanComponent } from './scan/scan.component';
 
 // region: components
 
@@ -22,7 +23,8 @@ const COMPONENTS = [PersonalComponent,
     ShopComponent,
     BindStaffComponent,
     WaitAuditComponent,
-    ShopAddComponent];
+    ShopAddComponent,
+    ScanComponent];
 
 const routes: Routes = [
     { path: '', redirectTo: 'personal' },
@@ -38,6 +40,7 @@ const routes: Routes = [
     { path: 'bind-staff', component: BindStaffComponent },
     { path: 'wait-audit', component: WaitAuditComponent },
     { path: 'shop-add', component: ShopAddComponent },
+    { path: 'scan', component: ScanComponent },
 ];
 // endregion
 
