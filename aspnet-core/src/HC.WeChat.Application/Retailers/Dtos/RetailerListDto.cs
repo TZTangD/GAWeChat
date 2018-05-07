@@ -31,6 +31,7 @@ namespace HC.WeChat.Retailers.Dtos
         public int? TenantId { get; set; }
 
         public string LicenseKey { get; set; }
+        public string VerificationCode { get; set; }
 
         public string OrderModeName
         {

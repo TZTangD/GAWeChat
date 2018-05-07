@@ -74,6 +74,8 @@ export class RetailCustomerDetailComponent extends AppComponentBase implements O
             marketType: [null],
             deliveryLine: [null, Validators.compose([Validators.maxLength(500)])],
             licenseKey: [null, Validators.compose([Validators.maxLength(50)])],
+            verificationCode: [null, Validators.compose([Validators.maxLength(50)])],
+            
         });
         this.getSingleRetailCustomer();
     }

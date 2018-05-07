@@ -115,5 +115,10 @@ namespace HC.WeChat.Retailers.Dtos
 
         [StringLength(50)]
         public string LicenseKey { get; set; }
+        /// <summary>
+        /// 验证码
+        /// </summary>
+        [StringLength(50)]
+        public string VerificationCode { get; set; }
     }
 }
