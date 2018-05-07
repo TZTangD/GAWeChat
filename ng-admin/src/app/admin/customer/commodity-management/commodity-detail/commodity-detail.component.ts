@@ -33,6 +33,7 @@ export class CommodityDetailComponent extends AppComponentBase implements OnInit
 
     host: string;
     photo: string;
+    actionUrl:string;
     constructor(injector: Injector, private fb: FormBuilder, private productService: ProductsServiceProxy, private actRouter: ActivatedRoute,
         private router: Router) {
         super(injector);
@@ -59,19 +60,18 @@ export class CommodityDetailComponent extends AppComponentBase implements OnInit
             this.product = result;
            
             if (result.photoUrl) {
-                this.photo = this.host + result.photoUrl;
-                console.log('photo')
-                console.log(this.photo);
-
+                // this.photo = this.host + result.photoUrl;
+                this.product.showPhotoUrl = this.host + result.photoUrl;
+                
             } else {
                 this.photo = '';
             }
-            // this.photo = this.host + result.photoUrl;
-            console.log('result.photoUrl')
-            console.log(result.photoUrl);
-           
+
             if (!this.product.id) {
                 this.product.init({ isAction: true });
+                this.actionUrl=this.host + '/WeChatFile/MarketingInfoPosts';
+            }else{
+                this.actionUrl=this.host + '/WeChatFile/MarketingInfoPosts?fileName='+this.product.id;
             }
         });
     }
@@ -122,7 +122,8 @@ export class CommodityDetailComponent extends AppComponentBase implements OnInit
         if (info.file.status === 'done') {
             this.getBase64(info.file.originFileObj, (img: any) => {
                 // this.loading = false;
-                this.photo = img;
+                // this.photo = img;
+                this.product.showPhotoUrl=img;
             });
             this.product.photoUrl = info.file.response.result.imageName;
             console.log('photoUrl')

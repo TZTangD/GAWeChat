@@ -15,6 +15,7 @@ export class Products implements IProducts {
     typeName: string;
     activeText: string;
     activeType: string;
+    showPhotoUrl:string;
     constructor(data?: IProducts) {
         if (data) {
             for (var property in data) {

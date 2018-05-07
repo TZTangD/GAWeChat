@@ -56,19 +56,19 @@
         <thead nz-thead>
             <tr>
                 <th nz-th>
-                    <span>产品图片</span>
+                    <span>商品图片</span>
                 </th>
                 <th nz-th>
-                    <span>规格</span>
+                    <span>商品规格</span>
                 </th>
                 <th nz-th>
-                    <span>类型</span>
+                    <span>商品类型</span>
                 </th>
                 <th nz-th>
                     <span>零售价(元/包)</span>
                 </th>
                 <th nz-th>
-                    <span>是否是特色商品</span>
+                    <span>特色商品</span>
                 </th>
                 <th nz-th>
                     <span>包码</span>
@@ -90,8 +90,8 @@
         <tbody nz-tbody>
             <tr nz-tbody-tr *ngFor="let product of nzTable.data">
                 <td nz-td>
-                    <nz-avatar [nzSrc]="(product.photoUrl===null||product.photoUrl===''?defalutImg:product.photoUrl)" style="width:80px;height: 80px;"
-                        (click)="handlePreview(product.photoUrl)" [nzSize]="'large'" [nzShape]="'square'"></nz-avatar>
+                    <nz-avatar [nzSrc]="(product.photoUrl===null||product.photoUrl==='')?defalutImg:product.showPhotoUrl" style="width:80px;height: 80px;"
+                        (click)="handlePreview(product.showPhotoUrl)" [nzSize]="'large'" [nzShape]="'square'"></nz-avatar>
 
                 </td>
                 <td nz-td>{{product.specification}}</td>
