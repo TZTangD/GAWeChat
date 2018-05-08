@@ -114,7 +114,7 @@ export class ShopAddComponent extends AppComponentBase implements OnInit {
         }).subscribe(data =>{
             if(data){
                 this.srv['success']('保存成功');
-                this.router.navigate(["/center/shop"]);
+                this.router.navigate(["/shops/shop"]);
             } else {
                 this.srv['warn']('保存失败');
             }

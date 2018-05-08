@@ -28,10 +28,10 @@ export class PersonalComponent extends AppComponentBase implements OnInit {
     }
 
     goShowCard() {
-        this.router.navigate(["/center/member-card"]);
+        this.router.navigate(["/members/member-card"]);
     }
 
     goBindPhone(){
-        this.router.navigate(["/center/bind-member"]);
+        this.router.navigate(["/personals/bind-member"]);
     }
 } 

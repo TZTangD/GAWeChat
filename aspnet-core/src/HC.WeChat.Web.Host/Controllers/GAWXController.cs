@@ -220,9 +220,9 @@ namespace HC.WeChat.Web.Host.Controllers
 
     public class GAAuthorizationPageUrl
     {
-        public static string PersonalCenterUrl = "/gawechat/index.html#/center/personal/{0}/{1}";
-        public static string MemberCardUrl = "/gawechat/index.html#/center/member-card/{0}/{1}";
-        public static string MyShopUrl = "/gawechat/index.html#/center/shop/{0}/{1}";
-        public static string ScanIntegralUrl = "/gawechat/index.html#/center/scan/{0}/{1}";
+        public static string PersonalCenterUrl = "/gawechat/index.html#/personals/personal/{0}/{1}";
+        public static string MemberCardUrl = "/gawechat/index.html#/members/member-card/{0}/{1}";
+        public static string MyShopUrl = "/gawechat/index.html#/shops/shop/{0}/{1}";
+        public static string ScanIntegralUrl = "/gawechat/index.html#/scans/scan/{0}/{1}";
     }
 }
