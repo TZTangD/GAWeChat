@@ -3737,7 +3737,7 @@ var AppComponentBase = /** @class */ (function () {
 /***/ "./src/app/wechat/personal-center/member-card/member-card.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<Page [ngClass]=\"'panel'\" [title]=\"'会员卡'\" [showTitle]=\"false\" [spacing]=\"false\">\r\n    <div class=\"weui-media-box weui-media-box_small-appmsg\">\r\n        <div class=\"weui-cells\">\r\n            <a class=\"weui-cell weui-cell_access\" href=\"javascript:;\">\r\n                <div class=\"weui-cell__hd\">\r\n                    <img src=\"./assets/images/icon_nav_layout.png\" alt=\"\" style=\"width:20px;margin-right:5px;display:block\">\r\n                </div>\r\n                <div class=\"weui-cell__bd weui-cell_primary\">\r\n                    <p>会员卡</p>\r\n                </div>\r\n            </a>\r\n\r\n        </div>\r\n    </div>\r\n    <div class=\"weui-cells__title\">购买商品扫码积分</div>\r\n    <div class=\"weui-cells\">\r\n        <div class=\"weui-cell\">\r\n            <div style=\"text-align: center; width: 100%;\">\r\n                <img id=\"barcode\" />\r\n            </div>\r\n        </div>\r\n        <div class=\"weui-cell\" style=\"font-size: 14px;\" *ngIf=\"user\">\r\n            <div class=\"weui-cell__bd\">\r\n                <span style=\"vertical-align: middle\">会员名</span>\r\n            </div>\r\n            <div class=\"weui-cell__ft\">{{user.nickName}}</div>\r\n        </div>\r\n        <div class=\"weui-cell\" style=\"font-size: 14px;\" *ngIf=\"user\">\r\n            <div class=\"weui-cell__bd\">\r\n                <span style=\"vertical-align: middle\">会员类型</span>\r\n            </div>\r\n            <div class=\"weui-cell__ft\">{{user.userTypeName}}</div>\r\n        </div>\r\n    </div>\r\n</Page>"
+module.exports = "<Page [ngClass]=\"'panel'\" [title]=\"'会员卡'\" [showTitle]=\"false\" [spacing]=\"false\">\r\n    <div class=\"weui-media-box weui-media-box_small-appmsg\">\r\n        <div class=\"weui-cells\">\r\n            <div class=\"weui-cell weui-cell_access\" >\r\n                <div class=\"weui-cell__hd\">\r\n                    <img src=\"./assets/images/icon_nav_layout.png\" alt=\"\" style=\"width:20px;margin-right:5px;display:block\">\r\n                </div>\r\n                <div class=\"weui-cell__bd weui-cell_primary\">\r\n                    <p>会员卡</p>\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n    <div class=\"weui-cells__title\">购买商品扫码积分</div>\r\n    <div class=\"weui-cells\">\r\n        <div class=\"weui-cell\">\r\n            <div style=\"text-align: center; width: 100%;\">\r\n                <img id=\"barcode\" />\r\n            </div>\r\n        </div>\r\n        <div class=\"weui-cell\" style=\"font-size: 14px;\" *ngIf=\"user\">\r\n            <div class=\"weui-cell__bd\">\r\n                <span style=\"vertical-align: middle\">会员名</span>\r\n            </div>\r\n            <div class=\"weui-cell__ft\">{{user.nickName}}</div>\r\n        </div>\r\n        <div class=\"weui-cell\" style=\"font-size: 14px;\" *ngIf=\"user\">\r\n            <div class=\"weui-cell__bd\">\r\n                <span style=\"vertical-align: middle\">会员类型</span>\r\n            </div>\r\n            <div class=\"weui-cell__ft\">{{user.userTypeName}}</div>\r\n        </div>\r\n    </div>\r\n</Page>"
 
 /***/ }),
 
@@ -3850,12 +3850,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__personal_bind_staff_bind_staff_component__ = __webpack_require__("./src/app/wechat/personal-center/personal/bind-staff/bind-staff.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__shop_wait_audit_wait_audit_component__ = __webpack_require__("./src/app/wechat/personal-center/shop/wait-audit/wait-audit.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__shop_shop_add_shop_add_component__ = __webpack_require__("./src/app/wechat/personal-center/shop/shop-add/shop-add.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__scan_scan_component__ = __webpack_require__("./src/app/wechat/personal-center/scan/scan.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -3877,7 +3879,8 @@ var COMPONENTS = [__WEBPACK_IMPORTED_MODULE_3__personal_personal_component__["a"
     __WEBPACK_IMPORTED_MODULE_9__shop_shop_component__["a" /* ShopComponent */],
     __WEBPACK_IMPORTED_MODULE_10__personal_bind_staff_bind_staff_component__["a" /* BindStaffComponent */],
     __WEBPACK_IMPORTED_MODULE_11__shop_wait_audit_wait_audit_component__["a" /* WaitAuditComponent */],
-    __WEBPACK_IMPORTED_MODULE_12__shop_shop_add_shop_add_component__["a" /* ShopAddComponent */]];
+    __WEBPACK_IMPORTED_MODULE_12__shop_shop_add_shop_add_component__["a" /* ShopAddComponent */],
+    __WEBPACK_IMPORTED_MODULE_13__scan_scan_component__["a" /* ScanComponent */]];
 var routes = [
     { path: '', redirectTo: 'personal' },
     { path: 'personal', component: __WEBPACK_IMPORTED_MODULE_3__personal_personal_component__["a" /* PersonalComponent */] },
@@ -3892,6 +3895,8 @@ var routes = [
     { path: 'bind-staff', component: __WEBPACK_IMPORTED_MODULE_10__personal_bind_staff_bind_staff_component__["a" /* BindStaffComponent */] },
     { path: 'wait-audit', component: __WEBPACK_IMPORTED_MODULE_11__shop_wait_audit_wait_audit_component__["a" /* WaitAuditComponent */] },
     { path: 'shop-add', component: __WEBPACK_IMPORTED_MODULE_12__shop_shop_add_shop_add_component__["a" /* ShopAddComponent */] },
+    { path: 'scan', component: __WEBPACK_IMPORTED_MODULE_13__scan_scan_component__["a" /* ScanComponent */] },
+    { path: 'scan/:openId/:tenantId', component: __WEBPACK_IMPORTED_MODULE_13__scan_scan_component__["a" /* ScanComponent */] },
 ];
 // endregion
 var PersonalCenterModule = /** @class */ (function () {
@@ -3918,7 +3923,7 @@ var PersonalCenterModule = /** @class */ (function () {
 /***/ "./src/app/wechat/personal-center/personal/bind-member/bind-member.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<Page [ngClass]=\"'input'\" [title]=\"'手机号绑定'\" [subTitle]=\"'绑定手机号立即成为会员'\" [showTitle]=\"false\" [showBack]=\"true\" [backUrl]=\"['/center/personal']\" [spacing]=\"false\">\r\n    <form #f=\"ngForm\" (ngSubmit)=\"onSave()\">\r\n        <div class=\"weui-cells__title\">更换或绑定手机号，绑定手机号可购买商品扫码积分</div>\r\n        <div class=\"weui-cells weui-cells_form\">\r\n            <div class=\"weui-cell weui-cell_warn\">\r\n                <div class=\"weui-cell__hd\">\r\n                    <label class=\"weui-label\">手机号</label>\r\n                </div>\r\n                <div class=\"weui-cell__bd\">\r\n                    <input class=\"weui-input\" type=\"tel\" [(ngModel)]=\"res.phone\" name=\"phone\" placeholder=\"请输入手机号\" weui-input=\"mobile\" weui-required>\r\n                </div>\r\n            </div>\r\n        </div>\r\n        <div class=\"weui-btn-area\">\r\n            <button class=\"weui-btn weui-btn_primary\" [disabled]=\"!f.form.valid || !f.form.dirty\" [ngClass]=\"{'weui-btn_disabled': !f.form.valid || !f.form.dirty}\">绑定</button>\r\n        </div>\r\n    </form>\r\n    <!--将对话框组件放在底部-->\r\n    <weui-toptips #toptips></weui-toptips>\r\n    <weui-toast #loading [type]=\"'loading'\" [text]=\"'提交中...'\"></weui-toast>\r\n</Page>"
+module.exports = "<Page [ngClass]=\"'input'\" [title]=\"'手机号绑定'\" [subTitle]=\"'绑定手机号立即成为会员'\" [showTitle]=\"false\" [spacing]=\"false\">\r\n    <div class=\"weui-media-box weui-media-box_small-appmsg\">\r\n        <div class=\"weui-cells\">\r\n            <div class=\"weui-cell weui-cell_access\" >\r\n                <div class=\"weui-cell__hd\">\r\n                    <img src=\"./assets/images/shop/PDA-o.png\" alt=\"\" style=\"width:25px;margin-right:5px;display:block\">\r\n                </div>\r\n                <div class=\"weui-cell__bd weui-cell_primary\">\r\n                    <p>手机号绑定</p>\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n    <form #f=\"ngForm\" (ngSubmit)=\"onSave()\">\r\n        <div class=\"weui-cells__title\">更换或绑定手机号，绑定手机号可购买商品扫码积分</div>\r\n        <div class=\"weui-cells weui-cells_form\">\r\n            <div class=\"weui-cell weui-cell_warn\">\r\n                <div class=\"weui-cell__hd\">\r\n                    <label class=\"weui-label\">手机号</label>\r\n                </div>\r\n                <div class=\"weui-cell__bd\">\r\n                    <input class=\"weui-input\" type=\"tel\" [(ngModel)]=\"res.phone\" name=\"phone\" placeholder=\"请输入手机号\" weui-input=\"mobile\" weui-required>\r\n                </div>\r\n            </div>\r\n        </div>\r\n        <div class=\"weui-btn-area\">\r\n            <button class=\"weui-btn weui-btn_primary\" [disabled]=\"!f.form.valid || !f.form.dirty\" [ngClass]=\"{'weui-btn_disabled': !f.form.valid || !f.form.dirty}\">绑定</button>\r\n        </div>\r\n    </form>\r\n    <!--将对话框组件放在底部-->\r\n    <weui-toptips #toptips></weui-toptips>\r\n    <weui-toast #loading [type]=\"'loading'\" [text]=\"'提交中...'\"></weui-toast>\r\n</Page>"
 
 /***/ }),
 
@@ -4318,6 +4323,163 @@ var PersonalComponent = /** @class */ (function (_super) {
 
 /***/ }),
 
+/***/ "./src/app/wechat/personal-center/scan/scan.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<Page [ngClass]=\"'Scan'\" [title]=\"'扫码积分'\" [showTitle]=\"false\" [spacing]=\"false\">\r\n    <div class=\"weui-media-box weui-media-box_small-appmsg\">\r\n        <div class=\"weui-cells\">\r\n            <div class=\"weui-cell weui-cell_access\">\r\n                <div class=\"weui-cell__hd\">\r\n                    <img src=\"./assets/images/scan/shoppingbag-o.png\" alt=\"\" style=\"width:25px;margin-right:5px;display:block\">\r\n                </div>\r\n                <div class=\"weui-cell__bd weui-cell_primary\" style=\"font-size: 17px;\">\r\n                    <p>扫码积分</p>\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n    <div class=\"weui-cells__title\">店铺信息</div>\r\n    <div class=\"weui-cells\" *ngIf=\"shop\">\r\n        <div class=\"weui-cell\">\r\n            <div class=\"weui-cell__bd\">\r\n                <p>店铺名称</p>\r\n            </div>\r\n            <div class=\"weui-cell__ft\">{{shop.name}}</div>\r\n        </div>\r\n        <div class=\"weui-cell\">\r\n            <div class=\"weui-cell__bd\">\r\n                <p>店铺地址</p>\r\n            </div>\r\n            <div class=\"weui-cell__ft\">{{shop.address}}</div>\r\n        </div>\r\n    </div>\r\n\r\n    <div class=\"weui-cells__title\">会员卡扫一扫</div>\r\n    <div class=\"weui-cells\">\r\n        <div class=\"weui-cell\" >\r\n            <div class=\"weui-cell__hd\">\r\n                <label class=\"weui-label\">会员卡</label>\r\n            </div>\r\n            <div class=\"weui-cell__bd\">\r\n                <input class=\"weui-input\"  type=\"text\" [(ngModel)]=\"cardNum\" name=\"cardNum\" placeholder=\"扫一扫会员卡\" >\r\n            </div>\r\n            <a class=\"weui-cell__ft weui-cell_access\" (click)=\"scanCard()\" >\r\n                <img class=\"weui-icon-h18\" src=\"./assets/images/scan/scan-o-2.png\" alt=\"\">\r\n            </a>\r\n        </div>\r\n        <div class=\"weui-cell\" >\r\n            <div class=\"weui-cell__bd\">\r\n                <p>会员名</p>\r\n            </div>\r\n            <div class=\"weui-cell__ft\">Donald</div>\r\n        </div>\r\n        <div class=\"weui-cell\" >\r\n            <div class=\"weui-cell__bd\">\r\n                <p>手机号</p>\r\n            </div>\r\n            <div class=\"weui-cell__ft\">138****4084</div>\r\n        </div>\r\n    </div>\r\n    <div class=\"weui-cells__title\">商品扫一扫</div>\r\n    <div class=\"weui-cells\">\r\n        <div class=\"weui-cell\" >\r\n            <div class=\"weui-cell__hd\">\r\n                <label for=\"\" class=\"weui-label\">商品码</label>\r\n            </div>\r\n            <div class=\"weui-cell__bd\">\r\n                <input class=\"weui-input\" type=\"text\" [(ngModel)]=\"goodsBarCode\" name=\"goodsBarCode\" placeholder=\"扫一扫商品包码或条码\" >\r\n            </div>\r\n            <a class=\"weui-cell__ft weui-cell_access\" (click)=\"scanGoodsBarCode()\" >\r\n                <img class=\"weui-icon-h18\" src=\"./assets/images/scan/scan-o-2.png\" alt=\"\">\r\n            </a>\r\n        </div>\r\n    </div>\r\n    <div class=\"weui-cells__title\">购买商品列表</div>\r\n    <div class=\"weui-cells\">\r\n        <div class=\"weui-cell\" >\r\n            <div class=\"weui-cell__bd\">\r\n                <p>宽窄五粮浓香</p>\r\n            </div>\r\n            <div class=\"weui-cell__ft\">\r\n                <weui-stepper [(ngModel)]=\"num\" [min]=\"1\" name=\"num\" [max]=\"10\"></weui-stepper>\r\n            </div>\r\n        </div>\r\n        <div class=\"weui-cell\" >\r\n            <div class=\"weui-cell__bd\">\r\n                <p>宽窄如意</p>\r\n            </div>\r\n            <div class=\"weui-cell__ft\">\r\n                <weui-stepper [(ngModel)]=\"num1\" name=\"num1\" [min]=\"-10\" [max]=\"10\"></weui-stepper>\r\n            </div>\r\n        </div>\r\n    </div>\r\n    <div class=\"weui-btn-area\">\r\n        <button class=\"weui-btn weui-btn_primary\" [disabled]=\"!cardNum || !goodsBarCode\" [ngClass]=\"{'weui-btn_disabled': !cardNum || !goodsBarCode}\">确定兑换</button>\r\n    </div>\r\n</Page>"
+
+/***/ }),
+
+/***/ "./src/app/wechat/personal-center/scan/scan.component.scss":
+/***/ (function(module, exports) {
+
+module.exports = ".Scan .weui-cell {\n  font-size: 14px; }\n\n.weui-icon-h18 {\n  height: 32px; }\n"
+
+/***/ }),
+
+/***/ "./src/app/wechat/personal-center/scan/scan.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ScanComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_add_observable_timer__ = __webpack_require__("./node_modules/rxjs/_esm5/add/observable/timer.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_app_component_base__ = __webpack_require__("./src/app/wechat/components/app-component-base.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_router__ = __webpack_require__("./node_modules/@angular/router/esm5/router.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_model__ = __webpack_require__("./src/app/services/model/index.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services__ = __webpack_require__("./src/app/services/index.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_ngx_weui_jweixin__ = __webpack_require__("./components/jweixin/index.ts");
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+
+var ScanComponent = /** @class */ (function (_super) {
+    __extends(ScanComponent, _super);
+    function ScanComponent(injector, shopService, router, wxService) {
+        var _this = _super.call(this, injector) || this;
+        _this.shopService = shopService;
+        _this.router = router;
+        _this.wxService = wxService;
+        _this.num = 1;
+        _this.num1 = 1;
+        return _this;
+    }
+    ScanComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.wxService.get().then(function (res) {
+            if (!res) {
+                console.warn('jweixin.js 加载失败');
+                return;
+            }
+            //alert(location.href.split('#')[0])
+            //alert(encodeURIComponent(location.href.split('#')[0]));
+            var url = encodeURIComponent(location.href.split('#')[0]);
+            _this.settingsService.getJsApiConfig(url).subscribe(function (result) {
+                if (result) {
+                    result.jsApiList = ['scanQRCode']; //指定调用的接口名
+                    //console.log(result.toJSON());
+                    // 1、通过config接口注入权限验证配置
+                    wx.config(result.toJSON());
+                    // 2、通过ready接口处理成功验证
+                    wx.ready(function () {
+                        // 注册各种onMenuShareTimeline & onMenuShareAppMessage
+                    });
+                    // 2、通过error接口处理失败验证
+                    wx.error(function () {
+                    });
+                }
+            });
+        });
+        this.settingsService.getUser().subscribe(function (result) {
+            _this.user = result;
+            if (_this.user) {
+                //console.table(this.user);
+                if (_this.user.userType != __WEBPACK_IMPORTED_MODULE_4__services_model__["e" /* UserType */].Retailer) {
+                    _this.router.navigate(['/center/bind-retailer']);
+                }
+                else {
+                    if (!_this.user.isShopkeeper && _this.user.status == 0) {
+                        _this.router.navigate(['/center/wait-audit']);
+                    }
+                    else {
+                        _this.shopService.GetShopByOpenId(_this.WUserParams)
+                            .subscribe(function (result) {
+                            _this.shop = result;
+                            if (!_this.shop) {
+                                _this.router.navigate(['/center/shop-add']);
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    };
+    ScanComponent.prototype.scanCard = function () {
+        //console.log('log scanCard start');
+        var _this = this;
+        wx.scanQRCode({
+            needResult: 1,
+            //scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+            scanType: ['barCode'],
+            success: (function (res) {
+                _this.cardNum = res.resultStr;
+            })
+        });
+        //console.log('log scanCard end');
+    };
+    ScanComponent.prototype.scanGoodsBarCode = function () {
+        var _this = this;
+        wx.scanQRCode({
+            needResult: 1,
+            scanType: ['barCode'],
+            success: (function (res) {
+                _this.goodsBarCode = res.resultStr;
+            })
+        });
+    };
+    ScanComponent.prototype.onSave = function () {
+    };
+    ScanComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'wechat-scan',
+            template: __webpack_require__("./src/app/wechat/personal-center/scan/scan.component.html"),
+            styles: [__webpack_require__("./src/app/wechat/personal-center/scan/scan.component.scss")],
+            encapsulation: __WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewEncapsulation"].None
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injector"],
+            __WEBPACK_IMPORTED_MODULE_5__services__["c" /* ShopService */],
+            __WEBPACK_IMPORTED_MODULE_3__angular_router__["d" /* Router */],
+            __WEBPACK_IMPORTED_MODULE_6_ngx_weui_jweixin__["a" /* JWeiXinService */]])
+    ], ScanComponent);
+    return ScanComponent;
+}(__WEBPACK_IMPORTED_MODULE_2__components_app_component_base__["a" /* AppComponentBase */]));
+
+
+
+/***/ }),
+
 /***/ "./src/app/wechat/personal-center/shop/shop-add/shop-add.component.html":
 /***/ (function(module, exports) {
 
@@ -4560,19 +4722,19 @@ var ShopComponent = /** @class */ (function (_super) {
             _this.user = result;
             if (_this.user) {
                 //console.table(this.user);
-                if (_this.user.userType != __WEBPACK_IMPORTED_MODULE_3__services_model__["d" /* UserType */].Retailer) {
-                    _this.router.navigate(["/center/bind-retailer"]);
+                if (_this.user.userType != __WEBPACK_IMPORTED_MODULE_3__services_model__["e" /* UserType */].Retailer) {
+                    _this.router.navigate(['/center/bind-retailer']);
                 }
                 else {
                     if (!_this.user.isShopkeeper && _this.user.status == 0) {
-                        _this.router.navigate(["/center/wait-audit"]);
+                        _this.router.navigate(['/center/wait-audit']);
                     }
                     else {
                         _this.shopService.GetShopByOpenId(_this.WUserParams)
                             .subscribe(function (result) {
                             _this.shop = result;
                             if (!_this.shop) {
-                                _this.router.navigate(["/center/shop-add"]);
+                                _this.router.navigate(['/center/shop-add']);
                             }
                         });
                     }
@@ -4624,7 +4786,7 @@ var ShopComponent = /** @class */ (function (_super) {
             }
             this.shopService.SaveShopProducts(params).subscribe(function (result) {
                 if (result && result.code == 0) {
-                    _this.shopProducts = __WEBPACK_IMPORTED_MODULE_3__services_model__["c" /* ShopProduct */].fromJSArray(result.data);
+                    _this.shopProducts = __WEBPACK_IMPORTED_MODULE_3__services_model__["d" /* ShopProduct */].fromJSArray(result.data);
                     _this.srv['success']('保存成功');
                     _this.productPopup.close();
                 }

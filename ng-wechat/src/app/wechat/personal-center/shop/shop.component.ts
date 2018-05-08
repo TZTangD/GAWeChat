@@ -40,16 +40,16 @@ export class ShopComponent extends AppComponentBase implements OnInit {
             if (this.user) {
                 //console.table(this.user);
                 if (this.user.userType != UserType.Retailer) { //不是零售客户需先绑定
-                    this.router.navigate(["/center/bind-retailer"]);
+                    this.router.navigate(['/center/bind-retailer']);
                 } else {
                     if (!this.user.isShopkeeper && this.user.status == 0) {//不是店主 且 未审核
-                        this.router.navigate(["/center/wait-audit"]);
+                        this.router.navigate(['/center/wait-audit']);
                     } else {
                         this.shopService.GetShopByOpenId(this.WUserParams)
                             .subscribe(result => {
                                 this.shop = result;
-                                if (!this.shop) {//如果没有店铺 需要新增
-                                    this.router.navigate(["/center/shop-add"]);
+                                if (!this.shop) {//如果没有店铺 需要新增 
+                                    this.router.navigate(['/center/shop-add']);
                                 }
                             });
                     }
@@ -59,7 +59,7 @@ export class ShopComponent extends AppComponentBase implements OnInit {
     }
 
     goEditShop() {
-        this.router.navigate(['/center/shop-add', { id: '1'}]);
+        this.router.navigate(['/center/shop-add', { id: '1' }]);
         //this.router.navigateByUrl('/center/shop-add');
     }
 

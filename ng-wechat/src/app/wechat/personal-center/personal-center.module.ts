@@ -41,6 +41,7 @@ const routes: Routes = [
     { path: 'wait-audit', component: WaitAuditComponent },
     { path: 'shop-add', component: ShopAddComponent },
     { path: 'scan', component: ScanComponent },
+    { path: 'scan/:openId/:tenantId', component: ScanComponent },
 ];
 // endregion
 

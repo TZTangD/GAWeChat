@@ -2446,7 +2446,7 @@ var InfiniteLoaderModule = /** @class */ (function () {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__jweixin_service__ = __webpack_require__("./components/jweixin/jweixin.service.ts");
-/* unused harmony reexport JWeiXinService */
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__jweixin_service__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__jweixin_module__ = __webpack_require__("./components/jweixin/jweixin.module.ts");
 /* unused harmony reexport JWeiXinModule */
 
@@ -10084,8 +10084,8 @@ var LayoutModule = /** @class */ (function () {
 var AppConsts = /** @class */ (function () {
     function AppConsts() {
     }
-    //static remoteServiceBaseUrl: string = "http://ga.intcov.com";
-    AppConsts.remoteServiceBaseUrl = "http://localhost:21021";
+    //static remoteServiceBaseUrl: string = 'http://ga.intcov.com';
+    AppConsts.remoteServiceBaseUrl = 'http://localhost:21021';
     return AppConsts;
 }());
 
@@ -10105,9 +10105,10 @@ var AppConsts = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_toPromise__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__personal_center_wechat_user_service__ = __webpack_require__("./src/app/services/personal-center/wechat-user.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__AppConsts__ = __webpack_require__("./src/app/services/AppConsts.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__model__ = __webpack_require__("./src/app/services/model/index.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_rxjs_Observable__ = __webpack_require__("./node_modules/rxjs/_esm5/Observable.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__httpclient__ = __webpack_require__("./src/app/services/httpclient.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__AppConsts__ = __webpack_require__("./src/app/services/AppConsts.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__model__ = __webpack_require__("./src/app/services/model/index.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_rxjs_Observable__ = __webpack_require__("./node_modules/rxjs/_esm5/Observable.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -10126,9 +10127,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var SettingsService = /** @class */ (function () {
-    function SettingsService(wechatUserService) {
+    function SettingsService(wechatUserService, httpClient) {
         this.wechatUserService = wechatUserService;
+        this.httpClient = httpClient;
     }
     SettingsService.prototype.setUserId = function (oid, tid) {
         if (tid == '0') {
@@ -10138,16 +10141,16 @@ var SettingsService = /** @class */ (function () {
         this.tenantId = tid;
     };
     SettingsService.prototype.setUser = function (val) {
-        this.user = __WEBPACK_IMPORTED_MODULE_7__model__["e" /* WechatUser */].fromJS(val);
+        this.user = __WEBPACK_IMPORTED_MODULE_8__model__["f" /* WechatUser */].fromJS(val);
         if (this.user.headImgUrl.includes('timg-4.jpeg')) {
-            this.user.headImgUrl = __WEBPACK_IMPORTED_MODULE_6__AppConsts__["a" /* AppConsts */].remoteServiceBaseUrl + this.user.headImgUrl;
+            this.user.headImgUrl = __WEBPACK_IMPORTED_MODULE_7__AppConsts__["a" /* AppConsts */].remoteServiceBaseUrl + this.user.headImgUrl;
         }
     };
     SettingsService.prototype.getUser = function () {
         var _this = this;
         if (this.user) {
             //return this.user;
-            return __WEBPACK_IMPORTED_MODULE_8_rxjs_Observable__["a" /* Observable */].of(this.user);
+            return __WEBPACK_IMPORTED_MODULE_9_rxjs_Observable__["a" /* Observable */].of(this.user);
         }
         if (this.openId) {
             return this.wechatUserService.GetWeChatUserAsync(this.openId, this.tenantId).map(function (data) {
@@ -10155,11 +10158,29 @@ var SettingsService = /** @class */ (function () {
                 return _this.user;
             });
         }
-        return __WEBPACK_IMPORTED_MODULE_8_rxjs_Observable__["a" /* Observable */].of(null);
+        return __WEBPACK_IMPORTED_MODULE_9_rxjs_Observable__["a" /* Observable */].of(null);
+    };
+    SettingsService.prototype.getJsApiConfig = function (url) {
+        var _this = this;
+        return this.httpClient.get('/GAWX/GetJsApiConfig', { url: url }).map(function (ret) {
+            if (!ret.success) {
+                console.error('jsapi 获取失败');
+                return null;
+            }
+            _this.jsApiConfig = __WEBPACK_IMPORTED_MODULE_8__model__["b" /* JsApiConfig */].fromJS({
+                debug: true,
+                appId: ret.result.appId,
+                timestamp: parseInt(ret.result.timestamp),
+                nonceStr: ret.result.nonceStr,
+                signature: ret.result.signature,
+                jsApiList: [] // 必填，需要使用的JS接口列表
+            });
+            return _this.jsApiConfig;
+        });
     };
     SettingsService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_4__angular_core__["Injectable"])(),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_5__personal_center_wechat_user_service__["a" /* WechatUserService */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_5__personal_center_wechat_user_service__["a" /* WechatUserService */], __WEBPACK_IMPORTED_MODULE_6__httpclient__["a" /* HttpClient */]])
     ], SettingsService);
     return SettingsService;
 }());
@@ -10408,16 +10429,71 @@ var BaseEntity = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ientity__ = __webpack_require__("./src/app/services/model/ientity.ts");
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__wechat_user__ = __webpack_require__("./src/app/services/model/wechat-user.ts");
-/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_2__wechat_user__["a"]; });
-/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "e", function() { return __WEBPACK_IMPORTED_MODULE_2__wechat_user__["b"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "e", function() { return __WEBPACK_IMPORTED_MODULE_2__wechat_user__["a"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "f", function() { return __WEBPACK_IMPORTED_MODULE_2__wechat_user__["b"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shop__ = __webpack_require__("./src/app/services/model/shop.ts");
-/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_3__shop__["a"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_3__shop__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__shop_product__ = __webpack_require__("./src/app/services/model/shop-product.ts");
-/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "c", function() { return __WEBPACK_IMPORTED_MODULE_4__shop_product__["a"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "d", function() { return __WEBPACK_IMPORTED_MODULE_4__shop_product__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__js_api_config__ = __webpack_require__("./src/app/services/model/js.api.config.ts");
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_5__js_api_config__["a"]; });
 
 
 
 
+
+
+
+
+/***/ }),
+
+/***/ "./src/app/services/model/js.api.config.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return JsApiConfig; });
+var JsApiConfig = /** @class */ (function () {
+    function JsApiConfig(data) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    this[property] = data[property];
+            }
+        }
+    }
+    JsApiConfig.prototype.init = function (data) {
+        if (data) {
+            this.debug = data["debug"];
+            this.appId = data["appId"];
+            this.timestamp = data["timestamp"];
+            this.nonceStr = data["nonceStr"];
+            this.signature = data["signature"];
+            this.jsApiList = data["jsApiList"];
+        }
+    };
+    JsApiConfig.fromJS = function (data) {
+        var result = new JsApiConfig();
+        result.init(data);
+        return result;
+    };
+    JsApiConfig.prototype.toJSON = function (data) {
+        data = typeof data === 'object' ? data : {};
+        data["debug"] = this.debug;
+        data["appId"] = this.appId;
+        data["timestamp"] = this.timestamp;
+        data["nonceStr"] = this.nonceStr;
+        data["signature"] = this.signature;
+        data["jsApiList"] = this.jsApiList;
+        return data;
+    };
+    JsApiConfig.prototype.clone = function () {
+        var json = this.toJSON();
+        var result = new JsApiConfig();
+        result.init(json);
+        return result;
+    };
+    return JsApiConfig;
+}());
 
 
 
@@ -10704,7 +10780,7 @@ var ShopService = /** @class */ (function () {
     ShopService.prototype.GetShopByOpenId = function (params) {
         return this.http.get('/api/services/app/Shop/GetShopByOpenId', params).map(function (data) {
             if (data.result) {
-                var rel = __WEBPACK_IMPORTED_MODULE_9__model_index__["b" /* Shop */].fromJS(data.result);
+                var rel = __WEBPACK_IMPORTED_MODULE_9__model_index__["c" /* Shop */].fromJS(data.result);
                 rel.evaluationArry = rel.evaluation.split(',');
                 return rel;
             }
@@ -10716,7 +10792,7 @@ var ShopService = /** @class */ (function () {
     ShopService.prototype.GetShopProductsByShopId = function (params) {
         return this.http.get('/api/services/app/ShopProduct/GetShopProductsByShopId', params).map(function (data) {
             if (data.result) {
-                var rel = __WEBPACK_IMPORTED_MODULE_9__model_index__["c" /* ShopProduct */].fromJSArray(data.result);
+                var rel = __WEBPACK_IMPORTED_MODULE_9__model_index__["d" /* ShopProduct */].fromJSArray(data.result);
                 return rel;
             }
             else {
@@ -10796,7 +10872,7 @@ var WechatUserService = /** @class */ (function () {
             param.tenantId = tId;
         }
         return this.http.get('/api/services/app/WeChatUser/GetWeChatUserAsync', param).map(function (data) {
-            return __WEBPACK_IMPORTED_MODULE_9__model_index__["e" /* WechatUser */].fromJS(data.result);
+            return __WEBPACK_IMPORTED_MODULE_9__model_index__["f" /* WechatUser */].fromJS(data.result);
         });
     };
     WechatUserService.prototype.BindMemberAsync = function (params) {
@@ -10804,7 +10880,7 @@ var WechatUserService = /** @class */ (function () {
             var result = new __WEBPACK_IMPORTED_MODULE_9__model_index__["a" /* ApiResult */]();
             result.code = data.result.code;
             result.msg = data.result.msg;
-            result.data = __WEBPACK_IMPORTED_MODULE_9__model_index__["e" /* WechatUser */].fromJS(data.result.data);
+            result.data = __WEBPACK_IMPORTED_MODULE_9__model_index__["f" /* WechatUser */].fromJS(data.result.data);
             return result;
         });
     };
@@ -10813,7 +10889,7 @@ var WechatUserService = /** @class */ (function () {
             var result = new __WEBPACK_IMPORTED_MODULE_9__model_index__["a" /* ApiResult */]();
             result.code = data.result.code;
             result.msg = data.result.msg;
-            result.data = __WEBPACK_IMPORTED_MODULE_9__model_index__["e" /* WechatUser */].fromJS(data.result.data);
+            result.data = __WEBPACK_IMPORTED_MODULE_9__model_index__["f" /* WechatUser */].fromJS(data.result.data);
             return result;
         });
     };
@@ -11180,7 +11256,7 @@ var PageComponent = /** @class */ (function () {
 /***/ "./src/app/wechat/home/home.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<Page [ngClass]=\"'grid'\" [title]=\"'Grid'\" [subTitle]=\"'主页'\" [spacing]=\"false\" [ftBottom]=\"true\">\r\n\r\n    <div class=\"weui-grids\">\r\n        <a [routerLink]=\"['/activities/activity']\" class=\"weui-grid\">\r\n            <div class=\"weui-grid__icon\">\r\n                <img src=\"./assets/images/icon_tabbar.png\" alt=\"\">\r\n            </div>\r\n            <p class=\"weui-grid__label\">营销活动</p>\r\n        </a>\r\n        <a href=\"javascript:;\" class=\"weui-grid\">\r\n            <div class=\"weui-grid__icon\">\r\n                <img src=\"./assets/images/icon_tabbar.png\" alt=\"\">\r\n            </div>\r\n            <p class=\"weui-grid__label\">Grid</p>\r\n        </a>\r\n        <a href=\"javascript:;\" class=\"weui-grid\">\r\n            <div class=\"weui-grid__icon\">\r\n                <img src=\"./assets/images/icon_tabbar.png\" alt=\"\">\r\n            </div>\r\n            <p class=\"weui-grid__label\">Grid</p>\r\n        </a>\r\n        <a [routerLink]=\"['/buy/nearby-shop']\" class=\"weui-grid\">\r\n            <div class=\"weui-grid__icon\">\r\n                <img src=\"./assets/images/icon_tabbar.png\" alt=\"\">\r\n            </div>\r\n            <p class=\"weui-grid__label\">附近店铺</p>\r\n        </a>\r\n        <a href=\"javascript:;\" class=\"weui-grid\">\r\n            <div class=\"weui-grid__icon\">\r\n                <img src=\"./assets/images/icon_tabbar.png\" alt=\"\">\r\n            </div>\r\n            <p class=\"weui-grid__label\">Grid</p>\r\n        </a>\r\n        <a href=\"javascript:;\" class=\"weui-grid\">\r\n            <div class=\"weui-grid__icon\">\r\n                <img src=\"./assets/images/icon_tabbar.png\" alt=\"\">\r\n            </div>\r\n            <p class=\"weui-grid__label\">Grid</p>\r\n        </a>\r\n        <a [routerLink]=\"['/center/personal']\" class=\"weui-grid\">\r\n            <div class=\"weui-grid__icon\">\r\n                <img src=\"./assets/images/icon_tabbar.png\" alt=\"\">\r\n            </div>\r\n            <p class=\"weui-grid__label\">个人中心</p>\r\n        </a>\r\n        <a [routerLink]=\"['/center/member-card']\" class=\"weui-grid\">\r\n            <div class=\"weui-grid__icon\">\r\n                <img src=\"./assets/images/icon_tabbar.png\" alt=\"\">\r\n            </div>\r\n            <p class=\"weui-grid__label\">会员卡</p>\r\n        </a>\r\n        <a [routerLink]=\"['/center/shop']\" class=\"weui-grid\">\r\n            <div class=\"weui-grid__icon\">\r\n                <img src=\"./assets/images/icon_tabbar.png\" alt=\"\">\r\n            </div>\r\n            <p class=\"weui-grid__label\">我的店铺</p>\r\n        </a>\r\n    </div>\r\n</Page>\r\n"
+module.exports = "<Page [ngClass]=\"'grid'\" [title]=\"'Grid'\" [subTitle]=\"'主页'\" [spacing]=\"false\" [ftBottom]=\"true\">\r\n\r\n    <div class=\"weui-grids\">\r\n        <a [routerLink]=\"['/activities/activity']\" class=\"weui-grid\">\r\n            <div class=\"weui-grid__icon\">\r\n                <img src=\"./assets/images/icon_tabbar.png\" alt=\"\">\r\n            </div>\r\n            <p class=\"weui-grid__label\">营销活动</p>\r\n        </a>\r\n        <a href=\"javascript:;\" class=\"weui-grid\">\r\n            <div class=\"weui-grid__icon\">\r\n                <img src=\"./assets/images/icon_tabbar.png\" alt=\"\">\r\n            </div>\r\n            <p class=\"weui-grid__label\">Grid</p>\r\n        </a>\r\n        <a href=\"javascript:;\" class=\"weui-grid\">\r\n            <div class=\"weui-grid__icon\">\r\n                <img src=\"./assets/images/icon_tabbar.png\" alt=\"\">\r\n            </div>\r\n            <p class=\"weui-grid__label\">Grid</p>\r\n        </a>\r\n        <a [routerLink]=\"['/buy/nearby-shop']\" class=\"weui-grid\">\r\n            <div class=\"weui-grid__icon\">\r\n                <img src=\"./assets/images/icon_tabbar.png\" alt=\"\">\r\n            </div>\r\n            <p class=\"weui-grid__label\">附近店铺</p>\r\n        </a>\r\n        <a [routerLink]=\"['/center/scan']\" class=\"weui-grid\">\r\n            <div class=\"weui-grid__icon\">\r\n                <img src=\"./assets/images/icon_tabbar.png\" alt=\"\">\r\n            </div>\r\n            <p class=\"weui-grid__label\">扫码积分</p>\r\n        </a>\r\n        <a href=\"javascript:;\" class=\"weui-grid\">\r\n            <div class=\"weui-grid__icon\">\r\n                <img src=\"./assets/images/icon_tabbar.png\" alt=\"\">\r\n            </div>\r\n            <p class=\"weui-grid__label\">Grid</p>\r\n        </a>\r\n        <a [routerLink]=\"['/center/personal']\" class=\"weui-grid\">\r\n            <div class=\"weui-grid__icon\">\r\n                <img src=\"./assets/images/icon_tabbar.png\" alt=\"\">\r\n            </div>\r\n            <p class=\"weui-grid__label\">个人中心</p>\r\n        </a>\r\n        <a [routerLink]=\"['/center/member-card']\" class=\"weui-grid\">\r\n            <div class=\"weui-grid__icon\">\r\n                <img src=\"./assets/images/icon_tabbar.png\" alt=\"\">\r\n            </div>\r\n            <p class=\"weui-grid__label\">会员卡</p>\r\n        </a>\r\n        <a [routerLink]=\"['/center/shop']\" class=\"weui-grid\">\r\n            <div class=\"weui-grid__icon\">\r\n                <img src=\"./assets/images/icon_tabbar.png\" alt=\"\">\r\n            </div>\r\n            <p class=\"weui-grid__label\">我的店铺</p>\r\n        </a>\r\n    </div>\r\n</Page>\r\n"
 
 /***/ }),
 
