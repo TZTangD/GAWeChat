@@ -1,0 +1,93 @@
+<Page [ngClass]="'List'" [title]="'扫码积分'" [showTitle]="false" [spacing]="false" >
+    <div class="weui-media-box weui-media-box_small-appmsg">
+        <div class="weui-cells">
+            <div class="weui-cell weui-cell_access" >
+                <div class="weui-cell__hd">
+                    <img src="./assets/images/scan/shoppingbag-o.png" alt="" style="width:25px;margin-right:5px;display:block">
+                </div>
+                <div class="weui-cell__bd weui-cell_primary">
+                    <p>扫码积分</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="weui-cells__title">店铺信息</div>
+    <div class="weui-cells">
+        <div class="weui-cell" style="font-size: 14px;" >
+            <div class="weui-cell__bd">
+                <p>店铺名称</p>
+            </div>
+            <div class="weui-cell__ft">华阳金棕榈店</div>
+        </div>
+        <div class="weui-cell" style="font-size: 14px;" >
+            <div class="weui-cell__bd">
+                <p>店铺地址</p>
+            </div>
+            <div class="weui-cell__ft">华阳金棕榈10栋1单元2003</div>
+        </div>
+    </div>
+    <form #f="ngForm" (ngSubmit)="onSave()">
+        <div class="weui-cells__title">会员卡扫一扫</div>
+        <div class="weui-cells">
+            <div class="weui-cell" style="font-size: 14px;" >
+                <div class="weui-cell__hd"><label class="weui-label">会员卡</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" [(ngModel)]="res.card" name="card" placeholder="扫一扫会员卡"
+                        weui-input="card" >
+                </div>
+                <a class="weui-cell__ft weui-cell_access" href="#">
+                    <img class="weui-icon-h18" src="./assets/images/scan/scan-o-2.png" alt="">
+                </a>
+            </div>
+            <div class="weui-cell" style="font-size: 14px;" >
+                <div class="weui-cell__bd">
+                    <p>会员名</p>
+                </div>
+                <div class="weui-cell__ft">Donald</div>
+            </div>
+            <div class="weui-cell" style="font-size: 14px;" >
+                <div class="weui-cell__bd">
+                    <p>手机号</p>
+                </div>
+                <div class="weui-cell__ft">138****4084</div>
+            </div>
+        </div>
+        <div class="weui-cells__title">商品扫一扫</div>
+        <div class="weui-cells">
+            <div class="weui-cell" style="font-size: 14px;" >
+                <div class="weui-cell__hd"><label for="" class="weui-label">商品码</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" [(ngModel)]="res.card" name="card" placeholder="扫一扫商品包码或条码"
+                        weui-input="card" >
+                </div>
+                <a class="weui-cell__ft weui-cell_access" href="#">
+                    <img class="weui-icon-h18" src="./assets/images/scan/scan-o-2.png" alt="">
+                </a>
+            </div>
+        </div>
+        <div class="weui-cells__title">购买商品列表</div>
+        <div class="weui-cells">
+            <div class="weui-cell" style="font-size: 14px;" >
+                <div class="weui-cell__bd">
+                    <p>宽窄五粮浓香</p>
+                </div>
+                <div class="weui-cell__ft">
+                    <weui-stepper [(ngModel)]="num" [min]="1" name="num" [max]="10"></weui-stepper>
+                </div>
+            </div>
+            <div class="weui-cell" style="font-size: 14px;">
+                <div class="weui-cell__bd">
+                    <p>宽窄如意</p>
+                </div>
+                <div class="weui-cell__ft">
+                    <weui-stepper [(ngModel)]="num1" name="num1" [min]="-10" [max]="10"></weui-stepper>
+                </div>
+            </div>
+        </div>
+        <div class="weui-btn-area">
+            <button class="weui-btn weui-btn_primary"
+                [disabled]="!f.form.valid || !f.form.dirty"
+                [ngClass]="{'weui-btn_disabled': !f.form.valid || !f.form.dirty}">确定兑换</button>
+        </div>
+    </form>
+</Page>

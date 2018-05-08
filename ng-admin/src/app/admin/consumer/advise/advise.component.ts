@@ -11,7 +11,7 @@ import { Advise } from '@shared/entity/consumer';
     selector: 'advise',
     templateUrl: 'advise.component.html',
 })
-export class AdviseComponent extends AppComponentBase implements OnInit {
+export class AdviseComponent extends AppComponentBase implements OnInit{
     data: Advise[] = [];
     loading = false;
     parameters: any = { beginDate: null, endDate: null };
@@ -42,9 +42,5 @@ export class AdviseComponent extends AppComponentBase implements OnInit {
         let parray = [];
         parray.push(Parameter.fromJS({ key: 'Filter', value: this.parameters.filter }));
         return parray;
-    }
-
-    adviseDetail(advise: Advise) {
-        this._router.navigate(['admin/consumer/advise-detail', advise.id]);
     }
 }

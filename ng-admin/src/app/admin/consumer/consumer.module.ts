@@ -7,7 +7,6 @@ import { SharedModule } from "@shared/shared.module";
 import { CommoditySearchComponent } from "./commodity-search/commodity-search.component";
 import { AdviseComponent } from "./advise/advise.component";
 import { LayoutModule } from "../../layout/layout.module";
-import { AdviseDetailComponent } from "./advise/advise-detail/advise-detail.component";
 
 @NgModule({
     imports: [
@@ -20,7 +19,6 @@ import { AdviseDetailComponent } from "./advise/advise-detail/advise-detail.comp
     declarations: [
         CommoditySearchComponent,
         AdviseComponent,
-        AdviseDetailComponent,
     ],
     providers: [
         AppRouteGuard  
