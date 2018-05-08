@@ -25,5 +25,6 @@ namespace HC.WeChat.Employees.Dtos
                 return this.Position.ToString();
             }
         }
+        public string VerificationCode { get; set; }
     }
 }

@@ -4,6 +4,9 @@ import { AuthSettingServiceProxy } from '@shared/service-proxies/service-proxies
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd';
 import { AuthSetting } from '@shared/entity/wechat';
+import { WeChatGroup } from '@shared/entity/wechat/wechat-group';
+import { WeChatGroupServiceProxy, PagedResultDtoOfWeChatGroup } from '@shared/service-proxies/wechat-service';
+import { Parameter } from '@shared/service-proxies/entity';
 
 @Component({
     moduleId: module.id,
@@ -13,6 +16,7 @@ import { AuthSetting } from '@shared/entity/wechat';
 export class AuthSettingComponent extends AppComponentBase implements OnInit {
     form: FormGroup;
     authSet: AuthSetting = new AuthSetting();
+    weChatGroups: WeChatGroup[] = [];
     appTypes = [
         { text: '订阅号', value: 1 },
         { text: '认证订阅号', value: 2 },
@@ -20,8 +24,10 @@ export class AuthSettingComponent extends AppComponentBase implements OnInit {
         { text: '认证服务号', value: 4 },
 
     ]
+    search: any = {};
+    loading = false;
     constructor(injector: Injector, private fb: FormBuilder, private service: AuthSettingServiceProxy,
-        private modal: NzModalService) {
+        private modal: NzModalService, private WeChatGroupService: WeChatGroupServiceProxy) {
         super(injector);
     }
 
@@ -42,7 +48,8 @@ export class AuthSettingComponent extends AppComponentBase implements OnInit {
             // expiresIn: [null],
             // nextGettime: [null]
         });
-        // this.getAuthSetByTenantId();
+        this.getAuthSetByTenantId();
+        this.refreshData();
     }
     /**
      * 
@@ -94,4 +101,35 @@ export class AuthSettingComponent extends AppComponentBase implements OnInit {
             }
         });
     }
+//#region 分组
+
+    refreshData(reset = false, search?: boolean) {
+        if (reset) {
+            this.query.pageIndex = 1;
+            this.search = { }
+        }
+        if (search) {
+            this.query.pageIndex = 1;
+        }
+        this.loading=true ;
+        this.WeChatGroupService.getAll(this.query.skipCount(), this.query.pageSize, this.getParameter()).subscribe((result: PagedResultDtoOfWeChatGroup) => {
+            this.loading=false;
+            this.weChatGroups = result.items;
+            this.query.total = result.totalCount;
+        });
+    }
+    getParameter(): Parameter[] {
+        var arry = [];
+        arry.push(Parameter.fromJS({ key: 'name', value: this.search.name }));
+        // arry.push(Parameter.fromJS({ key: 'Position', value: this.search.position }));
+        return arry;
+    }
+
+    editMessage(){
+        
+    }
+    createWeChatGroup(){
+
+    }
+    //#endregion
 }
