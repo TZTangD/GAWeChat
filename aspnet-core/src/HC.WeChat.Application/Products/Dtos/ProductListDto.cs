@@ -45,4 +45,21 @@ namespace HC.WeChat.Products.Dtos
         /// </summary>
         public List<ProductListDto> SpecialProducts { get; set; }
     }
+
+    /// <summary>
+    /// 购买商品Dto
+    /// </summary>
+    [AutoMapFrom(typeof(Product))]
+    public class ShopProductDto : EntityDto<Guid>
+    {
+        public string Specification { get; set; }
+
+        public decimal? Price { get; set; }
+
+        public string PackageCode { get; set; }
+
+        public string BarCode { get; set; }
+
+        public int Num { get; set; }
+    }
 }

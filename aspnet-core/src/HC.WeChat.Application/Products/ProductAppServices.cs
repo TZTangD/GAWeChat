@@ -51,14 +51,14 @@ namespace HC.WeChat.Products
         {
 
             var query = _productRepository.GetAll()
-                .WhereIf(!string.IsNullOrEmpty(input.Name),p=>p.Specification.Contains(input.Name))
-                .WhereIf(input.Type.HasValue,p=>p.Type==input.Type)
-                .WhereIf(input.IsRare.HasValue,p=>p.IsRare==input.IsRare);
+                .WhereIf(!string.IsNullOrEmpty(input.Name), p => p.Specification.Contains(input.Name))
+                .WhereIf(input.Type.HasValue, p => p.Type == input.Type)
+                .WhereIf(input.IsRare.HasValue, p => p.IsRare == input.IsRare);
             //TODO:根据传入的参数添加过滤条件
             var productCount = await query.CountAsync();
 
             var products = await query
-                .OrderBy(p=>p.Specification)
+                .OrderBy(p => p.Specification)
                 .ThenBy(input.Sorting)
                 .PageBy(input)
                 .ToListAsync();
@@ -196,7 +196,7 @@ namespace HC.WeChat.Products
         /// <returns></returns>
         public async Task<ProductListDto> GetProductByIdDtoAsync(EntityDto<Guid> input)
         {
-            var entity = await _productRepository.GetAll().Where(p=>p.Id==input.Id).FirstOrDefaultAsync();
+            var entity = await _productRepository.GetAll().Where(p => p.Id == input.Id).FirstOrDefaultAsync();
             return entity.MapTo<ProductListDto>();
         }
 
@@ -232,6 +232,33 @@ namespace HC.WeChat.Products
                 data.CigaretteProducts = (await query.Where(q => q.Type == WechatEnums.ProductTypeEnum.卷烟类).OrderBy(q => q.Specification).ToListAsync()).MapTo<List<ProductListDto>>();
                 data.SpecialProducts = (await query.Where(q => q.Type == WechatEnums.ProductTypeEnum.特产类).OrderBy(q => q.Specification).ToListAsync()).MapTo<List<ProductListDto>>();
                 return data;
+            }
+        }
+
+        [AbpAllowAnonymous]
+        public async Task<ShopProductDto> GetShopProductByCode(string code, int? tenantId)
+        {
+            using (CurrentUnitOfWork.SetTenantId(tenantId))
+            {
+                var query = await _productRepository.GetAll()
+                    .Where(p => p.IsAction == true && p.Type == WechatEnums.ProductTypeEnum.卷烟类)
+                    .Where(p => p.PackageCode == code || p.BarCode == code)
+                    .FirstOrDefaultAsync();
+                var shopProduct = query.MapTo<ShopProductDto>();
+                if (shopProduct != null)
+                {
+                    if (shopProduct.PackageCode == code)
+                    {
+                        shopProduct.Num = 1;
+                    }
+                    else
+                    {
+                        shopProduct.Num = 10;
+                    }
+                    return shopProduct;
+                }
+
+                return null;
             }
         }
     }

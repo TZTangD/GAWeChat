@@ -361,6 +361,17 @@ namespace HC.WeChat.WeChatUsers
                 );
 
         }
+
+        [AbpAllowAnonymous]
+        [UnitOfWork(isTransactional: false)]
+        public async Task<WeChatUserListDto> GetWeChatUserByMemberBarCodeAsync(string memberBarCode, int? tenantId)
+        {
+            using (CurrentUnitOfWork.SetTenantId(tenantId))
+            {
+                var entity = await _wechatuserRepository.GetAll().Where(u => u.MemberBarCode == memberBarCode).FirstOrDefaultAsync();
+                return entity.MapTo<WeChatUserListDto>();
+            }
+        }
     }
 }
 

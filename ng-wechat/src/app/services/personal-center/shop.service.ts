@@ -10,7 +10,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '../httpclient'
 import { Observable } from 'rxjs/Observable';
 import * as moment from 'moment';
-import { Shop, ApiResult, ShopProduct } from '../model/index';
+import { Shop, ApiResult, ShopProduct, ShopGoods } from '../model/index';
 
 
 @Injectable()
@@ -28,6 +28,17 @@ export class ShopService {
         if(data.result){
           let rel = Shop.fromJS(data.result);
           rel.evaluationArry = rel.evaluation.split(',');
+          return rel;
+        } else {
+          return null;
+        }
+    });
+  }
+
+  GetShopProductByCode(params: any): Observable<ShopGoods>{
+    return this.http.get('/api/services/app/Product/GetShopProductByCode', params).map(data => {
+        if(data.result){
+          let rel = ShopGoods.fromJS(data.result);
           return rel;
         } else {
           return null;
@@ -61,4 +72,6 @@ export class ShopService {
         return data.result;
     });
   }
+
+
 }
