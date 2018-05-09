@@ -232,8 +232,10 @@ namespace HC.WeChat.Web.Host.Controllers
         [RequestFormSizeLimit(valueCountLimit: 2147483647)]
         [HttpPost]
         [AbpAllowAnonymous]
-        public async Task<IActionResult> FilesPosts(IFormFile[] files, string folder)
+        //public async Task<IActionResult> FilesPosts(IFormFile[] files, string folder)
+        public async Task<IActionResult> FilesPosts(string folder, string newName)
         {
+            var files = Request.Form.Files;
             string webRootPath = _hostingEnvironment.WebRootPath;
             string contentRootPath = _hostingEnvironment.ContentRootPath;
             var saveUrl = "";
@@ -243,7 +245,11 @@ namespace HC.WeChat.Web.Host.Controllers
                 {
                     string fileExt = Path.GetExtension(formFile.FileName); //文件扩展名，不含“.”
                     long fileSize = formFile.Length; //获得文件大小，以字节为单位
-                    string fileName = Guid.NewGuid().ToString();
+                    string fileName = newName;
+                    if (string.IsNullOrEmpty(fileName))
+                    {
+                        fileName = Guid.NewGuid().ToString();
+                    }
                     string newFileName = fileName + fileExt; //新的文件名
                     var fileDire = webRootPath + string.Format("/upload/{0}/", folder);
                     if (!Directory.Exists(fileDire))
@@ -260,7 +266,7 @@ namespace HC.WeChat.Web.Host.Controllers
                     saveUrl = filePath.Substring(webRootPath.Length);
                 }
             }
-            return Ok();
+            return Ok(saveUrl);
         }
     }
 }

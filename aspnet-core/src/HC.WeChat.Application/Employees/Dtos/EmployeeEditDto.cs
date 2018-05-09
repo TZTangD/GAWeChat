@@ -65,5 +65,10 @@ namespace HC.WeChat.Employees.Dtos
         [Required]
         public bool IsAction { get; set; }
         public int? TenantId { get; set; }
+        /// <summary>
+        /// 绑定验证码
+        /// </summary>
+        [StringLength(50)]
+        public string VerificationCode { get; set; }
     }
 }

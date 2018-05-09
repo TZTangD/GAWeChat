@@ -15,6 +15,7 @@ export class Employee implements IEmployee {
     lastModifierUserId: number;
     creationTime: Date;
     creatorUserId: number;
+    verificationCode: string;
     id: string;
     activeType: string;
     activeText: string;
@@ -46,7 +47,8 @@ export class Employee implements IEmployee {
             this.lastModificationTime = data["lastModificationTime"];
             this.lastModifierUserId = data["lastModifierUserId"];
             this.positionName = data["positionName"];
-            
+            this.verificationCode = data["verificationCode"];
+
         }
     }
 
@@ -72,7 +74,8 @@ export class Employee implements IEmployee {
         data["deletionTime"] = this.deletionTime;
         data["creationTime"] = this.creationTime;
         data["creatorUserId"] = this.creatorUserId;
-        
+        data["verificationCode"] = this.verificationCode;
+
         return data;
     }
 
@@ -100,6 +103,7 @@ export interface IEmployee {
     creationTime: Date;
     creatorUserId: number;
     id: string;
+    verificationCode: string;
 }
 
 export class CreateEmployee implements ICreateImployee {
