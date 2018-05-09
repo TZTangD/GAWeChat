@@ -64,7 +64,7 @@ export class StoreDetailComponent extends AppComponentBase implements OnInit {
     evaluationShow: string;
     constructor(injector: Injector, private shopService: ShopServiceProxy, private shopEvaluationService: ShopEvaluationServiceProxy,
         private weChatService: WechatUserServiceProxy, private Acroute: ActivatedRoute, private modal: NzModalService,
-        private shopProductService: ShopProductsServiceProxy, 
+        private shopProductService: ShopProductsServiceProxy,
         private router: Router) {
         super(injector);
         this.id = this.Acroute.snapshot.params['id'];

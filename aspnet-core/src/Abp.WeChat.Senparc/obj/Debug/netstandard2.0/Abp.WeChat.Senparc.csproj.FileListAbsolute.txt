@@ -16,3 +16,12 @@ D:\mygit\HCWeChat\aspnet-core\src\Abp.WeChat.Senparc\obj\Debug\netstandard2.0\Ab
 D:\mygit\HCWeChat\aspnet-core\src\Abp.WeChat.Senparc\obj\Debug\netstandard2.0\Abp.WeChat.Senparc.dll
 D:\mygit\HCWeChat\aspnet-core\src\Abp.WeChat.Senparc\obj\Debug\netstandard2.0\Abp.WeChat.Senparc.pdb
 D:\mygit\HCWeChat\aspnet-core\src\Abp.WeChat.Senparc\obj\Debug\netstandard2.0\Abp.WeChat.Senparc.csprojResolveAssemblyReference.cache
+D:\201805\GAWeChat\aspnet-core\src\Abp.WeChat.Senparc\bin\Debug\netstandard2.0\Abp.WeChat.Senparc.deps.json
+D:\201805\GAWeChat\aspnet-core\src\Abp.WeChat.Senparc\bin\Debug\netstandard2.0\Abp.WeChat.Senparc.dll
+D:\201805\GAWeChat\aspnet-core\src\Abp.WeChat.Senparc\bin\Debug\netstandard2.0\Abp.WeChat.Senparc.pdb
+D:\201805\GAWeChat\aspnet-core\src\Abp.WeChat.Senparc\obj\Debug\netstandard2.0\Abp.WeChat.Senparc.csprojResolveAssemblyReference.cache
+D:\201805\GAWeChat\aspnet-core\src\Abp.WeChat.Senparc\obj\Debug\netstandard2.0\Abp.WeChat.Senparc.csproj.CoreCompileInputs.cache
+D:\201805\GAWeChat\aspnet-core\src\Abp.WeChat.Senparc\obj\Debug\netstandard2.0\Abp.WeChat.Senparc.AssemblyInfoInputs.cache
+D:\201805\GAWeChat\aspnet-core\src\Abp.WeChat.Senparc\obj\Debug\netstandard2.0\Abp.WeChat.Senparc.AssemblyInfo.cs
+D:\201805\GAWeChat\aspnet-core\src\Abp.WeChat.Senparc\obj\Debug\netstandard2.0\Abp.WeChat.Senparc.dll
+D:\201805\GAWeChat\aspnet-core\src\Abp.WeChat.Senparc\obj\Debug\netstandard2.0\Abp.WeChat.Senparc.pdb

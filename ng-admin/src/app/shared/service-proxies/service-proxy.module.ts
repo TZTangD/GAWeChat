@@ -13,6 +13,7 @@ import { ManuscriptServiceProxy } from '@shared/service-proxies/marketing-servic
 import { ShopServiceProxy } from '@shared/service-proxies/customer-service/shop-service';
 import { ShopEvaluationServiceProxy } from '@shared/service-proxies/customer-service/shop-evaluation-service';
 import { ShopProductsServiceProxy, ProductsServiceProxy } from '@shared/service-proxies/customer-service';
+import { IntegralServiceProxy } from '@shared/service-proxies/member';
 
 @NgModule({
     providers: [
@@ -46,6 +47,7 @@ import { ShopProductsServiceProxy, ProductsServiceProxy } from '@shared/service-
         ShopEvaluationServiceProxy,
         ShopProductsServiceProxy,
         ProductsServiceProxy,
+        IntegralServiceProxy
     ]
 })
 export class ServiceProxyModule { }

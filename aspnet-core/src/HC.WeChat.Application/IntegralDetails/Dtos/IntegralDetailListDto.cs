@@ -19,5 +19,11 @@ namespace HC.WeChat.IntegralDetails.Dtos
         public DateTime CreationTime { get; set; }
         public int? TenantId { get; set; }
         public IntegralTypeEnum? Type { get; set; }
+
+        public string WXName { get; set; }
+        public string TypeName { get; set; }
+        public string Phone { get; set; }
+        public string MemberBarCode { get; set; }
+        public string UserTypeName { get; set; }
     }
 }

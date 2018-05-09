@@ -15,7 +15,7 @@ using HC.WeChat.Products.DomainServices;
 using HC.WeChat.Products;
 using System;
 using HC.WeChat.Authorization;
-using System.Linq;
+//using System.Linq;
 
 namespace HC.WeChat.Products
 {

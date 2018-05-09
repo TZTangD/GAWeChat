@@ -9796,7 +9796,7 @@
       ]
     },
     "System.Linq.Queryable/4.3.0": {
-      "sha512": "iAyxEEZKjINanje5yt+wwBzyz9ZcIBpABL9axx69CEOdHqoliO+g98ejNb3DVnaP6UryFXmlik35mXatc5uwgg==",
+      "sha512": "In1Bmmvl/j52yPu3xgakQSI0YIckPUr870w4K5+Lak3JCCa8hl+my65lABOuKfYs4ugmZy25ScFerC4nz8+b6g==",
       "type": "package",
       "path": "system.linq.queryable/4.3.0",
       "files": [
@@ -11145,7 +11145,7 @@
       ]
     },
     "System.Runtime.Loader/4.3.0": {
-      "sha512": "2ha/v+UVp5euEVBPxEs79YkT6elWezrTGVPglsdfhY1EX8nDzLFPafAoVSEct2JikXQ110qrM3G7y2jjUASn7g==",
+      "sha512": "DHMaRn8D8YCK2GG2pw+UzNxn/OHVfaWx7OTLBD/hPegHZZgcZh3H6seWegrC4BYwsfuGrywIuT+MQs+rPqRLTQ==",
       "type": "package",
       "path": "system.runtime.loader/4.3.0",
       "files": [
@@ -12671,7 +12671,7 @@
       ]
     },
     "System.Xml.XmlSerializer/4.3.0": {
-      "sha512": "VShQJhOxgD/5M2Z1IWm1vMaSqlbjo1zdFf8H7Ahte6bTvSUhUko/gDpAVVhGgGgTDeue4QyNg1fu1Zz2GKSEuQ==",
+      "sha512": "MYoTCP7EZ98RrANESW05J5ZwskKDoN0AuZ06ZflnowE50LTpbR5yRg3tHckTVm5j/m47stuGgCrCHWePyHS70Q==",
       "type": "package",
       "path": "system.xml.xmlserializer/4.3.0",
       "files": [
@@ -12926,26 +12926,26 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\donal\\.nuget\\packages\\": {},
+    "C:\\Users\\Perha\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\mygit\\HCWeChat\\aspnet-core\\src\\HC.WeChat.Web.Host\\HC.WeChat.Web.Host.csproj",
+      "projectUniqueName": "D:\\201805\\GAWeChat\\aspnet-core\\src\\HC.WeChat.Web.Host\\HC.WeChat.Web.Host.csproj",
       "projectName": "HC.WeChat.Web.Host",
-      "projectPath": "D:\\mygit\\HCWeChat\\aspnet-core\\src\\HC.WeChat.Web.Host\\HC.WeChat.Web.Host.csproj",
-      "packagesPath": "C:\\Users\\donal\\.nuget\\packages\\",
-      "outputPath": "D:\\mygit\\HCWeChat\\aspnet-core\\src\\HC.WeChat.Web.Host\\obj\\",
+      "projectPath": "D:\\201805\\GAWeChat\\aspnet-core\\src\\HC.WeChat.Web.Host\\HC.WeChat.Web.Host.csproj",
+      "packagesPath": "C:\\Users\\Perha\\.nuget\\packages\\",
+      "outputPath": "D:\\201805\\GAWeChat\\aspnet-core\\src\\HC.WeChat.Web.Host\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\",
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "D:\\mygit\\HCWeChat\\aspnet-core\\NuGet.Config",
-        "C:\\Users\\donal\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "D:\\201805\\GAWeChat\\aspnet-core\\NuGet.Config",
+        "C:\\Users\\Perha\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.Fallback.config"
       ],
@@ -12960,8 +12960,8 @@
       "frameworks": {
         "netcoreapp2.0": {
           "projectReferences": {
-            "D:\\mygit\\HCWeChat\\aspnet-core\\src\\HC.WeChat.Web.Core\\HC.WeChat.Web.Core.csproj": {
-              "projectPath": "D:\\mygit\\HCWeChat\\aspnet-core\\src\\HC.WeChat.Web.Core\\HC.WeChat.Web.Core.csproj"
+            "D:\\201805\\GAWeChat\\aspnet-core\\src\\HC.WeChat.Web.Core\\HC.WeChat.Web.Core.csproj": {
+              "projectPath": "D:\\201805\\GAWeChat\\aspnet-core\\src\\HC.WeChat.Web.Core\\HC.WeChat.Web.Core.csproj"
             }
           }
         }
