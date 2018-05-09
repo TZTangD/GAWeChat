@@ -28,13 +28,14 @@ using HC.WeChat.Shops;
 using HC.WeChat.ShopEvaluations;
 using HC.WeChat.ShopProducts;
 using HC.WeChat.StatisticalDetails;
+using HC.WeChat.WeChatGroups;
 
 namespace HC.WeChat.EntityFrameworkCore
 {
     public class WeChatDbContext : AbpZeroDbContext<Tenant, Role, User, WeChatDbContext>
     {
         /* Define a DbSet for each entity of the application */
-        
+
         public WeChatDbContext(DbContextOptions<WeChatDbContext> options)
             : base(options)
         {
@@ -91,6 +92,8 @@ namespace HC.WeChat.EntityFrameworkCore
         public virtual DbSet<ShopProduct> ShopProducts { get; set; }
 
         public virtual DbSet<StatisticalDetail> StatisticalDetails { get; set; }
+        public virtual DbSet<WeChatGroup> WeChatGroups { get; set; }
+
 
     }
 }

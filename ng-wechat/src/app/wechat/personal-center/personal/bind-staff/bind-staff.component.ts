@@ -39,7 +39,7 @@ export class BindStaffComponent extends AppComponentBase {
             if(result.code == 0){//成功
                 this.srv['success']('绑定成功');
                 this.settingsService.setUser(result.data);
-                this.router.navigate(["/center/personal"]);
+                this.router.navigate(["/personals/personal"]);
             } else {//失败
                 this.srv['warn'](result.msg);
             }

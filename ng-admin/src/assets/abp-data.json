@@ -37,7 +37,7 @@
                         {
                             "text": "授权配置",
                             "link": "/admin/wechat/authsetting",
-                            "translate": "wechat-configs"
+                            "translate": "weichat-setting"
                         },
                         {
                             "text": "自动回复",
