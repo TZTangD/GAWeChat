@@ -21,7 +21,17 @@ namespace HC.WeChat.IntegralDetails.Dtos
         public IntegralTypeEnum? Type { get; set; }
 
         public string WXName { get; set; }
-        public string TypeName { get; set; }
+        public string TypeName
+        {
+            get
+            {
+                if (Type.HasValue)
+                {
+                    return Type.ToString();
+                }
+                return string.Empty;
+            }
+        }
         public string Phone { get; set; }
         public string MemberBarCode { get; set; }
         public string UserTypeName { get; set; }
