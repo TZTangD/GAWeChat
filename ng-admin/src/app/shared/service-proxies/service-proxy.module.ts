@@ -47,6 +47,8 @@ import { IntegralServiceProxy } from '@shared/service-proxies/member';
         ShopEvaluationServiceProxy,
         ShopProductsServiceProxy,
         ProductsServiceProxy,
-        WeChatGroupServiceProxy,        IntegralServiceProxy,    ]
+        WeChatGroupServiceProxy,
+        IntegralServiceProxy,
+    ]
 })
 export class ServiceProxyModule { }
