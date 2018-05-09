@@ -14,6 +14,7 @@ using HC.WeChat.PurchaseRecords.DomainServices;
 using HC.WeChat.PurchaseRecords;
 using System;
 using HC.WeChat.Authorization;
+using HC.WeChat.Dto;
 
 namespace HC.WeChat.PurchaseRecords
 {
@@ -183,6 +184,10 @@ namespace HC.WeChat.PurchaseRecords
             await _purchaserecordRepository.DeleteAsync(s => input.Contains(s.Id));
         }
 
+        public Task<APIResultDto> ExchangeIntegral(ExchangeIntegralDto input)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 

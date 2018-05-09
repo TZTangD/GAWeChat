@@ -70,5 +70,9 @@ namespace HC.WeChat.PurchaseRecords
         /// </summary>
         [Required]
         public virtual DateTime CreationTime { get; set; }
+        [StringLength(50)]
+        public virtual string OperatorOpenId { get; set; }
+        [StringLength(50)]
+        public virtual string OperatorName { get; set; }
     }
 }

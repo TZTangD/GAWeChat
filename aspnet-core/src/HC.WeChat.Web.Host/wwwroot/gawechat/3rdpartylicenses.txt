@@ -166,10 +166,6 @@ jsbarcode@3.9.0
 MIT
 MIT
 
-jsbarcode@3.9.0
-MIT
-MIT
-
 ngx-countdown@1.0.6
 MIT
 MIT License

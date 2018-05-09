@@ -29,11 +29,31 @@ namespace HC.WeChat.Migrations
                 {
                     table.PrimaryKey("PK_WeChatGroups", x => x.Id);
                 });
+
+            migrationBuilder.AddColumn<string>(
+             name: "OperatorOpenId",
+             table: "IntegralDetails",
+             maxLength: 50,
+             nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+             name: "OperatorName",
+             table: "IntegralDetails",
+             maxLength: 50,
+             nullable: true);
         }
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                  name: "WeChatGroups");
+
+            migrationBuilder.DropColumn(
+             name: "OperatorOpenId",
+             table: "IntegralDetails");
+
+            migrationBuilder.DropColumn(
+              name: "OperatorName",
+              table: "IntegralDetails");
         }
     }
 }

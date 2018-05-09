@@ -1651,7 +1651,11 @@ namespace HC.WeChat.Migrations
                 b.Property<string>("Desc").HasMaxLength(500);
                 b.Property<Guid?>("RefId");
                 b.Property<DateTime>("CreationTime").IsRequired();
-                b.Property<int?>("TenantId"); b.HasKey("Id");
+                b.Property<int?>("TenantId");
+                b.Property<string>("OperatorOpenId").HasMaxLength(50);
+                b.Property<string>("OperatorName").HasMaxLength(50);
+
+                b.HasKey("Id");
 
                 //b.HasIndex("TargetTenantId", "TargetUserId", "ReadState");
 

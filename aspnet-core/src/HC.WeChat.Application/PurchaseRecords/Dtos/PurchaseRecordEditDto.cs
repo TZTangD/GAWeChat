@@ -51,5 +51,11 @@ namespace HC.WeChat.PurchaseRecords.Dtos
         /// </summary>
         [Required]
         public DateTime CreationTime { get; set; }
+
+        [StringLength(50)]
+        public string OperatorOpenId { get; set; }
+
+        [StringLength(50)]
+        public string OperatorName { get; set; }
     }
 }

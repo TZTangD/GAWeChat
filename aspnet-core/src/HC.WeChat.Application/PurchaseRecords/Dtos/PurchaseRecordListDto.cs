@@ -2,6 +2,9 @@
 using Abp.Application.Services.Dto;
 using HC.WeChat.PurchaseRecords.Dtos.LTMAutoMapper;
 using HC.WeChat.PurchaseRecords;
+using HC.WeChat.Products.Dtos;
+using System.Collections.Generic;
+using Abp.AutoMapper;
 
 namespace HC.WeChat.PurchaseRecords.Dtos
 {
@@ -19,5 +22,19 @@ namespace HC.WeChat.PurchaseRecords.Dtos
         public int? Integral { get; set; }
         public string Remark { get; set; }
         public DateTime CreationTime { get; set; }
+        public string OperatorOpenId { get; set; }
+        public string OperatorName { get; set; }
+    }
+
+    [AutoMapFrom(typeof(PurchaseRecord))]
+    public class ExchangeIntegralDto
+    {
+        public List<ShopProductDto> ShopProductList { get; set; }
+        public string ShopId { get; set; }
+        public string ShopName { get; set; }
+        public string OpenId { get; set; }
+        public int? TenantId { get; set; }
+        public string OperatorOpenId { get; set; }
+        public string OperatorName { get; set; }
     }
 }
