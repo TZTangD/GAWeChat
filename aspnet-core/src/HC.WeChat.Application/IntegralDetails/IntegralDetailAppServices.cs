@@ -255,7 +255,8 @@ namespace HC.WeChat.IntegralDetails
                             Integral = i.Integral,
                             InitialIntegral = i.InitialIntegral,
                             FinalIntegral = i.FinalIntegral,
-                            TypeName = Enum.GetName(typeof(IntegralTypeEnum),i.Type),
+                            //TypeName = Enum.GetName(typeof(IntegralTypeEnum),i.Type),
+                            Type = i.Type,
                             WXName = u.NickName,
                             CreationTime = i.CreationTime,
                         };
@@ -265,6 +266,7 @@ namespace HC.WeChat.IntegralDetails
 
             var intergral = await query
                 .OrderByDescending(s => s.CreationTime)
+                .ThenBy(input.Sorting)
                 .PageBy(input)
                 .ToListAsync();
 

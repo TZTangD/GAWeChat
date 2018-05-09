@@ -30,7 +30,7 @@ export class MemberSettingComponent extends AppComponentBase implements OnInit {
             eValue: [null, [Validators.compose([Validators.maxLength(500)])]]
         });
         // this.getAuthSetByTenantId();
-        this.refreshData();
+        // this.refreshData();
     }
     getFormControl(name: string) {
         return this.form.controls[name];
