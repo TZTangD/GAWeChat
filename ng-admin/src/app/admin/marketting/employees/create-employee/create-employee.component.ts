@@ -35,7 +35,7 @@ export class CreateEmployeeComponent extends AppComponentBase implements OnInit{
      */
     ngOnInit(): void {
         this.formc = this.fb.group({
-            code: [null, Validators.compose([Validators.required, Validators.maxLength(50)])],
+            code: [null, Validators.compose([Validators.required, Validators.maxLength(50),Validators.pattern('^[0-9]*$')])],
             name: [null, Validators.compose([Validators.required, Validators.maxLength(50)])],
             position: [null, [Validators.required]],
             phone: [null, Validators.compose([Validators.pattern('^1[3|4|5|7|8|9][0-9]{9}$')])],

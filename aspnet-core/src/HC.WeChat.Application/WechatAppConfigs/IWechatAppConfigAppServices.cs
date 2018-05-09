@@ -66,7 +66,7 @@ namespace HC.WeChat.WechatAppConfigs
         /// </summary>
         /// <returns></returns>
         Task<WechatAppConfigListDto> GetTenantWechatAppConfigAsync();
-        
+
         /// <summary>
         /// 更新或删除微信配置
         /// </summary>

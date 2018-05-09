@@ -1,0 +1,79 @@
+<!-- <pro-header></pro-header> -->
+<nz-card [nzBordered]="false" nzTitle="意见反馈详细信息">
+    <nz-card [nzBordered]="false">
+        <form nz-form>
+            <div nz-row>
+                <div nz-col [nzSpan]="16">
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col [nzSm]="4">
+                            <label for="title">标题</label>
+                        </div>
+                        <div nz-form-control nz-col [nzSm]="20">
+                            {{advise.title}}
+                        </div>
+                    </div>
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col [nzSm]="4">
+                            <label for="userTypeName">用户类型</label>
+                        </div>
+                        <div nz-form-control nz-col [nzSm]="20" nzHasFeedback>
+                            {{advise.userTypeName}}
+                        </div>
+                    </div>
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col [nzSm]="4">
+                            <label for="phone">联系电话</label>
+                        </div>
+                        <div nz-form-control nz-col [nzSm]="20" nzHasFeedback>
+                            {{advise.phone}}
+                        </div>
+                    </div>
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col [nzSm]="4">
+                            <label for="creationTime">创建时间</label>
+                        </div>
+                        <div nz-form-control nz-col [nzSm]="20" nzHasFeedback>
+                            {{advise.creationTime | _date}}
+                        </div>
+                    </div>
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col [nzSm]="4">
+                            <label for="content">举报内容</label>
+                        </div>
+                        <div nz-form-control nz-col [nzSm]="20">
+                            <nz-input [nzDisabled]="true" nzType="textarea" nzRows="6" name='content' [(ngModel)]="advise.content" [nzId]="'content'"></nz-input>
+                        </div>
+                    </div>
+
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col [nzSm]="4">
+                            <label for="photoUrl">图片</label>
+                        </div>
+                        <div nz-form-control nz-col [nzSm]="20">
+                            <h4 *ngIf="advise.photoUrl" class="mb-md">点击图片可查看原图</h4>
+                            <nz-list [nzLoading]="loading" class="imgList" [nzDataSource]="photoUrls" [nzGrid]="{gutter: 24, lg: 6, md: 8, sm: 12, xs: 24 }">
+                                <ng-template #item let-item>
+                                    <nz-list-item>
+                                        <img alt="" src="{{host+item}}" (click)="handlePreview(host+item)" style="width: 98%; height: 250px;">
+                                    </nz-list-item>
+                                </ng-template>
+                            </nz-list>
+                            <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null" (nzOnCancel)="previewVisible=false">
+                                <ng-template #modalContent>
+                                    <img [src]="previewImage" [ngStyle]="{ 'width': '100%' }" />
+                                </ng-template>
+                            </nz-modal>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <footer-toolbar errorCollect>
+            <button nz-button [nzType]="'default'" (click)="Return()" [nzSize]="'large'">
+                {{l("返回")}}
+            </button>
+            <!-- <a routerLink="../admin/retail-customer" routerLinkActive="ngOnInit">Heroes</a> -->
+        </footer-toolbar>
+    </nz-card>
+</nz-card>

@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, Injector } from '@angular/core';
 import { AppComponentBase } from '@shared/app-component-base';
-import { RetailCustomer} from '@shared/service-proxies/entity';
+import { RetailCustomer } from '@shared/service-proxies/entity';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { RetailCustomerServiceProxy } from '@shared/service-proxies/customer-service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -47,6 +47,8 @@ export class RetailCustomerDetailComponent extends AppComponentBase implements O
     isConfirmLoading = false;
     //经理不可编辑
     isDisablec = true;
+
+    cardTitle = '';
     constructor(injector: Injector, private retailService: RetailCustomerServiceProxy, private ActRouter: ActivatedRoute,
         private fb: FormBuilder, private router: Router, private modal: NzModalService) {
         super(injector);
@@ -56,7 +58,7 @@ export class RetailCustomerDetailComponent extends AppComponentBase implements O
     }
     ngOnInit(): void {
         this.form = this.fb.group({
-            code: [null, Validators.compose([Validators.required, Validators.maxLength(50)])],
+            code: [null, Validators.compose([Validators.required, Validators.maxLength(50), Validators.pattern('^[0-9]*$')])],
             name: [null, Validators.compose([Validators.required, Validators.maxLength(50)])],
             businessAddress: [null, Validators.compose([Validators.maxLength(500)])],
             archivalLevel: [null, Validators.compose([Validators.maxLength(100)])],
@@ -84,9 +86,10 @@ export class RetailCustomerDetailComponent extends AppComponentBase implements O
         this.retailService.get(this.id).subscribe((result: RetailCustomer) => {
             this.retailCustomerd = result;
             if (this.retailCustomerd.id) {
-
+                this.cardTitle = '编辑零售户';
             } else {
                 this.retailCustomerd.init({ isAction: true });
+                this.cardTitle = '新增零售户';
             }
         });
     }
@@ -118,7 +121,7 @@ export class RetailCustomerDetailComponent extends AppComponentBase implements O
         }
         if (this.form.valid) {
             this.isConfirmLoading = true;
-            this.retailService.CheckCode(this.retailCustomerd.code,this.retailCustomerd.id).subscribe((isCode: boolean) => {
+            this.retailService.CheckCode(this.retailCustomerd.code, this.retailCustomerd.id).subscribe((isCode: boolean) => {
                 if (isCode) {
                     this.retailService.update(this.retailCustomerd)
                         .finally(() => { this.isConfirmLoading = false; })

@@ -1,4 +1,4 @@
-import { Component, OnInit, Injector } from '@angular/core';
+import { Component, OnInit, Injector, ViewChild } from '@angular/core';
 import { AppComponentBase } from '@shared/app-component-base';
 import { AuthSettingServiceProxy } from '@shared/service-proxies/service-proxies';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -7,6 +7,7 @@ import { AuthSetting } from '@shared/entity/wechat';
 import { WeChatGroup } from '@shared/entity/wechat/wechat-group';
 import { WeChatGroupServiceProxy, PagedResultDtoOfWeChatGroup } from '@shared/service-proxies/wechat-service';
 import { Parameter } from '@shared/service-proxies/entity';
+import { WechatGroupCreateComponent } from './wechat-group-create/wechat-group-create.component';
 
 @Component({
     moduleId: module.id,
@@ -14,6 +15,9 @@ import { Parameter } from '@shared/service-proxies/entity';
     templateUrl: 'auth-setting.component.html',
 })
 export class AuthSettingComponent extends AppComponentBase implements OnInit {
+    // @ViewChild('editMessageModal') editMessageModal: EditMessageComponent;
+    @ViewChild('createWeChatGroupModal') createWeChatGroupModal: WechatGroupCreateComponent;
+
     form: FormGroup;
     authSet: AuthSetting = new AuthSetting();
     weChatGroups: WeChatGroup[] = [];
@@ -101,19 +105,19 @@ export class AuthSettingComponent extends AppComponentBase implements OnInit {
             }
         });
     }
-//#region 分组
+    //#region 分组
 
     refreshData(reset = false, search?: boolean) {
         if (reset) {
             this.query.pageIndex = 1;
-            this.search = { }
+            this.search = {}
         }
         if (search) {
             this.query.pageIndex = 1;
         }
-        this.loading=true ;
+        this.loading = true;
         this.WeChatGroupService.getAll(this.query.skipCount(), this.query.pageSize, this.getParameter()).subscribe((result: PagedResultDtoOfWeChatGroup) => {
-            this.loading=false;
+            this.loading = false;
             this.weChatGroups = result.items;
             this.query.total = result.totalCount;
         });
@@ -125,11 +129,11 @@ export class AuthSettingComponent extends AppComponentBase implements OnInit {
         return arry;
     }
 
-    editMessage(){
-        
-    }
-    createWeChatGroup(){
+    editMessage() {
 
+    }
+    createWeChatGroup() {
+        this.createWeChatGroupModal.show();
     }
     //#endregion
 }
