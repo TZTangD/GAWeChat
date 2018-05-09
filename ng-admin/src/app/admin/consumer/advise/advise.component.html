@@ -27,15 +27,18 @@
                 </th>
                 <th nz-th>
                     <span>用户类型</span>
-                </th>      
+                </th>
                 <th nz-th>
                     <span>联系电话</span>
                 </th>
                 <th nz-th>
                     <span>举报内容</span>
-                </th>                
+                </th>
                 <th nz-th>
                     <span>提交时间</span>
+                </th>
+                <th nz-th>
+                    <span>操作</span>
                 </th>
             </tr>
         </thead>
@@ -46,6 +49,9 @@
                 <td nz-td>{{item.phone}}</td>
                 <td nz-td>{{item.content}}</td>
                 <td nz-td>{{item.creationTime | _date}}</td>
+                <td nz-td>
+                    <a (click)="adviseDetail(item)">详情</a>
+                </td>
             </tr>
         </tbody>
     </nz-table>

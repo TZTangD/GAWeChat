@@ -31,7 +31,7 @@ namespace HC.WeChat.Retailers.Dtos
         public int? TenantId { get; set; }
 
         public string LicenseKey { get; set; }
-
+        public string VerificationCode { get; set; }
         public string OrderModeName
         {
             get
@@ -58,6 +58,18 @@ namespace HC.WeChat.Retailers.Dtos
             get
             {
                 return MarketType.ToString();
+            }
+        }
+        /// <summary>
+        /// 验证码显示
+        /// </summary>
+        public string ShowVerificationCode
+        {
+            get
+            {
+                var emCode = (1 + Code.Substring(Code.Length - 6)).ToString();
+                var verCode = (int.Parse(emCode) * 15 + 15).ToString();
+                return verCode.Substring(verCode.Length - 6);
             }
         }
 

@@ -14,6 +14,7 @@
                         <nz-input formControlName="code" [(ngModel)]="employeee.code" [nzId]="'code'"></nz-input>
                         <div nz-form-explain *ngIf="getFormControl('code').dirty&&getFormControl('code').hasError('maxlength')">字符长度小于等于50</div>
                         <div nz-form-explain *ngIf="getFormControl('code').dirty&&getFormControl('code').hasError('required')">请输入员工编码</div>
+                        <div nz-form-explain *ngIf="getFormControl('code').dirty&&getFormControl('code').hasError('pattern')">请输入数字</div>
                     </div>
                 </div>
                 <div nz-form-item nz-row>

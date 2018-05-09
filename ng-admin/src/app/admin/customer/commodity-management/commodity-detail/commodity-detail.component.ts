@@ -31,9 +31,10 @@ export class CommodityDetailComponent extends AppComponentBase implements OnInit
     previewImage = '';
     previewVisible = false;
 
-    host: string;
-    photo: string;
-    actionUrl:string;
+    host = '';
+    photo = '';
+    actionUrl = '';
+    cardTitle = '';
     constructor(injector: Injector, private fb: FormBuilder, private productService: ProductsServiceProxy, private actRouter: ActivatedRoute,
         private router: Router) {
         super(injector);
@@ -53,22 +54,24 @@ export class CommodityDetailComponent extends AppComponentBase implements OnInit
         });
         this.getSingleProdct();
         this.host = AppConsts.remoteServiceBaseUrl;
-        this.actionUrl=this.host + '/WeChatFile/MarketingInfoPosts?fileName=product';
+        this.actionUrl = this.host + '/WeChatFile/MarketingInfoPosts?fileName=product';
     }
 
     getSingleProdct() {
         this.productService.get(this.id).subscribe((result: Products) => {
             this.product = result;
-           
+
             if (result.photoUrl) {
                 // this.photo = this.host + result.photoUrl;
                 this.product.showPhotoUrl = this.host + result.photoUrl;
-            } 
+            }
 
             if (!this.product.id) {
                 this.product.init({ isAction: true });
+                this.cardTitle = '新增商品';
             }
-            else{
+            else {
+                this.cardTitle = '编辑商品';
                 // this.actionUrl=this.host + '/WeChatFile/MarketingInfoPosts?fileName=product&name='+this.product.id;
             }
         });
@@ -121,7 +124,7 @@ export class CommodityDetailComponent extends AppComponentBase implements OnInit
             this.getBase64(info.file.originFileObj, (img: any) => {
                 // this.loading = false;
                 // this.photo = img;
-                this.product.showPhotoUrl=img;
+                this.product.showPhotoUrl = img;
             });
             this.product.photoUrl = info.file.response.result.imageName;
             console.log('photoUrl')
