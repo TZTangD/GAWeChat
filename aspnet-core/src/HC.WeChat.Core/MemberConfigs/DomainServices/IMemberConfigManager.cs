@@ -13,6 +13,6 @@ namespace HC.WeChat.MemberConfigs.DomainServices
         /// 初始化方法
         /// </summary>
         void InitMemberConfig();
-
+        //GetTenantMemberConfigAsync
     }
 }

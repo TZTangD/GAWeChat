@@ -265,7 +265,6 @@ namespace HC.WeChat.IntegralDetails
 
             var intergral = await query
                 .OrderByDescending(s => s.CreationTime)
-                .ThenBy(input.Sorting)
                 .PageBy(input)
                 .ToListAsync();
 

@@ -101,19 +101,19 @@ export class AuthSettingComponent extends AppComponentBase implements OnInit {
             }
         });
     }
-//#region 分组
+    //#region 分组
 
     refreshData(reset = false, search?: boolean) {
         if (reset) {
             this.query.pageIndex = 1;
-            this.search = { }
+            this.search = {}
         }
         if (search) {
             this.query.pageIndex = 1;
         }
-        this.loading=true ;
+        this.loading = true;
         this.WeChatGroupService.getAll(this.query.skipCount(), this.query.pageSize, this.getParameter()).subscribe((result: PagedResultDtoOfWeChatGroup) => {
-            this.loading=false;
+            this.loading = false;
             this.weChatGroups = result.items;
             this.query.total = result.totalCount;
         });
@@ -125,10 +125,10 @@ export class AuthSettingComponent extends AppComponentBase implements OnInit {
         return arry;
     }
 
-    editMessage(){
-        
+    editMessage() {
+
     }
-    createWeChatGroup(){
+    createWeChatGroup() {
 
     }
     //#endregion

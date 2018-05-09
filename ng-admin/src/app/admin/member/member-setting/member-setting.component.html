@@ -1,1 +1,51 @@
 <!--component html goes here -->
+<nz-tabset>
+    <nz-tab>
+        <ng-template #nzTabHeading>
+            积分设置
+        </ng-template>
+        <nz-card>
+            <form nz-form [formGroup]="form" id="frm_create_role" (ngSubmit)="save(modelContent)">
+                <div nz-row>
+                    <div nz-col [nzSpan]="16">
+                        <div nz-form-item nz-row>
+                            <div nz-form-label nz-col [nzSm]="5">
+                                <label for="rcValue">零售客户</label>
+                            </div>
+                            <div nz-form-control nz-col [nzSm]="19" nzHasFeedback [nzValidateStatus]="getFormControl('rcValue')">
+                                <nz-input formControlName="type" [(ngModel)]="authSet.rcValue" [nzId]="'type'"></nz-input>
+                                <div nz-form-explain *ngIf="getFormControl('rcValue').dirty&&getFormControl('rcValue').hasError('maxlength')">字符长度小于等于50</div>
+                            </div>
+                        </div>
+                        <div nz-form-item nz-row>
+                            <div nz-form-label nz-col [nzSm]="5">
+                                <label for="cValue">消费者</label>
+                            </div>
+                            <div nz-form-control nz-col [nzSm]="19" nzHasFeedback [nzValidateStatus]="getFormControl('cValue')">
+                                <nz-input formControlName="cValue" [(ngModel)]="authSet.cValue" [nzId]="'cValue'"></nz-input>
+                                <div nz-form-explain *ngIf="getFormControl('cValue').dirty&&getFormControl('cValue').hasError('maxlength')">字符长度小于等于250</div>
+                            </div>
+                        </div>
+                        <div nz-form-item nz-row>
+                            <div nz-form-label nz-col [nzSm]="5">
+                                <label for="eValue">评价兑换</label>
+                            </div>
+                            <div nz-form-control nz-col [nzSm]="19" nzHasFeedback [nzValidateStatus]="getFormControl('eValue')">
+                                <nz-input formControlName="eValue" [(ngModel)]="authSet.eValue" [nzId]="'eValue'"></nz-input>
+                                <div nz-form-explain *ngIf="getFormControl('eValue').dirty&&getFormControl('eValue').hasError('maxlength')">字符长度小于等于250</div>
+                            </div>
+                        </div>
+
+                        <div nz-form-item nz-row class="mb0">
+                            <div nz-form-label nz-col [nzSm]="5">
+                                <button nz-button [nzType]="'primary'" [nzSize]="'large'" type="submit">
+                                    {{l("保存")}}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </nz-card>
+    </nz-tab>
+</nz-tabset>

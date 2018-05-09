@@ -14,6 +14,7 @@ import { ShopServiceProxy } from '@shared/service-proxies/customer-service/shop-
 import { ShopEvaluationServiceProxy } from '@shared/service-proxies/customer-service/shop-evaluation-service';
 import { ShopProductsServiceProxy, ProductsServiceProxy } from '@shared/service-proxies/customer-service';
 import { IntegralServiceProxy } from '@shared/service-proxies/member';
+import { MemberConfigsServiceProxy } from '@shared/service-proxies/member/memberconfigs-service';
 
 @NgModule({
     providers: [
@@ -49,6 +50,7 @@ import { IntegralServiceProxy } from '@shared/service-proxies/member';
         ProductsServiceProxy,
         WeChatGroupServiceProxy,
         IntegralServiceProxy,
+        MemberConfigsServiceProxy,
     ]
 })
 export class ServiceProxyModule { }

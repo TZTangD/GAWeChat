@@ -84,6 +84,7 @@ namespace HC.WeChat.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
+                    TenantId = table.Column<int>(nullable: true),
                     Type = table.Column<int>(nullable: true),
                     Code = table.Column<int>(nullable: true),
                     Value = table.Column<string>(nullable: true),

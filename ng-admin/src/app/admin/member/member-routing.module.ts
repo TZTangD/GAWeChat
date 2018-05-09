@@ -13,7 +13,6 @@ const routes: Routes = [
   { path: 'integral-search', component: IntegralSearchComponent, data: { translate: 'integral-search', permission: 'Pages' }, canActivate: [AppRouteGuard] },
   { path: 'member-setting', component: MemberSettingComponent, data: { translate: 'member-setting', permission: 'Pages' }, canActivate: [AppRouteGuard] },
   { path: 'integral-search-detail/:openId', component: IntegralSearchDetailComponent, data: { translate: 'integral-search-detail', permission: 'Pages' }, canActivate: [AppRouteGuard] }
-
 ];
 @NgModule({
   imports: [RouterModule.forChild(routes)],

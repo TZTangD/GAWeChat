@@ -32,6 +32,16 @@ namespace HC.WeChat.MemberConfigs.DomainServices
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// 通过租户id获取积分配置
+        /// </summary>
+        /// <returns></returns>
+        //public async Task<WechatAppConfigListDto> GetTenantMemberConfigAsync()
+        //{
+        //    var entity = _wechatappconfigRepository.GetAll().Where(w => w.TenantId == AbpSession.TenantId).FirstOrDefault();
+        //    return await Task.FromResult(entity.MapTo<WechatAppConfigListDto>());
+        //}
+
     }
 
 }
