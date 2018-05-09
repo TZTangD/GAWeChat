@@ -27,9 +27,9 @@ export abstract class AppComponentBase {
             if(openId){
                 this.settingsService.setUserId(openId, tenantId);
             }
-            console.log('openId:' + openId);
-            console.log('tenantId:' + tenantId);
-            console.log('id:' + this.id);
+            //console.log('openId:' + openId);
+            //console.log('tenantId:' + tenantId);
+            //console.log('id:' + this.id);
         });
     }
 

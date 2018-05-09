@@ -1,0 +1,38 @@
+.error{
+    color: red;
+}
+.success{
+    color: #49a9ee;
+}
+.hight{
+    // color:red;
+    // background-color: red;
+}
+.middle{
+    // color:#FF5511;
+    // background-color:#FF5511;
+}
+.low{
+    // color: #AAAAAA;
+    // background-color:#AAAAAA;
+}
+.ant-tag-text{
+    color:#FF5511;
+}
+// .img{
+//     width:100%;
+// }
+:host ::ng-deep .ant-card-meta-title {
+    margin-bottom: 4px;
+}
+:host ::ng-deep nz-list nz-card {
+    margin-bottom: 0 !important;
+}
+:host ::ng-deep .card-item-content {
+    display: flex;
+    margin-top: 16px;
+    margin-bottom: -4px;
+    line-height: 20px;
+    height: 20px;
+    justify-content: space-between;
+}

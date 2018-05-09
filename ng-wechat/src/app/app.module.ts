@@ -6,16 +6,16 @@ import { HttpModule } from '@angular/http';
 
 import { WeUiModule } from 'ngx-weui';
 import { NotifyModule } from 'ngx-notify';
-import { AqmModule } from 'angular-qq-maps';
+//import { AqmModule } from 'angular-qq-maps';
 
 import { SharedModule } from './shared/shared.module';
 import { LayoutModule } from './layout/layout.module';
 //import { RoutesModule } from './routes/routes.module';
 import { WechatModule } from './wechat/wechat.module';
-import { CoreModule } from './core/core.module';
+//import { CoreModule } from './core/core.module';
 import { AppComponent } from './app.component';
-import { JsonpModule } from '@angular/http';
-import { ServiceModule } from './services/service.module';
+//import { JsonpModule } from '@angular/http';
+//import { ServiceModule } from './services/service.module';
 
 @NgModule({
     imports: [
@@ -23,10 +23,10 @@ import { ServiceModule } from './services/service.module';
         BrowserAnimationsModule,
         HttpModule,
         HttpClientModule,
-        JsonpModule,
-        CoreModule,
+        //JsonpModule,
+        //CoreModule,
         SharedModule,
-        ServiceModule,
+        //ServiceModule,
         //RoutesModule,
         WechatModule,
         LayoutModule,
@@ -35,10 +35,10 @@ import { ServiceModule } from './services/service.module';
             notify: {
                 progress: false
             }
-        }),
-        AqmModule.forRoot({
-            apiKey: 'I3TBZ-QTN3J-MWPFI-FERMS-IBOCQ-LBBWY'
-        })
+        })//,
+        //AqmModule.forRoot({
+        //    apiKey: 'I3TBZ-QTN3J-MWPFI-FERMS-IBOCQ-LBBWY'
+        //})
     ],
     declarations: [
         AppComponent

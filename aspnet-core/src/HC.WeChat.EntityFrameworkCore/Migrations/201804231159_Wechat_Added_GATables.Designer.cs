@@ -1679,10 +1679,11 @@ namespace HC.WeChat.Migrations
                 b.ToTable("Manuscripts");
             });
 
-            modelBuilder.Entity("HC.WeChat.MemberConfigs.MemberConfig", b => 
+            modelBuilder.Entity("HC.WeChat.MemberConfigs.MemberConfig", b =>
             {
                 b.Property<Guid>("Id").ValueGeneratedOnAdd();
                 b.Property<int?>("Type");
+                b.Property<int?>("TenantId");
                 b.Property<int?>("Code");
                 b.Property<string>("Value");
                 b.Property<DateTime>("CreationTime").IsRequired();

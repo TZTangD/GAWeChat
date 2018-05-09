@@ -14,7 +14,10 @@ namespace HC.WeChat.MemberConfigs.Dtos
         public DeployTypeEnum? Type { get; set; }
         public DeployCodeEnum? Code { get; set; }
         public string Value { get; set; }
-
+        /// <summary>
+        /// 租户ID
+        /// </summary>
+        public int? TenantId { get; set; }
 
         /// <summary>
         /// 创建时间

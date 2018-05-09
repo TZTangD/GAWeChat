@@ -23,7 +23,7 @@ export class MemberCardComponent extends AppComponentBase implements OnInit {
         this.settingsService.getUser().subscribe(result => {
             this.user = result;
             if (!this.user || !this.user.phone || !this.user.memberBarCode) {//没有电话号码和会员卡号 都需要重新绑定
-                this.router.navigate(["/center/bind-member"]);
+                this.router.navigate(["/personals/bind-member"]);
             } else {
                 this.generateBarcode('barcode', this.user.memberBarCode);
             }

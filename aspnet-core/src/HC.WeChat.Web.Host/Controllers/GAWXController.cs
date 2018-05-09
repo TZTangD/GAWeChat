@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using Senparc.Weixin.MP.Helpers;
 
 namespace HC.WeChat.Web.Host.Controllers
 {
@@ -91,6 +92,17 @@ namespace HC.WeChat.Web.Host.Controllers
             return View();
         }
 
+        /// <summary>
+        /// 获取JS SDK配置
+        /// </summary>
+        public IActionResult GetJsApiConfig(string url)
+        {
+            var host = _appConfiguration["App:ServerRootAddress"];
+            //var url = string.Format("{0}/gawechat", host); //Request.GetAbsoluteUri();  
+            var jsApiConfig = JSSDKHelper.GetJsSdkUiPackageAsync(WechatAppConfig.AppId, WechatAppConfig.AppSecret, url).Result;
+            return Json(jsApiConfig);
+        }
+
         public IActionResult Authorization(GAAuthorizationPageEnum page)
         {
             //UserOpenId = "9A7C8776-A623-473F-AF29-10D3E79A2FAE";
@@ -125,6 +137,16 @@ namespace HC.WeChat.Web.Host.Controllers
                             return Redirect(string.Format(GAAuthorizationPageUrl.MyShopUrl, UserOpenId, tenantId ?? 0));
                         }
                         var url = host + "/GAWX/MyShop";
+                        ViewBag.PageUrl = _weChatOAuthAppService.GetAuthorizeUrl(url, "123", Senparc.Weixin.MP.OAuthScope.snsapi_base);
+                    }
+                    break;
+                case GAAuthorizationPageEnum.ScanIntegral:
+                    {
+                        if (!string.IsNullOrEmpty(UserOpenId))
+                        {
+                            return Redirect(string.Format(GAAuthorizationPageUrl.ScanIntegralUrl, UserOpenId, tenantId ?? 0));
+                        }
+                        var url = host + "/GAWX/ScanIntegral";
                         ViewBag.PageUrl = _weChatOAuthAppService.GetAuthorizeUrl(url, "123", Senparc.Weixin.MP.OAuthScope.snsapi_base);
                     }
                     break;
@@ -173,6 +195,19 @@ namespace HC.WeChat.Web.Host.Controllers
 
             return Redirect(string.Format(GAAuthorizationPageUrl.MyShopUrl, UserOpenId, tenantId ?? 0));
         }
+
+        /// <summary>
+        /// 扫码积分
+        /// </summary>
+        public IActionResult ScanIntegral(string code, string state)
+        {
+            //存储openId 避免重复提交
+            SetUserOpenId(code);
+            var tenantId = GetTenantId();
+            //UserOpenId = "9A7C8776-A623-473F-AF29-10D3E79A2FAE";
+
+            return Redirect(string.Format(GAAuthorizationPageUrl.ScanIntegralUrl, UserOpenId, tenantId ?? 0));
+        }
     }
 
     public enum GAAuthorizationPageEnum
@@ -185,8 +220,9 @@ namespace HC.WeChat.Web.Host.Controllers
 
     public class GAAuthorizationPageUrl
     {
-        public static string PersonalCenterUrl = "/gawechat/index.html#/center/personal/{0}/{1}";
-        public static string MemberCardUrl = "/gawechat/index.html#/center/member-card/{0}/{1}";
-        public static string MyShopUrl = "/gawechat/index.html#/center/shop/{0}/{1}";
+        public static string PersonalCenterUrl = "/gawechat/index.html#/personals/personal/{0}/{1}";
+        public static string MemberCardUrl = "/gawechat/index.html#/members/member-card/{0}/{1}";
+        public static string MyShopUrl = "/gawechat/index.html#/shops/shop/{0}/{1}";
+        public static string ScanIntegralUrl = "/gawechat/index.html#/scans/scan/{0}/{1}";
     }
 }

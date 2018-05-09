@@ -5,6 +5,7 @@ using Abp.Application.Services.Dto;
 using HC.WeChat.IntegralDetails.Dtos;
 using HC.WeChat.IntegralDetails;
 using System;
+using HC.WeChat.WeChatUsers.Dtos;
 
 namespace HC.WeChat.IntegralDetails
 {
@@ -56,5 +57,19 @@ namespace HC.WeChat.IntegralDetails
         /// 批量删除IntegralDetail
         /// </summary>
         Task BatchDeleteIntegralDetailsAsync(List<Guid> input);
+
+        /// <summary>
+        /// 获取积分详情
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        Task<PagedResultDto<IntegralDetailListDto>> GetPagedIntegralDetailsById(GetIntegralDetailsInput input);
+
+        /// <summary>
+        /// 查询用户信息
+        /// </summary>
+        /// <param name="openId"></param>
+        /// <returns></returns>
+        Task<WeChatUserListDto> GetUserInfo(string openId);
     }
 }
