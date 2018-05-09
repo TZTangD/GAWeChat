@@ -33,6 +33,8 @@ export class RetailCustomer implements IRetailCustomer {
     lastModifierUserId: number;
     creationTime: Date;
     creatorUserId: number;
+    verificationCode: string;
+    showVerificationCode: string;
     constructor(data?: IRetailCustomer) {
         if (data) {
             for (var property in data) {
@@ -76,6 +78,9 @@ export class RetailCustomer implements IRetailCustomer {
             this.lastModifierUserId = data["lastModifierUserId"];
             this.deletionTime = data["deletionTime"];
             this.deleterUserId = data["deleterUserId"];
+            this.verificationCode = data["verificationCode"];
+            this.showVerificationCode = data["showVerificationCode"];
+            
         }
     }
 
@@ -146,5 +151,7 @@ export interface IRetailCustomer {
     deliveryLine: string;
     tenantId: number;
     licenseKey: string;
-    id: string
+    id: string;
+    verificationCode: string;
+    showVerificationCode: string;
 }

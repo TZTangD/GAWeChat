@@ -1,6 +1,7 @@
 ﻿using Abp.Runtime.Validation;
 using HC.WeChat.Dto;
 using HC.WeChat.IntegralDetails;
+using HC.WeChat.WechatEnums;
 
 namespace HC.WeChat.IntegralDetails.Dtos
 {
@@ -12,6 +13,9 @@ namespace HC.WeChat.IntegralDetails.Dtos
         /// 模糊搜索使用的关键字
         /// </summary>
         public string Filter { get; set; }
+        public string OpenId { get; set; }
+
+        public UserTypeEnum? UserType { get; set; }
 
         /// <summary>
         /// 正常化排序使用
@@ -23,6 +27,5 @@ namespace HC.WeChat.IntegralDetails.Dtos
                 Sorting = "Id";
             }
         }
-
     }
 }

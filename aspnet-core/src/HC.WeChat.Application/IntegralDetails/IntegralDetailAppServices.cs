@@ -13,29 +13,37 @@ using HC.WeChat.IntegralDetails.Dtos;
 using HC.WeChat.IntegralDetails.DomainServices;
 using HC.WeChat.IntegralDetails;
 using System;
+using HC.WeChat.Authorization;
+using HC.WeChat.WeChatUsers;
+using System.Linq;
+using HC.WeChat.WechatEnums;
+using HC.WeChat.WeChatUsers.Dtos;
 
 namespace HC.WeChat.IntegralDetails
 {
     /// <summary>
     /// IntegralDetail应用层服务的接口实现方法
     /// </summary>
-    [AbpAuthorize(IntegralDetailAppPermissions.IntegralDetail)]
+    //[AbpAuthorize(IntegralDetailAppPermissions.IntegralDetail)]
+    [AbpAuthorize(AppPermissions.Pages)]
     public class IntegralDetailAppService : WeChatAppServiceBase, IIntegralDetailAppService
     {
         ////BCC/ BEGIN CUSTOM CODE SECTION
         ////ECC/ END CUSTOM CODE SECTION
         private readonly IRepository<IntegralDetail, Guid> _integraldetailRepository;
         private readonly IIntegralDetailManager _integraldetailManager;
+        private readonly IRepository<WeChatUser, Guid> _wechatusersRepository;
 
         /// <summary>
         /// 构造函数
         /// </summary>
         public IntegralDetailAppService(IRepository<IntegralDetail, Guid> integraldetailRepository
-      , IIntegralDetailManager integraldetailManager
+      , IIntegralDetailManager integraldetailManager, IRepository<WeChatUser, Guid> wechatusersRepository
         )
         {
             _integraldetailRepository = integraldetailRepository;
             _integraldetailManager = integraldetailManager;
+            _wechatusersRepository = wechatusersRepository;
         }
 
         /// <summary>
@@ -43,27 +51,27 @@ namespace HC.WeChat.IntegralDetails
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<PagedResultDto<IntegralDetailListDto>> GetPagedIntegralDetails(GetIntegralDetailsInput input)
-        {
+        //public async Task<PagedResultDto<IntegralDetailListDto>> GetPagedIntegralDetails(GetIntegralDetailsInput input)
+        //{
 
-            var query = _integraldetailRepository.GetAll();
-            //TODO:根据传入的参数添加过滤条件
-            var integraldetailCount = await query.CountAsync();
+        //    var query = _integraldetailRepository.GetAll();
+        //    //TODO:根据传入的参数添加过滤条件
+        //    var integraldetailCount = await query.CountAsync();
 
-            var integraldetails = await query
-                .OrderBy(input.Sorting)
-                .PageBy(input)
-                .ToListAsync();
+        //    var integraldetails = await query
+        //        .OrderBy(input.Sorting)
+        //        .PageBy(input)
+        //        .ToListAsync();
 
-            //var integraldetailListDtos = ObjectMapper.Map<List <IntegralDetailListDto>>(integraldetails);
-            var integraldetailListDtos = integraldetails.MapTo<List<IntegralDetailListDto>>();
+        //    //var integraldetailListDtos = ObjectMapper.Map<List <IntegralDetailListDto>>(integraldetails);
+        //    var integraldetailListDtos = integraldetails.MapTo<List<IntegralDetailListDto>>();
 
-            return new PagedResultDto<IntegralDetailListDto>(
-                integraldetailCount,
-                integraldetailListDtos
-                );
+        //    return new PagedResultDto<IntegralDetailListDto>(
+        //        integraldetailCount,
+        //        integraldetailListDtos
+        //        );
 
-        }
+        //}
 
         /// <summary>
         /// 通过指定id获取IntegralDetailListDto信息
@@ -134,7 +142,7 @@ namespace HC.WeChat.IntegralDetails
         /// <summary>
         /// 新增IntegralDetail
         /// </summary>
-        [AbpAuthorize(IntegralDetailAppPermissions.IntegralDetail_CreateIntegralDetail)]
+        //[AbpAuthorize(IntegralDetailAppPermissions.IntegralDetail_CreateIntegralDetail)]
         protected virtual async Task<IntegralDetailEditDto> CreateIntegralDetailAsync(IntegralDetailEditDto input)
         {
             //TODO:新增前的逻辑判断，是否允许新增
@@ -147,7 +155,7 @@ namespace HC.WeChat.IntegralDetails
         /// <summary>
         /// 编辑IntegralDetail
         /// </summary>
-        [AbpAuthorize(IntegralDetailAppPermissions.IntegralDetail_EditIntegralDetail)]
+        //[AbpAuthorize(IntegralDetailAppPermissions.IntegralDetail_EditIntegralDetail)]
         protected virtual async Task UpdateIntegralDetailAsync(IntegralDetailEditDto input)
         {
             //TODO:更新前的逻辑判断，是否允许更新
@@ -163,7 +171,7 @@ namespace HC.WeChat.IntegralDetails
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        [AbpAuthorize(IntegralDetailAppPermissions.IntegralDetail_DeleteIntegralDetail)]
+        //[AbpAuthorize(IntegralDetailAppPermissions.IntegralDetail_DeleteIntegralDetail)]
         public async Task DeleteIntegralDetail(EntityDto<Guid> input)
         {
 
@@ -174,13 +182,120 @@ namespace HC.WeChat.IntegralDetails
         /// <summary>
         /// 批量删除IntegralDetail的方法
         /// </summary>
-        [AbpAuthorize(IntegralDetailAppPermissions.IntegralDetail_BatchDeleteIntegralDetails)]
+        //[AbpAuthorize(IntegralDetailAppPermissions.IntegralDetail_BatchDeleteIntegralDetails)]
         public async Task BatchDeleteIntegralDetailsAsync(List<Guid> input)
         {
             //TODO:批量删除前的逻辑判断，是否允许删除
             await _integraldetailRepository.DeleteAsync(s => input.Contains(s.Id));
         }
 
+        /// <summary>
+        /// 获取IntegralDetail的分页列表用户积分汇总信息
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task<PagedResultDto<IntegralDetailListDto>> GetPagedIntegralDetails(GetIntegralDetailsInput input)
+        {
+            var queryIntegralDetail = _integraldetailRepository.GetAll();
+            var queryWXUser = _wechatusersRepository.GetAll()
+                .WhereIf(!string.IsNullOrEmpty(input.Filter), v => v.NickName.Contains(input.Filter))
+                .WhereIf(input.UserType.HasValue, u => u.UserType == input.UserType);
+            var queryGroup = from i in queryIntegralDetail
+                             group new { i.OpenId, i.Integral } by new
+                             {
+                                 i.OpenId,
+                             } into r
+                             select new IntegralDetailListDto()
+                             {
+                                 FinalIntegral = r.Sum(v => v.Integral),
+                                 OpenId = r.Key.OpenId,
+                             };
+            var query = from g in queryGroup
+                        join u in queryWXUser on g.OpenId equals u.OpenId
+                        select new IntegralDetailListDto()
+                        {
+                            OpenId = u.OpenId,
+                            FinalIntegral = g.FinalIntegral,
+                            WXName = u.NickName,
+                            Phone = u.Phone,
+                            UserTypeName = Enum.GetName(typeof(UserTypeEnum), u.UserType),
+                        };
+
+            ////TODO:根据传入的参数添加过滤条件
+            var intergralCount = await query.CountAsync();
+
+            var intergral = await query
+                .OrderByDescending(s => s.CreationTime)
+                .ThenBy(input.Sorting)
+                .PageBy(input)
+                .ToListAsync();
+
+            var intergralListDtos = intergral.MapTo<List<IntegralDetailListDto>>();
+
+            return new PagedResultDto<IntegralDetailListDto>(
+                            intergralCount,
+                            intergralListDtos
+                            );
+        }
+
+        /// <summary>
+        /// 根据OpenId查询用户积分详情
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task<PagedResultDto<IntegralDetailListDto>> GetPagedIntegralDetailsById(GetIntegralDetailsInput input)
+        {
+            var queryIntegralDetail = _integraldetailRepository.GetAll().Where(v=>v.OpenId == input.OpenId);
+            var queryWXUser = _wechatusersRepository.GetAll();
+            var query = from i in queryIntegralDetail
+                        join u in queryWXUser on i.OpenId equals u.OpenId
+                        select new IntegralDetailListDto()
+                        {
+                            OpenId = i.OpenId,
+                            Integral = i.Integral,
+                            InitialIntegral = i.InitialIntegral,
+                            FinalIntegral = i.FinalIntegral,
+                            //TypeName = Enum.GetName(typeof(IntegralTypeEnum),i.Type),
+                            Type = i.Type,
+                            WXName = u.NickName,
+                            CreationTime = i.CreationTime,
+                        };
+
+            ////TODO:根据传入的参数添加过滤条件
+            var intergralCount = await query.CountAsync();
+
+            var intergral = await query
+                .OrderByDescending(s => s.CreationTime)
+                .ThenBy(input.Sorting)
+                .PageBy(input)
+                .ToListAsync();
+
+            var intergralListDtos = intergral.MapTo<List<IntegralDetailListDto>>();
+
+            return new PagedResultDto<IntegralDetailListDto>(
+                            intergralCount,
+                            intergralListDtos
+                            );
+        }
+
+        /// <summary>
+        /// 查询用户基本信息
+        /// </summary>
+        /// <param name="openId"></param>
+        /// <returns></returns>
+        public async Task<WeChatUserListDto> GetUserInfo(string openId)
+        {
+            var entity = await (from u in _wechatusersRepository.GetAll().Where(v => v.OpenId == openId)
+                         select new WeChatUserListDto()
+                         {
+                             OpenId = u.OpenId,
+                             Phone = u.Phone,
+                             MemberBarCode = u.MemberBarCode,
+                             NickName = u.NickName,
+                             UserType = u.UserType
+                         }).FirstOrDefaultAsync();
+            return  entity;
+        }
     }
 }
 

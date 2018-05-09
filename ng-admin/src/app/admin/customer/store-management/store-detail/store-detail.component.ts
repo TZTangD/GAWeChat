@@ -7,6 +7,7 @@ import { WechatUserServiceProxy, PagedResultDtoOfWeChatUser } from '@shared/serv
 import { ActivatedRoute, Router } from '@angular/router';
 import { Parameter } from '@shared/service-proxies/entity';
 import { NzModalService } from 'ng-zorro-antd';
+import { AppConsts } from '@shared/AppConsts';
 
 @Component({
     moduleId: module.id,
@@ -47,7 +48,7 @@ export class StoreDetailComponent extends AppComponentBase implements OnInit {
     previewImage = ''
     previewVisible = false;
     imgWidth: number = 550;
-    defalutImg = './assets/img/tobacco.jpg';
+    defalutImg = '/upload/product/tobacco.jpg';
     //评价
 
     low: number = 0;
@@ -62,20 +63,27 @@ export class StoreDetailComponent extends AppComponentBase implements OnInit {
     ];
     evaluationSearch: number = 0;
     evaluationShow: string;
+    host = '';
+    showCoverPhoto = '';
     constructor(injector: Injector, private shopService: ShopServiceProxy, private shopEvaluationService: ShopEvaluationServiceProxy,
         private weChatService: WechatUserServiceProxy, private Acroute: ActivatedRoute, private modal: NzModalService,
-        private shopProductService: ShopProductsServiceProxy, 
+        private shopProductService: ShopProductsServiceProxy,
         private router: Router) {
         super(injector);
         this.id = this.Acroute.snapshot.params['id'];
     }
     ngOnInit(): void {
         this.getSingleShop();
+        this.host = AppConsts.remoteServiceBaseUrl;
+        this.defalutImg = this.host + this.defalutImg;
     }
 
     getSingleShop() {
         this.shopService.get(this.id).subscribe((result: Shop) => {
             this.shop = result;
+            if (this.shop.coverPhoto) {
+                this.showCoverPhoto = this.host + this.shop.coverPhoto;
+            }
             this.evaluations = [
                 { id: 0, text: '全部', value: true, color: 'blue' },
                 { id: 5, text: '好评', value: false, color: 'red' },
@@ -183,7 +191,14 @@ export class StoreDetailComponent extends AppComponentBase implements OnInit {
         this.loadingSP = true;
         this.shopProductService.getAll(this.querySP.skipCount(), this.querySP.pageSize, this.getParameteShopProduct()).subscribe((result: PagedResultDtoOfShopProduct) => {
             this.loadingSP = false;
-            this.shopProducts = result.items;
+            this.shopProducts = result.items.map(i => {
+                if (i.photoUrl) {
+                    i.showPhotoUrl = this.host + i.photoUrl;
+                } else {
+                    i.showPhotoUrl = this.defalutImg;
+                }
+                return i;
+            });
             this.querySP.total = result.totalCount;
 
         })

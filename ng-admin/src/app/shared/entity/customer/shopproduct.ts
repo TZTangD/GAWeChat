@@ -9,6 +9,7 @@ export class ShopProduct implements IShopProduct{
     barCode: string;
     typeName: string;
     photoUrl:string;
+    showPhotoUrl:string;
     constructor(data?: IShopProduct) {
         if (data) {
             for (var property in data) {

@@ -26,5 +26,18 @@ namespace HC.WeChat.Employees.Dtos
             }
         }
         public string VerificationCode { get; set; }
+
+        /// <summary>
+        /// 验证码显示
+        /// </summary>
+        public string ShowVerificationCode
+        {
+            get
+            {
+                var emCode = (1 + Code.Substring(Code.Length - 6)).ToString();
+                var verCode = (int.Parse(emCode) * 15 + 15).ToString();
+                return verCode.Substring(verCode.Length - 6);
+            }
+        }
     }
 }

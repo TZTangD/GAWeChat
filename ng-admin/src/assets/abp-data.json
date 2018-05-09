@@ -50,11 +50,6 @@
                             "translate": "customize-menu"
                         },
                         {
-                            "text": "微信用户",
-                            "link": "/admin/wechat/wechat-user",
-                            "translate": "wechat-user"
-                        },
-                        {
                             "text": "微信群发",
                             "link": "/admin/wechat/wechat-mass",
                             "translate": "wechat-mass"

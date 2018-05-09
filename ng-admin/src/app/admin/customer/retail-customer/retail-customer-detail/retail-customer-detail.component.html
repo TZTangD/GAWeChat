@@ -1,5 +1,5 @@
-<form nz-form [formGroup]="form" id="frm_create_role">
-
+<nz-card [nzBordered]="false" nzTitle="{{cardTitle}}">
+<form nz-form [formGroup]="form" id="frm_create_retail-customer">
     <div nz-row [nzGutter]="24">
         <div nz-col nzMd="8" nzSm="14" nzXs="24">
             <div nz-form-item nz-row>
@@ -10,6 +10,7 @@
                     <nz-input style="height:32px;" formControlName="code" [(ngModel)]="retailCustomerd.code" [nzId]="'code'"></nz-input>
                     <div nz-form-explain *ngIf="getFormControl('code').dirty&&getFormControl('code').hasError('maxlength')">字符长度小于等于50</div>
                     <div nz-form-explain *ngIf="getFormControl('code').dirty&&getFormControl('code').hasError('required')">请输入客户编码</div>
+                    <div nz-form-explain *ngIf="getFormControl('code').dirty&&getFormControl('code').hasError('pattern')">请输入数字</div>
                 </div>
             </div>
         </div>
@@ -264,4 +265,5 @@
 
     <!-- <a routerLink="../admin/retail-customer" routerLinkActive="ngOnInit">Heroes</a> -->
 </footer-toolbar>
+</nz-card>
 <employee-modal #selectEmployeeModal (modalSelect)="getSelectData($event)"></employee-modal>

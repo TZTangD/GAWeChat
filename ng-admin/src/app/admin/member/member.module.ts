@@ -7,6 +7,7 @@ import { IntegralSearchComponent } from "./integral-search/integral-search.compo
 import { MemberSettingComponent } from "./member-setting/member-setting.component";
 import { MemberRoutingModule } from "./member-routing.module";
 import { LayoutModule } from "../../layout/layout.module";
+import { IntegralSearchDetailComponent } from "./integral-search/integral-search-detail/integral-search-detail.component";
 
 @NgModule({
     imports: [
@@ -18,9 +19,10 @@ import { LayoutModule } from "../../layout/layout.module";
         MemberManagementComponent,
         IntegralSearchComponent,
         MemberSettingComponent,
+        IntegralSearchDetailComponent
     ],
     providers: [
-        AppRouteGuard  
+        AppRouteGuard
     ]
 
 })
