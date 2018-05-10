@@ -29,9 +29,7 @@ export class MemberSettingComponent extends AppComponentBase implements OnInit {
             eValue: [null, [Validators.compose([Validators.required, Validators.pattern(/^[+]{0,1}(\d+)$|^[+]{0,1}(\d+\.\d+)$/), Validators.min(0)])]]
 
         });
-        // this.getAuthSetByTenantId();
         this.getMemberConfigsByTenantId();
-        // this.refreshData();
     }
     getFormControl(name: string) {
         return this.form.controls[name];
@@ -65,24 +63,10 @@ export class MemberSettingComponent extends AppComponentBase implements OnInit {
             this.form.controls[i].markAsDirty();
         }
         if (this.form.valid) {
-            if (!this.config) {
-                this.modal.confirm({
-                    content: Tplcontent,
-                    okText: '继续',
-                    cancelText: '取消',
-                    onOk: () => {
-                        this.memberconfigsService.update(this.configCode).subscribe(() => {
-                            this.notify.info(this.l('保存成功！'));
-                            this.getMemberConfigsByTenantId();
-                        });
-                    }
-                });
-            } else {
-                this.memberconfigsService.update(this.configCode).subscribe(() => {
-                    this.notify.info(this.l('保存成功！'));
-                    this.getMemberConfigsByTenantId();
-                });
-            }
+            this.memberconfigsService.update(this.configCode).subscribe(() => {
+                this.notify.info(this.l('保存成功！'));
+                this.getMemberConfigsByTenantId();
+            });
         }
         abp.multiTenancy.setTenantIdCookie();
     }
