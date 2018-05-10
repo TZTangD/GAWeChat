@@ -62,6 +62,9 @@
     <div class="weui-cells__title">购买商品列表</div>
     <div class="weui-cells">
         <div class="weui-cell" *ngFor="let g of goods">
+            <a class="weui-cell__hd weui-cell_access" (click)="onRemoveProduct(g.id)">
+                <i class="weui-icon-cancel"></i>
+            </a>
             <div class="weui-cell__bd">
                 <p>{{g.specification}}</p>
             </div>
@@ -72,6 +75,7 @@
         <weui-loadmore type="line" *ngIf="!goods || goods.length == 0"></weui-loadmore>
     </div>
     <div class="weui-btn-area">
-        <button class="weui-btn weui-btn_primary" [disabled]="!cardNum || !goodsBarCode" [ngClass]="{'weui-btn_disabled': !cardNum || !goodsBarCode}">确定兑换</button>
+        <button class="weui-btn weui-btn_primary" [disabled]="!cardNum || !goodsBarCode" (click)="onSave()" [ngClass]="{'weui-btn_disabled': !cardNum || !goodsBarCode}">确定兑换</button>
     </div>
+    <weui-dialog #delconfirm [config]="config"></weui-dialog>
 </Page>

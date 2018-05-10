@@ -153,8 +153,9 @@ namespace HC.WeChat.WechatEnums
     public enum IntegralTypeEnum
     {
         购买商品兑换 = 1,
-        评价商品获得 = 2,
-        抽奖消费 = 3
+        评价店铺赠送 = 2,
+        抽奖消费 = 3,
+        扫码积分赠送 = 4
     }
     /// <summary>
     /// 产品类型

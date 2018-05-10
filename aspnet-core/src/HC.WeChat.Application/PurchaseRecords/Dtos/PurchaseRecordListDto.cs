@@ -26,7 +26,7 @@ namespace HC.WeChat.PurchaseRecords.Dtos
         public string OperatorName { get; set; }
     }
 
-    [AutoMapFrom(typeof(PurchaseRecord))]
+    [AutoMapTo(typeof(PurchaseRecord))]
     public class ExchangeIntegralDto
     {
         public List<ShopProductDto> ShopProductList { get; set; }

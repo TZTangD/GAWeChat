@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, Injector, OnInit } from '@angular/core';
+import { Component, ViewEncapsulation, Injector, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/timer';
 import { AppComponentBase } from '../../components/app-component-base';
@@ -7,6 +7,7 @@ import { WechatUser, Shop, UserType, ShopGoods } from '../../../services/model';
 import { ShopService, AppConsts, WechatUserService } from '../../../services';
 import { JWeiXinService } from 'ngx-weui/jweixin';
 import { ToptipsService } from "ngx-weui/toptips";
+import { DialogConfig, DialogComponent } from 'ngx-weui/dialog';
 
 @Component({
     selector: 'wechat-scan',
@@ -15,6 +16,19 @@ import { ToptipsService } from "ngx-weui/toptips";
     encapsulation: ViewEncapsulation.None
 })
 export class ScanComponent extends AppComponentBase implements OnInit {
+
+    @ViewChild('delconfirm') delconfirm: DialogComponent;
+    config: DialogConfig = <DialogConfig>{
+        title: '确认框',
+        skin: 'ios',
+        cancel: null,
+        confirm: null,
+        btns: [
+            { text: '取消', type: 'default', value: 0 },
+            { text: '删除', type: 'warn', value: 1 }
+        ],
+        content: '确定要删除吗？'
+    };
 
     cardNum: string;
     goodsBarCode: string;
@@ -106,7 +120,7 @@ export class ScanComponent extends AppComponentBase implements OnInit {
     }
 
     //调用微信扫一扫
-    wxScanQRCode(): Promise<string>{
+    wxScanQRCode(): Promise<string> {
         return new Promise<string>((resolve, reject) => {
             wx.scanQRCode({
                 needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
@@ -121,9 +135,10 @@ export class ScanComponent extends AppComponentBase implements OnInit {
     }
 
     scanCard() {
-        this.wxScanQRCode().then((res) =>{
+        this.setCardNum(this.cardNum);
+        /*this.wxScanQRCode().then((res) => {
             this.setCardNum(res);
-        });
+        });*/
     }
 
     findGoods() {
@@ -170,12 +185,52 @@ export class ScanComponent extends AppComponentBase implements OnInit {
     }
 
     scanGoodsBarCode() {
-        this.wxScanQRCode().then((res) =>{
+        this.setGoodsBarCode(this.goodsBarCode);
+        /*this.wxScanQRCode().then((res) => {
             this.setGoodsBarCode(res);
+        });*/
+    }
+
+    onRemoveProduct(id) {
+        this.delconfirm.show().subscribe((res: any) => {
+            //console.log('type', res);
+            if(res.value == '1'){
+                let i: number = 0;
+                for(let g of this.goods){
+                    if (g.id == id) {
+                        this.goods.splice(i, 1);
+                        return;
+                    }
+                    i++;
+                }
+            }
+            this.delconfirm.hide();
         });
     }
 
     onSave() {
-
+        if(!this.member){
+            this.srv['warn']('没有会员信息');
+        }
+        if(!this.goods || this.goods.length == 0){
+            this.srv['warn']('没有商品信息');
+        }
+        let param: any = {};
+        param.shopProductList = this.goods;
+        param.shopId = this.shop.id;
+        param.shopName = this.shop.name;
+        param.openId = this.member.openId;
+        param.tenantId = this.settingsService.tenantId;
+        param.operatorOpenId = this.settingsService.openId;
+        param.operatorName = this.user.nickName;
+        param.retailerId = this.user.userId;
+        this.shopService.ExchangeIntegral(param).subscribe(res => {
+            if(res && res.code == 0){
+                //this.srv['success']('扫码积分兑换成功');
+                this.router.navigate(['/scans/scan-success', res.data]);
+            } else {
+                this.srv['warn']('兑换失败，请重试');
+            }
+        });
     }
 }

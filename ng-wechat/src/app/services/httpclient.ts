@@ -11,6 +11,7 @@ import { Http, Headers, Response, Request, RequestMethod, RequestOptions } from 
 import { Observable } from 'rxjs/Observable';
 import * as moment from 'moment';
 import { AppConsts } from './AppConsts';
+import { ToastComponent, ToastService } from "ngx-weui/toast";
 
 export class SwaggerException extends Error {
     message: string;
@@ -49,7 +50,7 @@ export class HttpClient {
   protected jsonParseReviver: (key: string, value: any) => any = undefined;
   private baseHost: string = AppConsts.remoteServiceBaseUrl;
 
-  constructor(private http: Http) { }
+  constructor(private http: Http,private srv: ToastService) { }
 
   get(url: string, params?: { [key: string]: string }, showLoading?: boolean): Observable<any> {
     url = this.baseHost + url;
@@ -84,11 +85,12 @@ export class HttpClient {
 
     let request = new Request(options);
 
-    if (showLoading !== false) {
-
+    if (showLoading === true) {
+        this.srv.show(null, 10000, null,'loading');
     }
 
     return this.http.request(request).flatMap((response_) => {
+        this.srv.hide();
         return this.process(response_);
     }).catch(x => this.handleError(x));
   }

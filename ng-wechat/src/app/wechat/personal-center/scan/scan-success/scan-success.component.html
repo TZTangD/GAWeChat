@@ -1,0 +1,34 @@
+<Page [ngClass]="'icons'" [spacing]="false" [showTitle]="false">
+    <div class="weui-cells">
+        <div class="weui-cell">
+            <div class="icon-box">
+                <i class="weui-icon-success weui-icon_msg"></i>
+                <div class="icon-box__ctn">
+                    <h3 class="icon-box__title">兑换成功</h3>
+                    <p class="icon-box__desc">扫码积分兑换成功</p>
+                </div>
+            </div>
+        </div>
+        <div class="weui-cell" *ngIf="userIntegral" style="font-size: 14px;">
+            <div class="weui-cell__bd">
+                <p>消费者获得积分</p>
+            </div>
+            <div class="weui-cell__ft">{{userIntegral}}</div>
+        </div>
+        <div class="weui-cell" *ngIf="retailerIntegral" style="font-size: 14px;">
+            <div class="weui-cell__bd">
+                <p>店铺获得积分</p>
+            </div>
+            <div class="weui-cell__ft">{{retailerIntegral}}</div>
+        </div>
+        <div class="weui-cell" style="font-size: 14px;">
+            <div class="weui-cell__bd">
+                <p>获得时间</p>
+            </div>
+            <div class="weui-cell__ft">{{gDate | date:'yyyy-MM-dd HH:mm'}}</div>
+        </div>
+        <div class="weui-cell">
+            <button weui-button (click)="goBack()">继续兑换</button>
+        </div>
+    </div>
+</Page>

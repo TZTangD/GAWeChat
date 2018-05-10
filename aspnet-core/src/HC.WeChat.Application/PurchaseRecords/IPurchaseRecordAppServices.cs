@@ -61,7 +61,7 @@ namespace HC.WeChat.PurchaseRecords
         /// <summary>
         /// 兑换积分
         /// </summary>
-        Task<APIResultDto> ExchangeIntegral(ExchangeIntegralDto input);
+        Task<APIResultDto> ExchangeIntegralAsync(ExchangeIntegralDto input);
 
     }
 }

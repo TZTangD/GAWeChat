@@ -73,5 +73,10 @@ export class ShopService {
     });
   }
 
+  ExchangeIntegral(params: any): Observable<any>{
+    return this.http.post('/api/services/app/PurchaseRecord/ExchangeIntegralAsync', params, null, true).map(data => {
+        return data.result;
+    });
+  }
 
 }

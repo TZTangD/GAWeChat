@@ -18,6 +18,8 @@ using HC.WeChat.Authorization;
 using HC.WeChat.Dto;
 using HC.WeChat.IntegralDetails;
 using HC.WeChat.WeChatUsers;
+using HC.WeChat.MemberConfigs;
+using HC.WeChat.WechatEnums;
 
 namespace HC.WeChat.PurchaseRecords
 {
@@ -33,6 +35,7 @@ namespace HC.WeChat.PurchaseRecords
         private readonly IRepository<PurchaseRecord, Guid> _purchaserecordRepository;
         private readonly IRepository<IntegralDetail, Guid> _integralDetailRepository;
         private readonly IRepository<WeChatUser, Guid> _weChatUserRepository;
+        private readonly IRepository<MemberConfig, Guid> _memberConfigRepository;
         private readonly IPurchaseRecordManager _purchaserecordManager;
 
         /// <summary>
@@ -41,12 +44,14 @@ namespace HC.WeChat.PurchaseRecords
         public PurchaseRecordAppService(IRepository<PurchaseRecord, Guid> purchaserecordRepository
         , IRepository<IntegralDetail, Guid> integralDetailRepository
         , IRepository<WeChatUser, Guid> weChatUserRepository
+        , IRepository<MemberConfig, Guid> memberConfigRepository
         , IPurchaseRecordManager purchaserecordManager
         )
         {
             _purchaserecordRepository = purchaserecordRepository;
             _integralDetailRepository = integralDetailRepository;
             _weChatUserRepository = weChatUserRepository;
+            _memberConfigRepository = memberConfigRepository;
             _purchaserecordManager = purchaserecordManager;
         }
 
@@ -193,36 +198,144 @@ namespace HC.WeChat.PurchaseRecords
             await _purchaserecordRepository.DeleteAsync(s => input.Contains(s.Id));
         }
 
+        private async Task<Dictionary<DeployCodeEnum?, decimal>> GetIntegralConfig(int? tenantId)
+        {
+            using (CurrentUnitOfWork.SetTenantId(tenantId))
+            {
+                //获取积分配置
+                var configList = await _memberConfigRepository.GetAll().Where(c => c.Type == DeployTypeEnum.积分配置).ToListAsync();
+                if (!configList.Exists(c => c.Code == DeployCodeEnum.商品评价))
+                {
+                    configList.Add(new MemberConfig()
+                    {
+                        Code = DeployCodeEnum.商品评价,
+                        Value = "5"
+                    });
+                }
+                if (!configList.Exists(c => c.Code == DeployCodeEnum.商品购买))
+                {
+                    configList.Add(new MemberConfig()
+                    {
+                        Code = DeployCodeEnum.商品购买,
+                        Value = "1"
+                    });
+                }
+                if (!configList.Exists(c => c.Code == DeployCodeEnum.店铺扫码兑换))
+                {
+                    configList.Add(new MemberConfig()
+                    {
+                        Code = DeployCodeEnum.店铺扫码兑换,
+                        Value = "0.5"
+                    });
+                }
+                return configList.ToDictionary(key => key.Code,
+                    value =>
+                    {
+                        decimal v = 0;
+                        if (!decimal.TryParse(value.Value, out v))
+                        {
+                            switch (value.Code)
+                            {
+                                case DeployCodeEnum.商品评价:
+                                    {
+                                        v = 5;
+                                    }
+                                    break;
+                                case DeployCodeEnum.商品购买:
+                                    {
+                                        v = 1;
+                                    }
+                                    break;
+                                case DeployCodeEnum.店铺扫码兑换:
+                                    {
+                                        v = 0.5M;
+                                    }
+                                    break;
+                            }
+                        }
+                        return v;
+                    });
+            }
+        }
+
         [AbpAllowAnonymous]
-        public async Task<APIResultDto> ExchangeIntegral(ExchangeIntegralDto input)
+        public async Task<APIResultDto> ExchangeIntegralAsync(ExchangeIntegralDto input)
         {
             using (CurrentUnitOfWork.SetTenantId(input.TenantId))
             {
                 //获取积分配置
-
-                //获取零售客户 店铺管理员
-                var shopKeeper = await _weChatUserRepository.GetAll().Where(w => w.UserId == input.RetailerId
-                && w.UserType == WechatEnums.UserTypeEnum.零售客户 && w.IsShopkeeper == true).FirstOrDefaultAsync();
-
+                var config = await GetIntegralConfig(input.TenantId);
+               
+                int? xintegral = 0;//消费者获得积分
+                int? rintegral = 0;//零售客户获得积分
+                string refIds = string.Empty;
                 foreach (var item in input.ShopProductList)
                 {
                     //购买记录
+                    var purchaseRecord = input.MapTo<PurchaseRecord>();
+                    purchaseRecord.Integral = (int)(item.Price * item.Num * config[DeployCodeEnum.商品购买]);
+                    purchaseRecord.Quantity = item.Num;
+                    purchaseRecord.ProductId = item.Id;
+                    purchaseRecord.Specification = item.Specification;
+                    purchaseRecord.Remark = string.Format("数量{0}*指导零售价{1}*兑换比例{2}=积分{3}", item.Num, item.Price, config[DeployCodeEnum.商品购买], purchaseRecord.Integral);
+                    await _purchaserecordRepository.InsertAsync(purchaseRecord);
+                    await CurrentUnitOfWork.SaveChangesAsync();
 
-                    
+                    refIds += purchaseRecord.Id.ToString() + ",";
+                    xintegral += purchaseRecord.Integral;
+                    rintegral += ((int)(item.Price * item.Num * config[DeployCodeEnum.店铺扫码兑换]));
                 }
-                decimal? sumAmount = input.ShopProductList.Sum(s => s.Price * s.Num);//消费总金额
-                int xintegral = 0;//消费者获得积分
-                int rintegral = 0;//零售客户获得积分
-                //积分明细
+                if (refIds.Length > 0)
+                {
+                    refIds = refIds.Substring(0, refIds.Length - 1);
+                }
+                //更新消费者总积分 和 积分明细
+                if (xintegral > 0)
+                {
+                    var user = await _weChatUserRepository.GetAll().Where(u => u.OpenId == input.OpenId).FirstOrDefaultAsync();
+                    var intDetail = new IntegralDetail();
+                    intDetail.InitialIntegral = user.IntegralTotal;
+                    intDetail.Integral = xintegral;
+                    intDetail.FinalIntegral = user.IntegralTotal + xintegral;
+                    intDetail.OpenId = user.OpenId;
+                    intDetail.RefId = refIds;
+                    intDetail.TenantId = input.TenantId;
+                    intDetail.Type = IntegralTypeEnum.购买商品兑换;
+                    intDetail.Desc = "店铺购买商品兑换";
+                    await _integralDetailRepository.InsertAsync(intDetail);
+                    user.IntegralTotal = intDetail.FinalIntegral.Value;
+                    await _weChatUserRepository.UpdateAsync(user);
+                }
 
-                //更新消费者总积分
+                //更新店铺管理员总积分 和 积分明细
+                if (rintegral > 0)
+                {
+                    //获取零售客户 店铺管理员
+                    var shopKeeper = await _weChatUserRepository.GetAll().Where(w => w.UserId == input.RetailerId
+                    && w.UserType == UserTypeEnum.零售客户 && w.IsShopkeeper == true).FirstOrDefaultAsync();
+                    if (shopKeeper != null)
+                    {
+                        var intDetail = new IntegralDetail();
+                        intDetail.InitialIntegral = shopKeeper.IntegralTotal;
+                        intDetail.Integral = rintegral;
+                        intDetail.FinalIntegral = shopKeeper.IntegralTotal + rintegral;
+                        intDetail.OpenId = shopKeeper.OpenId;
+                        intDetail.RefId = refIds;
+                        intDetail.TenantId = input.TenantId;
+                        intDetail.Type = IntegralTypeEnum.扫码积分赠送;
+                        intDetail.Desc = "店铺消费者购买商品赠送";
+                        await _integralDetailRepository.InsertAsync(intDetail);
+                        shopKeeper.IntegralTotal = intDetail.FinalIntegral.Value;
+                        await _weChatUserRepository.UpdateAsync(shopKeeper);
+                    }
+                }
 
-                //更新店铺管理员总积分
+                //发送积分微信通知
 
                 APIResultDto result = new APIResultDto();
                 result.Code = 0;
                 result.Msg = "积分兑换成功";
-                result.Data = new { RetailerIntegral = 100, UserIntegral = 200 };
+                result.Data = new { RetailerIntegral = rintegral, UserIntegral = xintegral };
                 return result;
             }
         }
