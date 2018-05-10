@@ -12,6 +12,7 @@ import { Observable } from "rxjs/Observable";
 import { Http, Headers, ResponseContentType, Response } from "@angular/http";
 import { Parameter } from '@shared/service-proxies/entity';
 import { MemberConfigs } from '@shared/entity/member/memberconfig';
+import { ConfigCode } from '@shared/entity/member/configcode';
 
 function throwException(message: string, status: number, response: string, headers: { [key: string]: any; }, result?: any): Observable<any> {
     if (result !== null && result !== undefined)
@@ -29,8 +30,8 @@ export class MemberConfigsServiceProxy {
         this.http = http;
         this.baseUrl = baseUrl ? baseUrl : "";
     }
-    getMemberConfigs(): Observable<MemberConfigs> {
-        let url_ = this.baseUrl + "/api/services/app/IntegralDetail/GetPagedIntegralDetails?";
+    getMemberConfigs(): Observable<PagedResultDtoOfMemberConfigs> {
+        let url_ = this.baseUrl + "/api/services/app/MemberConfig/GetTenanMemberConfigAsync?";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ = {
@@ -48,14 +49,14 @@ export class MemberConfigsServiceProxy {
                 try {
                     return this.processGetMemberConfigs(response_);
                 } catch (e) {
-                    return <Observable<MemberConfigs>><any>Observable.throw(e);
+                    return <Observable<PagedResultDtoOfMemberConfigs>><any>Observable.throw(e);
                 }
             } else
-                return <Observable<MemberConfigs>><any>Observable.throw(response_);
+                return <Observable<PagedResultDtoOfMemberConfigs>><any>Observable.throw(response_);
         });
     }
 
-    protected processGetMemberConfigs(response: Response): Observable<MemberConfigs> {
+    protected processGetMemberConfigs(response: Response): Observable<PagedResultDtoOfMemberConfigs> {
         const status = response.status;
 
         let _headers: any = response.headers ? response.headers.toJSON() : {};
@@ -63,7 +64,7 @@ export class MemberConfigsServiceProxy {
             const _responseText = response.text();
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 ? PagedResultDtoOfMemberConfigs.fromJS(resultData200) : new MemberConfigs();
+            result200 = resultData200 ? PagedResultDtoOfMemberConfigs.fromJS(resultData200) : new PagedResultDtoOfMemberConfigs();
             return Observable.of(result200);
         } else if (status === 401) {
             const _responseText = response.text();
@@ -75,12 +76,64 @@ export class MemberConfigsServiceProxy {
             const _responseText = response.text();
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Observable.of<MemberConfigs>(<any>null);
+        return Observable.of<PagedResultDtoOfMemberConfigs>(<any>null);
+    }
+
+    update(input: ConfigCode): Observable<ConfigCode> {
+        let url_ = this.baseUrl + "/api/services/app/MemberConfig/CreateOrUpdateMemberConfigDtoAsync";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ = {
+            body: content_,
+            method: "post",
+            headers: new Headers({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_) => {
+            return this.processUpdate(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processUpdate(response_);
+                } catch (e) {
+                    return <Observable<ConfigCode>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<ConfigCode>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processUpdate(response: Response): Observable<ConfigCode> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? ConfigCode.fromJS(resultData200) : new ConfigCode();
+            return Observable.of(result200);
+        } else if (status === 401) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status === 403) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<ConfigCode>(<any>null);
     }
 }
 
 export class PagedResultDtoOfMemberConfigs implements PagedResultDtoOfMemberConfigs {
-    totalCount: number;
+    // totalCount: number;
     items: MemberConfigs[];
 
     constructor(data?: PagedResultDtoOfMemberConfigs) {
@@ -94,10 +147,15 @@ export class PagedResultDtoOfMemberConfigs implements PagedResultDtoOfMemberConf
 
     init(data?: any) {
         if (data) {
-            this.totalCount = data["totalCount"];
-            if (data["items"] && data["items"].constructor === Array) {
+            // this.totalCount = data["totalCount"];
+            // if (data["items"] && data["items"].constructor === Array) {
+            //     this.items = [];
+            //     for (let item of data["items"])
+            //         this.items.push(MemberConfigs.fromJS(item));
+            // }
+            if (data && data.constructor === Array) {
                 this.items = [];
-                for (let item of data["items"])
+                for (let item of data)
                     this.items.push(MemberConfigs.fromJS(item));
             }
         }
@@ -111,11 +169,16 @@ export class PagedResultDtoOfMemberConfigs implements PagedResultDtoOfMemberConf
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["totalCount"] = this.totalCount;
+        // data["totalCount"] = this.totalCount;
+        // if (this.items && this.items.constructor === Array) {
+        //     data["items"] = [];
+        //     for (let item of this.items)
+        //         data["items"].push(item.toJSON());
+        // }
         if (this.items && this.items.constructor === Array) {
-            data["items"] = [];
+            data = [];
             for (let item of this.items)
-                data["items"].push(item.toJSON());
+                data.push(item.toJSON());
         }
         return data;
     }
@@ -129,6 +192,6 @@ export class PagedResultDtoOfMemberConfigs implements PagedResultDtoOfMemberConf
 }
 
 export interface IPagedResultDtoOfMemberConfigs {
-    totalCount: number;
+    // totalCount: number;
     items: MemberConfigs[];
 }

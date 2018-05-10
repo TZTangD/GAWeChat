@@ -24,5 +24,21 @@ namespace HC.WeChat.MemberConfigs.Dtos
         /// </summary>
         [Required]
         public DateTime CreationTime { get; set; }
+
+
+
+    }
+    public class MemberCodeEditDto
+    {
+        public Guid RcId { get; set; }
+        public Guid CId { get; set; }
+        public Guid EId { get; set; }
+
+        public int RcCode { get; set; }
+        public int CCode { get; set; }
+        public int ECode { get; set; }
+        public string RcValue { get; set; }
+        public string CValue { get; set; }
+        public string EValue { get; set; }
     }
 }

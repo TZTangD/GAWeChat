@@ -56,5 +56,9 @@ namespace HC.WeChat.MemberConfigs
         /// 批量删除MemberConfig
         /// </summary>
         Task BatchDeleteMemberConfigsAsync(List<Guid> input);
+        Task<List<MemberConfigListDto>> GetTenanMemberConfigAsync();
+        Task CreateOrUpdateMemberConfigDtoAsync(MemberCodeEditDto input);
+
+        //Task<MemberConfigListDto> GetTenanMemberConfigAsync();
     }
 }

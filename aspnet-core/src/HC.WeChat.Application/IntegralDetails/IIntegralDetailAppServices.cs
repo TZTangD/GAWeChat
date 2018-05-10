@@ -19,7 +19,7 @@ namespace HC.WeChat.IntegralDetails
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task<PagedResultDto<IntegralDetailListDto>> GetPagedIntegralDetails(GetIntegralDetailsInput input);
+        Task<PagedResultDto<IntegralDetailListDto>> GetPagedIntegralDetailsAsync(GetIntegralDetailsInput input);
 
         /// <summary>
         /// 通过指定id获取IntegralDetailListDto信息
@@ -63,13 +63,13 @@ namespace HC.WeChat.IntegralDetails
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task<PagedResultDto<IntegralDetailListDto>> GetPagedIntegralDetailsById(GetIntegralDetailsInput input);
+        Task<PagedResultDto<IntegralDetailListDto>> GetPagedIntegralDetailsByIdAsync(GetIntegralDetailsInput input);
 
         /// <summary>
         /// 查询用户信息
         /// </summary>
         /// <param name="openId"></param>
         /// <returns></returns>
-        Task<WeChatUserListDto> GetUserInfo(string openId);
+        Task<WeChatUserListDto> GetUserInfoAsync(string openId);
     }
 }

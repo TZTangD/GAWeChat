@@ -79,7 +79,7 @@ import { TransferService } from './transfer.service';
 export class Step1Component implements OnInit {
     form: FormGroup;
 
-    constructor(private fb: FormBuilder, public item: TransferService) {}
+    constructor(private fb: FormBuilder, public item: TransferService) { }
 
     ngOnInit() {
         this.form = this.fb.group({

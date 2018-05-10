@@ -31,7 +31,7 @@ export class IntegralServiceProxy {
         this.baseUrl = baseUrl ? baseUrl : "";
     }
     getAll(skipCount: number, maxResultCount: number, parameter: Parameter[]): Observable<PagedResultDtoOfIntegralDetails> {
-        let url_ = this.baseUrl + "/api/services/app/IntegralDetail/GetPagedIntegralDetails?";
+        let url_ = this.baseUrl + "/api/services/app/IntegralDetail/GetPagedIntegralDetailsAsync?";
         if (skipCount !== undefined)
             url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&";
         if (maxResultCount !== undefined)
@@ -91,7 +91,7 @@ export class IntegralServiceProxy {
     }
 
     GetUserInfo(openId: string): Observable<IntegralDetails> {
-        let url_ = this.baseUrl + "/api/services/app/IntegralDetail/GetUserInfo?";
+        let url_ = this.baseUrl + "/api/services/app/IntegralDetail/GetUserInfoAsync?";
         if (openId !== undefined)
             url_ += "openId=" + encodeURIComponent("" + openId) + "&";
         url_ = url_.replace(/[?&]$/, "");
@@ -141,7 +141,7 @@ export class IntegralServiceProxy {
     }
 
     getIntegralDetailsById(skipCount: number, maxResultCount: number, openId: string): Observable<PagedResultDtoOfIntegralDetails> {
-        let url_ = this.baseUrl + "/api/services/app/IntegralDetail/GetPagedIntegralDetailsById?";
+        let url_ = this.baseUrl + "/api/services/app/IntegralDetail/GetPagedIntegralDetailsByIdAsync?";
         if (skipCount !== undefined)
             url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&";
         if (maxResultCount !== undefined)
