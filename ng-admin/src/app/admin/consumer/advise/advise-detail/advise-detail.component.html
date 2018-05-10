@@ -49,7 +49,7 @@
                         <div nz-form-label nz-col [nzSm]="4">
                             <label for="photoUrl">图片</label>
                         </div>
-                        <div nz-form-control nz-col [nzSm]="20">
+                        <div nz-form-control nz-col [nzSm]="10">
                             <h4 *ngIf="advise.photoUrl" class="mb-md">点击图片可查看原图</h4>
                             <nz-list [nzLoading]="loading" class="imgList" [nzDataSource]="photoUrls" [nzGrid]="{gutter: 24, lg: 6, md: 8, sm: 12, xs: 24 }">
                                 <ng-template #item let-item>

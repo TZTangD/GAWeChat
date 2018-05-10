@@ -194,7 +194,7 @@ namespace HC.WeChat.IntegralDetails
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<PagedResultDto<IntegralDetailListDto>> GetPagedIntegralDetails(GetIntegralDetailsInput input)
+        public async Task<PagedResultDto<IntegralDetailListDto>> GetPagedIntegralDetailsAsync(GetIntegralDetailsInput input)
         {
             var queryIntegralDetail = _integraldetailRepository.GetAll();
             var queryWXUser = _wechatusersRepository.GetAll()
@@ -243,7 +243,7 @@ namespace HC.WeChat.IntegralDetails
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<PagedResultDto<IntegralDetailListDto>> GetPagedIntegralDetailsById(GetIntegralDetailsInput input)
+        public async Task<PagedResultDto<IntegralDetailListDto>> GetPagedIntegralDetailsByIdAsync(GetIntegralDetailsInput input)
         {
             var queryIntegralDetail = _integraldetailRepository.GetAll().Where(v=>v.OpenId == input.OpenId);
             var queryWXUser = _wechatusersRepository.GetAll();
@@ -283,7 +283,7 @@ namespace HC.WeChat.IntegralDetails
         /// </summary>
         /// <param name="openId"></param>
         /// <returns></returns>
-        public async Task<WeChatUserListDto> GetUserInfo(string openId)
+        public async Task<WeChatUserListDto> GetUserInfoAsync(string openId)
         {
             var entity = await (from u in _wechatusersRepository.GetAll().Where(v => v.OpenId == openId)
                          select new WeChatUserListDto()

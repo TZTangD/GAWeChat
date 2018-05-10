@@ -13,13 +13,17 @@ using HC.WeChat.MemberConfigs.Dtos;
 using HC.WeChat.MemberConfigs.DomainServices;
 using HC.WeChat.MemberConfigs;
 using System;
+using System.Linq;
+using HC.WeChat.WechatEnums;
+using HC.WeChat.Authorization;
 
 namespace HC.WeChat.MemberConfigs
 {
     /// <summary>
     /// MemberConfig应用层服务的接口实现方法
     /// </summary>
-    [AbpAuthorize(MemberConfigAppPermissions.MemberConfig)]
+    //[AbpAuthorize(MemberConfigAppPermissions.MemberConfig)]
+    [AbpAuthorize(AppPermissions.Pages)]
     public class MemberConfigAppService : WeChatAppServiceBase, IMemberConfigAppService
     {
         ////BCC/ BEGIN CUSTOM CODE SECTION
@@ -134,12 +138,11 @@ namespace HC.WeChat.MemberConfigs
         /// <summary>
         /// 新增MemberConfig
         /// </summary>
-        [AbpAuthorize(MemberConfigAppPermissions.MemberConfig_CreateMemberConfig)]
+        //[AbpAuthorize(MemberConfigAppPermissions.MemberConfig_CreateMemberConfig)]
         protected virtual async Task<MemberConfigEditDto> CreateMemberConfigAsync(MemberConfigEditDto input)
         {
             //TODO:新增前的逻辑判断，是否允许新增
             var entity = ObjectMapper.Map<MemberConfig>(input);
-
             entity = await _memberconfigRepository.InsertAsync(entity);
             return entity.MapTo<MemberConfigEditDto>();
         }
@@ -147,7 +150,7 @@ namespace HC.WeChat.MemberConfigs
         /// <summary>
         /// 编辑MemberConfig
         /// </summary>
-        [AbpAuthorize(MemberConfigAppPermissions.MemberConfig_EditMemberConfig)]
+        //[AbpAuthorize(MemberConfigAppPermissions.MemberConfig_EditMemberConfig)]
         protected virtual async Task UpdateMemberConfigAsync(MemberConfigEditDto input)
         {
             //TODO:更新前的逻辑判断，是否允许更新
@@ -163,7 +166,7 @@ namespace HC.WeChat.MemberConfigs
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        [AbpAuthorize(MemberConfigAppPermissions.MemberConfig_DeleteMemberConfig)]
+        //[AbpAuthorize(MemberConfigAppPermissions.MemberConfig_DeleteMemberConfig)]
         public async Task DeleteMemberConfig(EntityDto<Guid> input)
         {
 
@@ -174,13 +177,87 @@ namespace HC.WeChat.MemberConfigs
         /// <summary>
         /// 批量删除MemberConfig的方法
         /// </summary>
-        [AbpAuthorize(MemberConfigAppPermissions.MemberConfig_BatchDeleteMemberConfigs)]
+        //[AbpAuthorize(MemberConfigAppPermissions.MemberConfig_BatchDeleteMemberConfigs)]
         public async Task BatchDeleteMemberConfigsAsync(List<Guid> input)
         {
             //TODO:批量删除前的逻辑判断，是否允许删除
             await _memberconfigRepository.DeleteAsync(s => input.Contains(s.Id));
         }
 
+        /// <summary>
+        /// 通过租户id获取积分配置
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<MemberConfigListDto>> GetTenanMemberConfigAsync()
+        {
+            var entity = await _memberconfigRepository.GetAll().Where(u => u.TenantId == AbpSession.TenantId).ToListAsync();
+            //return await Task.FromResult(entity.MapTo<List<MemberConfigListDto>>());
+            return entity.MapTo<List<MemberConfigListDto>>();
+
+        }
+
+        /// <summary>
+        /// 新增or修改积分配置
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task CreateOrUpdateMemberConfigDtoAsync(MemberCodeEditDto input)
+        {
+            MemberConfigEditDto dto = new MemberConfigEditDto();
+            if (input.ECode == 2 && input.EId != Guid.Parse("00000000-0000-0000-0000-000000000000"))
+            {
+                dto.Code = DeployCodeEnum.商品评价;
+                dto.Value = input.EValue;
+                dto.Type = DeployTypeEnum.积分配置;
+                dto.CreationTime = DateTime.Now;
+                dto.Id = input.EId;
+                await UpdateMemberConfigAsync(dto); 
+            }
+            else
+            {
+                dto.Code = DeployCodeEnum.商品评价;
+                dto.Value = input.EValue;
+                dto.Type = DeployTypeEnum.积分配置;
+                dto.CreationTime = DateTime.Now;
+                await CreateMemberConfigAsync(dto);
+            }
+            if (input.CCode == 1 && input.CId != Guid.Parse("00000000-0000-0000-0000-000000000000"))
+            {
+                dto.Code = DeployCodeEnum.商品购买;
+                dto.Value = input.CValue;
+                dto.Type = DeployTypeEnum.积分配置;
+                dto.CreationTime = DateTime.Now;
+                dto.Id = input.CId;
+                await UpdateMemberConfigAsync(dto);
+            }
+            else
+            {
+                dto.Code = DeployCodeEnum.商品购买;
+                dto.Value = input.CValue;
+                dto.Type = DeployTypeEnum.积分配置;
+                dto.CreationTime = DateTime.Now;
+                await CreateMemberConfigAsync(dto);
+                
+            }
+            if (input.RcCode == 3 && input.RcId != Guid.Parse("00000000-0000-0000-0000-000000000000"))
+            {
+                dto.Code = DeployCodeEnum.店铺扫码兑换;
+                dto.Value = input.RcValue;
+                dto.Type = DeployTypeEnum.积分配置;
+                dto.CreationTime = DateTime.Now;
+                dto.Id = input.RcId;
+                await UpdateMemberConfigAsync(dto);
+            }
+            else
+            {
+                dto.Code = DeployCodeEnum.店铺扫码兑换;
+                dto.Value = input.RcValue;
+                dto.Type = DeployTypeEnum.积分配置;
+                dto.CreationTime = DateTime.Now;
+                await CreateMemberConfigAsync(dto);
+                
+            }
+        }
     }
 }
 
