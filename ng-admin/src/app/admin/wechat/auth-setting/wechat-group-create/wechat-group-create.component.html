@@ -8,10 +8,10 @@
             <fieldset>
                 <div nz-form-item nz-row>
                     <div nz-form-label nz-col [nzSm]="5">
-                        <label for="code" nz-form-item-required>用户类型</label>
+                        <label for="typeCode" nz-form-item-required>用户类型</label>
                     </div>
-                    <div nz-form-control nz-col [nzSm]="19" nzHasFeedback [nzValidateStatus]="getFormControl('code')">
-                        <nz-select formControlName="position" [nzPlaceHolder]="'职位'" [(ngModel)]="employeec.position" [nzShowSearch]="true" nzSize="large">
+                    <div nz-form-control nz-col [nzSm]="19" nzHasFeedback [nzValidateStatus]="getFormControl('typeCode')">
+                        <nz-select formControlName="typeCode" [nzPlaceHolder]="'职位'" [(ngModel)]="wechatGroup.typeCode" [nzShowSearch]="true" nzSize="large">
                             <nz-option *ngFor="let i of positions" [nzLabel]="i.text" [nzValue]="i.value">
                             </nz-option>
                         </nz-select>
@@ -19,12 +19,12 @@
                 </div>
                 <div nz-form-item nz-row>
                     <div nz-form-label nz-col [nzSm]="5">
-                        <label for="name" nz-form-item-required>分组名</label>
+                        <label for="tagName" nz-form-item-required>分组名</label>
                     </div>
-                    <div nz-form-control nz-col [nzSm]="19" nzHasFeedback [nzValidateStatus]="getFormControl('name')">
-                        <nz-input formControlName="name" [(ngModel)]="employeec.name" [nzId]="'name'"></nz-input>
-                        <div nz-form-explain *ngIf="getFormControl('name').dirty&&getFormControl('name').hasError('maxlength')">字符长度小于等于50</div>
-                        <div nz-form-explain *ngIf="getFormControl('name').dirty&&getFormControl('name').hasError('required')">请输入姓名</div>
+                    <div nz-form-control nz-col [nzSm]="19" nzHasFeedback [nzValidateStatus]="getFormControl('tagName')">
+                        <nz-input formControlName="tagName" [(ngModel)]="wechatGroup.tagName" [nzId]="'tagName'"></nz-input>
+                        <div nz-form-explain *ngIf="getFormControl('tagName').dirty&&getFormControl('tagName').hasError('maxlength')">字符长度小于等于50</div>
+                        <div nz-form-explain *ngIf="getFormControl('tagName').dirty&&getFormControl('tagName').hasError('required')">请输入姓名</div>
                     </div>
                  
                 </div>

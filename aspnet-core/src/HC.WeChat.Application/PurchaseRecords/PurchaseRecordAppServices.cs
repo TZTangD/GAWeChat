@@ -13,7 +13,11 @@ using HC.WeChat.PurchaseRecords.Dtos;
 using HC.WeChat.PurchaseRecords.DomainServices;
 using HC.WeChat.PurchaseRecords;
 using System;
+using System.Linq;
 using HC.WeChat.Authorization;
+using HC.WeChat.Dto;
+using HC.WeChat.IntegralDetails;
+using HC.WeChat.WeChatUsers;
 
 namespace HC.WeChat.PurchaseRecords
 {
@@ -27,16 +31,22 @@ namespace HC.WeChat.PurchaseRecords
         ////BCC/ BEGIN CUSTOM CODE SECTION
         ////ECC/ END CUSTOM CODE SECTION
         private readonly IRepository<PurchaseRecord, Guid> _purchaserecordRepository;
+        private readonly IRepository<IntegralDetail, Guid> _integralDetailRepository;
+        private readonly IRepository<WeChatUser, Guid> _weChatUserRepository;
         private readonly IPurchaseRecordManager _purchaserecordManager;
 
         /// <summary>
         /// 构造函数
         /// </summary>
         public PurchaseRecordAppService(IRepository<PurchaseRecord, Guid> purchaserecordRepository
-      , IPurchaseRecordManager purchaserecordManager
+        , IRepository<IntegralDetail, Guid> integralDetailRepository
+        , IRepository<WeChatUser, Guid> weChatUserRepository
+        , IPurchaseRecordManager purchaserecordManager
         )
         {
             _purchaserecordRepository = purchaserecordRepository;
+            _integralDetailRepository = integralDetailRepository;
+            _weChatUserRepository = weChatUserRepository;
             _purchaserecordManager = purchaserecordManager;
         }
 
@@ -183,6 +193,39 @@ namespace HC.WeChat.PurchaseRecords
             await _purchaserecordRepository.DeleteAsync(s => input.Contains(s.Id));
         }
 
+        [AbpAllowAnonymous]
+        public async Task<APIResultDto> ExchangeIntegral(ExchangeIntegralDto input)
+        {
+            using (CurrentUnitOfWork.SetTenantId(input.TenantId))
+            {
+                //获取积分配置
+
+                //获取零售客户 店铺管理员
+                var shopKeeper = await _weChatUserRepository.GetAll().Where(w => w.UserId == input.RetailerId
+                && w.UserType == WechatEnums.UserTypeEnum.零售客户 && w.IsShopkeeper == true).FirstOrDefaultAsync();
+
+                foreach (var item in input.ShopProductList)
+                {
+                    //购买记录
+
+                    
+                }
+                decimal? sumAmount = input.ShopProductList.Sum(s => s.Price * s.Num);//消费总金额
+                int xintegral = 0;//消费者获得积分
+                int rintegral = 0;//零售客户获得积分
+                //积分明细
+
+                //更新消费者总积分
+
+                //更新店铺管理员总积分
+
+                APIResultDto result = new APIResultDto();
+                result.Code = 0;
+                result.Msg = "积分兑换成功";
+                result.Data = new { RetailerIntegral = 100, UserIntegral = 200 };
+                return result;
+            }
+        }
     }
 }
 

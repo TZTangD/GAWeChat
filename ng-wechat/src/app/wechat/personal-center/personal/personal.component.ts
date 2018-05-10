@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 export class PersonalComponent extends AppComponentBase implements OnInit {
 
     user: WechatUser;
-    phone: string = '';
+    //phone: string = '';
 
     constructor(injector: Injector, private router: Router) {
         super(injector);
@@ -21,9 +21,9 @@ export class PersonalComponent extends AppComponentBase implements OnInit {
     ngOnInit() {
         this.settingsService.getUser().subscribe(result => {
             this.user = result;
-            if (this.user && this.user.phone) {
-                this.phone = this.user.phone.substr(0,3) + '****' + this.user.phone.substr(7);
-            }
+            //if (this.user && this.user.phone) {
+            //    this.phone = this.user.phone.substr(0,3) + '****' + this.user.phone.substr(7);
+            //}
         });
     }
 

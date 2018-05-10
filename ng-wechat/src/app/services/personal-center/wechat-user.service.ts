@@ -28,6 +28,17 @@ export class WechatUserService {
     });
   }
 
+  GetWeChatUserByMemberBarCodeAsync(mCode:string, tId:string): Observable<WechatUser> {
+    let param: any = {};
+    param.memberBarCode = mCode;
+    if(tId){
+      param.tenantId = tId;
+    }
+    return this.http.get('/api/services/app/WeChatUser/GetWeChatUserByMemberBarCodeAsync', param).map(data => {
+      return WechatUser.fromJS(data.result);
+    });
+  }
+
   BindMemberAsync(params: any): Observable<ApiResult<WechatUser>>{
     return this.http.post('/api/services/app/WeChatUser/BindMemberAsync', params).map(data => {
       let result = new ApiResult<WechatUser>();

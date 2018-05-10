@@ -27,6 +27,11 @@ namespace HC.WeChat.WeChatUsers
         Task<WeChatUserListDto> GetWeChatUserByIdAsync(EntityDto<Guid> input);
 
         /// <summary>
+        /// 通过指定id获取WeChatUserListDto信息
+        /// </summary>
+        Task<WeChatUserListDto> GetWeChatUserByMemberBarCodeAsync(string memberBarCode, int? tenantId);
+
+        /// <summary>
         /// 导出WeChatUser为excel表
         /// </summary>
         /// <returns></returns>
@@ -76,8 +81,6 @@ namespace HC.WeChat.WeChatUsers
         /// <summary>
         /// 获取店员信息
         /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
         Task<PagedResultDto<WeChatUserListDto>> GetPagedShopWeChatUsers(GetShopWeChatUsersInput input);
     }
 }
