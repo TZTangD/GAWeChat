@@ -1,5 +1,5 @@
 <form nz-form [formGroup]="formc" *ngIf="cdalVisible" id="frm_create_wechatGroup" (ngSubmit)="savec()">
-    <nz-modal [nzVisible]="cmodalVisible" [nzTitle]="'创建分组'" [nzConfirmLoading]="cloading" [nzContent]="modalContent" [nzFooter]="modalFooter"
+    <nz-modal [nzVisible]="cdalVisible" [nzTitle]="'创建分组'" [nzConfirmLoading]="cloading" [nzContent]="modalContent" [nzFooter]="modalFooter"
         (nzOnCancel)="chandleCancel($event)">
         <ng-template #modalContent>
             <ng-template #nzTabHeading>
@@ -11,8 +11,8 @@
                         <label for="typeCode" nz-form-item-required>用户类型</label>
                     </div>
                     <div nz-form-control nz-col [nzSm]="19" nzHasFeedback [nzValidateStatus]="getFormControl('typeCode')">
-                        <nz-select formControlName="typeCode" [nzPlaceHolder]="'职位'" [(ngModel)]="wechatGroup.typeCode" [nzShowSearch]="true" nzSize="large">
-                            <nz-option *ngFor="let i of positions" [nzLabel]="i.text" [nzValue]="i.value">
+                        <nz-select formControlName="typeCode" [nzPlaceHolder]="'用户类型'" [(ngModel)]="wechatGroup.typeCode" (ngModelChange)="changeValue()" [nzShowSearch]="true" nzSize="large">
+                            <nz-option *ngFor="let i of showTypes" [nzLabel]="i.text" [nzValue]="i.value">
                             </nz-option>
                         </nz-select>
                     </div>
@@ -23,7 +23,6 @@
                     </div>
                     <div nz-form-control nz-col [nzSm]="19" nzHasFeedback [nzValidateStatus]="getFormControl('tagName')">
                         <nz-input formControlName="tagName" [(ngModel)]="wechatGroup.tagName" [nzId]="'tagName'"></nz-input>
-                        <div nz-form-explain *ngIf="getFormControl('tagName').dirty&&getFormControl('tagName').hasError('maxlength')">字符长度小于等于50</div>
                         <div nz-form-explain *ngIf="getFormControl('tagName').dirty&&getFormControl('tagName').hasError('required')">请输入姓名</div>
                     </div>
                  

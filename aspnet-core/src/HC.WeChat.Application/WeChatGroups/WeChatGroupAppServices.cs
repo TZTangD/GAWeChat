@@ -23,6 +23,7 @@ using HC.WeChat.WechatAppConfigs.Dtos;
 using HC.WeChat.WeChatUsers;
 using System;
 using HC.WeChat.Dto;
+using HC.WeChat.WechatEnums;
 
 namespace HC.WeChat.WeChatGroups
 {
@@ -67,7 +68,7 @@ namespace HC.WeChat.WeChatGroups
         {
 
             var query = _wechatgroupRepository.GetAll()
-                .WhereIf(string.IsNullOrEmpty(input.Name),g=>g.TagName.Contains(input.Name));
+                .WhereIf(!string.IsNullOrEmpty(input.Name), g => g.TagName.Contains(input.Name));
             //TODO:根据传入的参数添加过滤条件
             var wechatgroupCount = await query.CountAsync();
 
@@ -223,7 +224,7 @@ namespace HC.WeChat.WeChatGroups
         /// <returns></returns>
         public async Task UpdateWeChatGroup(WeChatGroupListDto input)
         {
-            var group = await UserTagApi.UpdateAsync(AppConfig.AppId,input.TagId, input.TagName);
+            var group = await UserTagApi.UpdateAsync(AppConfig.AppId, input.TagId, input.TagName);
             if (group.errcode == 0)
             {
                 await UpdateWeChatGroupAsync(input.MapTo<WeChatGroupEditDto>());
@@ -237,18 +238,18 @@ namespace HC.WeChat.WeChatGroups
         /// <param name="tagId">标签id</param>
         /// <param name="tagName">标签名</param>
         /// <returns></returns>
-        public async Task MarkWeChatGroup(string openId,int tagId)
+        public async Task MarkWeChatGroup(string openId, int tagId)
         {
             List<string> openIds = new List<string>();
             openIds.Add(openId);
-            await UserTagApi.BatchTaggingAsync(AppConfig.AppId,tagId, openIds);
+            await UserTagApi.BatchTaggingAsync(AppConfig.AppId, tagId, openIds);
         }
 
         /// <summary>
         /// 批量标记用户分组
         /// </summary>
         /// <returns></returns>
-        public async Task<APIResultDto> BatchMarkWeChatGroup()
+        public async Task BatchMarkWeChatGroup()
         {
             //try
             //{
@@ -260,6 +261,8 @@ namespace HC.WeChat.WeChatGroups
             var weChatGroupList = await _wechatgroupRepository.GetAllListAsync();
             foreach (var item in weChatGroupList)
             {
+                //if(item.TypeCode!= UserTypeEnum.消费者)
+                //{
                 var count = await _wechatuserRepository.GetAll().Where(g => g.UserType == item.TypeCode).Select(g => g.OpenId).CountAsync();
                 if (count > 0)
                 {
@@ -267,21 +270,18 @@ namespace HC.WeChat.WeChatGroups
                     for (var i = 0; i < cycleCount; i++)
                     {
                         var weChatUser = await _wechatuserRepository.GetAll().Where(g => g.UserType == item.TypeCode).Skip(i * 50).Take(50).Select(g => g.OpenId).ToListAsync();
+
                         var result = await UserTagApi.BatchTaggingAsync(AppConfig.AppId, item.TagId, weChatUser);
-                        if (result.errcode != 0)
-                        {
-                            return new APIResultDto(){ Code = 0, Msg = "标记失败" };
-                        }
+                        //if (result.errcode != 0)
+                        //{
+                        //    return new APIResultDto() { Code = 0, Msg = "标记失败" };
+                        //}
                     }
                 }
+                //}
             }
-            return new APIResultDto() { Code = 0, Msg = "标记成功" };
+            //return new APIResultDto() { Code = 0, Msg = "标记成功" };
         }
-
-
-
-
-
 
     }
 }

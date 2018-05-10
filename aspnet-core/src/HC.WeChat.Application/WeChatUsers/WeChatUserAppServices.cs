@@ -23,6 +23,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using HC.WeChat.Configuration;
 using Abp.Domain.Uow;
+using HC.WeChat.WeChatGroups;
+using HC.WeChat.WechatAppConfigs.Dtos;
+using HC.WeChat.WechatAppConfigs;
+using Senparc.Weixin.MP.AdvancedAPIs;
 
 namespace HC.WeChat.WeChatUsers
 {
@@ -37,20 +41,30 @@ namespace HC.WeChat.WeChatUsers
         private readonly IWeChatUserManager _wechatuserManager;
         private readonly IRepository<Retailer, Guid> _retailerRepository;
         private readonly IRepository<Employee, Guid> _employeeRepository;
+        private readonly IRepository<WeChatGroup, int> _wechatgroupRepository;
+        public int? TenantId { get; set; }
+        public WechatAppConfigInfo AppConfig { get; set; }
 
+        IWechatAppConfigAppService _wechatAppConfigAppService;
         /// <summary>
         /// 构造函数
         /// </summary>
         public WeChatUserAppService(IRepository<WeChatUser, Guid> wechatuserRepository,
        IWeChatUserManager wechatuserManager,
        IRepository<Retailer, Guid> retailerRepository,
-       IRepository<Employee, Guid> employeeRepository
+       IRepository<Employee, Guid> employeeRepository,
+       IRepository<WeChatGroup, int> wechatgroupRepository,
+       IWechatAppConfigAppService wechatAppConfigAppService
         )
         {
             _wechatuserRepository = wechatuserRepository;
             _wechatuserManager = wechatuserManager;
             _retailerRepository = retailerRepository;
             _employeeRepository = employeeRepository;
+            _wechatgroupRepository = wechatgroupRepository;
+            _wechatAppConfigAppService = wechatAppConfigAppService;
+            TenantId = null;
+            AppConfig = _wechatAppConfigAppService.GetWechatAppConfig(TenantId).Result;
 
         }
 
@@ -263,7 +277,18 @@ namespace HC.WeChat.WeChatUsers
                 entity.BindTime = DateTime.Now;
                 entity.OpenId = input.OpenId;
                 entity.TenantId = input.TenantId;
-                await _wechatuserManager.BindWeChatUserAsync(entity);
+               var result= await _wechatuserManager.BindWeChatUserAsync(entity);
+                //绑定成功后打标签
+                if (result.BindStatus == BindStatusEnum.已绑定)
+                {
+                    var weChatGroup = _wechatgroupRepository.GetAll().Where(g=>g.TypeCode==entity.UserType).FirstOrDefaultAsync();
+                    if (weChatGroup.Result!=null)
+                    {
+                        List<string> openId_list = new List<string>();
+                        openId_list.Add(entity.OpenId);
+                        await UserTagApi.BatchTaggingAsync(AppConfig.AppId, weChatGroup.Result.TagId, openId_list);
+                    }
+                }
                 return new APIResultDto() { Code = 0, Msg = "绑定成功", Data = entity.MapTo<WeChatUserListDto>() };
             }
         }

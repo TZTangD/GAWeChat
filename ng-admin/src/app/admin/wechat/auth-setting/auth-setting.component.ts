@@ -132,8 +132,15 @@ export class AuthSettingComponent extends AppComponentBase implements OnInit {
     editMessage() {
 
     }
+    
     createWeChatGroup() {
-        this.createWeChatGroupModal.show();
+        this.createWeChatGroupModal.show(this.weChatGroups);
+    }
+
+    batchMark(){
+         this.WeChatGroupService.BatchMarkWeChatUser().subscribe(()=>{
+             this.notify.info(this.l('分组成功！'))
+         });
     }
     //#endregion
 }

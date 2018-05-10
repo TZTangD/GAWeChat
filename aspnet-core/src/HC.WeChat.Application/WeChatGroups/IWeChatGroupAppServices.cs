@@ -83,6 +83,6 @@ namespace HC.WeChat.WeChatGroups
         /// 批量标记用户分组
         /// </summary>
         /// <returns></returns>
-        Task<APIResultDto> BatchMarkWeChatGroup();
+        Task BatchMarkWeChatGroup();
     }
 }
