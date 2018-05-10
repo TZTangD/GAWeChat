@@ -41,6 +41,12 @@ namespace HC.WeChat.Migrations
              table: "IntegralDetails",
              maxLength: 50,
              nullable: true);
+
+            migrationBuilder.AlterColumn<string>(
+             name: "RefId",
+             table: "IntegralDetails",
+             maxLength: 500,
+             nullable: true);
         }
         protected override void Down(MigrationBuilder migrationBuilder)
         {
@@ -54,6 +60,11 @@ namespace HC.WeChat.Migrations
             migrationBuilder.DropColumn(
               name: "OperatorName",
               table: "IntegralDetails");
+
+            migrationBuilder.AlterColumn<Guid?>(
+            name: "RefId",
+            table: "IntegralDetails",
+            nullable: true);
         }
     }
 }

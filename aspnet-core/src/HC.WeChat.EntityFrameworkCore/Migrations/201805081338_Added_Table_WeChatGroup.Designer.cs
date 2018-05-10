@@ -1649,7 +1649,7 @@ namespace HC.WeChat.Migrations
                 b.Property<int?>("FinalIntegral");
                 b.Property<int?>("Type");
                 b.Property<string>("Desc").HasMaxLength(500);
-                b.Property<Guid?>("RefId");
+                b.Property<string>("RefId").HasMaxLength(500);
                 b.Property<DateTime>("CreationTime").IsRequired();
                 b.Property<int?>("TenantId");
                 b.Property<string>("OperatorOpenId").HasMaxLength(50);
