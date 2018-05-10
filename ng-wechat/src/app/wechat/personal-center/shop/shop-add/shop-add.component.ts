@@ -11,19 +11,20 @@ import { ToptipsService } from "ngx-weui/toptips";
 @Component({
     selector: 'wechat-shop-add',
     templateUrl: './shop-add.component.html',
-    styleUrls: [ './shop-add.component.scss' ],
+    styleUrls: ['./shop-add.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
 export class ShopAddComponent extends AppComponentBase implements OnInit {
     showAddInfo: boolean = true;
     user: WechatUser;
 
-    res: any = { };
-    coverPhoto: string = '';
+    res: any = {};
+    coverPhoto: string;
 
     img: any;
     imgShow: boolean = false;
     title: string = '新增店铺';
+    hostUrl: string = AppConsts.remoteServiceBaseUrl;
 
     uploader: Uploader = new Uploader(<UploaderOptions>{
         url: AppConsts.remoteServiceBaseUrl + '/WeChatFile/FilesPosts?folder=shop',
@@ -43,18 +44,18 @@ export class ShopAddComponent extends AppComponentBase implements OnInit {
             //console.table(file);
             //console.table(arguments);
             let data = JSON.parse(response);
-            if(data && data.success == true){
+            if (data && data.success == true) {
                 this.coverPhoto = data.result;
             }
         }),
-        onUploadComplete: function(file: FileItem, response: string) {
+        onUploadComplete: function (file: FileItem, response: string) {
             console.log('onUploadComplete-' + response, arguments);
             //console.table(file);
             //console.table(arguments);  
         }
     });
 
-    constructor(injector: Injector, private router: Router, 
+    constructor(injector: Injector, private router: Router,
         private shopService: ShopService,
         private srv: ToptipsService) {
         super(injector);
@@ -62,15 +63,16 @@ export class ShopAddComponent extends AppComponentBase implements OnInit {
 
     ngOnInit() {
         //alert(this.id)
-        if(this.id && this.id == '1'){
+        if (this.id && this.id == '1') {
             this.showAddInfo = false;
         }
         this.settingsService.getUser().subscribe(result => {
             this.user = result;
         });
         this.shopService.GetShopByOpenId(this.WUserParams).subscribe(result => {
-            if(result){
+            if (result) {
                 this.res = result.toJSON();
+                this.coverPhoto = this.res.coverPhoto;
                 this.showAddInfo = false;
                 this.title = '修改店铺';
             }
@@ -87,32 +89,38 @@ export class ShopAddComponent extends AppComponentBase implements OnInit {
     }
 
     onGallery(item: any) {
-        this.img = [{ file: item._file, item: item }];
+        if(item){
+            this.img = [{ file: item._file, item: item }];
+        } else {
+            this.img = this.hostUrl + this.coverPhoto;
+        } 
         this.imgShow = true;
     }
 
     onDel(item: any) {
-        console.log(item);
-        this.uploader.removeFromQueue(item.item);
-        this.coverPhoto = '';
+        //console.log(item);
+        if (item) {
+            this.uploader.removeFromQueue(item.item);
+        }
+        this.coverPhoto = null;
     }
 
     onSave() {
         //alert('请求数据：' + JSON.stringify(this.res));
-        if(this.coverPhoto != ''){
+        if (!this.coverPhoto) {
             this.res.coverPhoto = this.coverPhoto;
         }
         //console.table(this.res);
-        if(!this.res.coverPhoto || this.res.coverPhoto == ''){
+        if (!this.res.coverPhoto || this.res.coverPhoto == '') {
             this.srv['warn']('请上传店铺形象');
             return;
         }
-        this.shopService.WechatCreateOrUpdateShop({ 
-            shop : this.res, 
-            tenantId: this.settingsService.tenantId, 
-            openId: this.settingsService.openId 
-        }).subscribe(data =>{
-            if(data){
+        this.shopService.WechatCreateOrUpdateShop({
+            shop: this.res,
+            tenantId: this.settingsService.tenantId,
+            openId: this.settingsService.openId
+        }).subscribe(data => {
+            if (data) {
                 this.srv['success']('保存成功');
                 this.router.navigate(["/shops/shop"]);
             } else {
