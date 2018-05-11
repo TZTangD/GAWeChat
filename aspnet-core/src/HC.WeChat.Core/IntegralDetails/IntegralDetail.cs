@@ -51,7 +51,8 @@ namespace HC.WeChat.IntegralDetails
         /// <summary>
         /// 引用Id
         /// </summary>
-        public virtual Guid? RefId { get; set; }
+        [StringLength(500)]
+        public virtual string RefId { get; set; }
 
         /// <summary>
         /// 创建时间

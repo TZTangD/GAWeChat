@@ -207,7 +207,6 @@ namespace HC.WeChat.WechatAppConfigs
                 }
                 return Task.FromResult(new WechatAppConfigInfo());
             }
-
         }
 
         /// <summary>

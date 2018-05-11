@@ -4,7 +4,7 @@ import 'rxjs/add/observable/timer';
 import { AppComponentBase } from '../../components/app-component-base';
 import { WechatUser, UserType, Shop, ShopProduct } from '../../../services/model';
 import { Router } from '@angular/router';
-import { ShopService, AppConsts } from '../../../services';
+import { ShopService } from '../../../services';
 
 import { PopupComponent } from "ngx-weui/popup";
 import { ToptipsService } from "ngx-weui/toptips";
@@ -24,14 +24,12 @@ export class ShopComponent extends AppComponentBase implements OnInit {
     @ViewChild('product') productPopup: PopupComponent;
     cigaretteProducts: ShopProduct[];//卷烟类
     specialProducts: ShopProduct[];//特产类
-    host: string;
 
     constructor(injector: Injector,
         private router: Router,
         private shopService: ShopService,
         private srv: ToptipsService) {
         super(injector);
-        this.host = AppConsts.remoteServiceBaseUrl;
     }
 
     ngOnInit() {
@@ -71,10 +69,7 @@ export class ShopComponent extends AppComponentBase implements OnInit {
             }
 
             this.shopService.GetShopProductsByShopId(params).subscribe(result => {
-                this.shopProducts = result.map(result => {
-                    result.photoUrl = this.host + result.photoUrl;
-                    return result;
-                });
+                this.shopProducts = result;
                 this.shopProductIds = this.shopProducts.map(s => { return s.id });
             });
 

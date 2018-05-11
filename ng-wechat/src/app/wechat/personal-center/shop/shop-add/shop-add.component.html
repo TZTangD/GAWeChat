@@ -40,11 +40,11 @@
                     <label class="weui-label">店铺地址</label>
                 </div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" type="text" [(ngModel)]="res.address" name="address" placeholder="定位店铺地址" weui-input="address"
+                    <input class="weui-input" type="text" [(ngModel)]="res.address" name="address" placeholder="请输入店铺地址" weui-input="address"
                         weui-required>
                 </div>
                 <div class="weui-cell__ft">
-                    <button type="button" class="weui-vcode-btn">重新定位</button>
+                    <button type="button" class="weui-vcode-btn">获取定位</button>
                 </div>
             </div>
             <div class="weui-cells__title">店铺描述</div>
@@ -56,7 +56,23 @@
                     </div>
                 </div>
             </div>
-            <div class="weui-cell">
+            <div class="weui-cell" *ngIf="coverPhoto">
+                <div class="weui-cell__bd">
+                    <div class="weui-uploader">
+                        <div class="weui-uploader__hd">
+                            <p class="weui-uploader__title">店铺形象</p>
+                            <div class="weui-uploader__info"></div>
+                        </div>
+                        <div class="weui-uploader__bd">
+                            <ul class="weui-uploader__files">
+                                <li class="weui-uploader__file" (click)="onGallery()" [ngStyle]="{'background-image':'url('+ hostUrl + coverPhoto +')'}" ></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <weui-gallery [imgs]="img" [(show)]="imgShow" (delete)="onDel()"></weui-gallery>
+                </div>
+            </div>
+            <div class="weui-cell" *ngIf="!coverPhoto">
                 <div class="weui-cell__bd">
                     <div class="weui-uploader">
                         <div class="weui-uploader__hd">
@@ -65,19 +81,15 @@
                         </div>
                         <div class="weui-uploader__bd">
                             <ul class="weui-uploader__files">
-                                <li class="weui-uploader__file" *ngFor="let item of uploader.queue"
-                                    [weui-thumb]="item._file"
-                                    (click)="onGallery(item)"
-                                    [ngClass]="{'weui-uploader__file_status': item.isError}">
+                                <li class="weui-uploader__file" *ngFor="let item of uploader.queue" [weui-thumb]="item._file" (click)="onGallery(item)" [ngClass]="{'weui-uploader__file_status': item.isError}">
                                     <div class="weui-uploader__file-content" *ngIf="item.isUploading">{{item.progress}}%</div>
                                     <div class="weui-uploader__file-content" *ngIf="item.isError">
                                         <i class="weui-icon-warn"></i>
                                     </div>
                                 </li>
                             </ul>
-                            <div class="weui-uploader__input-box" *ngIf="uploader?.queue?.length < 1" >
-                                <input class="weui-uploader__input" type="file" accept="image/*"
-                                    [weui-uploader-file]="uploader" name="files" weui-required>
+                            <div class="weui-uploader__input-box" *ngIf="uploader?.queue?.length < 1">
+                                <input class="weui-uploader__input" type="file" accept="image/*" [weui-uploader-file]="uploader" name="files" weui-required>
                             </div>
                         </div>
                     </div>
@@ -85,14 +97,14 @@
                 </div>
             </div>
         </div>
-        
+
         <label for="weuiAgree" class="weui-agree">
             <span class="weui-agree__text">
                 店铺信息提交后需等待营销中心审核，审核通过后可维护商品信息，消费者可以在附近店铺和特色商品进行查找
             </span>
         </label>
         <div class="weui-btn-area">
-            <button class="weui-btn weui-btn_primary" [disabled]="!f.form.valid || !f.form.dirty" [ngClass]="{'weui-btn_disabled': !f.form.valid || !f.form.dirty}">提交</button>
+            <button class="weui-btn weui-btn_primary" [disabled]="!f.form.valid" [ngClass]="{'weui-btn_disabled': !f.form.valid}">提交</button>
         </div>
     </form>
 </Page>

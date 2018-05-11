@@ -1,18 +1,10 @@
 <Page [ngClass]="'Scan'" [title]="'扫码积分'" [showTitle]="false" [spacing]="false">
-    <div class="weui-media-box weui-media-box_small-appmsg">
-        <div class="weui-cells">
-            <div class="weui-cell weui-cell_access">
-                <div class="weui-cell__hd">
-                    <img src="./assets/images/scan/shoppingbag-o.png" alt="" style="width:25px;margin-right:5px;display:block">
-                </div>
-                <div class="weui-cell__bd weui-cell_primary" style="font-size: 17px;">
-                    <p>扫码积分</p>
-                </div>
+    <div class="weui-cells" *ngIf="shop" style="margin-top: 0px;">
+        <div class="weui-cell" style=" padding-bottom: 0px; padding-top: 0px; padding-left: 0px; padding-right: 0px;">
+            <div style="text-align: center; width: 100%;">
+                <img src="./assets/images/scan/scan.jpg" style="width:100%;">
             </div>
         </div>
-    </div>
-    <div class="weui-cells__title">店铺信息</div>
-    <div class="weui-cells" *ngIf="shop">
         <div class="weui-cell">
             <div class="weui-cell__bd">
                 <p>店铺名称</p>
@@ -29,64 +21,61 @@
 
     <div class="weui-cells__title">会员卡扫一扫</div>
     <div class="weui-cells">
-        <div class="weui-cell" >
+        <div class="weui-cell">
             <div class="weui-cell__hd">
                 <label class="weui-label">会员卡</label>
             </div>
             <div class="weui-cell__bd">
-                <input class="weui-input"  type="text" [(ngModel)]="cardNum" name="cardNum" placeholder="扫一扫会员卡" >
+                <input class="weui-input" type="text" [(ngModel)]="cardNum" name="cardNum" placeholder="扫一扫会员卡">
             </div>
-            <a class="weui-cell__ft weui-cell_access" (click)="scanCard()" >
+            <a class="weui-cell__ft weui-cell_access" (click)="scanCard()">
                 <img class="weui-icon-h18" src="./assets/images/scan/scan-o-2.png" alt="">
             </a>
         </div>
-        <div class="weui-cell" >
+        <div class="weui-cell" *ngIf="member">
             <div class="weui-cell__bd">
                 <p>会员名</p>
             </div>
-            <div class="weui-cell__ft">Donald</div>
+            <div class="weui-cell__ft">{{member.nickName}}</div>
         </div>
-        <div class="weui-cell" >
+        <div class="weui-cell" *ngIf="member">
             <div class="weui-cell__bd">
                 <p>手机号</p>
             </div>
-            <div class="weui-cell__ft">138****4084</div>
+            <div class="weui-cell__ft">{{member.phone | phoneFormat}}</div>
         </div>
     </div>
     <div class="weui-cells__title">商品扫一扫</div>
     <div class="weui-cells">
-        <div class="weui-cell" >
+        <div class="weui-cell">
             <div class="weui-cell__hd">
                 <label for="" class="weui-label">商品码</label>
             </div>
             <div class="weui-cell__bd">
-                <input class="weui-input" type="text" [(ngModel)]="goodsBarCode" name="goodsBarCode" placeholder="扫一扫商品包码或条码" >
+                <input class="weui-input" type="text" [(ngModel)]="goodsBarCode" name="goodsBarCode" placeholder="扫一扫商品包码或条码">
             </div>
-            <a class="weui-cell__ft weui-cell_access" (click)="scanGoodsBarCode()" >
+            <a class="weui-cell__ft weui-cell_access" (click)="scanGoodsBarCode()">
                 <img class="weui-icon-h18" src="./assets/images/scan/scan-o-2.png" alt="">
             </a>
         </div>
     </div>
     <div class="weui-cells__title">购买商品列表</div>
     <div class="weui-cells">
-        <div class="weui-cell" >
+        <div class="weui-cell" *ngFor="let g of goods">
+            <a class="weui-cell__hd weui-cell_access" (click)="onRemoveProduct(g.id)">
+                <i class="weui-icon-cancel"></i>
+            </a>
             <div class="weui-cell__bd">
-                <p>宽窄五粮浓香</p>
+                <p>{{g.specification}}</p>
             </div>
             <div class="weui-cell__ft">
-                <weui-stepper [(ngModel)]="num" [min]="1" name="num" [max]="10"></weui-stepper>
+                <weui-stepper [(ngModel)]="g.num" [min]="1" name="num" [max]="1000"></weui-stepper>
             </div>
         </div>
-        <div class="weui-cell" >
-            <div class="weui-cell__bd">
-                <p>宽窄如意</p>
-            </div>
-            <div class="weui-cell__ft">
-                <weui-stepper [(ngModel)]="num1" name="num1" [min]="-10" [max]="10"></weui-stepper>
-            </div>
-        </div>
+        <weui-loadmore type="line" *ngIf="!goods || goods.length == 0"></weui-loadmore>
     </div>
     <div class="weui-btn-area">
-        <button class="weui-btn weui-btn_primary" [disabled]="!cardNum || !goodsBarCode" [ngClass]="{'weui-btn_disabled': !cardNum || !goodsBarCode}">确定兑换</button>
+        <button class="weui-btn weui-btn_primary" [disabled]="!cardNum || !goodsBarCode" (click)="onSave()" [ngClass]="{'weui-btn_disabled': !cardNum || !goodsBarCode}">确定兑换</button>
     </div>
+    <weui-dialog #delconfirm [config]="config"></weui-dialog>
 </Page>

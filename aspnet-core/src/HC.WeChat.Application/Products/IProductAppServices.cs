@@ -73,5 +73,10 @@ namespace HC.WeChat.Products
         /// </summary>
         Task<ProductListDto> GetProductByIdDtoAsync(EntityDto<Guid> input);
 
+        /// <summary>
+        /// 根据包码 和 条码 获取商品信息
+        /// </summary>
+        Task<ShopProductDto> GetShopProductByCode(string code, int? tenantId);
+
     }
 }

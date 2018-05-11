@@ -5,6 +5,7 @@ using Abp.Application.Services.Dto;
 using HC.WeChat.PurchaseRecords.Dtos;
 using HC.WeChat.PurchaseRecords;
 using System;
+using HC.WeChat.Dto;
 
 namespace HC.WeChat.PurchaseRecords
 {
@@ -56,5 +57,11 @@ namespace HC.WeChat.PurchaseRecords
         /// 批量删除PurchaseRecord
         /// </summary>
         Task BatchDeletePurchaseRecordsAsync(List<Guid> input);
+
+        /// <summary>
+        /// 兑换积分
+        /// </summary>
+        Task<APIResultDto> ExchangeIntegralAsync(ExchangeIntegralDto input);
+
     }
 }

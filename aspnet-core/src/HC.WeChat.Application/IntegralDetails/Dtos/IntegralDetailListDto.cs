@@ -15,7 +15,7 @@ namespace HC.WeChat.IntegralDetails.Dtos
         public int? Integral { get; set; }
         public int? FinalIntegral { get; set; }
         public string Desc { get; set; }
-        public Guid? RefId { get; set; }
+        public string RefId { get; set; }
         public DateTime CreationTime { get; set; }
         public int? TenantId { get; set; }
         public IntegralTypeEnum? Type { get; set; }

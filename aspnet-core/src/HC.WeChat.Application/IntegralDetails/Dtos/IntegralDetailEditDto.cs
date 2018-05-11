@@ -30,7 +30,8 @@ namespace HC.WeChat.IntegralDetails.Dtos
         /// </summary>
         [StringLength(500)]
         public string Desc { get; set; }
-        public Guid? RefId { get; set; }
+        [StringLength(500)]
+        public string RefId { get; set; }
 
 
         /// <summary>
