@@ -10,7 +10,7 @@ import { Parameter } from '@shared/service-proxies/entity';
     selector: 'member-management',
     templateUrl: 'member-management.component.html',
 })
-export class MemberManagementComponent extends AppComponentBase implements OnInit{
+export class MemberManagementComponent extends AppComponentBase implements OnInit {
     search: any = { name: '', UserType: null };
     loading = false;
     weChatUsers: WechatUser[] = [];

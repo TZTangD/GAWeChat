@@ -64,6 +64,7 @@ export class IntegralDetails implements IIntegralDetails {
         data["creationTime"] = this.creationTime;
         data["tenantId"] = this.tenantId;
         data["wxName"] = this.wxName;
+        data["phone"] = this.phone;
         return data;
     }
 

@@ -17,6 +17,8 @@ namespace HC.WeChat.IntegralDetails.Dtos
 
         public UserTypeEnum? UserType { get; set; }
 
+        public string Phone { get; set; }
+
         /// <summary>
         /// 正常化排序使用
         /// </summary>
