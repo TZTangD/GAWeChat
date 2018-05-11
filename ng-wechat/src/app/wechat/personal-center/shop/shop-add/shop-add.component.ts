@@ -116,12 +116,8 @@ export class ShopAddComponent extends AppComponentBase implements OnInit {
     }
 
     onSave() {
-        //alert('请求数据：' + JSON.stringify(this.res));
-        if (!this.coverPhoto) {
-            this.res.coverPhoto = this.coverPhoto;
-        }
         //console.table(this.res);
-        if (!this.res.coverPhoto || this.res.coverPhoto == '') {
+        if (!this.coverPhoto || this.coverPhoto == '') {
             this.srv['warn']('请上传店铺形象');
             return;
         }
@@ -129,6 +125,7 @@ export class ShopAddComponent extends AppComponentBase implements OnInit {
             this.srv['warn']('请获取位置信息');
             return;
         }
+        this.res.coverPhoto = this.coverPhoto;
         this.res.latitude = this.latitude;
         this.res.longitude = this.longitude;
         this.shopService.WechatCreateOrUpdateShop({
@@ -160,7 +157,7 @@ export class ShopAddComponent extends AppComponentBase implements OnInit {
             });
         })).then((res) => {
             this.latitude = res.latitude;
-            this.longitude = res.location;
+            this.longitude = res.longitude;
         });
     }
     //打开微信地图
@@ -175,7 +172,7 @@ export class ShopAddComponent extends AppComponentBase implements OnInit {
             name: this.res.name, // 位置名
             address: this.res.address, // 地址详情说明
             scale: 12, // 地图缩放级别,整形值,范围从1~28。默认为最大
-            infoUrl: this.hostUrl + '/gawechat/index.html#/shops/shop/' + this.settingsService.openId + '/0' // 在查看位置界面底部显示的超链接,可点击跳转
+            infoUrl: this.hostUrl + '/gawechat/index.html#/shops/shop' // 在查看位置界面底部显示的超链接,可点击跳转
         });
     }
 }

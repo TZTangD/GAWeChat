@@ -15,7 +15,19 @@
         </div>
     </div>
 </Page>
-<Page [ngClass]="'input'" [showTitle]="true" [title]="title" [subTitle]="'维护自己的店铺信息'" [spacing]="false" *ngIf="!showAddInfo">
+<Page [ngClass]="'input'" [title]="title" [subTitle]="'维护自己的店铺信息'" [showTitle]="false" [spacing]="false" *ngIf="!showAddInfo">
+    <div class="weui-media-box weui-media-box_small-appmsg">
+        <div class="weui-cells">
+            <div class="weui-cell weui-cell_access" >
+                <div class="weui-cell__hd">
+                    <img src="./assets/images/shop/network-o-3.png" alt="" style="width:25px;margin-right:5px;display:block">
+                </div>
+                <div class="weui-cell__bd weui-cell_primary">
+                    <p>{{title}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
     <form #f="ngForm" (ngSubmit)="onSave()">
         <div class="weui-cells__title">店铺信息</div>
         <div class="weui-cells weui-cells_form">

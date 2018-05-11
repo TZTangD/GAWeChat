@@ -4,10 +4,11 @@ import 'rxjs/add/observable/timer';
 import { AppComponentBase } from '../../components/app-component-base';
 import { WechatUser, UserType, Shop, ShopProduct } from '../../../services/model';
 import { Router } from '@angular/router';
-import { ShopService } from '../../../services';
+import { ShopService, AppConsts } from '../../../services';
 
 import { PopupComponent } from "ngx-weui/popup";
 import { ToptipsService } from "ngx-weui/toptips";
+import { JWeiXinService } from 'ngx-weui/jweixin';
 
 @Component({
     selector: 'wechat-shop',
@@ -28,11 +29,36 @@ export class ShopComponent extends AppComponentBase implements OnInit {
     constructor(injector: Injector,
         private router: Router,
         private shopService: ShopService,
+        private wxService: JWeiXinService,
         private srv: ToptipsService) {
         super(injector);
     }
 
     ngOnInit() {
+        //微信JS SDK配置
+        this.wxService.get().then((res) => {
+            if (!res) {
+                console.warn('jweixin.js 加载失败');
+                return;
+            }
+            let url = encodeURIComponent(location.href.split('#')[0]);
+            this.settingsService.getJsApiConfig(url).subscribe(result => {
+                if (result) {
+                    result.jsApiList = ['openLocation'];//指定调用的接口名
+                    // 1、通过config接口注入权限验证配置
+                    wx.config(result.toJSON());
+                    // 2、通过ready接口处理成功验证
+                    wx.ready(() => {
+                        // 注册各种onMenuShareTimeline & onMenuShareAppMessage
+                    });
+                    // 2、通过error接口处理失败验证
+                    wx.error(() => {
+
+                    });
+                }
+            });
+        });
+
         this.settingsService.getUser().subscribe(result => {
             this.user = result;
             if (this.user) {
@@ -108,5 +134,21 @@ export class ShopComponent extends AppComponentBase implements OnInit {
                 }
             });
         }
+    }
+
+    //打开微信地图
+    wxOpenLocation() {
+        if (!this.shop.latitude || !this.shop.longitude) {
+            this.srv['info']('当前店铺没有位置信息');
+            return;
+        }
+        wx.openLocation({
+            latitude: this.shop.latitude, // 纬度，浮点数，范围为90 ~ -90
+            longitude: this.shop.longitude, // 经度，浮点数，范围为180 ~ -180。
+            name: this.shop.name, // 位置名
+            address: this.shop.address, // 地址详情说明
+            scale: 12, // 地图缩放级别,整形值,范围从1~28。默认为最大
+            infoUrl: AppConsts.remoteServiceBaseUrl + '/gawechat/index.html#/shops/shop' // 在查看位置界面底部显示的超链接,可点击跳转
+        });
     }
 }

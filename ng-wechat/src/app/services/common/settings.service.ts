@@ -54,9 +54,6 @@ export class SettingsService {
 
     setUser(val: any) {
         this.user = WechatUser.fromJS(val);
-        if (this.user.headImgUrl.includes('timg-4.jpeg')) {//表示默认头像
-            this.user.headImgUrl = AppConsts.remoteServiceBaseUrl + this.user.headImgUrl;
-        }
     }
 
     getUser(): Observable<WechatUser> {
