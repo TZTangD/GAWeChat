@@ -16,4 +16,10 @@ namespace HC.WeChat.WeChatGroups.Dtos
         public string TagName { get; set; }
         public int? TenantId { get; set; }
     }
+    public class CheckResult
+    {
+        public int? TagId { get; set; }
+        public bool IsExist { get; set; }
+        public bool IsValid { get; set; }
+    }
 }

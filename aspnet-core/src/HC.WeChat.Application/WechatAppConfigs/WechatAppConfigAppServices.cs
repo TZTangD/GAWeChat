@@ -215,8 +215,8 @@ namespace HC.WeChat.WechatAppConfigs
         /// <returns></returns>
         public async Task<WechatAppConfigListDto> GetTenantWechatAppConfigAsync()
         {
-            var entity = _wechatappconfigRepository.GetAll().Where(w => w.TenantId == AbpSession.TenantId).FirstOrDefault();
-            return await Task.FromResult( entity.MapTo<WechatAppConfigListDto>());
+            var entity = await _wechatappconfigRepository.GetAll().Where(w => w.TenantId == AbpSession.TenantId).FirstOrDefaultAsync();
+            return  entity.MapTo<WechatAppConfigListDto>();
         }
 
         /// <summary>

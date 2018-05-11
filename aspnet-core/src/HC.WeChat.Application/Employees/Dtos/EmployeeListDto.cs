@@ -3,9 +3,11 @@ using Abp.Application.Services.Dto;
 using HC.WeChat.Employees.Dtos.LTMAutoMapper;
 using HC.WeChat.Employees;
 using HC.WeChat.WechatEnums;
+using Abp.AutoMapper;
 
 namespace HC.WeChat.Employees.Dtos
 {
+    [AutoMapFrom(typeof(Employee))]
     public class EmployeeListDto : FullAuditedEntityDto<Guid>
     {
         ////BCC/ BEGIN CUSTOM CODE SECTION
@@ -30,7 +32,7 @@ namespace HC.WeChat.Employees.Dtos
         /// <summary>
         /// 验证码显示
         /// </summary>
-        public string ShowVerificationCode
+        public string EmployeeVerificationCode
         {
             get
             {

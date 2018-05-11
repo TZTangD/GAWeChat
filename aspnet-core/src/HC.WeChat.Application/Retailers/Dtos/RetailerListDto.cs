@@ -3,9 +3,11 @@ using Abp.Application.Services.Dto;
 using HC.WeChat.Retailers.Dtos.LTMAutoMapper;
 using HC.WeChat.Retailers;
 using HC.WeChat.WechatEnums;
+using Abp.AutoMapper;
 
 namespace HC.WeChat.Retailers.Dtos
 {
+    [AutoMapFrom(typeof(Retailer))]
     public class RetailerListDto : FullAuditedEntityDto<Guid>
     {
         ////BCC/ BEGIN CUSTOM CODE SECTION
@@ -61,9 +63,9 @@ namespace HC.WeChat.Retailers.Dtos
             }
         }
         /// <summary>
-        /// 验证码显示
+        /// 验证码
         /// </summary>
-        public string ShowVerificationCode
+        public string RetailerVerificationCode
         {
             get
             {

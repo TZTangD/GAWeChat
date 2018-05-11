@@ -29,16 +29,16 @@ namespace HC.WeChat.WeChatUsers.DomainServices
         /// 绑定微信用户
         /// </summary>
         /// <param name="user"></param>
-        public async Task BindWeChatUserAsync(WeChatUser user)
+        public async Task<WeChatUser> BindWeChatUserAsync(WeChatUser user)
         {
             //存在就更新
             if (_wechatuserRepository.GetAll().Any(u => u.Id == user.Id))
             {
-                await _wechatuserRepository.UpdateAsync(user);
+               return  await _wechatuserRepository.UpdateAsync(user);
             }
             else //新增
             {
-                await _wechatuserRepository.InsertAsync(user);
+               return  await _wechatuserRepository.InsertAsync(user);
             }
         }
 

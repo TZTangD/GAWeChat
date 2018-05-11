@@ -148,10 +148,10 @@ export class ProductsServiceProxy {
         return Observable.of<Products>(<any>null);
     }
 
-     /**
-     * 新增或修改产品信息
-     * @param input 
-     */
+    /**
+    * 新增或修改产品信息
+    * @param input 
+    */
     update(input: Products): Observable<Products> {
         let url_ = this.baseUrl + "/api/services/app/Product/CreateOrUpdateProductDto";
         url_ = url_.replace(/[?&]$/, "");
@@ -252,6 +252,60 @@ export class ProductsServiceProxy {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Observable.of<void>(<any>null);
+    }
+
+
+    CheckCode(id: string,pCode:string,bCode:string): Observable<number> {
+        let url_ = this.baseUrl + "/api/services/app/Product/GetCheckCode?";
+        if (id !== undefined)
+            url_ += "ProductId=" + encodeURIComponent("" + id) + "&";
+        if (pCode !== undefined)
+            url_ += "PCode=" + encodeURIComponent("" + pCode) + "&";
+        if (bCode !== undefined)
+            url_ += "BCode=" + encodeURIComponent("" + bCode) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = {
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json",
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_) => {
+            return this.processCheckCode(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processCheckCode(response_);
+                } catch (e) {
+                    return <Observable<number>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<number>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processCheckCode(response: Response): Observable<number> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            return Observable.of(resultData200);
+        } else if (status === 401) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status === 403) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<number>(<any>null);
     }
 
 }

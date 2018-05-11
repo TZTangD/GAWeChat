@@ -43,7 +43,7 @@ export class WeChatGroupServiceProxy {
             url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&";
         if (maxResultCount !== undefined)
             url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&";
-            
+
         if (parameter.length > 0) {
             parameter.forEach(element => {
                 if (element.value !== undefined && element.value !== null) {
@@ -100,11 +100,76 @@ export class WeChatGroupServiceProxy {
     }
 
     /**
+    * 获取所有分组信息
+    */
+    getAllNoPage(): Observable<WeChatGroupList> {
+        let url_ = this.baseUrl + "/api/services/app/WeChatGroup/GetAllWeChatGroupAsync?";
+        // if (skipCount !== undefined)
+        //     url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&";
+        // if (maxResultCount !== undefined)
+        //     url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&";
+
+        // if (parameter.length > 0) {
+        //     parameter.forEach(element => {
+        //         if (element.value !== undefined && element.value !== null) {
+        //             url_ += element.key + "=" + encodeURIComponent("" + element.value) + "&";
+        //         }
+        //     });
+        // }
+
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = {
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_) => {
+            return this.processGetAllNoPage(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processGetAllNoPage(response_);
+                } catch (e) {
+                    return <Observable<WeChatGroupList>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<WeChatGroupList>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processGetAllNoPage(response: Response): Observable<WeChatGroupList> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? WeChatGroupList.fromJS(resultData200) : new WeChatGroupList();
+            return Observable.of(result200);
+        } else if (status === 401) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status === 403) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<WeChatGroupList>(<any>null);
+    }
+
+    /**
      * 获取单个分组信息
      * @param id 
      */
-    get(id: string): Observable<WeChatGroup> {
-        let url_ = this.baseUrl + "/api/services/app/WeChatUser/GetWeChatUserByIdAsync?";
+    get(id: number): Observable<WeChatGroup> {
+        let url_ = this.baseUrl + "/api/services/app/WeChatGroup/GetWeChatGroupByIdAsync?";
         if (id !== undefined)
             url_ += "Id=" + encodeURIComponent("" + id) + "&";
         url_ = url_.replace(/[?&]$/, "");
@@ -312,10 +377,12 @@ export class WeChatGroupServiceProxy {
         return Observable.of<void>(<any>null);
     }
 
-    delete(id: number): Observable<void> {
-        let url_ = this.baseUrl + "/api/services/app/WeChatUser/DeleteWeChatUser?";
+    delete(id: number, tagId: number): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/WeChatGroup/DeleteWeChatGroupAsync?";
         if (id !== undefined)
             url_ += "Id=" + encodeURIComponent("" + id) + "&";
+        if (id !== undefined)
+            url_ += "TagId=" + encodeURIComponent("" + tagId) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ = {
@@ -411,5 +478,68 @@ export class PagedResultDtoOfWeChatGroup implements IPagedResultDtoOfWeChatGroup
 
 export interface IPagedResultDtoOfWeChatGroup {
     totalCount: number;
+    items: WeChatGroup[];
+}
+
+
+export class WeChatGroupList implements IWeChatGroupList {
+    items: WeChatGroup[];
+
+    constructor(data?: IWeChatGroupList) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            // this.totalCount = data["totalCount"];
+            // if (data["items"] && data["items"].constructor === Array) {
+            //     this.items = [];
+            //     for (let item of data["items"])
+            //         this.items.push(WeChatGroup.fromJS(item));
+            // }
+            if (data && data.constructor === Array) {
+                this.items = [];
+                for (let item of data)
+                    this.items.push(WeChatGroup.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): WeChatGroupList {
+        let result = new WeChatGroupList();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        // data["totalCount"] = this.totalCount;
+        // if (this.items && this.items.constructor === Array) {
+        //     data["items"] = [];
+        //     for (let item of this.items)
+        //         data["items"].push(item.toJSON());
+        // }
+        if (this.items && this.items.constructor === Array) {
+            data = [];
+            for (let item of this.items)
+                data.push(item.toJSON());
+        }
+        return data;
+    }
+
+    clone() {
+        const json = this.toJSON();
+        let result = new WeChatGroupList();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IWeChatGroupList {
     items: WeChatGroup[];
 }

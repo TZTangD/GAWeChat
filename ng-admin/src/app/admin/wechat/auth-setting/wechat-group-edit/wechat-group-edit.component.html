@@ -1,0 +1,41 @@
+<form nz-form [formGroup]="forme" *ngIf="emodalVisible" id="frm_create_wechatGroup" (ngSubmit)="savee()">
+    <nz-modal [nzVisible]="emodalVisible" [nzTitle]="'创建分组'" [nzConfirmLoading]="eloading" [nzContent]="modalContent" [nzFooter]="modalFooter"
+        (nzOnCancel)="ehandleCancel($event)">
+        <ng-template #modalContent>
+            <ng-template #nzTabHeading>
+             分组信息
+            </ng-template>
+            <fieldset>
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSm]="5">
+                        <label for="typeCode" nz-form-item-required>用户类型</label>
+                    </div>
+                    <div nz-form-control nz-col [nzSm]="19" nzHasFeedback [nzValidateStatus]="getFormControl('typeCode')">
+                        <nz-select formControlName="typeCode" [nzPlaceHolder]="'用户类型'" [(ngModel)]="wechatGroupE.typeCode" (ngModelChange)="changeValueE()" [nzShowSearch]="true" nzSize="large">
+                            <nz-option *ngFor="let i of showTypesE" [nzLabel]="i.text" [nzValue]="i.value">
+                            </nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSm]="5">
+                        <label for="tagName" nz-form-item-required>分组名</label>
+                    </div>
+                    <div nz-form-control nz-col [nzSm]="19" nzHasFeedback [nzValidateStatus]="getFormControl('tagName')">
+                        <nz-input [nzDisabled]="true" formControlName="tagName" [(ngModel)]="wechatGroupE.tagName" [nzId]="'tagName'"></nz-input>
+                        <div nz-form-explain *ngIf="getFormControl('tagName').dirty&&getFormControl('tagName').hasError('required')">请输入姓名</div>
+                    </div>
+                 
+                </div>
+            </fieldset>
+        </ng-template>
+        <ng-template #modalFooter>
+            <button nz-button [nzType]="'default'" [nzSize]="'large'" type="button" (click)="ehandleCancel($event)">
+                取消
+            </button>
+            <button nz-button [nzType]="'primary'" [nzSize]="'large'" type="submit" [nzLoading]="eIsConfirmLoading">
+                保存
+            </button>
+        </ng-template>
+    </nz-modal>
+</form>

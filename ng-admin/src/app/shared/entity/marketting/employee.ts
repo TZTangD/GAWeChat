@@ -16,7 +16,7 @@ export class Employee implements IEmployee {
     creationTime: Date;
     creatorUserId: number;
     verificationCode: string;
-    showVerificationCode:string;
+    employeeVerificationCode:string;
     id: string;
     activeType: string;
     activeText: string;
@@ -49,7 +49,7 @@ export class Employee implements IEmployee {
             this.lastModifierUserId = data["lastModifierUserId"];
             this.positionName = data["positionName"];
             this.verificationCode = data["verificationCode"];
-            this.showVerificationCode = data["showVerificationCode"];
+            this.employeeVerificationCode = data["employeeVerificationCode"];
 
         }
     }
@@ -106,7 +106,7 @@ export interface IEmployee {
     creatorUserId: number;
     id: string;
     verificationCode: string;
-    showVerificationCode:string;
+    employeeVerificationCode:string;
     
 }
 

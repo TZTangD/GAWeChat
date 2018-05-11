@@ -2,6 +2,7 @@
 using HC.WeChat.Dto;
 using HC.WeChat.Products;
 using HC.WeChat.WechatEnums;
+using System;
 
 namespace HC.WeChat.Products.Dtos
 {
@@ -27,5 +28,21 @@ namespace HC.WeChat.Products.Dtos
             }
         }
 
+    }
+
+    public class CheckInput
+    {
+        /// <summary>
+        /// 包码
+        /// </summary>
+        public string PCode { get; set; }
+        /// <summary>
+        /// 条码
+        /// </summary>
+        public string BCode { get; set; }
+        /// <summary>
+        /// 商品Id
+        /// </summary>
+        public Guid? ProductId { get; set; }
     }
 }

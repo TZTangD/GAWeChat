@@ -78,5 +78,12 @@ namespace HC.WeChat.Products
         /// </summary>
         Task<ShopProductDto> GetShopProductByCode(string code, int? tenantId);
 
+        /// <summary>
+        /// 检查包码条码是否重复（0：不重复，1：包码重复，2：条码重复，3,：包码、条码重复）
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        Task<int> GetCheckCode(CheckInput input);
+
     }
 }

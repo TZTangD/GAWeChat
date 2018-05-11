@@ -199,7 +199,9 @@ namespace HC.WeChat.IntegralDetails
             var queryIntegralDetail = _integraldetailRepository.GetAll();
             var queryWXUser = _wechatusersRepository.GetAll()
                 .WhereIf(!string.IsNullOrEmpty(input.Filter), v => v.NickName.Contains(input.Filter))
-                .WhereIf(input.UserType.HasValue, u => u.UserType == input.UserType);
+                .WhereIf(input.UserType.HasValue, u => u.UserType == input.UserType)
+                .WhereIf(!string.IsNullOrEmpty(input.Phone), u => u.Phone.Contains(input.Phone));
+
             var queryGroup = from i in queryIntegralDetail
                              group new { i.OpenId, i.Integral } by new
                              {
