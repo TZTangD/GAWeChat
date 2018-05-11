@@ -1,6 +1,6 @@
 import { Component, ViewEncapsulation, OnInit, Injector } from '@angular/core';
 import { AppComponentBase } from '../../components/app-component-base';
-import { WechatUserService, AppConsts } from '../../../services';
+import { AppConsts } from '../../../services';
 import { WechatUser } from '../../../services/model';
 import 'jsbarcode';
 import { Router } from '@angular/router';
@@ -15,7 +15,7 @@ export class MemberCardComponent extends AppComponentBase implements OnInit {
 
     user: WechatUser;
 
-    constructor(injector: Injector, private wechatUserService: WechatUserService, private router: Router) {
+    constructor(injector: Injector, private router: Router) {
         super(injector);
     }
 

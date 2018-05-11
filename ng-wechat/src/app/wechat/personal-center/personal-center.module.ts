@@ -3,7 +3,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { AngularSplitModule } from 'angular-split';
 import { SharedModule } from '../../shared/shared.module';
 import { ComponentsModule } from '../components/components.module';
-import { SettingsService } from '../../services';
 
 // region: components
 
@@ -28,7 +27,6 @@ const routes: Routes = [
         ...COMPONENTS
     ],
     providers: [
-        SettingsService
     ]
 })
 export class PersonalCenterModule {

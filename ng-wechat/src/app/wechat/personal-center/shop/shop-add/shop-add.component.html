@@ -21,7 +21,7 @@
         <div class="weui-cells weui-cells_form">
             <div class="weui-cell">
                 <div class="weui-cell__hd">
-                    <label class="weui-label">店铺名称</label>
+                    <label class="weui-label">名称</label>
                 </div>
                 <div class="weui-cell__bd">
                     <input class="weui-input" type="text" [(ngModel)]="res.name" name="name" placeholder="请输入店铺名称" weui-input="name" weui-required>
@@ -29,7 +29,7 @@
             </div>
             <div class="weui-cell">
                 <div class="weui-cell__hd">
-                    <label class="weui-label">店铺电话</label>
+                    <label class="weui-label">电话</label>
                 </div>
                 <div class="weui-cell__bd">
                     <input class="weui-input" type="tel" [(ngModel)]="res.tel" name="tel" placeholder="请输入店铺电话" weui-input="tel" weui-required>
@@ -37,14 +37,34 @@
             </div>
             <div class="weui-cell">
                 <div class="weui-cell__hd">
-                    <label class="weui-label">店铺地址</label>
+                    <label class="weui-label">地址</label>
                 </div>
                 <div class="weui-cell__bd">
                     <input class="weui-input" type="text" [(ngModel)]="res.address" name="address" placeholder="请输入店铺地址" weui-input="address"
                         weui-required>
                 </div>
+                <a class="weui-cell__ft weui-cell_access" (click)="wxOpenLocation()" >
+                    <img class="weui-icon-h18" src="./assets/images/shop/navigation-o.png" alt="">
+                </a>
+            </div>
+            <div class="weui-cells__title">位置信息</div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd">
+                    <label class="weui-label">经度</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <p>{{longitude}}</p>
+                </div>
                 <div class="weui-cell__ft">
-                    <button type="button" class="weui-vcode-btn">获取定位</button>
+                    <button type="button" class="weui-vcode-btn" (click)="wxGetLocation()">重新定位</button>
+                </div>
+            </div>
+            <div class="weui-cell" >
+                <div class="weui-cell__hd">
+                    <label class="weui-label">纬度</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <p>{{latitude}}</p>
                 </div>
             </div>
             <div class="weui-cells__title">店铺描述</div>
@@ -65,7 +85,7 @@
                         </div>
                         <div class="weui-uploader__bd">
                             <ul class="weui-uploader__files">
-                                <li class="weui-uploader__file" (click)="onGallery()" [ngStyle]="{'background-image':'url('+ hostUrl + coverPhoto +')'}" ></li>
+                                <li class="weui-uploader__file" (click)="onGallery()" [ngStyle]="{'background-image':'url('+ hostUrl + coverPhoto +')'}"></li>
                             </ul>
                         </div>
                     </div>

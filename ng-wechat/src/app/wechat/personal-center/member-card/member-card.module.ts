@@ -5,15 +5,12 @@ import { SharedModule } from '../../../shared/shared.module';
 import { ComponentsModule } from '../../components/components.module';
 import { MemberCardComponent } from './member-card.component';
 
-import { WechatUserService } from '../../../services';
-
 // region: components
 
 const COMPONENTS = [MemberCardComponent];
 
 const routes: Routes = [
     { path: 'member-card', component: MemberCardComponent },
-    { path: 'member-card/:openId/:tenantId', component: MemberCardComponent }
 ];
 // endregion
 
@@ -28,7 +25,6 @@ const routes: Routes = [
         ...COMPONENTS
     ],
     providers: [
-        WechatUserService
     ]
 })
 export class MemberCardModule {

@@ -7,7 +7,6 @@ import { ComponentsModule } from '../../components/components.module';
 import { BindMemberComponent } from './bind-member/bind-member.component';
 import { BindRetailerComponent } from './bind-retailer/bind-retailer.component';
 import { BindStaffComponent } from './bind-staff/bind-staff.component';
-
 import { WechatUserService } from '../../../services';
 
 // region: components
@@ -19,10 +18,8 @@ const COMPONENTS = [PersonalComponent,
 
 const routes: Routes = [
     { path: 'personal', component: PersonalComponent },
-    { path: 'personal/:openId/:tenantId', component: PersonalComponent },
     { path: 'bind-member', component: BindMemberComponent },
     { path: 'bind-retailer', component: BindRetailerComponent },
-    { path: 'bind-retailer/:openId/:tenantId', component: BindRetailerComponent },
     { path: 'bind-staff', component: BindStaffComponent }
 ];
 // endregion
