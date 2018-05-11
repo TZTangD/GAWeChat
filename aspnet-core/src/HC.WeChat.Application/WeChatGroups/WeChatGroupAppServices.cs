@@ -204,12 +204,23 @@ namespace HC.WeChat.WeChatGroups
         }
 
         /// <summary>
+        /// 获取所有分组信息
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<WeChatGroupListDto>> GetAllWeChatGroupAsync()
+        {
+            var weChatGroupList =await _wechatgroupRepository.GetAllListAsync();
+            return weChatGroupList.MapTo<List<WeChatGroupListDto>>();
+        }
+
+        /// <summary>
         /// 创建分组
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
         public async Task CreateWeChatGroup(WeChatGroupListDto input)
         {
+            var tags = await UserTagApi.GetAsync(AppConfig.AppId);
             var group = await UserTagApi.CreateAsync(AppConfig.AppId, input.TagName);
             if (group.errcode == 0)
             {
@@ -228,6 +239,20 @@ namespace HC.WeChat.WeChatGroups
             if (group.errcode == 0)
             {
                 await UpdateWeChatGroupAsync(input.MapTo<WeChatGroupEditDto>());
+            }
+        }
+
+        /// <summary>
+        ///  删除分组
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task DeleteWeChatGroupAsync(WeChatGroupListDto input)
+        {
+            var group = await UserTagApi.DeleteAsync(AppConfig.AppId, input.TagId);
+            if (group.errcode == 0)
+            {
+                await _wechatgroupRepository.DeleteAsync(input.Id);
             }
         }
 

@@ -12,6 +12,7 @@ import { PhotoWarehouseComponent } from "./photo-warehouse/photo-warehouse.compo
 import { LayoutModule } from "../../layout/layout.module";
 import { WeChatRoutingModule } from "./wechat-routing.module";
 import { WechatGroupCreateComponent } from "./auth-setting/wechat-group-create/wechat-group-create.component";
+import { WechatGroupEditComponent } from "./auth-setting/wechat-group-edit/wechat-group-edit.component";
 
 @NgModule({
     imports: [
@@ -29,6 +30,7 @@ import { WechatGroupCreateComponent } from "./auth-setting/wechat-group-create/w
         MaterialManagementComponent,
         PhotoWarehouseComponent,
         WechatGroupCreateComponent,
+        WechatGroupEditComponent,
 
     ],
     providers: [

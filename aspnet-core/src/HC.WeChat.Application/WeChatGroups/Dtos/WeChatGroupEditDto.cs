@@ -2,10 +2,11 @@
 using HC.WeChat.WeChatGroups.Dtos.LTMAutoMapper;
 using HC.WeChat.WeChatGroups;
 using HC.WeChat.WechatEnums;
+using Abp.Domain.Entities.Auditing;
 
 namespace HC.WeChat.WeChatGroups.Dtos
 {
-    public class WeChatGroupEditDto
+    public class WeChatGroupEditDto : AuditedEntity
     {
         ////BCC/ BEGIN CUSTOM CODE SECTION
         ////ECC/ END CUSTOM CODE SECTION

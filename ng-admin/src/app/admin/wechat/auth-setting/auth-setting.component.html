@@ -118,15 +118,15 @@
             <form nz-form (ngSubmit)="refreshData(false,true)" [nzLayout]="'inline'">
                 <div nz-row [nzGutter]="24">
                     <ng-template #deleteContent>
-                        <h2>是否删除标签{{mesT}}?</h2>
+                        <h2>是否删除{{groupName}}组?</h2>
                     </ng-template>
                     <div nz-col [nzSpan]="8" class="mb-md">
                         <div nz-form-item class="d-flex">
                             <div nz-form-label>
-                                <label>标签名</label>
+                                <label>组名</label>
                             </div>
                             <div nz-form-control class="flex-1">
-                                <nz-input [(ngModel)]="search.name" name="no" [nzSize]="'large'" [nzPlaceHolder]="'请输入标签名'" nzId="no"></nz-input>
+                                <nz-input [(ngModel)]="search.name" name="no" [nzSize]="'large'" [nzPlaceHolder]="'请输入组名'" nzId="no"></nz-input>
                             </div>
                         </div>
                     </div>
@@ -149,7 +149,7 @@
                 <thead nz-thead>
                     <tr>
                         <th nz-th>
-                            <span>标签名</span>
+                            <span>组名</span>
                         </th>
                         <th nz-th>
                             <span>用户类型</span>
@@ -164,7 +164,7 @@
                         <td nz-td>{{weChatGroup.typeName}}</td>
                         <td nz-td>{{weChatGroup.tagName}}</td>
                         <td nz-td>
-                            <a (click)="editMessage(weChatGroup)">编辑</a>
+                            <a (click)="editWeChatGroup(weChatGroup)">编辑</a>
                             <span nz-table-divider></span>
                             <a (click)="delete(weChatGroup,deleteContent)">删除</a>
                         </td>
@@ -173,6 +173,6 @@
             </nz-table>
         </nz-card>
         <wechat-group-create #createWeChatGroupModal (modalSave)="refreshData()"></wechat-group-create>
-        <create-message-modal #createMessageModal (modalSave)="refreshData()"></create-message-modal>
+        <wechat-group-edit #editWeChatGroupModal (modalSave)="refreshData()"></wechat-group-edit>
     </nz-tab>
 </nz-tabset>

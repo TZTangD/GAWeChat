@@ -5,9 +5,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd';
 import { AuthSetting } from '@shared/entity/wechat';
 import { WeChatGroup } from '@shared/entity/wechat/wechat-group';
-import { WeChatGroupServiceProxy, PagedResultDtoOfWeChatGroup } from '@shared/service-proxies/wechat-service';
+import { WeChatGroupServiceProxy, PagedResultDtoOfWeChatGroup, WeChatGroupList } from '@shared/service-proxies/wechat-service';
 import { Parameter } from '@shared/service-proxies/entity';
 import { WechatGroupCreateComponent } from './wechat-group-create/wechat-group-create.component';
+import { WechatGroupEditComponent } from './wechat-group-edit/wechat-group-edit.component';
 
 @Component({
     moduleId: module.id,
@@ -15,12 +16,13 @@ import { WechatGroupCreateComponent } from './wechat-group-create/wechat-group-c
     templateUrl: 'auth-setting.component.html',
 })
 export class AuthSettingComponent extends AppComponentBase implements OnInit {
-    // @ViewChild('editMessageModal') editMessageModal: EditMessageComponent;
+    @ViewChild('editWeChatGroupModal') editWeChatGroupModal: WechatGroupEditComponent;
     @ViewChild('createWeChatGroupModal') createWeChatGroupModal: WechatGroupCreateComponent;
 
     form: FormGroup;
     authSet: AuthSetting = new AuthSetting();
     weChatGroups: WeChatGroup[] = [];
+    weChatGroupsNoPage: WeChatGroup[] = [];
     appTypes = [
         { text: '订阅号', value: 1 },
         { text: '认证订阅号', value: 2 },
@@ -30,6 +32,7 @@ export class AuthSettingComponent extends AppComponentBase implements OnInit {
     ]
     search: any = {};
     loading = false;
+    groupName = '';
     constructor(injector: Injector, private fb: FormBuilder, private service: AuthSettingServiceProxy,
         private modal: NzModalService, private WeChatGroupService: WeChatGroupServiceProxy) {
         super(injector);
@@ -121,6 +124,7 @@ export class AuthSettingComponent extends AppComponentBase implements OnInit {
             this.weChatGroups = result.items;
             this.query.total = result.totalCount;
         });
+        this.getAllWeChatGroup();
     }
     getParameter(): Parameter[] {
         var arry = [];
@@ -129,18 +133,58 @@ export class AuthSettingComponent extends AppComponentBase implements OnInit {
         return arry;
     }
 
-    editMessage() {
-
+    /**
+     * 进入修改模态框
+     * @param wecahtGroup 
+     */
+    editWeChatGroup(wecahtGroup: WeChatGroup) {
+        this.editWeChatGroupModal.show(this.weChatGroupsNoPage, wecahtGroup.id);
     }
-    
+
+    /**
+     * 进入新增模态框
+     */
     createWeChatGroup() {
-        this.createWeChatGroupModal.show(this.weChatGroups);
+        this.createWeChatGroupModal.show(this.weChatGroupsNoPage);
     }
 
-    batchMark(){
-         this.WeChatGroupService.BatchMarkWeChatUser().subscribe(()=>{
-             this.notify.info(this.l('分组成功！'))
-         });
+    /**
+     * 批量分组
+     */
+    batchMark() {
+        this.WeChatGroupService.BatchMarkWeChatUser().subscribe(() => {
+            this.notify.info(this.l('分组成功！'))
+        });
+    }
+
+    /**
+     * 获取所有分组信息（用于新增和修改页）
+     */
+    getAllWeChatGroup() {
+        this.WeChatGroupService.getAllNoPage().subscribe((result: WeChatGroupList) => {
+            this.weChatGroupsNoPage = result.items;
+        })
+    }
+
+    /**
+     * 删除分组
+     * @param wechatGroup 删除的实体
+     * @param contentTpl 提示弹框ID
+     */
+    delete(wechatGroup: WeChatGroup, contentTpl) {
+        this.groupName = wechatGroup.tagName;
+        this.modal.confirm({
+            content: contentTpl,
+            okText: '是',
+            cancelText: '否',
+            onOk: () => {
+                this.service
+                this.WeChatGroupService.delete(wechatGroup.id,wechatGroup.tagId).subscribe(() => {
+                    this.notify.info(this.l('删除成功！'));
+                    this.refreshData();
+                })
+            }
+        })
     }
     //#endregion
 }

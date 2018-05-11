@@ -59,12 +59,14 @@ export class WechatGroupCreateComponent extends AppComponentBase implements OnIn
      * 过滤已经存在的类型
      */
     filterType(){
-        if(this.wechatGroupes){
+        if(this.wechatGroupes.length>0){
             this.wechatGroupes.map(i=>{
                 this.showTypes=this.types.filter((item,index,arry)=>{
                     return item.value!=i.typeCode;
                 });
             });
+        }else{
+            this.showTypes=this.types;
         }
     }
 

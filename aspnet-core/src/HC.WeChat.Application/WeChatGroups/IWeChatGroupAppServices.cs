@@ -58,6 +58,12 @@ namespace HC.WeChat.WeChatGroups
         Task BatchDeleteWeChatGroupsAsync(List<int> input);
 
         /// <summary>
+        /// 获取所有分组信息
+        /// </summary>
+        /// <returns></returns>
+        Task<List<WeChatGroupListDto>> GetAllWeChatGroupAsync();
+
+        /// <summary>
         /// 创建分组
         /// </summary>
         /// <param name="input"></param>
@@ -70,6 +76,13 @@ namespace HC.WeChat.WeChatGroups
         /// <param name="input"></param>
         /// <returns></returns>
         Task UpdateWeChatGroup(WeChatGroupListDto input);
+
+        /// <summary>
+        ///  删除分组
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        Task DeleteWeChatGroupAsync(WeChatGroupListDto input);
 
         /// <summary>
         /// 单个标记用户分组
