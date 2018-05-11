@@ -10,29 +10,38 @@
                     <div nz-col [nzSpan]="16">
                         <div nz-form-item nz-row>
                             <div nz-form-label nz-col [nzSm]="5">
-                                <label for="rcValue">零售客户</label>
+                                <label for="rcValue">店铺扫码</label>
                             </div>
                             <div nz-form-control nz-col [nzSm]="19" nzHasFeedback [nzValidateStatus]="getFormControl('rcValue')">
                                 <nz-input formControlName="rcValue" [(ngModel)]="configCode.rcValue" [nzId]="'rcId'"></nz-input>
                                 <div nz-form-explain *ngIf="getFormControl('rcValue').dirty&&getFormControl('rcValue').hasError('pattern')">兑换比例必须为正数</div>
+                                <div nz-form-control nz-col [nzSm]="19">
+                                    店铺管理员可获赠{{configCode.rcValue}}积分
+                                </div>
                             </div>
                         </div>
                         <div nz-form-item nz-row>
                             <div nz-form-label nz-col [nzSm]="5">
-                                <label for="cValue">消费者</label>
+                                <label for="cValue">购买商品</label>
                             </div>
                             <div nz-form-control nz-col [nzSm]="19" nzHasFeedback [nzValidateStatus]="getFormControl('cValue')">
                                 <nz-input formControlName="cValue" [(ngModel)]="configCode.cValue" [nzId]="'cValue'"></nz-input>
                                 <div nz-form-explain *ngIf="getFormControl('cValue').dirty&&getFormControl('cValue').hasError('pattern')">兑换比例必须为正数</div>
+                                <div nz-form-control nz-col [nzSm]="19">
+                                    消费金额1元可获得{{configCode.cValue}}积分
+                                </div>
                             </div>
                         </div>
                         <div nz-form-item nz-row>
                             <div nz-form-label nz-col [nzSm]="5">
-                                <label for="eValue">评价兑换</label>
+                                <label for="eValue">店铺评价</label>
                             </div>
                             <div nz-form-control nz-col [nzSm]="19" nzHasFeedback [nzValidateStatus]="getFormControl('eValue')">
                                 <nz-input formControlName="eValue" [(ngModel)]="configCode.eValue" [nzId]="'eValue'"></nz-input>
                                 <div nz-form-explain *ngIf="getFormControl('eValue').dirty&&getFormControl('eValue').hasError('pattern')">兑换比例必须为正数</div>
+                                <div nz-form-control nz-col [nzSm]="19">
+                                    店铺评价1次可获得{{configCode.eValue}}积分
+                                </div>
                             </div>
                         </div>
                         <div nz-form-item nz-row>
@@ -42,8 +51,6 @@
                             <div nz-form-control nz-col [nzSm]="19">
                                 <h4 class="mb-md">金钱:积分=1:1，则填写 1，金钱:积分=1:100，则填写100</h4>
                             </div>
-                            <!-- <div nz-form-label nz-col [nzSm]="20">
-                            </div> -->
                         </div>
                         <div nz-form-item nz-row class="mb0">
                             <div nz-form-label nz-col [nzSm]="5">

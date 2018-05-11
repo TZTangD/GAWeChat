@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 })
 export class IntegralSearchComponent extends AppComponentBase implements OnInit {
     loading = false;
-    search: any = { filter: '', UserType: null };
+    search: any = { filter: '', UserType: null, phone: '' };
     positions = [
         { text: '零售客户', value: 1 },
         { text: '内部员工', value: 2 },
@@ -28,7 +28,7 @@ export class IntegralSearchComponent extends AppComponentBase implements OnInit 
     refreshData(reset = false, search?: boolean) {
         if (reset) {
             this.query.pageIndex = 1;
-            this.search = { filter: '', UserType: null };
+            this.search = { filter: '', UserType: null, phone: '' };
         }
         if (search) {
             this.query.pageIndex = 1;
@@ -45,6 +45,7 @@ export class IntegralSearchComponent extends AppComponentBase implements OnInit 
         var arry = [];
         arry.push(Parameter.fromJS({ key: 'Filter', value: this.search.filter }));
         arry.push(Parameter.fromJS({ key: 'UserType', value: this.search.UserType }));
+        arry.push(Parameter.fromJS({ key: 'Phone', value: this.search.phone }));
         return arry;
 
     }
