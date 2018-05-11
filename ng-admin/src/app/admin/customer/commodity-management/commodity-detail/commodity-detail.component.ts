@@ -1,6 +1,6 @@
 import { Component, OnInit, Injector } from '@angular/core';
 import { AppComponentBase } from '@shared/app-component-base';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { ProductsServiceProxy } from '@shared/service-proxies/customer-service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Products } from '@shared/entity/customer';
@@ -47,8 +47,8 @@ export class CommodityDetailComponent extends AppComponentBase implements OnInit
             type: [null],
             price: [null],
             isRare: [null],
-            packageCode: [null, Validators.compose([Validators.pattern('^[0-9]*$')])],
-            barCode: [null, Validators.compose([Validators.pattern('^[0-9]*$')])],
+            packageCode: [null, Validators.compose([Validators.pattern('^[0-9]*$'),this.confirmationValidatorP])],
+            barCode: [null, Validators.compose([Validators.pattern('^[0-9]*$'),this.confirmationValidatorB])],
             isAction: [true],
             photoUrl: [null, Validators.compose([Validators.maxLength(500)])],
         });
@@ -56,6 +56,22 @@ export class CommodityDetailComponent extends AppComponentBase implements OnInit
         this.host = AppConsts.remoteServiceBaseUrl;
         this.actionUrl = this.host + '/WeChatFile/MarketingInfoPosts?fileName=product';
     }
+
+    confirmationValidatorB = (control: FormControl): { [s: string]: boolean } => {
+        if (!control.value) {
+            // return { required: true };
+        } else if (control.value == this.form.controls['packageCode'].value) {
+            return { confirm: true, error: true };
+        }
+    }
+    confirmationValidatorP = (control: FormControl): { [s: string]: boolean } => {
+        if (!control.value) {
+            // return { required: true };
+        } else if (control.value == this.form.controls['barCode'].value) {
+            return { confirm: true, error: true };
+        }
+    }
+
 
     getSingleProdct() {
         this.productService.get(this.id).subscribe((result: Products) => {
@@ -88,11 +104,19 @@ export class CommodityDetailComponent extends AppComponentBase implements OnInit
         }
         if (this.form.valid) {
             this.isConfirmLoading = true;
-            this.productService.update(this.product)
-                .finally(() => { this.isConfirmLoading = false; })
-                .subscribe(() => {
-                    this.notify.info(this.l('保存成功！'));
-                })
+            this.productService.CheckCode(this.product.id, this.product.packageCode, this.product.barCode).subscribe((result: number) => {
+                if (result === 0) {
+                    this.productService.update(this.product)
+                        .finally(() => { this.isConfirmLoading = false; })
+                        .subscribe(() => {
+                            this.notify.info(this.l('保存成功！'));
+                        });
+                }else{
+                    this.isConfirmLoading = false;
+                    var errorMsg=result===1?'包码重复':(result===2?'条码重复':(result===3?'包码、条码重复':''));
+                    this.notify.error(this.l(errorMsg));
+                }
+            });
         }
     }
     /**

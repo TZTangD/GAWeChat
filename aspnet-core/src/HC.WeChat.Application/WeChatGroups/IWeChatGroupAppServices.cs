@@ -68,7 +68,7 @@ namespace HC.WeChat.WeChatGroups
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task CreateWeChatGroup(WeChatGroupListDto input);
+        Task<WeChatGroupEditDto> CreateWeChatGroup(WeChatGroupListDto input);
 
         /// <summary>
         /// 修改分组

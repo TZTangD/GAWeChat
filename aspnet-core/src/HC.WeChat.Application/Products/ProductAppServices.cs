@@ -261,6 +261,34 @@ namespace HC.WeChat.Products
                 return null;
             }
         }
+
+        /// <summary>
+        /// 检查包码条码是否重复（0：不重复，1：包码重复，2：条码重复，3：包码、条码重复）
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="tenantId"></param>
+        /// <returns></returns>
+        public async Task<int> GetCheckCode(CheckInput input)
+        {
+            var result = 0;
+            var countP =await _productRepository.GetAll().Where(p => p.PackageCode == input.PCode||p.BarCode==input.PCode).WhereIf(input.ProductId != Guid.Empty, p => p.Id != input.ProductId).CountAsync();
+            var countB =await _productRepository.GetAll().Where(p => p.BarCode == input.BCode||p.PackageCode==input.BCode).WhereIf(input.ProductId != Guid.Empty, p => p.Id != input.ProductId).CountAsync();
+            //var entity = _productRepository.GetAll().Where(e => e.Id == input.ProductId).FirstOrDefault();
+
+            if (countB > 0 && countP > 0)
+            {
+                result = 3;
+            }
+            else if (countB > 0 && countP == 0)
+            {
+                result = 2;
+            }
+            else if (countB == 0 && countP > 0)
+            {
+                result = 1;
+            }
+            return result;
+        }
     }
 }
 
