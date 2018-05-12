@@ -1,47 +1,62 @@
-<Page [ngClass]="'badge'" [title]="'Badge'" [subTitle]="'徽章'" [spacing]="false" [ftBottom]="true">
-
-    <div class="weui-cells__title">新消息提示跟摘要信息后，统一在列表右侧</div>
-    <div class="weui-cells">
-        <div class="weui-cell weui-cell_access">
-            <div class="weui-cell__bd">单行列表</div>
-            <div class="weui-cell__ft" style="font-size: 0">
-                <span style="vertical-align:middle; font-size: 17px;">详细信息</span>
-                <span class="weui-badge weui-badge_dot" style="margin-left: 5px;margin-right: 5px;"></span>
+<Page [ngClass]="'badge'" [showTitle]="false" [spacing]="false" [ftBottom]="true">
+    <div class="weui-cells" style="margin-top: 0px;">
+        <div class="weui-cell" style=" padding: 0px;">
+            <div style="text-align: center; width: 100%;">
+                <img src="./assets/images/shop/shop.jpg" style="width:100%;">
             </div>
         </div>
+        <div class="weui-cell" style="font-size: 14px;" *ngIf="myaddress">
+            <div class="weui-cell__hd">
+                <img src="./assets/images/shop/map-3-o.png" alt="" style="width:24px;margin-right:5px;display:block">
+            </div>
+            <div class="weui-cell__bd weui-cell_primary">
+                <p>{{myaddress}}</p>
+            </div>
+            <a class="weui-cell__ft weui-cell_access" style="color: cornflowerblue" (click)="getlocation()">
+               重新定位
+            </a>
+        </div>
     </div>
-    <div class="weui-cells__title">未读数红点跟在主题信息后，统一在列表左侧</div>
+    <div class="weui-cells__title">只显示附近5公里已内的店铺</div>
     <div class="weui-cells">
         <div class="weui-cell">
             <div class="weui-cell__hd" style="position: relative;margin-right: 10px;">
                 <img src="./assets/images/pic_160.png" style="width: 50px;display: block">
-                <span class="weui-badge" style="position: absolute;top: -.4em;right: -.4em;">8</span>
             </div>
             <div class="weui-cell__bd">
-                <p>联系人名称</p>
-                <p style="font-size: 13px;color: #888888;">摘要信息</p>
+                <p>华阳金棕榈店</p>
+                <p style="font-size: 13px;color: #888888;">地址：成都华阳金棕榈<br/>电话：13880954084</p>
             </div>
+            <a class="weui-cell__ft weui-cell_access">
+                200米
+                <img class="weui-icon-h18" src="./assets/images/shop/navigation-o.png" alt="">
+            </a>
         </div>
-        <div class="weui-cell weui-cell_access">
-            <div class="weui-cell__bd">
-                <span style="vertical-align: middle">单行列表</span>
-                <span class="weui-badge" style="margin-left: 5px;">8</span>
+        <div class="weui-cell">
+            <div class="weui-cell__hd" style="position: relative;margin-right: 10px;">
+                <img src="./assets/images/pic_160.png" style="width: 50px;display: block">
             </div>
-            <div class="weui-cell__ft"></div>
+            <div class="weui-cell__bd">
+                <p>高新天府五街店</p>
+                <p style="font-size: 13px;color: #888888;">地址：高新天府五街店<br/>电话：13880954084</p>
+            </div>
+            <a class="weui-cell__ft weui-cell_access">
+                700米
+                <img class="weui-icon-h18" src="./assets/images/shop/navigation-o.png" alt="">
+            </a>
         </div>
-        <div class="weui-cell weui-cell_access">
-            <div class="weui-cell__bd">
-                <span style="vertical-align: middle">单行列表</span>
-                <span class="weui-badge" style="margin-left: 5px;">8</span>
+        <div class="weui-cell">
+            <div class="weui-cell__hd" style="position: relative;margin-right: 10px;">
+                <img src="./assets/images/pic_160.png" style="width: 50px;display: block">
             </div>
-            <div class="weui-cell__ft">详细信息</div>
-        </div>
-        <div class="weui-cell weui-cell_access">
             <div class="weui-cell__bd">
-                <span style="vertical-align: middle">单行列表</span>
-                <span class="weui-badge" style="margin-left: 5px;">New</span>
+                <p>高新天府三街店</p>
+                <p style="font-size: 13px;color: #888888;">地址：高新天府三街店<br/>电话：13880954084</p>
             </div>
-            <div class="weui-cell__ft"></div>
+            <a class="weui-cell__ft weui-cell_access">
+                1000米
+                <img class="weui-icon-h18" src="./assets/images/shop/navigation-o.png" alt="">
+            </a>
         </div>
     </div>
 </Page>
