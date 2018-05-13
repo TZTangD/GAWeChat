@@ -17,6 +17,7 @@ using System;
 using HC.WeChat.Authorization;
 using HC.WeChat.Retailers;
 using HC.WeChat.WeChatUsers.DomainServices;
+using HC.WeChat.WechatEnums;
 
 namespace HC.WeChat.Shops
 {
@@ -57,13 +58,13 @@ namespace HC.WeChat.Shops
         {
 
             var query = _shopRepository.GetAll()
-                .WhereIf(!string.IsNullOrEmpty(input.Name),s=>s.Name.Contains(input.Name))
-                .WhereIf(input.Status.HasValue,s=>s.Status==input.Status);
+                .WhereIf(!string.IsNullOrEmpty(input.Name), s => s.Name.Contains(input.Name))
+                .WhereIf(input.Status.HasValue, s => s.Status == input.Status);
             //TODO:根据传入的参数添加过滤条件
             var shopCount = await query.CountAsync();
 
             var shops = await query
-                .OrderByDescending(s=>s.CreationTime)
+                .OrderByDescending(s => s.CreationTime)
                 .ThenBy(input.Sorting)
                 .PageBy(input)
                 .ToListAsync();
@@ -148,7 +149,7 @@ namespace HC.WeChat.Shops
             {
                 if (input.Shop.Id.HasValue)
                 {
-                    input.Shop.Status = WechatEnums.ShopAuditStatus.提交申请;                  
+                    input.Shop.Status = WechatEnums.ShopAuditStatus.提交申请;
                     await UpdateShopAsync(input.Shop);
                 }
                 else
@@ -230,11 +231,11 @@ namespace HC.WeChat.Shops
             var entity = new ShopEditDto();
             if (input.Id.HasValue)
             {
-                 await UpdateShopAsync(input);
+                await UpdateShopAsync(input);
             }
             else
             {
-                 await CreateShopAsync(input);
+                await CreateShopAsync(input);
             }
             //return await GetShopByIdRetailerAsync(entity.Id);
 
@@ -305,7 +306,6 @@ namespace HC.WeChat.Shops
         {
             var queryShop = _shopRepository.GetAll()
                 .Where(s => s.Id == id);
-
             var queryRetailer = _retailerRepository.GetAll();
             var entity = await (from s in queryShop
                                 join r in queryRetailer on s.RetailerId equals r.Id into queryS
@@ -323,6 +323,8 @@ namespace HC.WeChat.Shops
                                     Evaluation = s.Evaluation,
                                     Longitude = s.Longitude,
                                     Latitude = s.Latitude,
+                                    QqLatitude = s.QqLatitude,
+                                    QqLongitude = s.QqLongitude,
                                     Status = s.Status,
                                     AuditTime = s.AuditTime,
                                     CreationTime = s.CreationTime,
@@ -333,7 +335,7 @@ namespace HC.WeChat.Shops
             return entity;
         }
 
-      
+
         [AbpAllowAnonymous]
         public async Task<ShopListDto> GetShopByOpenId(int? tenantId, string openId)
         {
@@ -341,6 +343,31 @@ namespace HC.WeChat.Shops
             {
                 var user = await _wechatuserManager.GetWeChatUserAsync(openId, tenantId);
                 var shop = await _shopRepository.GetAll().Where(s => s.RetailerId == user.UserId).FirstOrDefaultAsync();
+                return shop.MapTo<ShopListDto>();
+            }
+        }
+
+        /// <summary>
+        /// 根据当前位置获取附近店铺
+        /// </summary>
+        [AbpAllowAnonymous]
+        public async Task<List<NearbyShopDto>> GetNearbyShopByLocationAsync(decimal latitude, decimal longitude, int? tenantId, string openId)
+        {
+            using (CurrentUnitOfWork.SetTenantId(tenantId))
+            {
+                var dataList = await _shopRepository.GetAll().Where(s => s.Status == ShopAuditStatus.审核通过).ToListAsync();
+
+                return dataList.MapTo<List<NearbyShopDto>>();
+            }
+        }
+
+        [AbpAllowAnonymous]
+        public async Task<ShopListDto> GetViewShopByIdAsync(Guid id, int? tenantId)
+        {
+            using (CurrentUnitOfWork.SetTenantId(tenantId))
+            {
+                var shop = await _shopRepository.GetAsync(id);
+                shop.ReadTotal++;
                 return shop.MapTo<ShopListDto>();
             }
         }

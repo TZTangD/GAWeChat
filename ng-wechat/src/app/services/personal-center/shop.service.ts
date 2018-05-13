@@ -10,72 +10,94 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '../httpclient'
 import { Observable } from 'rxjs/Observable';
 import * as moment from 'moment';
-import { Shop, ApiResult, ShopProduct, ShopGoods } from '../model/index';
+import { Shop, ApiResult, ShopProduct, ShopGoods, NearbyShop } from '../model/index';
 
 
 @Injectable()
 export class ShopService {
   constructor(private http: HttpClient) { }
 
-  WechatCreateOrUpdateShop(params: any): Observable<boolean>{
+  WechatCreateOrUpdateShop(params: any): Observable<boolean> {
     return this.http.post('/api/services/app/Shop/WechatCreateOrUpdateShop', params).map(data => {
-        return <boolean>data.success;
+      return <boolean>data.success;
     });
   }
 
-  GetShopByOpenId(params: any): Observable<Shop>{
+  GetShopByOpenId(params: any): Observable<Shop> {
     return this.http.get('/api/services/app/Shop/GetShopByOpenId', params).map(data => {
-        if(data.result){
-          let rel = Shop.fromJS(data.result);
-          rel.evaluationArry = rel.evaluation.split(',');
-          return rel;
-        } else {
-          return null;
-        }
+      if (data.result) {
+        let rel = Shop.fromJS(data.result);
+        rel.evaluationArry = rel.evaluation.split(',');
+        return rel;
+      } else {
+        return null;
+      }
     });
   }
 
-  GetShopProductByCode(params: any): Observable<ShopGoods>{
+  GetShopProductByCode(params: any): Observable<ShopGoods> {
     return this.http.get('/api/services/app/Product/GetShopProductByCode', params).map(data => {
-        if(data.result){
-          let rel = ShopGoods.fromJS(data.result);
-          return rel;
-        } else {
-          return null;
-        }
+      if (data.result) {
+        let rel = ShopGoods.fromJS(data.result);
+        return rel;
+      } else {
+        return null;
+      }
     });
   }
 
-  GetShopProductsByShopId(params: any): Observable<ShopProduct[]>{
+  GetShopProductsByShopId(params: any): Observable<ShopProduct[]> {
     return this.http.get('/api/services/app/ShopProduct/GetShopProductsByShopId', params).map(data => {
-        if(data.result){
-          let rel = ShopProduct.fromJSArray(data.result);
-          return rel;
-        } else {
-          return null;
-        }
+      if (data.result) {
+        let rel = ShopProduct.fromJSArray(data.result);
+        return rel;
+      } else {
+        return null;
+      }
     });
   }
 
   GetRareProduct(params: any): Observable<any> {
     return this.http.get('/api/services/app/Product/GetRareProduct', params).map(data => {
-        if(data.result){
-          return data.result;
-        } else {
-          return null;
-        }
+      if (data.result) {
+        return data.result;
+      } else {
+        return null;
+      }
     });
   }
 
-  SaveShopProducts(params: any): Observable<any>{
+  SaveShopProducts(params: any): Observable<any> {
     return this.http.post('/api/services/app/ShopProduct/SaveShopProducts', params).map(data => {
-        return data.result;
+      return data.result;
     });
   }
 
-  ExchangeIntegral(params: any): Observable<any>{
+  ExchangeIntegral(params: any): Observable<any> {
     return this.http.post('/api/services/app/PurchaseRecord/ExchangeIntegralAsync', params, null, true).map(data => {
-        return data.result;
+      return data.result;
+    });
+  }
+
+  GetNearbyShopByLocationAsync(params: any): Observable<NearbyShop[]> {
+    return this.http.get('/api/services/app/Shop/GetNearbyShopByLocationAsync', params).map(data => {
+      if (data.result) {
+        return NearbyShop.fromJSArray(data.result);
+      } else {
+        return null;
+      }
+    });
+  }
+
+  GetViewShopByIdAsync(params: any): Observable<Shop> {
+    return this.http.get('/api/services/app/Shop/GetViewShopByIdAsync', params).map(data => {
+      if (data.result) {
+        let rel = Shop.fromJS(data.result);
+        rel.evaluationArry = rel.evaluation.split(',');
+        return rel;
+      } else {
+        return null;
+      }
     });
   }
 

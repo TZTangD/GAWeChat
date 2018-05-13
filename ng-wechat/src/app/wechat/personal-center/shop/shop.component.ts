@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/timer';
 import { AppComponentBase } from '../../components/app-component-base';
 import { WechatUser, UserType, Shop, ShopProduct } from '../../../services/model';
-import { Router } from '@angular/router';
+import { Router, Params } from '@angular/router';
 import { ShopService, AppConsts } from '../../../services';
 
 import { PopupComponent } from "ngx-weui/popup";
@@ -20,11 +20,14 @@ export class ShopComponent extends AppComponentBase implements OnInit {
 
     user: WechatUser;
     shop: Shop;
+    shopId: string;
     shopProducts: ShopProduct[];
     shopProductIds: string[];
     @ViewChild('product') productPopup: PopupComponent;
     cigaretteProducts: ShopProduct[];//卷烟类
     specialProducts: ShopProduct[];//特产类
+    isView: boolean = false;
+    hostUrl: string = AppConsts.remoteServiceBaseUrl;
 
     constructor(injector: Injector,
         private router: Router,
@@ -32,6 +35,9 @@ export class ShopComponent extends AppComponentBase implements OnInit {
         private wxService: JWeiXinService,
         private srv: ToptipsService) {
         super(injector);
+        this.activatedRoute.params.subscribe((params: Params) => {
+            this.shopId = params['shopId'];
+        });
     }
 
     ngOnInit() {
@@ -59,27 +65,35 @@ export class ShopComponent extends AppComponentBase implements OnInit {
             });
         });
 
-        this.settingsService.getUser().subscribe(result => {
-            this.user = result;
-            if (this.user) {
-                //console.table(this.user);
-                if (this.user.userType != UserType.Retailer) { //不是零售客户需先绑定
-                    this.router.navigate(['/personals/bind-retailer']);
-                } else {
-                    if (!this.user.isShopkeeper && this.user.status == 0) {//不是店主 且 未审核
-                        this.router.navigate(['/shops/wait-audit']);
+        if (this.shopId) {
+            this.isView = true;
+            this.shopService.GetViewShopByIdAsync({ id: this.shopId, tenantId: this.settingsService.tenantId }).subscribe(res => {
+                this.shop = res;
+            });
+        }
+        else {
+            this.settingsService.getUser().subscribe(result => {
+                this.user = result;
+                if (this.user) {
+                    //console.table(this.user);
+                    if (this.user.userType != UserType.Retailer) { //不是零售客户需先绑定
+                        this.router.navigate(['/personals/bind-retailer']);
                     } else {
-                        this.shopService.GetShopByOpenId(this.WUserParams)
-                            .subscribe(result => {
-                                this.shop = result;
-                                if (!this.shop) {//如果没有店铺 需要新增 
-                                    this.router.navigate(['/shops/shop-add']);
-                                }
-                            });
+                        if (!this.user.isShopkeeper && this.user.status == 0) {//不是店主 且 未审核
+                            this.router.navigate(['/shops/wait-audit']);
+                        } else {
+                            this.shopService.GetShopByOpenId(this.WUserParams)
+                                .subscribe(result => {
+                                    this.shop = result;
+                                    if (!this.shop) {//如果没有店铺 需要新增 
+                                        this.router.navigate(['/shops/shop-add']);
+                                    }
+                                });
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
     }
 
     goEditShop() {

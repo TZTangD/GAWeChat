@@ -34,4 +34,25 @@ export class JWeiXinService {
             });
         });
     }
+
+    getLocation(): Promise<any> {
+        return (new Promise<any>((resolve, reject) => {
+            wx.getLocation({
+                type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+                success: function (res) {
+                    resolve(res);
+                }
+            });
+        }));
+    }
+
+    translate(lat: any, lng: any): Promise<any> {
+        return (new Promise<any>((resolve, reject) => {
+            //将GPS坐标 转换为腾讯坐标
+            qq.maps.convertor.translate(new qq.maps.LatLng(lat, lng), 1,
+                function (results) {//[{"lat":39.921792,"lng":116.200274}]
+                    resolve(results);
+                });
+        }));
+    }
 }

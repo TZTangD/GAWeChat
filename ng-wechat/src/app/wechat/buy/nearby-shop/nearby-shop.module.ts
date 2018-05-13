@@ -5,6 +5,7 @@ import { SharedModule } from '../../../shared/shared.module';
 import { ComponentsModule } from '../../components/components.module';
 
 import { NearbyShopComponent } from './nearby-shop.component';
+import { ShopService } from '../../../services';
 
 // region: components
 
@@ -26,6 +27,7 @@ const routes: Routes = [
         ...COMPONENTS
     ],
     providers: [
+        ShopService
     ]
 })
 export class NearbyShopModule {

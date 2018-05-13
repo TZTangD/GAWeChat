@@ -5,58 +5,31 @@
                 <img src="./assets/images/shop/shop.jpg" style="width:100%;">
             </div>
         </div>
-        <div class="weui-cell" style="font-size: 14px;" *ngIf="myaddress">
+        <div class="weui-cell" style="font-size: 14px;" >
             <div class="weui-cell__hd">
                 <img src="./assets/images/shop/map-3-o.png" alt="" style="width:24px;margin-right:5px;display:block">
             </div>
             <div class="weui-cell__bd weui-cell_primary">
                 <p>{{myaddress}}</p>
             </div>
-            <a class="weui-cell__ft weui-cell_access" style="color: cornflowerblue" (click)="getlocation()">
+            <a  class="weui-cell__ft weui-cell_access" style="color: cornflowerblue" (click)="wxGetLocation()">
                重新定位
             </a>
         </div>
     </div>
-    <div class="weui-cells__title">只显示附近5公里已内的店铺</div>
-    <div class="weui-cells">
-        <div class="weui-cell">
-            <div class="weui-cell__hd" style="position: relative;margin-right: 10px;">
-                <img src="./assets/images/pic_160.png" style="width: 50px;display: block">
+    <div class="weui-cells__title">只显示附近3公里以内的店铺</div>
+    <div class="weui-cells" *ngIf="shops && shops.length > 0" >
+        <a class="weui-cell weui-cell_access" *ngFor="let s of shops" (click)="goShop(s.id)" >
+            <div class="weui-cell__hd weui-cell_img" [ngStyle]="{'background-image':'url('+ hostUrl + s.coverPhoto +')'}">
             </div>
             <div class="weui-cell__bd">
-                <p>华阳金棕榈店</p>
-                <p style="font-size: 13px;color: #888888;">地址：成都华阳金棕榈<br/>电话：13880954084</p>
+                <p>{{s.name}}</p>
+                <p style="font-size: 13px;color: #888888;">地址：{{s.address}}<br/>电话：{{s.tel}}</p>
             </div>
-            <a class="weui-cell__ft weui-cell_access">
-                200米
-                <img class="weui-icon-h18" src="./assets/images/shop/navigation-o.png" alt="">
-            </a>
-        </div>
-        <div class="weui-cell">
-            <div class="weui-cell__hd" style="position: relative;margin-right: 10px;">
-                <img src="./assets/images/pic_160.png" style="width: 50px;display: block">
+            <div class="weui-cell__ft">
+                {{s.distance}}米
             </div>
-            <div class="weui-cell__bd">
-                <p>高新天府五街店</p>
-                <p style="font-size: 13px;color: #888888;">地址：高新天府五街店<br/>电话：13880954084</p>
-            </div>
-            <a class="weui-cell__ft weui-cell_access">
-                700米
-                <img class="weui-icon-h18" src="./assets/images/shop/navigation-o.png" alt="">
-            </a>
-        </div>
-        <div class="weui-cell">
-            <div class="weui-cell__hd" style="position: relative;margin-right: 10px;">
-                <img src="./assets/images/pic_160.png" style="width: 50px;display: block">
-            </div>
-            <div class="weui-cell__bd">
-                <p>高新天府三街店</p>
-                <p style="font-size: 13px;color: #888888;">地址：高新天府三街店<br/>电话：13880954084</p>
-            </div>
-            <a class="weui-cell__ft weui-cell_access">
-                1000米
-                <img class="weui-icon-h18" src="./assets/images/shop/navigation-o.png" alt="">
-            </a>
-        </div>
+        </a>
     </div>
+    <weui-loadmore type="line" *ngIf="!shops || shops.length == 0"></weui-loadmore>
 </Page>

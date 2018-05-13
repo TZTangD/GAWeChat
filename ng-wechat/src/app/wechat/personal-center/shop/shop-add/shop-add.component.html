@@ -18,13 +18,24 @@
 <Page [ngClass]="'input'" [title]="title" [subTitle]="'维护自己的店铺信息'" [showTitle]="false" [spacing]="false" *ngIf="!showAddInfo">
     <div class="weui-media-box weui-media-box_small-appmsg">
         <div class="weui-cells">
-            <div class="weui-cell weui-cell_access" >
+            <div class="weui-cell weui-cell_access">
                 <div class="weui-cell__hd">
                     <img src="./assets/images/shop/network-o-3.png" alt="" style="width:25px;margin-right:5px;display:block">
                 </div>
                 <div class="weui-cell__bd weui-cell_primary">
                     <p>{{title}}</p>
                 </div>
+            </div>
+            <div class="weui-cell" style="font-size: 14px;" *ngIf="locationInfo">
+                <div class="weui-cell__hd">
+                    <img src="./assets/images/shop/map-3-o.png" alt="" style="width:24px;margin-right:5px;display:block">
+                </div>
+                <div class="weui-cell__bd weui-cell_primary">
+                    <p>{{locationInfo}}</p>
+                </div>
+                <a class="weui-cell__ft weui-cell_access" style="color: cornflowerblue" (click)="wxGetLocation()">
+                    重新定位
+                </a>
             </div>
         </div>
     </div>
@@ -49,51 +60,43 @@
             </div>
             <div class="weui-cell">
                 <div class="weui-cell__hd">
-                    <label class="weui-label">地址</label>
+                    <label class="weui-label">位置</label>
                 </div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" type="text" [(ngModel)]="res.address" name="address" placeholder="请输入店铺地址" weui-input="address"
-                        weui-required>
+                    <p>{{locationInfo}}</p>
                 </div>
-                <a class="weui-cell__ft weui-cell_access" (click)="wxOpenLocation()" >
+                <a class="weui-cell__ft weui-cell_access" (click)="wxOpenLocation()">
                     <img class="weui-icon-h18" src="./assets/images/shop/navigation-o.png" alt="">
                 </a>
             </div>
-            <div class="weui-cells__title">位置信息</div>
+        </div>
+        <div class="weui-cells__title">详细地址</div>
+        <div class="weui-cells weui-cells_form">
             <div class="weui-cell">
-                <div class="weui-cell__hd">
-                    <label class="weui-label">经度</label>
-                </div>
                 <div class="weui-cell__bd">
-                    <p>{{longitude}}</p>
-                </div>
-                <div class="weui-cell__ft">
-                    <button type="button" class="weui-vcode-btn" (click)="wxGetLocation()">重新定位</button>
+                    <textarea class="weui-textarea" placeholder="请输入店铺详细地址" rows="2" [(ngModel)]="res.address" name="address" weui-textarea weui-cn="2"
+                        maxlength="500"></textarea>
                 </div>
             </div>
-            <div class="weui-cell" >
-                <div class="weui-cell__hd">
-                    <label class="weui-label">纬度</label>
-                </div>
+        </div>
+        <!-- <div class="weui-cells__tips">地址：{{myaddress + res.address}}</div> -->
+        <div class="weui-cells__title">店铺描述</div>
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
                 <div class="weui-cell__bd">
-                    <p>{{latitude}}</p>
+                    <textarea class="weui-textarea" placeholder="请输入店铺描述信息" rows="3" [(ngModel)]="res.desc" name="desc" weui-textarea weui-cn="2"
+                        maxlength="500"></textarea>
                 </div>
             </div>
-            <div class="weui-cells__title">店铺描述</div>
-            <div class="weui-cells weui-cells_form">
-                <div class="weui-cell">
-                    <div class="weui-cell__bd">
-                        <textarea class="weui-textarea" placeholder="请输入店铺描述信息" rows="3" [(ngModel)]="res.desc" name="desc" weui-textarea weui-cn="2"
-                            maxlength="500"></textarea>
-                    </div>
-                </div>
-            </div>
+        </div>
+        <div class="weui-cells__title">店铺形象</div>
+        <div class="weui-cells weui-cells_form">
             <div class="weui-cell" *ngIf="coverPhoto">
                 <div class="weui-cell__bd">
                     <div class="weui-uploader">
                         <div class="weui-uploader__hd">
-                            <p class="weui-uploader__title">店铺形象</p>
-                            <div class="weui-uploader__info"></div>
+                            <p class="weui-uploader__title">上传图片</p>
+                            <div class="weui-uploader__info">小于等于150KB</div>
                         </div>
                         <div class="weui-uploader__bd">
                             <ul class="weui-uploader__files">
@@ -108,8 +111,8 @@
                 <div class="weui-cell__bd">
                     <div class="weui-uploader">
                         <div class="weui-uploader__hd">
-                            <p class="weui-uploader__title">店铺形象</p>
-                            <div class="weui-uploader__info">{{uploader?.uploadedCount}}/{{uploader?.queue?.length}}</div>
+                            <p class="weui-uploader__title">上传图片</p>
+                            <div class="weui-uploader__info">小于等于150KB</div>
                         </div>
                         <div class="weui-uploader__bd">
                             <ul class="weui-uploader__files">

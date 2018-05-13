@@ -170,6 +170,16 @@ namespace HC.WeChat.Web.Host.Controllers
                         ViewBag.PageUrl = _weChatOAuthAppService.GetAuthorizeUrl(url, "123", Senparc.Weixin.MP.OAuthScope.snsapi_base);
                     }
                     break;
+                case GAAuthorizationPageEnum.NearbyShop:
+                    {
+                        if (!string.IsNullOrEmpty(UserOpenId))
+                        {
+                            return Redirect(GAAuthorizationPageUrl.NearbyShopUrl);
+                        }
+                        var url = host + "/GAWX/NearbyShop";
+                        ViewBag.PageUrl = _weChatOAuthAppService.GetAuthorizeUrl(url, "123", Senparc.Weixin.MP.OAuthScope.snsapi_base);
+                    }
+                    break;
                 default:
                     {
                         return Redirect("/gawechat/index.html");
@@ -220,6 +230,17 @@ namespace HC.WeChat.Web.Host.Controllers
 
             return Redirect(GAAuthorizationPageUrl.ScanIntegralUrl);
         }
+
+        /// <summary>
+        /// 扫码积分
+        /// </summary>
+        public IActionResult NearbyShop(string code, string state)
+        {
+            //存储openId 避免重复提交
+            SetUserOpenId(code);
+
+            return Redirect(GAAuthorizationPageUrl.NearbyShopUrl);
+        }
     }
 
     public enum GAAuthorizationPageEnum
@@ -227,7 +248,8 @@ namespace HC.WeChat.Web.Host.Controllers
         PersonalCenter = 1,
         MemberCard = 2,
         ScanIntegral = 3,
-        MyShop = 4
+        MyShop = 4,
+        NearbyShop = 201
     }
 
     public class GAAuthorizationPageUrl
@@ -236,5 +258,7 @@ namespace HC.WeChat.Web.Host.Controllers
         public static string MemberCardUrl = "/gawechat/index.html#/members/member-card";
         public static string MyShopUrl = "/gawechat/index.html#/shops/shop";
         public static string ScanIntegralUrl = "/gawechat/index.html#/scans/scan";
+
+        public static string NearbyShopUrl = "/gawechat/index.html#/nearbies/nearby";
     }
 }

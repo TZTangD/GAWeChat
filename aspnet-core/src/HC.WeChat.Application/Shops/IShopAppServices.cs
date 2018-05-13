@@ -85,5 +85,9 @@ namespace HC.WeChat.Shops
         /// 通过微信用户获取店铺信息
         /// </summary>
         Task<ShopListDto> GetShopByOpenId(int? tenantId, string openId);
+
+        Task<ShopListDto> GetViewShopByIdAsync(Guid id, int? tenantId);
+
+        Task<List<NearbyShopDto>> GetNearbyShopByLocationAsync(decimal latitude, decimal longitude, int? tenantId, string openId);
     }
 }
