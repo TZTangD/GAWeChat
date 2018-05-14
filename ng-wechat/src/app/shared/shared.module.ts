@@ -4,22 +4,22 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { WeUiModule } from 'ngx-weui';
-import { AqmModule } from 'angular-qq-maps';
-import { GesturePasswordModule } from 'ngx-gesture-password';
-import { NotifyModule } from 'ngx-notify';
-import { CountdownModule } from 'ngx-countdown';
+//import { AqmModule } from 'angular-qq-maps';
+//import { GesturePasswordModule } from 'ngx-gesture-password';
+//import { NotifyModule } from 'ngx-notify';
+//import { CountdownModule } from 'ngx-countdown';
 
-import { DocsNavComponent } from './docs-nav/docs-nav.component';
-import { EditButtonComponent } from './edit-button/edit-button.component';
+//import { DocsNavComponent } from './docs-nav/docs-nav.component';
+//import { EditButtonComponent } from './edit-button/edit-button.component';
 
-const COMPONENTS = [ DocsNavComponent, EditButtonComponent ];
+//const COMPONENTS = [ DocsNavComponent, EditButtonComponent ];
 
-const THIDS = [
-    CountdownModule,
-    NotifyModule,
-    GesturePasswordModule,
-    AqmModule
-];
+//const THIDS = [
+    //CountdownModule,
+    //NotifyModule,
+    //GesturePasswordModule,
+    //AqmModule
+//];
 
 @NgModule({
     imports: [
@@ -27,18 +27,18 @@ const THIDS = [
         FormsModule,
         RouterModule,
         ReactiveFormsModule,
-        WeUiModule,
-        ...THIDS
+        WeUiModule//,
+    //    ...THIDS
     ],
-    declarations: COMPONENTS,
+    //declarations: COMPONENTS,
     exports: [
         CommonModule,
         FormsModule,
         RouterModule,
         ReactiveFormsModule,
-        WeUiModule,
-        ...THIDS,
-        ...COMPONENTS
+        WeUiModule//,
+      //  ...THIDS,
+      //  ...COMPONENTS
     ]
 })
 export class SharedModule {

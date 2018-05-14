@@ -91,8 +91,8 @@ namespace HC.WeChat.Web.Host.Controllers
         public IActionResult GetCurrentUserOpenId()
         {
             APIResultDto result = new APIResultDto();
-            UserOpenId = "oPM5Uv81jfyJqWbVxWAH-RUqsCAs";
-            //UserOpenId = "9A7C8776-A623-473F-AF29-10D3E79A2FAE";
+            //UserOpenId = "oPM5Uv81jfyJqWbVxWAH-RUqsCAs";
+            UserOpenId = "9A7C8776-A623-473F-AF29-10D3E79A2FAE";
             if (string.IsNullOrEmpty(UserOpenId))
             {
                 result.Code = 901;
