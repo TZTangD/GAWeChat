@@ -18,6 +18,8 @@ export class Shop implements IShop {
     retailerName: string;
     statusType: string;
     tel: string;
+    qqLongitude: number;
+    qqLatitude: number;
     constructor(data?: IShop) {
         if (data) {
             for (var property in data) {
@@ -47,6 +49,8 @@ export class Shop implements IShop {
             this.statusName = data["statusName"];
             this.retailerName = data["retailerName"];
             this.tel = data["tel"];
+            this.qqLongitude = data["qqLongitude"];
+            this.qqLatitude = data["qqLatitude"];
         }
     }
 
@@ -74,7 +78,8 @@ export class Shop implements IShop {
         data["creationTime"] = this.creationTime;
         data["tenantId"] = this.tenantId;
         data["tel"] = this.tel;
-        
+        data["qqLongitude"] = this.qqLongitude;
+        data["qqLatitude"] = this.qqLatitude;
         return data;
     }
 
@@ -101,4 +106,7 @@ export interface IShop {
     auditTime: string;
     creationTime: Date;
     tenantId: number;
+    qqLongitude: number;
+    qqLatitude: number;
+    tel: string;
 }

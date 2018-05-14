@@ -73,6 +73,16 @@ namespace HC.WeChat.Shops
         public virtual decimal? Latitude { get; set; }
 
         /// <summary>
+        /// 腾讯地图经度
+        /// </summary>
+        public virtual decimal? QqLongitude { get; set; }
+
+        /// <summary>
+        /// 腾讯地图纬度
+        /// </summary>
+        public virtual decimal? QqLatitude { get; set; }
+
+        /// <summary>
         /// 审核状态（枚举：提交申请、审核通过、审核未通过）
         /// </summary>
         public virtual ShopAuditStatus? Status { get; set; }

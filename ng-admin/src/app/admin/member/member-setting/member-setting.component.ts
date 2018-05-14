@@ -58,7 +58,7 @@ export class MemberSettingComponent extends AppComponentBase implements OnInit {
         });
     }
 
-    save(Tplcontent) {
+    save() {
         for (const i in this.form.controls) {
             this.form.controls[i].markAsDirty();
         }

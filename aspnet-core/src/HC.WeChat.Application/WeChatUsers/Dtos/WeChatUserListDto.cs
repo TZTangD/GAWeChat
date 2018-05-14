@@ -29,7 +29,7 @@ namespace HC.WeChat.WeChatUsers.Dtos
             {
                 if (string.IsNullOrEmpty(_headImgUrl))
                 {
-                    return @"/gawechat/img/timg-4.jpeg";
+                    return @"./assets/images/timg-4.jpeg";
                 }
                 return _headImgUrl;
             }

@@ -7,6 +7,7 @@ import { Router, Params } from '@angular/router';
 import { UploaderOptions, FileItem, Uploader, UploaderHeaders } from 'ngx-weui';
 import { ShopService, AppConsts } from '../../../../services';
 import { ToptipsService } from "ngx-weui/toptips";
+import { JWeiXinService } from 'ngx-weui/jweixin';
 
 @Component({
     selector: 'wechat-shop-add',
@@ -25,47 +26,110 @@ export class ShopAddComponent extends AppComponentBase implements OnInit {
     imgShow: boolean = false;
     title: string = '新增店铺';
     hostUrl: string = AppConsts.remoteServiceBaseUrl;
+    longitude: number;
+    latitude: number;
+    qqLongitude: number;
+    qqLatitude: number;
+    myaddress: string = '';
+    locationInfo: string = '获取店铺位置....';
+    citylocation: any;
+    isReset: boolean = false;//是否是重新定位地址
+    options: any = {
+        complete: ((res) => {
+            //console.log(JSON.stringify(res));
+            this.locationInfo = res.detail.detail;
+            let resArry = this.locationInfo.split(',');
+            let cityName = '';
+            if (resArry.length > 0) {
+                let i = resArry.length - 2;
+                while (i >= 0) {
+                    cityName = (cityName + resArry[i]);
+                    i--;
+                }
+                this.myaddress = cityName;
+                if (this.isReset == true) {
+                    this.res.address = this.myaddress;
+                    this.isReset = false;
+                }
+            }
+        }),
+        error: (() => {
+            this.locationInfo = '定位失败';
+            this.myaddress = '';
+        })
+    }
 
     uploader: Uploader = new Uploader(<UploaderOptions>{
         url: AppConsts.remoteServiceBaseUrl + '/WeChatFile/FilesPosts?folder=shop',
         auto: true,
         limit: 1,
-        /*onUploadSuccess(file: FileItem, response: string) {
-            console.log('onUploadSuccess-' + response, arguments);
-            //console.table(file);
-            //console.table(arguments);
-            let data = JSON.parse(response);
-            if(data && data.success == true){
-                this.coverPhoto = data.result;
+        size: 153600,
+        onUploadStart: ((file: FileItem) => {
+            if (file.file.size > 153600) {
+                this.srv['warn']('文件必须小于等于150KB');
+                file.cancel();
             }
-        },*/
+        }),
         onUploadSuccess: ((file: FileItem, response: string) => {
-            console.log('onUploadSuccess-' + response);
-            //console.table(file);
-            //console.table(arguments);
+            //console.log('onUploadSuccess-' + response);
             let data = JSON.parse(response);
             if (data && data.success == true) {
                 this.coverPhoto = data.result;
             }
         }),
+        onError: (() => {
+            this.srv['warn']('检查文件大小是否超过限制');
+        }),
         onUploadComplete: function (file: FileItem, response: string) {
-            console.log('onUploadComplete-' + response, arguments);
-            //console.table(file);
-            //console.table(arguments);  
+            //console.log('onUploadComplete-' + response, arguments);
         }
     });
 
     constructor(injector: Injector, private router: Router,
         private shopService: ShopService,
+        private wxService: JWeiXinService,
         private srv: ToptipsService) {
         super(injector);
     }
 
     ngOnInit() {
-        //alert(this.id)
         if (this.id && this.id == '1') {
             this.showAddInfo = false;
         }
+        //调用城市服务信息
+        this.citylocation = new qq.maps.CityService(this.options);
+        //微信JS SDK配置
+        this.wxService.get().then((res) => {
+            if (!res) {
+                console.warn('jweixin.js 加载失败');
+                return;
+            }
+            let url = encodeURIComponent(location.href.split('#')[0]);
+            this.settingsService.getJsApiConfig(url).subscribe(result => {
+                if (result) {
+                    result.jsApiList = ['openLocation', 'getLocation'];//指定调用的接口名
+                    // 1、通过config接口注入权限验证配置
+                    wx.config(result.toJSON());
+                    // 2、通过ready接口处理成功验证
+                    //wx.ready(() => {
+                    // 注册各种onMenuShareTimeline & onMenuShareAppMessage
+                    //    if (this.showAddInfo == true) {//当新增的时候 才自动定位
+                    //        this.wxGetLocation();
+                    //    }
+                    //});
+                    this.wxReady().then((res) => {
+                        if (this.showAddInfo == true) {//当新增的时候 才自动定位
+                            this.wxGetLocation();
+                        }
+                    });
+                    // 2、通过error接口处理失败验证
+                    wx.error(() => {
+
+                    });
+                }
+            });
+        });
+
         this.settingsService.getUser().subscribe(result => {
             this.user = result;
         });
@@ -73,27 +137,31 @@ export class ShopAddComponent extends AppComponentBase implements OnInit {
             if (result) {
                 this.res = result.toJSON();
                 this.coverPhoto = this.res.coverPhoto;
+                this.latitude = this.res.latitude;
+                this.longitude = this.res.longitude;
+                this.qqLatitude = this.res.qqLatitude;
+                this.qqLongitude = this.res.qqLongitude;
                 this.showAddInfo = false;
+                this.getlocation();
                 this.title = '修改店铺';
             }
         });
-        /*
-        this.activatedRoute.params.subscribe((params: Params) => {
-            let shop = params['shop'];
-            console.table(shop);
-            if(shop){//编辑
-                this.res = shop;
-                this.showAddInfo = false;
-            }
-        });*/
+    }
+
+    wxReady(): Promise<boolean> {
+        return (new Promise<any>((resolve, reject) => {
+            wx.ready(() => {
+                resolve(true);
+            });
+        }));
     }
 
     onGallery(item: any) {
-        if(item){
+        if (item) {
             this.img = [{ file: item._file, item: item }];
         } else {
             this.img = this.hostUrl + this.coverPhoto;
-        } 
+        }
         this.imgShow = true;
     }
 
@@ -106,15 +174,21 @@ export class ShopAddComponent extends AppComponentBase implements OnInit {
     }
 
     onSave() {
-        //alert('请求数据：' + JSON.stringify(this.res));
-        if (!this.coverPhoto) {
-            this.res.coverPhoto = this.coverPhoto;
-        }
         //console.table(this.res);
-        if (!this.res.coverPhoto || this.res.coverPhoto == '') {
+        if (!this.coverPhoto || this.coverPhoto == '') {
             this.srv['warn']('请上传店铺形象');
             return;
         }
+        if (!this.latitude || !this.longitude) {
+            this.srv['warn']('请获取位置信息');
+            return;
+        }
+        this.res.coverPhoto = this.coverPhoto;
+        this.res.latitude = this.latitude;
+        this.res.longitude = this.longitude;
+        this.res.qqLatitude = this.qqLatitude;
+        this.res.qqLongitude = this.qqLongitude;
+        //this.res.address = this.myaddress + this.res.address;
         this.shopService.WechatCreateOrUpdateShop({
             shop: this.res,
             tenantId: this.settingsService.tenantId,
@@ -127,5 +201,48 @@ export class ShopAddComponent extends AppComponentBase implements OnInit {
                 this.srv['warn']('保存失败');
             }
         });
+    }
+
+    getWXLocation(): Promise<any> {
+        return (new Promise<any>((resolve, reject) => {
+            this.wxService.getLocation().then((res) => {
+                this.latitude = res.latitude;
+                this.longitude = res.longitude;
+                this.wxService.translate(res.latitude, res.longitude).then((result) => {
+                    resolve(result);
+                })
+            });
+        }));
+    }
+
+    //调用微信获取当前位置
+    wxGetLocation() {
+        this.isReset = true;
+        this.locationInfo = '定位中....';
+        this.getWXLocation().then((res) => {
+            this.qqLatitude = res[0].lat;
+            this.qqLongitude = res[0].lng;
+            this.getlocation();
+        });
+    }
+    //打开微信地图
+    wxOpenLocation() {
+        if (!this.latitude || !this.longitude) {
+            this.srv['info']('请先获取位置信息');
+            return;
+        }
+        wx.openLocation({
+            latitude: (this.qqLatitude ? this.qqLatitude : this.latitude), // 纬度，浮点数，范围为90 ~ -90
+            longitude: (this.qqLongitude ? this.qqLongitude : this.longitude), // 经度，浮点数，范围为180 ~ -180。
+            name: this.res.name, // 位置名
+            address: this.res.address, // 地址详情说明
+            scale: 12, // 地图缩放级别,整形值,范围从1~28。默认为最大
+            infoUrl: this.hostUrl + '/gawechat/index.html#/shops/shop' // 在查看位置界面底部显示的超链接,可点击跳转
+        });
+    }
+    //获取城市位置信息
+    getlocation() {
+        var latLng = new qq.maps.LatLng(this.qqLatitude, this.qqLongitude);
+        this.citylocation.searchCityByLatLng(latLng);
     }
 }

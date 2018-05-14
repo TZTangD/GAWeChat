@@ -21,7 +21,7 @@ import { Component, Input, ViewEncapsulation } from '@angular/core';
     <div class="page__ft" *ngIf="!noBottom">
     <div class="weui-footer">
         <p class="weui-footer__links" *ngIf="showBindStaff">
-        <a [routerLink]="['/center/bind-staff']" class="weui-footer__link">员工绑定</a>
+        <a [routerLink]="['/personals/bind-staff']" class="weui-footer__link">员工绑定</a>
         </p>
         <p class="weui-footer__text">广安烟草 | 渠江烟语</p>
     </div>

@@ -10,6 +10,8 @@ export class Shop implements IShop {
     evaluation: string;
     longitude: number;
     latitude: number;
+    qqLongitude: number;
+    qqLatitude: number;
     status: number;
     auditTime: Date;
     creationTime: Date;
@@ -39,6 +41,8 @@ export class Shop implements IShop {
             this.evaluation = data["evaluation"];
             this.longitude = data["longitude"];
             this.latitude = data["latitude"];
+            this.qqLongitude = data["qqLongitude"];
+            this.qqLatitude = data["qqLatitude"];
             this.status = data["status"];
             this.auditTime = data["auditTime"];
             this.creationTime = data["creationTime"];
@@ -66,6 +70,8 @@ export class Shop implements IShop {
         data["evaluation"] = this.evaluation;
         data["longitude"] = this.longitude;
         data["latitude"] = this.latitude;
+        data["qqLongitude"] = this.qqLongitude;
+        data["qqLatitude"] = this.qqLatitude;
         data["status"] = this.status;
         data["auditTime"] = this.auditTime;
         data["creationTime"] = this.creationTime;
@@ -93,10 +99,100 @@ export interface IShop {
     evaluation: string;
     longitude: number;
     latitude: number;
+    qqLongitude: number;
+    qqLatitude: number;
     status: number;
     auditTime: Date;
     creationTime: Date;
     tenantId: number;
     tel: string;
+}
+
+export class NearbyShop implements INearbyShop {
+    id: string;
+    name: string;
+    address: string;
+    coverPhoto: string;
+    longitude: number;
+    latitude: number;
+    qqLongitude: number;
+    qqLatitude: number;
+    tel: string;
+    distance: number;
+
+    constructor(data?: INearbyShop) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(data?: any) {
+        if (data) {
+            this.id = data["id"];
+            this.name = data["name"];
+            this.address = data["address"];
+            this.coverPhoto = data["coverPhoto"];
+            this.longitude = data["longitude"];
+            this.latitude = data["latitude"];
+            this.qqLongitude = data["qqLongitude"];
+            this.qqLatitude = data["qqLatitude"];
+            this.tel = data["tel"];
+            this.distance = data["distance"];
+        }
+    }
+
+    static fromJS(data: any): NearbyShop {
+        let result = new NearbyShop();
+        result.init(data);
+        return result;
+    }
+
+    static fromJSArray(dataArray: any[]): NearbyShop[] {
+        let array = [];
+        dataArray.forEach(result => {
+            let item = new NearbyShop();
+            item.init(result);
+            array.push(item);
+        });   
+      
+        return array;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["address"] = this.address;
+        data["coverPhoto"] = this.coverPhoto;
+        data["longitude"] = this.longitude;
+        data["latitude"] = this.latitude;
+        data["qqLongitude"] = this.qqLongitude;
+        data["qqLatitude"] = this.qqLatitude;
+        data["tel"] = this.tel;
+        data["distance"] = this.distance;
+        return data;
+    }
+
+    clone() {
+        const json = this.toJSON();
+        let result = new NearbyShop();
+        result.init(json);
+        return result;
+    }
+}
+export interface INearbyShop {
+    id: string;
+    name: string;
+    address: string;
+    coverPhoto: string;
+    longitude: number;
+    latitude: number;
+    qqLongitude: number;
+    qqLatitude: number;
+    tel: string;
+    distance: number;
 }
 

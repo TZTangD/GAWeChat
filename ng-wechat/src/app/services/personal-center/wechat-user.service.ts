@@ -17,17 +17,6 @@ import { WechatUser, ApiResult } from '../model/index';
 export class WechatUserService {
   constructor(private http: HttpClient) { }
 
-  GetWeChatUserAsync(oId:string, tId:string): Observable<WechatUser> {
-    let param: any = {};
-    param.openId = oId;
-    if(tId){
-      param.tenantId = tId;
-    }
-    return this.http.get('/api/services/app/WeChatUser/GetWeChatUserAsync', param).map(data => {
-      return WechatUser.fromJS(data.result);
-    });
-  }
-
   GetWeChatUserByMemberBarCodeAsync(mCode:string, tId:string): Observable<WechatUser> {
     let param: any = {};
     param.memberBarCode = mCode;

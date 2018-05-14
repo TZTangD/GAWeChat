@@ -5,8 +5,6 @@ import { ComponentsModule } from '../wechat/components/components.module';
 import { HomeComponent } from './home/home.component';
 import { routes } from './wechat.route';
 
-import { SettingsService, HttpClient, WechatUserService } from '../services';
-
 @NgModule({
     imports: [
         SharedModule,
@@ -17,9 +15,6 @@ import { SettingsService, HttpClient, WechatUserService } from '../services';
         HomeComponent
     ],
     providers: [
-        HttpClient,
-        SettingsService,
-        WechatUserService
     ],
     entryComponents: [
     ],

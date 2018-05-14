@@ -4,7 +4,6 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 
 import { Injectable } from '@angular/core';
-import { WechatUserService } from '../personal-center/wechat-user.service';
 import { HttpClient } from '../httpclient';
 import { AppConsts } from '../AppConsts';
 import { WechatUser, JsApiConfig } from '../model'
@@ -18,7 +17,32 @@ export class SettingsService {
     tenantId: string;
     private jsApiConfig: JsApiConfig;
 
-    constructor(private wechatUserService: WechatUserService, private httpClient: HttpClient) { }
+    constructor(private httpClient: HttpClient) { }
+
+    load(): Promise<any> {
+        if (this.openId) {
+            return new Promise<any>((resolve, reject) => {
+                resolve(null);
+            });
+        } else {
+            return new Promise<any>((resolve, reject) => {
+                this.httpClient.get('/GAWX/GetCurrentUserOpenId').subscribe(ret => {
+                    if (!ret.success) {
+                        console.error('openid获取失败');
+                        resolve(null);
+                        return;
+                    }
+                    if (ret.result.code != 0) {
+                        console.error(ret.result.msg);
+                        resolve(null);
+                        return;
+                    }
+                    this.setUserId(ret.result.data.openId, ret.result.data.tenantId);
+                    resolve(ret);
+                });
+            });
+        }
+    };
 
     setUserId(oid: string, tid: string) {
         if (tid == '0') {
@@ -30,9 +54,6 @@ export class SettingsService {
 
     setUser(val: any) {
         this.user = WechatUser.fromJS(val);
-        if (this.user.headImgUrl.includes('timg-4.jpeg')) {//表示默认头像
-            this.user.headImgUrl = AppConsts.remoteServiceBaseUrl + this.user.headImgUrl;
-        }
     }
 
     getUser(): Observable<WechatUser> {
@@ -41,7 +62,7 @@ export class SettingsService {
             return Observable.of(this.user);
         }
         if (this.openId) {
-            return this.wechatUserService.GetWeChatUserAsync(this.openId, this.tenantId).map(data => {
+            return this.GetWeChatUserAsync(this.openId, this.tenantId).map(data => {
                 this.setUser(data);
                 return this.user;
             })
@@ -50,7 +71,7 @@ export class SettingsService {
     }
 
     getJsApiConfig(url): Observable<JsApiConfig> {
-        return this.httpClient.get('/GAWX/GetJsApiConfig',{ url: url }).map(ret => {
+        return this.httpClient.get('/GAWX/GetJsApiConfig', { url: url }).map(ret => {
             if (!ret.success) {
                 console.error('jsapi 获取失败');
                 return null;
@@ -66,4 +87,15 @@ export class SettingsService {
             return this.jsApiConfig;
         });
     }
+
+    GetWeChatUserAsync(oId:string, tId:string): Observable<WechatUser> {
+        let param: any = {};
+        param.openId = oId;
+        if(tId){
+          param.tenantId = tId;
+        }
+        return this.httpClient.get('/api/services/app/WeChatUser/GetWeChatUserAsync', param).map(data => {
+          return WechatUser.fromJS(data.result);
+        });
+      }
 }

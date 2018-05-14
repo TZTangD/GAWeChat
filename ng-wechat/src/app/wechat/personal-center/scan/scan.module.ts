@@ -7,7 +7,7 @@ import { ComponentsModule } from '../../components/components.module';
 import { ScanComponent } from './scan.component';
 import { ScanSuccessComponent } from './scan-success/scan-success.component';
 
-import { ShopService } from '../../../services';
+import { ShopService, WechatUserService } from '../../../services';
 
 // region: components
 
@@ -15,7 +15,6 @@ const COMPONENTS = [ScanComponent, ScanSuccessComponent];
 
 const routes: Routes = [
     { path: 'scan', component: ScanComponent },
-    { path: 'scan/:openId/:tenantId', component: ScanComponent },
     { path: 'scan-success', component: ScanSuccessComponent },
 ];
 // endregion
@@ -31,7 +30,8 @@ const routes: Routes = [
         ...COMPONENTS
     ],
     providers: [
-        ShopService
+        ShopService,
+        WechatUserService
     ]
 })
 export class ScanModule {

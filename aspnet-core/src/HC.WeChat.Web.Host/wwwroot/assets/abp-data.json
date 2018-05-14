@@ -37,7 +37,7 @@
                         {
                             "text": "授权配置",
                             "link": "/admin/wechat/authsetting",
-                            "translate": "wechat-configs"
+                            "translate": "weichat-setting"
                         },
                         {
                             "text": "自动回复",
@@ -48,11 +48,6 @@
                             "text": "自定义菜单",
                             "link": "/admin/wechat/customize-menu",
                             "translate": "customize-menu"
-                        },
-                        {
-                            "text": "微信用户",
-                            "link": "/admin/wechat/wechat-user",
-                            "translate": "wechat-user"
                         },
                         {
                             "text": "微信群发",

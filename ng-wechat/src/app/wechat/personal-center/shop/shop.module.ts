@@ -17,7 +17,6 @@ const COMPONENTS = [ShopComponent,
 
 const routes: Routes = [
     { path: 'shop', component: ShopComponent },
-    { path: 'shop/:openId/:tenantId', component: ShopComponent },
     { path: 'wait-audit', component: WaitAuditComponent },
     { path: 'shop-add', component: ShopAddComponent } 
 ];

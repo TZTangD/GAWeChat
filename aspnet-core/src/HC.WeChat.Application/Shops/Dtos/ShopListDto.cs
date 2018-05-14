@@ -21,6 +21,8 @@ namespace HC.WeChat.Shops.Dtos
         public string Evaluation { get; set; }
         public decimal? Longitude { get; set; }
         public decimal? Latitude { get; set; }
+        public decimal? QqLongitude { get; set; }
+        public decimal? QqLatitude { get; set; }
         public ShopAuditStatus? Status { get; set; }
         public DateTime? AuditTime { get; set; }
         public DateTime CreationTime { get; set; }
@@ -41,5 +43,19 @@ namespace HC.WeChat.Shops.Dtos
         public Guid Id { get; set; }
         public ShopAuditStatus Status { get; set; }
         public DateTime AuditTime { get; set; }
+    }
+    
+    [AutoMapFrom(typeof(Shop))]
+    public class NearbyShopDto : EntityDto<Guid>
+    {
+        public string Name { get; set; }
+        public string Address { get; set; }
+        public string CoverPhoto { get; set; }
+        public decimal? Longitude { get; set; }
+        public decimal? Latitude { get; set; }
+        public decimal? QqLongitude { get; set; }
+        public decimal? QqLatitude { get; set; }
+        public string Tel { get; set; }
+        public decimal Distance { get; set; }
     }
 }

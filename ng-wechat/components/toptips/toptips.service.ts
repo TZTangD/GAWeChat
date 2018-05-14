@@ -15,7 +15,7 @@ export class ToptipsService extends BaseService {
      * @param type 类型
      * @param 显示时长后自动关闭（单位：ms）
      */
-    show(text: string, type: ToptipsType, time: number = 2000): ToptipsComponent {
+    show(text: string, type: ToptipsType, time: number = 3000): ToptipsComponent {
         const componentRef = this.build(ToptipsComponent);
 
         if (type) componentRef.instance.type = type;
@@ -35,7 +35,7 @@ export class ToptipsService extends BaseService {
      * @param text 文本
      * @param time 显示时长后自动关闭（单位：ms）
      */
-    warn(text: string, time: number = 2000): ToptipsComponent {
+    warn(text: string, time: number = 3000): ToptipsComponent {
         return this.show(text, 'warn', time);
     }
 
@@ -45,7 +45,7 @@ export class ToptipsService extends BaseService {
      * @param text 文本
      * @param time 显示时长后自动关闭（单位：ms）
      */
-    info(text: string, time: number = 2000): ToptipsComponent {
+    info(text: string, time: number = 3000): ToptipsComponent {
         return this.show(text, 'info', time);
     }
 
@@ -55,7 +55,7 @@ export class ToptipsService extends BaseService {
      * @param text 文本
      * @param time 显示时长后自动关闭（单位：ms）
      */
-    primary(text: string, time: number = 2000): ToptipsComponent {
+    primary(text: string, time: number = 3000): ToptipsComponent {
         return this.show(text, 'primary', time);
     }
 
@@ -65,7 +65,7 @@ export class ToptipsService extends BaseService {
      * @param text 文本
      * @param time 显示时长后自动关闭（单位：ms）
      */
-    success(text: string, time: number = 2000): ToptipsComponent {
+    success(text: string, time: number = 3000): ToptipsComponent {
         return this.show(text, 'primary', time);
     }
 
@@ -75,7 +75,7 @@ export class ToptipsService extends BaseService {
      * @param text 文本
      * @param time 显示时长后自动关闭（单位：ms）
      */
-    default(text: string, time: number = 2000): ToptipsComponent {
+    default(text: string, time: number = 3000): ToptipsComponent {
         return this.show(text, 'default', time);
     }
 }

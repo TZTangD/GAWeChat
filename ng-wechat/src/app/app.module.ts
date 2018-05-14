@@ -1,4 +1,4 @@
-import { NgModule, LOCALE_ID } from '@angular/core';
+import { NgModule, LOCALE_ID, Injector, APP_INITIALIZER } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
@@ -16,6 +16,15 @@ import { WechatModule } from './wechat/wechat.module';
 import { AppComponent } from './app.component';
 //import { JsonpModule } from '@angular/http';
 //import { ServiceModule } from './services/service.module';
+import { HttpClient, SettingsService } from './services';
+
+export function StartupServiceFactory(injector: Injector): Function {
+    //return () => settingSer.load();
+    return () => {
+        let settingSer = injector.get(SettingsService);
+        return settingSer.load();
+    };
+}
 
 @NgModule({
     imports: [
@@ -39,6 +48,16 @@ import { AppComponent } from './app.component';
         //AqmModule.forRoot({
         //    apiKey: 'I3TBZ-QTN3J-MWPFI-FERMS-IBOCQ-LBBWY'
         //})
+    ],
+    providers:[
+        HttpClient, 
+        SettingsService,
+        {
+            provide: APP_INITIALIZER,
+            useFactory: StartupServiceFactory,
+            deps: [ Injector ],
+            multi: true
+        }
     ],
     declarations: [
         AppComponent

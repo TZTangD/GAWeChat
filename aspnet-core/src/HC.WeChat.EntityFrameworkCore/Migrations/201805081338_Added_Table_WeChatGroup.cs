@@ -48,6 +48,16 @@ namespace HC.WeChat.Migrations
              table: "IntegralDetails",
              maxLength: 500,
              nullable: true);
+
+            migrationBuilder.AlterColumn<decimal?>(
+             name: "QqLongitude",
+             table: "Shops",
+             nullable: true);
+
+            migrationBuilder.AlterColumn<decimal?>(
+            name: "QqLatitude",
+            table: "Shops",
+            nullable: true);
         }
         protected override void Down(MigrationBuilder migrationBuilder)
         {
@@ -66,6 +76,14 @@ namespace HC.WeChat.Migrations
             name: "RefId",
             table: "IntegralDetails",
             nullable: true);
+
+            migrationBuilder.DropColumn(
+            name: "QQLongitude",
+            table: "Shops");
+
+            migrationBuilder.DropColumn(
+              name: "QQLatitude",
+              table: "Shops");
         }
     }
 }
