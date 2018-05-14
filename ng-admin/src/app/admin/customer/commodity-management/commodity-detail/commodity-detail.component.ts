@@ -78,7 +78,6 @@ export class CommodityDetailComponent extends AppComponentBase implements OnInit
     getSingleProdct() {
         this.productService.get(this.id).subscribe((result: Products) => {
             this.product = result;
-
             if (!this.product.id) {
                 this.product.init({ isAction: true,photoUrl:this.defalutImg });
                 this.cardTitle = '新增商品';

@@ -166,7 +166,7 @@ namespace HC.WeChat.Products
             input.MapTo(entity);
 
             // ObjectMapper.Map(input, entity);
-           var result= await _productRepository.UpdateAsync(entity);
+            var result = await _productRepository.UpdateAsync(entity);
             return result.MapTo<ProductEditDto>();
         }
 
@@ -212,19 +212,20 @@ namespace HC.WeChat.Products
         /// <returns></returns>
         public async Task CreateOrUpdateProductDto(ProductEditDto input)
         {
-            //string webRootPath = _hostingEnvironment.WebRootPath;
-            //var entity = _productRepository.GetAsync(input.Id.MapTo<Guid>()).Result;
+            string webRootPath = _hostingEnvironment.WebRootPath;
+            var entity = _productRepository.GetAsync(input.Id.MapTo<Guid>()).Result;
+            var url = entity.PhotoUrl;
             if (input.Id.HasValue)
             {
-               var result= await UpdateProductAsync(input);
-                //删除无用的单个图片
-                //if (entity.PhotoUrl != result.PhotoUrl)
-                //{
-                //    if (System.IO.File.Exists(webRootPath+entity.PhotoUrl))
-                //    {
-                //        System.IO.File.Delete(webRootPath + entity.PhotoUrl);
-                //    }
-                //}
+                var result = await UpdateProductAsync(input);
+                //删除原来的单个图片
+                if (url != result.PhotoUrl)
+                {
+                    if (System.IO.File.Exists(webRootPath + url))
+                    {
+                        System.IO.File.Delete(webRootPath + url);
+                    }
+                }
 
             }
             else
