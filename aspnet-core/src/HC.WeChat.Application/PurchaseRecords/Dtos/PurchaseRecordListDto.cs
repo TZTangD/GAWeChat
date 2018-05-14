@@ -30,7 +30,7 @@ namespace HC.WeChat.PurchaseRecords.Dtos
     public class ExchangeIntegralDto
     {
         public List<ShopProductDto> ShopProductList { get; set; }
-        public string ShopId { get; set; }
+        public Guid? ShopId { get; set; }
         public string ShopName { get; set; }
         public string OpenId { get; set; }
         public int? TenantId { get; set; }
