@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 })
 export class NearbyShopComponent extends AppComponentBase implements OnInit {
 
-    myaddress: string = '定位中...';
+    myaddress: string = '定位中....';
     citylocation: any;
     options: any = {
         complete: ((res) => {
@@ -99,6 +99,7 @@ export class NearbyShopComponent extends AppComponentBase implements OnInit {
 
     //调用微信获取当前位置
     wxGetLocation() {
+        this.myaddress = '定位中....';
         this.getWXLocation().then((res) => {
             if (res && res.length > 0) {
                 this.latitude = res[0].lat;

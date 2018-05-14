@@ -31,7 +31,7 @@ export class ShopAddComponent extends AppComponentBase implements OnInit {
     qqLongitude: number;
     qqLatitude: number;
     myaddress: string = '';
-    locationInfo: string = '定位中...';
+    locationInfo: string = '获取店铺位置....';
     citylocation: any;
     isReset: boolean = false;//是否是重新定位地址
     options: any = {
@@ -218,6 +218,7 @@ export class ShopAddComponent extends AppComponentBase implements OnInit {
     //调用微信获取当前位置
     wxGetLocation() {
         this.isReset = true;
+        this.locationInfo = '定位中....';
         this.getWXLocation().then((res) => {
             this.qqLatitude = res[0].lat;
             this.qqLongitude = res[0].lng;
