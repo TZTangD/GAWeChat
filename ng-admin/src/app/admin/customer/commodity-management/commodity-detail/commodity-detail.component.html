@@ -92,12 +92,12 @@
                             </nz-upload> -->
                             <nz-upload class="avatar-uploader" nzAction="{{actionUrl}}" [nzName]="'image'" [nzShowUploadList]="false"
                                  (nzChange)="handleChange($event)" [nzPreview]="handlePreview">
-                                <i *ngIf="!product.showPhotoUrl" class="anticon anticon-plus avatar-uploader-trigger"></i>
-                                <img *ngIf="product.showPhotoUrl" [src]="product.showPhotoUrl" class="avatar">
+                                <i *ngIf="product.photoUrl==defalutImg" class="anticon anticon-plus avatar-uploader-trigger"></i>
+                                <img *ngIf="product.photoUrl!=defalutImg" [src]="(product.photoUrl|hostUrl)" class="avatar">
                             </nz-upload>
                             <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null" (nzOnCancel)="previewVisible=false">
                                 <ng-template #modalContent>
-                                    <img [src]="previewImage" [ngStyle]="{ 'width': '100%' }" />
+                                    <img [src]="(previewImage|hostUrl)" [ngStyle]="{ 'width': '100%' }" />
                                 </ng-template>
                             </nz-modal>
 

@@ -15,6 +15,7 @@ using HC.WeChat.Products.DomainServices;
 using HC.WeChat.Products;
 using System;
 using HC.WeChat.Authorization;
+using Microsoft.AspNetCore.Hosting;
 //using System.Linq;
 
 namespace HC.WeChat.Products
@@ -30,16 +31,18 @@ namespace HC.WeChat.Products
         ////ECC/ END CUSTOM CODE SECTION
         private readonly IRepository<Product, Guid> _productRepository;
         private readonly IProductManager _productManager;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
         /// <summary>
         /// 构造函数
         /// </summary>
         public ProductAppService(IRepository<Product, Guid> productRepository
-      , IProductManager productManager
+      , IProductManager productManager, IHostingEnvironment hostingEnvironment
         )
         {
             _productRepository = productRepository;
             _productManager = productManager;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         /// <summary>
@@ -156,14 +159,15 @@ namespace HC.WeChat.Products
         /// 编辑Product
         /// </summary>
         //[AbpAuthorize(ProductAppPermissions.Product_EditProduct)]
-        protected virtual async Task UpdateProductAsync(ProductEditDto input)
+        protected virtual async Task<ProductEditDto> UpdateProductAsync(ProductEditDto input)
         {
             //TODO:更新前的逻辑判断，是否允许更新
             var entity = await _productRepository.GetAsync(input.Id.Value);
             input.MapTo(entity);
 
             // ObjectMapper.Map(input, entity);
-            await _productRepository.UpdateAsync(entity);
+           var result= await _productRepository.UpdateAsync(entity);
+            return result.MapTo<ProductEditDto>();
         }
 
         /// <summary>
@@ -208,9 +212,20 @@ namespace HC.WeChat.Products
         /// <returns></returns>
         public async Task CreateOrUpdateProductDto(ProductEditDto input)
         {
+            //string webRootPath = _hostingEnvironment.WebRootPath;
+            //var entity = _productRepository.GetAsync(input.Id.MapTo<Guid>()).Result;
             if (input.Id.HasValue)
             {
-                await UpdateProductAsync(input);
+               var result= await UpdateProductAsync(input);
+                //删除无用的单个图片
+                //if (entity.PhotoUrl != result.PhotoUrl)
+                //{
+                //    if (System.IO.File.Exists(webRootPath+entity.PhotoUrl))
+                //    {
+                //        System.IO.File.Delete(webRootPath + entity.PhotoUrl);
+                //    }
+                //}
+
             }
             else
             {
@@ -271,8 +286,8 @@ namespace HC.WeChat.Products
         public async Task<int> GetCheckCode(CheckInput input)
         {
             var result = 0;
-            var countP =await _productRepository.GetAll().Where(p => p.PackageCode == input.PCode||p.BarCode==input.PCode).WhereIf(input.ProductId != Guid.Empty, p => p.Id != input.ProductId).CountAsync();
-            var countB =await _productRepository.GetAll().Where(p => p.BarCode == input.BCode||p.PackageCode==input.BCode).WhereIf(input.ProductId != Guid.Empty, p => p.Id != input.ProductId).CountAsync();
+            var countP = await _productRepository.GetAll().Where(p => p.PackageCode == input.PCode || p.BarCode == input.PCode).WhereIf(input.ProductId != Guid.Empty, p => p.Id != input.ProductId).CountAsync();
+            var countB = await _productRepository.GetAll().Where(p => p.BarCode == input.BCode || p.PackageCode == input.BCode).WhereIf(input.ProductId != Guid.Empty, p => p.Id != input.ProductId).CountAsync();
             //var entity = _productRepository.GetAll().Where(e => e.Id == input.ProductId).FirstOrDefault();
 
             if (countB > 0 && countP > 0)

@@ -35,6 +35,8 @@ export class CommodityDetailComponent extends AppComponentBase implements OnInit
     photo = '';
     actionUrl = '';
     cardTitle = '';
+
+    defalutImg = '/assets/img/default.png';
     constructor(injector: Injector, private fb: FormBuilder, private productService: ProductsServiceProxy, private actRouter: ActivatedRoute,
         private router: Router) {
         super(injector);
@@ -77,13 +79,8 @@ export class CommodityDetailComponent extends AppComponentBase implements OnInit
         this.productService.get(this.id).subscribe((result: Products) => {
             this.product = result;
 
-            if (result.photoUrl) {
-                // this.photo = this.host + result.photoUrl;
-                this.product.showPhotoUrl = this.host + result.photoUrl;
-            }
-
             if (!this.product.id) {
-                this.product.init({ isAction: true });
+                this.product.init({ isAction: true,photoUrl:this.defalutImg });
                 this.cardTitle = '新增商品';
             }
             else {

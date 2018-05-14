@@ -82,7 +82,8 @@ export class StoreDetailComponent extends AppComponentBase implements OnInit {
         this.shopService.get(this.id).subscribe((result: Shop) => {
             this.shop = result;
             if (this.shop.coverPhoto) {
-                this.showCoverPhoto = this.host + this.shop.coverPhoto;
+                // this.showCoverPhoto = this.host + this.shop.coverPhoto;
+                this.showCoverPhoto=this.shop.coverPhoto;
             }
             this.evaluations = [
                 { id: 0, text: '全部', value: true, color: 'blue' },
@@ -192,11 +193,11 @@ export class StoreDetailComponent extends AppComponentBase implements OnInit {
         this.shopProductService.getAll(this.querySP.skipCount(), this.querySP.pageSize, this.getParameteShopProduct()).subscribe((result: PagedResultDtoOfShopProduct) => {
             this.loadingSP = false;
             this.shopProducts = result.items.map(i => {
-                if (i.photoUrl) {
-                    i.showPhotoUrl = this.host + i.photoUrl;
-                } else {
-                    i.showPhotoUrl = this.defalutImg;
-                }
+                // if (i.photoUrl) {
+                //     i.showPhotoUrl = this.host + i.photoUrl;
+                // } else {
+                //     i.showPhotoUrl = this.defalutImg;
+                // }
                 return i;
             });
             this.querySP.total = result.totalCount;
@@ -210,12 +211,13 @@ export class StoreDetailComponent extends AppComponentBase implements OnInit {
     }
 
     handlePreview = (url: string) => {
-        if (!url) {
-            this.previewImage = this.defalutImg;
-        }
-        else {
-            this.previewImage = url;
-        }
+        // if (!url) {
+        //     this.previewImage = this.defalutImg;
+        // }
+        // else {
+        //     this.previewImage = url;
+        // }
+        this.previewImage = url;
         this.previewVisible = true;
     }
 

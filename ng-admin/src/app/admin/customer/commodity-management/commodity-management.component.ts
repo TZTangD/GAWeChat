@@ -11,6 +11,8 @@ import { AppConsts } from '@shared/AppConsts';
     moduleId: module.id,
     selector: 'commodity-management',
     templateUrl: 'commodity-management.component.html',
+    styleUrls: ['commodity-management.component.scss']
+    
 })
 export class CommodityManagementComponent extends AppComponentBase implements OnInit {
     loading = false;
@@ -34,7 +36,8 @@ export class CommodityManagementComponent extends AppComponentBase implements On
     previewImage = ''
     previewVisible = false;
     imgWidth: number = 550;
-    defalutImg = '/upload/product/tobacco.jpg';
+    defalutImg = '/assets/img/default.png';
+    // defalutImg = '/upload/product/tobacco.jpg';
     productName = '';
 
     host = '';
@@ -45,7 +48,7 @@ export class CommodityManagementComponent extends AppComponentBase implements On
     ngOnInit(): void {
         this.refreshData();
         this.host = AppConsts.remoteServiceBaseUrl;
-        this.defalutImg = this.host + this.defalutImg;
+        // this.defalutImg = this.host + this.defalutImg;
     }
     refreshData(reset = false, search?: boolean) {
         if (reset) {
@@ -60,7 +63,11 @@ export class CommodityManagementComponent extends AppComponentBase implements On
             this.loading = false;
             let status = 0;
             this.products = result.items.map(i => {
-                i.showPhotoUrl = this.host + i.photoUrl;
+                // if(i.photoUrl){
+                //     i.photoUrl = i.photoUrl;
+                // }else{
+                //     i.photoUrl= this.defalutImg;
+                // }
                 if (i.isAction) {
                     status = 0;
                 } else {
