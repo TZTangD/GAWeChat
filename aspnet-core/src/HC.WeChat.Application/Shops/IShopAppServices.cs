@@ -85,5 +85,13 @@ namespace HC.WeChat.Shops
         /// 通过微信用户获取店铺信息
         /// </summary>
         Task<ShopListDto> GetShopByOpenId(int? tenantId, string openId);
+
+        /// <summary>
+        /// 店铺审核
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        Task CheckShop(CheckShopDto input);
     }
 }

@@ -173,7 +173,7 @@ export class StoreDetailComponent extends AppComponentBase implements OnInit {
             onOk: () => {
                 this.shop.status = status;
                 this.shop.auditTime = this.dateFormat(new Date);
-                this.shopService.update(this.shop).subscribe((result: Shop) => {
+                this.shopService.CheckShop(this.shop).subscribe((result: Shop) => {
                     this.shop = result;
                     this.getSingleShop();
                     this.notify.info(this.l('店铺状态更新成功！'));

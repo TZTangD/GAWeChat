@@ -17,6 +17,7 @@ using System;
 using HC.WeChat.Authorization;
 using HC.WeChat.Retailers;
 using HC.WeChat.WeChatUsers.DomainServices;
+using HC.WeChat.WechatEnums;
 
 namespace HC.WeChat.Shops
 {
@@ -343,6 +344,20 @@ namespace HC.WeChat.Shops
                 var shop = await _shopRepository.GetAll().Where(s => s.RetailerId == user.UserId).FirstOrDefaultAsync();
                 return shop.MapTo<ShopListDto>();
             }
+        }
+
+        /// <summary>
+        /// 店铺审核
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task CheckShop(CheckShopDto input)
+        {
+            var entity = await _shopRepository.GetAsync(input.Id);
+            entity.Status = input.Status;
+            entity.AuditTime = input.AuditTime;
+            var result = _shopRepository.UpdateAsync(entity);
+            //return result.MapTo<ShopEditDto>();
         }
     }
 }
