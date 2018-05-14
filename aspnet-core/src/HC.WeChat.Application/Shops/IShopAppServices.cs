@@ -86,6 +86,14 @@ namespace HC.WeChat.Shops
         /// </summary>
         Task<ShopListDto> GetShopByOpenId(int? tenantId, string openId);
 
+        /// <summary>
+        /// 店铺审核
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        Task CheckShop(CheckShopDto input);
+        
         Task<ShopListDto> GetViewShopByIdAsync(Guid id, int? tenantId);
 
         Task<List<NearbyShopDto>> GetNearbyShopByLocationAsync(decimal latitude, decimal longitude, int? tenantId, string openId);

@@ -38,6 +38,13 @@ namespace HC.WeChat.Shops.Dtos
         public string Tel { get; set; }
     }
 
+    public class CheckShopDto
+    {
+        public Guid Id { get; set; }
+        public ShopAuditStatus Status { get; set; }
+        public DateTime AuditTime { get; set; }
+    }
+    
     [AutoMapFrom(typeof(Shop))]
     public class NearbyShopDto : EntityDto<Guid>
     {

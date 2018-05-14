@@ -348,8 +348,23 @@ namespace HC.WeChat.Shops
         }
 
         /// <summary>
+        /// 店铺审核
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task CheckShop(CheckShopDto input)
+        {
+            var entity = await _shopRepository.GetAsync(input.Id);
+            entity.Status = input.Status;
+            entity.AuditTime = input.AuditTime;
+            var result = _shopRepository.UpdateAsync(entity);
+            //return result.MapTo<ShopEditDto>();
+        }
+
+        /// <summary>
         /// 根据当前位置获取附近店铺
         /// </summary>
+        /// <returns></returns>
         [AbpAllowAnonymous]
         public async Task<List<NearbyShopDto>> GetNearbyShopByLocationAsync(decimal latitude, decimal longitude, int? tenantId, string openId)
         {

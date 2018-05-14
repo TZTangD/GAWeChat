@@ -17,7 +17,7 @@
 
             <div nz-col nzXs="24" nzMd="6" *ngIf="shop.coverPhoto">
                 <nz-card [nzBordered]="false" class="ant-card__img">
-                    <img class="img ng-star-inserted" src="{{showCoverPhoto}}">
+                    <img class="img ng-star-inserted" src="{{showCoverPhoto | hostUrl}}">
                     <!-- <img class="img ng-star-inserted" src="https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png"> -->
                 </nz-card>
             </div>
@@ -26,7 +26,6 @@
                     <desc-list size="small" col="3">
                         <desc-list-item term="店铺名称">{{shop.name}}</desc-list-item>
                         <desc-list-item term="店铺地址">{{shop.address}}</desc-list-item>
-                        <desc-list-item term="店铺描述">{{shop.desc}}</desc-list-item>
                         <desc-list-item term="零售客户">{{shop.retailerName}}</desc-list-item>
                         <desc-list-item term="店铺销量">{{shop.saleTotal}}</desc-list-item>
                         <desc-list-item term="店铺浏览量">{{shop.readTotal}}</desc-list-item>
@@ -34,7 +33,9 @@
                         <desc-list-item term="经度">{{shop.longitude}}</desc-list-item>
                         <desc-list-item term="纬度">{{shop.latitude}}</desc-list-item>
                         <desc-list-item term="审核时间">{{shop.auditTime|_date}}</desc-list-item>
-                        <desc-list-item term="评价描述">{{evaluationShow}}</desc-list-item>
+                        <!-- <desc-list-item term="评价描述">{{evaluationShow}}</desc-list-item> -->
+                        <desc-list-item term="店铺描述">{{shop.desc}}</desc-list-item>
+                        
                     </desc-list>
                 <!-- </nz-card> -->
             </div>
@@ -73,7 +74,7 @@
                     <tbody nz-tbody>
                         <tr nz-tbody-tr *ngFor="let shopProduct of nzTable3.data">
                             <td nz-td>
-                                <nz-avatar [nzSrc]="shopProduct.showPhotoUrl" style="width:80px;height: 80px;" (click)="handlePreview(shopProduct.showPhotoUrl)"
+                                <nz-avatar [nzSrc]="(shopProduct.photoUrl | hostUrl)" style="width:80px;height: 80px;" (click)="handlePreview(shopProduct.photoUrl)"
                                     [nzSize]="'large'" [nzShape]="'square'"></nz-avatar>
                             </td>
                             <td nz-td>{{shopProduct.specification }}</td>
@@ -86,7 +87,7 @@
                 </nz-table>
                 <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null" [nzWidth]="imgWidth" (nzOnCancel)="previewVisible=false">
                     <ng-template #modalContent>
-                        <img [src]="previewImage" [ngStyle]="{ 'width': '100%' }" />
+                        <img [src]="(previewImage | hostUrl)" [ngStyle]="{ 'width': '100%' }" />
                     </ng-template>
                 </nz-modal>
             </nz-tab>

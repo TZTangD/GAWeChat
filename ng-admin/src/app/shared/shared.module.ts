@@ -12,11 +12,14 @@ import { TranslateModule } from '@ngx-translate/core';
 
 // region: third libs
 import { CountdownModule } from 'ngx-countdown';
+
+import { HostUrlPipe } from '@shared/pipe/host-url.pipe';
+
 const THIRDMODULES = [ CountdownModule ];
 // endregion
 
 // region: your componets & directives
-const COMPONENTS = [];
+const COMPONENTS = [HostUrlPipe];
 const DIRECTIVES = [];
 // endregion
 
