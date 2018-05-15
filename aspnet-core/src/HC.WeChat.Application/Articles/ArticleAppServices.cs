@@ -52,15 +52,15 @@ namespace HC.WeChat.Articles
 
             var query = _articleRepository.GetAll()
                 .Where(a => a.Type == ArticleTypeEnum.营销活动)
-                .WhereIf(!string.IsNullOrEmpty(input.Name),a=>a.Title.Contains(input.Name))
-                .WhereIf(!string.IsNullOrEmpty(input.Author),a=>a.Author.Contains(input.Author))
-                .WhereIf(input.Status.HasValue,a=>a.PushStatus==input.Status);
+                .WhereIf(!string.IsNullOrEmpty(input.Name), a => a.Title.Contains(input.Name))
+                .WhereIf(!string.IsNullOrEmpty(input.Author), a => a.Author.Contains(input.Author))
+                .WhereIf(input.Status.HasValue, a => a.PushStatus == input.Status);
             //TODO:根据传入的参数添加过滤条件
             var articleCount = await query.CountAsync();
 
             var articles = await query
-                .OrderByDescending(a=>a.PushTime)
-                .ThenByDescending(a=>a.CreationTime)
+                .OrderByDescending(a => a.PushTime)
+                .ThenByDescending(a => a.CreationTime)
                 .ThenBy(input.Sorting)
                 .PageBy(input)
                 .ToListAsync();
@@ -201,7 +201,7 @@ namespace HC.WeChat.Articles
         {
             if (input.Id.HasValue)
             {
-               return  await UpdateArticleAsync(input);
+                return await UpdateArticleAsync(input);
             }
             else
             {
@@ -227,7 +227,7 @@ namespace HC.WeChat.Articles
 
             var articles = await query
                 .OrderByDescending(a => a.PushTime)
-                .ThenByDescending(a=>a.CreationTime)
+                .ThenByDescending(a => a.CreationTime)
                 .ThenBy(input.Sorting)
                 .PageBy(input)
                 .ToListAsync();
@@ -239,9 +239,41 @@ namespace HC.WeChat.Articles
                 articleCount,
                 articleListDtos
                 );
-
         }
 
+        /// <summary>
+        /// 微信获取营销活动列表
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task<List<ArticleListDto>> GetWXPagedArticlesAsync(int? tenantId, int pageIndex, int pageSize)
+        {
+            using (CurrentUnitOfWork.SetTenantId(tenantId))
+            {
+                var query = _articleRepository.GetAll().Where(a => a.Type == ArticleTypeEnum.营销活动&&a.PushStatus==ArticlePushStatusEnum.已发布);
+                var entity = from a in query
+                             select new ArticleListDto()
+                             {
+                                 Id = a.Id,
+                                 Title = a.Title,
+                                 PushTime = a.PushTime,
+                                 Content = a.Content,
+                                 CoverPhoto = a.CoverPhoto
+                             };
+                return await entity.OrderByDescending(q => q.PushTime).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+            }
+        }
+
+        [AbpAllowAnonymous]
+        public async Task<ArticleListDto> GetWXArticlesByIdAsync(Guid id, int? tenantId)
+        {
+            using (CurrentUnitOfWork.SetTenantId(tenantId))
+            {
+                var result = await _articleRepository.GetAll().Where(a => a.Id == id).FirstOrDefaultAsync();
+                return result.MapTo<ArticleListDto>();
+            }
+        }
     }
 }
 

@@ -70,5 +70,8 @@ namespace HC.WeChat.Articles
         /// <param name="input">查询条件</param>
         /// <returns></returns>
         Task<PagedResultDto<ArticleListDto>> GetPagedArticlesForExperience(GetArticlesInput input);
+
+        Task<List<ArticleListDto>> GetWXPagedArticlesAsync(int? tenantId, int pageIndex, int pageSize);
+        Task<ArticleListDto> GetWXArticlesByIdAsync(Guid id, int? tenantId);
     }
 }

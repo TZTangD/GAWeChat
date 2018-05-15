@@ -6,6 +6,7 @@ using HC.WeChat.ShopProducts.Dtos;
 using HC.WeChat.ShopProducts;
 using System;
 using HC.WeChat.Dto;
+using HC.WeChat.Articles.Dtos;
 
 namespace HC.WeChat.ShopProducts
 {
