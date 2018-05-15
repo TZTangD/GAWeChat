@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { HttpClient } from './httpclient';
-import { WechatUserService, SettingsService, ShopService, ArticleService } from './index';
+import { WechatUserService, SettingsService, ShopService, ArticleService, IntegralDetailService } from './index';
 
 @NgModule({
     providers: [
@@ -9,6 +9,7 @@ import { WechatUserService, SettingsService, ShopService, ArticleService } from 
         SettingsService,
         ShopService,
         ArticleService,
+        IntegralDetailService,
     ]
 })
 export class ServiceModule { }

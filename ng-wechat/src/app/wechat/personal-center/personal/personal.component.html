@@ -13,7 +13,7 @@
             </div>
         </div>
         <div class="weui-cell weui-cell_access">
-            <div class="weui-cell__bd">
+            <div class="weui-cell__bd" (click)="goIntegralTotal(user.openId)" *ngIf="user">
                 <span style="vertical-align: middle; font-size: 13px;">我的积分</span>
             </div>
             <div class="weui-cell__ft">
@@ -37,7 +37,7 @@
             </div>
             <div class="weui-cell__ft" style="font-size: 13px;">评价送积分</div>
         </div>
-        <div class="weui-cell weui-cell_access" (click)="goBindPhone()" *ngIf="user" >
+        <div class="weui-cell weui-cell_access" (click)="goBindPhone()" *ngIf="user">
             <div class="weui-cell__bd">
                 <span style="vertical-align: middle">换绑手机</span>
             </div>

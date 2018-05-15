@@ -17,7 +17,6 @@ export class ArticleComponent extends AppComponentBase implements OnInit {
     activity: Article[] = [];
     pageModel: PageModel = new PageModel(); // 分页信息
     @ViewChild(InfiniteLoaderComponent) il;
-    restartBtn = false;
 
     constructor(injector: Injector, private router: Router,
         private articleService: ArticleService, private wxService: JWeiXinService,
@@ -40,16 +39,6 @@ export class ArticleComponent extends AppComponentBase implements OnInit {
         this.GetPagedArticles();
         comp.resolveLoading();
 
-    }
-
-    GetPagedArticlesNopage() {
-        let params: any = {};
-        if (this.settingsService.tenantId) {
-            params.tenantId = this.settingsService.tenantId;
-        }
-        this.articleService.GetPagedArticles(params).subscribe(result => {
-            this.activity = result;
-        });
     }
 
     GetPagedArticles() {

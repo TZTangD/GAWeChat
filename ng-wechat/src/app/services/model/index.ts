@@ -6,3 +6,4 @@ export * from './shop-product';
 export * from './js.api.config';
 export * from './article';
 export * from './pagemodel';
+export * from './integraldetail';

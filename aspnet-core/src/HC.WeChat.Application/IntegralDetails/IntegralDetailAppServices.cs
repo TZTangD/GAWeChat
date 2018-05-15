@@ -298,6 +298,33 @@ namespace HC.WeChat.IntegralDetails
                          }).FirstOrDefaultAsync();
             return  entity;
         }
+
+        /// <summary>
+        /// 分页获取积分详情
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="openId"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task<List<IntegralDetailListDto>> GetWXPagedIntegralDetailAsync(int? tenantId, string openId, int pageIndex, int pageSize)
+        {
+            using (CurrentUnitOfWork.SetTenantId(tenantId))
+            {
+                var query = _integraldetailRepository.GetAll().Where(i => i.OpenId == openId);
+                var entity = from i in query
+                             select new IntegralDetailListDto()
+                             {
+                                 Id=i.Id,
+                                 CreationTime =i.CreationTime,
+                                 Integral=i.Integral,
+                                 Type = i.Type,
+                                 Desc =i.Desc
+                             };
+                return await entity.OrderByDescending(v=>v.CreationTime).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+            }
+        }
     }
 }
 

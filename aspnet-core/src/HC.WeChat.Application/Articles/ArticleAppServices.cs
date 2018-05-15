@@ -265,8 +265,56 @@ namespace HC.WeChat.Articles
             }
         }
 
+        /// <summary>
+        /// 根据Id获取营销活动详情
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="tenantId"></param>
+        /// <returns></returns>
         [AbpAllowAnonymous]
         public async Task<ArticleListDto> GetWXArticlesByIdAsync(Guid id, int? tenantId)
+        {
+            using (CurrentUnitOfWork.SetTenantId(tenantId))
+            {
+                var result = await _articleRepository.GetAll().Where(a => a.Id == id).FirstOrDefaultAsync();
+                return result.MapTo<ArticleListDto>();
+            }
+        }
+
+        /// <summary>
+        /// 经验分享列表
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task<List<ArticleListDto>> GetWXPagedExpAsync(int? tenantId, int pageIndex, int pageSize)
+        {
+            using (CurrentUnitOfWork.SetTenantId(tenantId))
+            {
+                var query = _articleRepository.GetAll().Where(a => a.Type == ArticleTypeEnum.经验分享 && a.PushStatus == ArticlePushStatusEnum.已发布);
+                var entity = from a in query
+                             select new ArticleListDto()
+                             {
+                                 Id = a.Id,
+                                 Title = a.Title,
+                                 PushTime = a.PushTime,
+                                 Content = a.Content,
+                                 CoverPhoto = a.CoverPhoto
+                             };
+                return await entity.OrderByDescending(q => q.PushTime).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+            }
+        }
+
+        /// <summary>
+        /// 根据Id获取经验分享详情
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="tenantId"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task<ArticleListDto> GetWXExpByIdAsync(Guid id, int? tenantId)
         {
             using (CurrentUnitOfWork.SetTenantId(tenantId))
             {
