@@ -1,0 +1,61 @@
+<!--component html goes here -->
+<Page [ngClass]="'Scan'" [title]="'意见反馈'" [showTitle]="false" [spacing]="false">
+
+    <div class="weui-cells" style="margin-top: 0px;">
+        <div class="weui-cell" style=" padding-bottom: 0px; padding-top: 0px; padding-left: 0px; padding-right: 0px;">
+            <div style="text-align: center; width: 100%;">
+                <img src="./assets/images/feedback/feedback.jpg" style="width:100%;">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__bd">
+                <p>用户名</p>
+            </div>
+            <div class="weui-cell__ft">{{user.nickName}}</div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__bd">
+                <p>用户类型</p>
+            </div>
+            <div class="weui-cell__ft">{{user.userTypeName}}</div>
+        </div>
+    </div>
+    <div class="weui-cells__title">意见反馈信息</div>
+    <form #f="ngForm" (ngSubmit)="save()">
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__hd">
+                    <label class="weui-label">标题</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" [(ngModel)]="feedback.title" name="title" weui-input="title" weui-required>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <textarea class="weui-textarea" placeholder="内容" rows="4" [(ngModel)]="feedback.content" weui-input="content" name="content" weui-textarea weui-cn="2"
+                        maxlength="500" weui-required></textarea>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd">
+                    <label class="weui-label">联系电话</label>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="tel" [(ngModel)]="feedback.phone" name="phone" weui-input="mobile">
+                </div>
+            </div>
+        </div>
+        <div class="weui-btn-area">
+            <button weui-button [weui-loading]="loading" [disabled]="!f.form.valid" [ngClass]="{'weui-btn_disabled': !f.form.valid}">提交</button>
+        </div>
+    </form>
+</Page>
+<!-- <div class="weui-cell">
+    <div class="weui-cell__hd">
+
+    </div>
+    <div class="weui-cell__hd">
+
+    </div>
+</div> -->

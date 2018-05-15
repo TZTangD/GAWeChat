@@ -38,7 +38,8 @@
     "release": "bash ./build.sh && cd publish && npm publish --access public"
   },
   "dependencies": {
-    "jsbarcode": "^3.9.0"
+    "jsbarcode": "^3.9.0",
+    "node-sass": "^4.9.0"
   },
   "devDependencies": {
     "@angular/animations": "^5.0.0",

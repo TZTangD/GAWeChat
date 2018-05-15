@@ -117,5 +117,27 @@ namespace HC.WeChat.Retailers.Dtos
         public string LicenseKey { get; set; }
 
         public string VerificationCode { get; set; }
+
+
+        /// <summary>
+        /// 客户id
+        /// </summary>
+        public string CustId { get; set; }
+        /// <summary>
+        /// 线路编号
+        /// </summary>
+        public string DisLineCode { get; set; }
+        /// <summary>
+        /// 类别
+        /// </summary>
+        public string Category { get; set; }
+        /// <summary>
+        /// 市场部id
+        /// </summary>
+        public string DepartmentId { get; set; }
+       
+        public string SlsmanId { get; set; }
+        
+        public string SlsmanName { get; set; }
     }
 }

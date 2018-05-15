@@ -13,6 +13,7 @@ export const routes = [
     { path: 'shops', loadChildren: './personal-center/shop/shop.module#ShopModule' },
     { path: 'scans', loadChildren: './personal-center/scan/scan.module#ScanModule' },
     { path: 'nearbies', loadChildren: './buy/nearby-shop/nearby-shop.module#NearbyShopModule' },
+    { path: 'feedbacks', loadChildren: './personal-center/feedback/feedback.module#FeedbackModule' },
     // Not found
     { path: '**', redirectTo: '' }
 ];
