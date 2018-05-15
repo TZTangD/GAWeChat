@@ -1,0 +1,25 @@
+// component css goes here
+.weui-media-box__info {
+    margin-top: 4px;
+    padding-bottom: 5px;
+    font-size: 13px;
+    color: #CECECE;
+    line-height: 1em;
+    list-style: none;
+    overflow: hidden;
+}
+
+.weui-media-box {
+    padding: 10px;
+    position: relative;
+}
+
+.weui-cell {
+    padding: 5px 15px;
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+}

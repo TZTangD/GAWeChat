@@ -71,5 +71,7 @@ namespace HC.WeChat.IntegralDetails
         /// <param name="openId"></param>
         /// <returns></returns>
         Task<WeChatUserListDto> GetUserInfoAsync(string openId);
+
+        Task<List<IntegralDetailListDto>> GetWXPagedIntegralDetailAsync(int? tenantId, string openId, int pageIndex, int pageSize);
     }
 }

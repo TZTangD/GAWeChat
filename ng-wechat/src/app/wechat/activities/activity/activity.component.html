@@ -1,31 +1,31 @@
- <Page [ngClass]="'swiper'" [title]="'Swiper'" [subTitle]="'触摸滑动'" [spacing]="false"> 
-
-    <p>log: {{log}}</p>
-    <!-- options等同于：Swiper API（@see: http://www.swiper.com.cn/api/index.html） -->
-    <weui-swiper [options]="options">
-        <div class="swiper-container">
-            <!-- 容器（必选） -->
-            <div class="swiper-wrapper">
-                <div class="swiper-slide" *ngFor="let i of [1, 2, 3, 4]">
-                    Slide {{i}}
-                </div>
+<Page [ngClass]="'Scan'" [title]="'营销活动'" [showTitle]="false" [spacing]="false">
+    <!-- <weui-ptr (refresh)="onRefresh($event)" [disabled]="disabled"> -->
+    <div class="weui-panel weui-panel_access">
+        <div class="weui-cell" style=" padding-bottom: 0px; padding-top: 0px; padding-left: 0px; padding-right: 0px;">
+            <div style="text-align: center; width: 100%;">
+                <img src="assets/images/activity/activitybanner.jpg" style="width:100%;">
             </div>
-            <!-- 分页（可选） -->
-            <div class="swiper-pagination"></div>
         </div>
-    </weui-swiper>
-    <p>渐变效果</p>
-    <weui-swiper [options]="{effect: 'fade', spaceBetween: 30, autoplay: 2000}">
-        <div class="swiper-container">
-            <!-- 容器（必选） -->
-            <div class="swiper-wrapper">
-                <div class="swiper-slide" *ngFor="let i of images">
-                    <img src="{{i.url}}">
-                </div>
-            </div>
-            <!-- 分页（可选） -->
-            <div class="swiper-pagination"></div>
-        </div>
-    </weui-swiper>
+        <weui-infiniteloader (loadmore)="onLoadMore($event)" #comp>
 
- </Page>
+            <div class="weui-panel__bd">
+                <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg" *ngFor="let item of activity" (click)="goDetailActivity(item.id)">
+                    <div class="weui-media-box__hd">
+                        <img class="weui-media-box__thumb" src="{{item.coverPhoto | hostUrl}}" alt="">
+                    </div>
+                    <div class="weui-media-box__bd">
+                        <h4 class="weui-media-box__title">{{item.title}}</h4>
+                        <p class="weui-media-box__desc">{{item.content}}</p>
+                    </div>
+                    <div>
+                        <div class="placeholder ">
+                            <p class="weui-media-box__desc">{{item.creationTime| date:'yyyy-MM-dd'}}</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+        </weui-infiniteloader>
+    </div>
+    <!-- </weui-ptr> -->
+</Page>

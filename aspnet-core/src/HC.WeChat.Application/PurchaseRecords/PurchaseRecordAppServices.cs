@@ -20,6 +20,7 @@ using HC.WeChat.IntegralDetails;
 using HC.WeChat.WeChatUsers;
 using HC.WeChat.MemberConfigs;
 using HC.WeChat.WechatEnums;
+using HC.WeChat.Shops;
 
 namespace HC.WeChat.PurchaseRecords
 {
@@ -30,12 +31,11 @@ namespace HC.WeChat.PurchaseRecords
     [AbpAuthorize(AppPermissions.Pages)]
     public class PurchaseRecordAppService : WeChatAppServiceBase, IPurchaseRecordAppService
     {
-        ////BCC/ BEGIN CUSTOM CODE SECTION
-        ////ECC/ END CUSTOM CODE SECTION
         private readonly IRepository<PurchaseRecord, Guid> _purchaserecordRepository;
         private readonly IRepository<IntegralDetail, Guid> _integralDetailRepository;
         private readonly IRepository<WeChatUser, Guid> _weChatUserRepository;
         private readonly IRepository<MemberConfig, Guid> _memberConfigRepository;
+        private readonly IRepository<Shop, Guid> _shopRepository;
         private readonly IPurchaseRecordManager _purchaserecordManager;
 
         /// <summary>
@@ -45,6 +45,7 @@ namespace HC.WeChat.PurchaseRecords
         , IRepository<IntegralDetail, Guid> integralDetailRepository
         , IRepository<WeChatUser, Guid> weChatUserRepository
         , IRepository<MemberConfig, Guid> memberConfigRepository
+        , IRepository<Shop, Guid> shopRepository
         , IPurchaseRecordManager purchaserecordManager
         )
         {
@@ -52,6 +53,7 @@ namespace HC.WeChat.PurchaseRecords
             _integralDetailRepository = integralDetailRepository;
             _weChatUserRepository = weChatUserRepository;
             _memberConfigRepository = memberConfigRepository;
+            _shopRepository = shopRepository;
             _purchaserecordManager = purchaserecordManager;
         }
 
@@ -329,6 +331,12 @@ namespace HC.WeChat.PurchaseRecords
                         await _weChatUserRepository.UpdateAsync(shopKeeper);
                     }
                 }
+
+                //更新店铺销量
+                var shop = await _shopRepository.GetAsync(input.ShopId.Value);
+                shop.ReadTotal++;//人气增加
+                shop.SaleTotal++;//销量增加
+                await _shopRepository.UpdateAsync(shop);
 
                 //发送积分微信通知
 

@@ -27,11 +27,15 @@ export class PersonalComponent extends AppComponentBase implements OnInit {
         });
     }
 
+    goIntegralTotal(openId: string, integralTotal: number) {
+        this.router.navigate(["/integrals/integral", { openId: openId }]);
+    }
+
     goShowCard() {
         this.router.navigate(["/members/member-card"]);
     }
 
-    goBindPhone(){
+    goBindPhone() {
         this.router.navigate(["/personals/bind-member"]);
     }
     goFeedBack(){

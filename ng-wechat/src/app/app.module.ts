@@ -5,11 +5,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 
 import { WeUiModule } from 'ngx-weui';
-import { NotifyModule } from 'ngx-notify';
+//import { NotifyModule } from 'ngx-notify';
 //import { AqmModule } from 'angular-qq-maps';
 
 import { SharedModule } from './shared/shared.module';
-import { LayoutModule } from './layout/layout.module';
+//import { LayoutModule } from './layout/layout.module';
 //import { RoutesModule } from './routes/routes.module';
 import { WechatModule } from './wechat/wechat.module';
 //import { CoreModule } from './core/core.module';
@@ -38,13 +38,13 @@ export function StartupServiceFactory(injector: Injector): Function {
         //ServiceModule,
         //RoutesModule,
         WechatModule,
-        LayoutModule,
+        //LayoutModule,
         WeUiModule.forRoot(),
-        NotifyModule.forRoot({
-            notify: {
-                progress: false
-            }
-        })//,
+        //NotifyModule.forRoot({
+        //    notify: {
+        //        progress: false
+        //    }
+        //})//,
         //AqmModule.forRoot({
         //    apiKey: 'I3TBZ-QTN3J-MWPFI-FERMS-IBOCQ-LBBWY'
         //})
