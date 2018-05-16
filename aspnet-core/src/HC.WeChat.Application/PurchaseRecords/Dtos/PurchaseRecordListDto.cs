@@ -24,6 +24,7 @@ namespace HC.WeChat.PurchaseRecords.Dtos
         public DateTime CreationTime { get; set; }
         public string OperatorOpenId { get; set; }
         public string OperatorName { get; set; }
+        public string PhotoUrl { get; set; }
     }
 
     [AutoMapTo(typeof(PurchaseRecord))]

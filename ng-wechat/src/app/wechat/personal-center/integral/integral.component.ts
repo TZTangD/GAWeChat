@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, OnInit, Injector } from '@angular/core';
+import { Component, ViewEncapsulation, OnInit, Injector, ViewChild } from '@angular/core';
 import { AppComponentBase } from '../../components/app-component-base';
 import { PageModel, IntegralDetail, WechatUser, MemberConfigs, ConfigCode } from '../../../services/model';
 import { Router } from '@angular/router';
@@ -20,6 +20,7 @@ export class IntegralComponent extends AppComponentBase implements OnInit {
     user: WechatUser;
     config: MemberConfigs[] = [];
     configCode: ConfigCode = new ConfigCode();
+    @ViewChild(InfiniteLoaderComponent) il;
 
     constructor(injector: Injector, private integralDetailService: IntegralDetailService, private route: ActivatedRoute, private router: Router) {
         super(injector);

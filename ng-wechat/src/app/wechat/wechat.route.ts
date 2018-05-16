@@ -16,6 +16,8 @@ export const routes = [
     { path: 'feedbacks', loadChildren: './personal-center/feedback/feedback.module#FeedbackModule' },
     { path: 'goodses', loadChildren: './buy/goods/goods.module#GoodsModule' },
     { path: 'integrals', loadChildren: './personal-center/integral/integral.module#IntegralModule' },
+    { path: 'purchaserecords', loadChildren: './personal-center/purchaserecord/purchaserecord.module#PurchaserecordModule' },
+
     { path: 'customer-searchs', loadChildren: './personal-center/customer-search/customer-search.module#CustomerSearchModule' },
     // Not found
     { path: '**', redirectTo: '' }
