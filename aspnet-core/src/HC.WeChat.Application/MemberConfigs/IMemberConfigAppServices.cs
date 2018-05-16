@@ -59,6 +59,6 @@ namespace HC.WeChat.MemberConfigs
         Task<List<MemberConfigListDto>> GetTenanMemberConfigAsync();
         Task CreateOrUpdateMemberConfigDtoAsync(MemberCodeEditDto input);
 
-        //Task<MemberConfigListDto> GetTenanMemberConfigAsync();
+        Task<List<MemberConfigListDto>> GetWXMemberConfigByTenantIdAsync(int? tenantId);
     }
 }

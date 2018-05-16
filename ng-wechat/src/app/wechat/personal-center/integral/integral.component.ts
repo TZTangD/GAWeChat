@@ -1,6 +1,6 @@
 import { Component, ViewEncapsulation, OnInit, Injector } from '@angular/core';
 import { AppComponentBase } from '../../components/app-component-base';
-import { PageModel, IntegralDetail, WechatUser } from '../../../services/model';
+import { PageModel, IntegralDetail, WechatUser, MemberConfigs, ConfigCode } from '../../../services/model';
 import { Router } from '@angular/router';
 import { IntegralDetailService } from '../../../services';
 import { InfiniteLoaderComponent } from 'ngx-weui';
@@ -15,10 +15,11 @@ import { ActivatedRoute } from '@angular/router';
 
 export class IntegralComponent extends AppComponentBase implements OnInit {
     openId: string = this.route.snapshot.params['openId'];
-    // integralTotal: number = this.route.snapshot.params['integralTotal'];
     integralDetail: IntegralDetail[] = [];
     pageModel: PageModel = new PageModel(); // 分页信息
     user: WechatUser;
+    config: MemberConfigs[] = [];
+    configCode: ConfigCode = new ConfigCode();
 
     constructor(injector: Injector, private integralDetailService: IntegralDetailService, private route: ActivatedRoute, private router: Router) {
         super(injector);
@@ -29,6 +30,7 @@ export class IntegralComponent extends AppComponentBase implements OnInit {
         this.settingsService.getUser().subscribe(result => {
             this.user = result;
         });
+        this.getMemberConfigsByTenantId();
         this.GetPagedIntegralDetail();
     }
 
@@ -41,6 +43,30 @@ export class IntegralComponent extends AppComponentBase implements OnInit {
         }
         this.GetPagedIntegralDetail();
         comp.resolveLoading();
+    }
+
+    getMemberConfigsByTenantId() {
+        let params: any = {};
+        if (this.settingsService.tenantId) {
+            params.tenantId = this.settingsService.tenantId;
+        }
+        this.integralDetailService.GetMemberConfigsByTenantId(params).subscribe(result => {
+            this.config = result;
+            this.config.map(i => {
+                if (i.code == 3) {
+                    this.configCode.rcValue = i.value;
+                    this.configCode.rcId = i.id;
+                }
+                if (i.code == 2) {
+                    this.configCode.eValue = i.value;
+                    this.configCode.eId = i.id;
+                }
+                if (i.code == 1) {
+                    this.configCode.cValue = i.value;
+                    this.configCode.cId = i.id;
+                }
+            })
+        });
     }
 
     GetPagedIntegralDetail() {

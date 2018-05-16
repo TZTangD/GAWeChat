@@ -14,7 +14,7 @@
         <div class="weui-cell ">
             <div class="weui-cell__bd ">
                 <div class="weui-media-box__desc" style="text-align:left ">
-                    <img src="assets/images/integral/samleintegral1.png"> 店铺管理员可获赠0.5积分
+                    <img src="assets/images/integral/samleintegral1.png"> 店铺扫码店铺管理员可获赠{{configCode.rcValue}}积分
                 </div>
             </div>
         </div>
@@ -22,7 +22,7 @@
             <div class="weui-cell ">
                 <div class="weui-cell__bd ">
                     <div class="weui-media-box__desc" style="text-align:left ">
-                        <img src="assets/images/integral/samleintegral1.png"> 消费金额1元可获得1积分
+                        <img src="assets/images/integral/samleintegral1.png"> 购买商品消费金额1元可获得{{configCode.cValue}}积分
                     </div>
                 </div>
             </div>
@@ -31,7 +31,7 @@
             <div class="weui-cell ">
                 <div class="weui-cell__bd ">
                     <div class="weui-media-box__desc" style="text-align:left ">
-                        <img src="assets/images/integral/samleintegral1.png"> 店铺评价1次可获得5积分
+                        <img src="assets/images/integral/samleintegral1.png"> 店铺评价1次可获得{{configCode.eValue}}积分
                     </div>
                 </div>
             </div>
@@ -48,9 +48,14 @@
                                 <h4 class="weui-media-box__info" style="font-weight:normal ;font-size: 15px;font-family: -apple-system-font, Helvetica Neue, Helvetica, sans-serif;color: black">{{item.desc}}</h4>
                             </div>
                         </div>
-                        <div class="weui-flex__item">
+                        <div class="weui-flex__item" *ngIf="item.integral>=0">
                             <div class="placeholder">
                                 <h4 class="weui-media-box__desc  " style="font-size: 17px;color:#D1A06C;text-align: right">+{{item.integral}}</h4>
+                            </div>
+                        </div>
+                        <div class="weui-flex__item" *ngIf="item.integral<0">
+                            <div class="placeholder">
+                                <h4 class="weui-media-box__desc  " style="font-size: 17px;color:#FF0000;text-align: right">{{item.integral}}</h4>
                             </div>
                         </div>
                     </div>
