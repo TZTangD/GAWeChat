@@ -38,4 +38,7 @@ export class PersonalComponent extends AppComponentBase implements OnInit {
     goBindPhone() {
         this.router.navigate(["/personals/bind-member"]);
     }
+    goFeedBack(){
+        this.router.navigate(['/feedbacks/feedback']);
+    }
 } 

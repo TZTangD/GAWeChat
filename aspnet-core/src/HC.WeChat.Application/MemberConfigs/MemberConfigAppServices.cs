@@ -259,8 +259,12 @@ namespace HC.WeChat.MemberConfigs
             }
         }
 
+        /// <summary>
+        /// 微信获取积分配置
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <returns></returns>
         [AbpAllowAnonymous]
-
         public async Task<List<MemberConfigListDto>> GetWXMemberConfigByTenantIdAsync(int? tenantId)
         {
             using (CurrentUnitOfWork.SetTenantId(tenantId))

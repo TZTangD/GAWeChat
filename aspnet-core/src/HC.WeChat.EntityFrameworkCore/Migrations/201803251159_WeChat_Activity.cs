@@ -225,7 +225,14 @@ namespace HC.WeChat.Migrations
                     LastModifierUserId = table.Column<long>(nullable: true),
                     DeletionTime = table.Column<DateTime>(nullable: true),
                     DeleterUserId = table.Column<long>(nullable: true),
-                    VerificationCode = table.Column<string>(maxLength: 50, nullable: true)
+                    VerificationCode = table.Column<string>(maxLength: 50, nullable: true),
+                    CustId = table.Column<string>(maxLength: 30, nullable: false),
+                    DisLineCode = table.Column<string>(maxLength: 50, nullable: true),
+                    Category = table.Column<string>(maxLength: 6, nullable: true),
+                    DepartmentId = table.Column<string>(maxLength: 50, nullable: false),
+                    SlsmanId = table.Column<string>(maxLength: 50, nullable: true),
+                    SlsmanName = table.Column<string>(maxLength: 100, nullable: true),
+
                 },
                 constraints: table =>
                 {

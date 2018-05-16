@@ -137,5 +137,34 @@ namespace HC.WeChat.Retailers
         /// </summary>
         [StringLength(50)]
         public string VerificationCode { get; set; }
+
+        /// <summary>
+        /// 客户id
+        /// </summary>
+        [StringLength(30)]
+        [Required]
+        public string CustId { get; set; }
+        /// <summary>
+        /// 线路编号
+        /// </summary>
+        [StringLength(50)]
+        public string DisLineCode { get; set; }
+        /// <summary>
+        /// 类别
+        /// </summary>
+        [StringLength(6)]
+        public string Category { get; set; }
+        /// <summary>
+        /// 市场部id
+        /// </summary>
+        [StringLength(50)]
+        [Required]
+        public string DepartmentId { get; set; }
+
+        [StringLength(50)]
+        public string SlsmanId { get; set; }
+
+        [StringLength(100)]
+        public string SlsmanName { get; set; }
     }
 }
