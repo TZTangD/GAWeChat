@@ -305,6 +305,16 @@ namespace HC.WeChat.Products
             }
             return result;
         }
+
+        [AbpAllowAnonymous]
+        public async Task<List<RareProductSearchDto>> GetRareProductByKey(int? tenantId, string key)
+        {
+            using (CurrentUnitOfWork.SetTenantId(tenantId))
+            {
+                var query = await _productRepository.GetAll().Where(p => p.IsRare == true && p.IsAction == true && p.Specification.Contains(key)).ToListAsync();
+                return query.MapTo<List<RareProductSearchDto>>();
+            }
+        }
     }
 }
 

@@ -1,6 +1,6 @@
 import { Component, ViewEncapsulation, OnInit, Injector } from '@angular/core';
 import { AppComponentBase } from '../../components/app-component-base';
-import { WechatUser } from '../../../services/model';
+import { WechatUser, UserType } from '../../../services/model';
 import { Router } from '@angular/router';
 
 @Component({
@@ -12,7 +12,8 @@ import { Router } from '@angular/router';
 export class PersonalComponent extends AppComponentBase implements OnInit {
 
     user: WechatUser;
-    //phone: string = '';
+    isShowRetailer: boolean = false;
+    accountTitle: string = '我的台账';
 
     constructor(injector: Injector, private router: Router) {
         super(injector);
@@ -21,9 +22,13 @@ export class PersonalComponent extends AppComponentBase implements OnInit {
     ngOnInit() {
         this.settingsService.getUser().subscribe(result => {
             this.user = result;
-            //if (this.user && this.user.phone) {
-            //    this.phone = this.user.phone.substr(0,3) + '****' + this.user.phone.substr(7);
-            //}
+            if(this.user.userType == UserType.Retailer){//零售客户
+                this.isShowRetailer = true;
+                this.accountTitle = '我的台账';
+            } else if(this.user.userType == UserType.Staff){//内部员工
+                this.isShowRetailer = true;
+                this.accountTitle = '台账查询';
+            }
         });
     }
 

@@ -82,4 +82,20 @@ namespace HC.WeChat.Products.Dtos
 
         public int Num { get; set; }
     }
+
+    [AutoMapFrom(typeof(Product))]
+    public class RareProductSearchDto : EntityDto<Guid>
+    {
+        public string Specification { get; set; }
+
+        public ProductTypeEnum? Type { get; set; }
+
+        public string TypeName
+        {
+            get
+            {
+                return Type.ToString();
+            }
+        }
+    }
 }

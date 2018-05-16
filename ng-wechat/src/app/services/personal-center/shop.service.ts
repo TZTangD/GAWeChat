@@ -57,6 +57,17 @@ export class ShopService {
     });
   }
 
+  GetRareProductByKey(params: any): Observable<ShopProduct[]> {
+    return this.http.get('/api/services/app/Product/GetRareProductByKey', params).map(data => {
+      if (data.result) {
+        let rel = ShopProduct.fromJSArray(data.result);
+        return rel;
+      } else {
+        return null;
+      }
+    });
+  }
+
   GetRareProduct(params: any): Observable<any> {
     return this.http.get('/api/services/app/Product/GetRareProduct', params).map(data => {
       if (data.result) {

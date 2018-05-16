@@ -64,9 +64,16 @@ namespace HC.WeChat.Products
         /// <returns></returns>
         Task CreateOrUpdateProductDto(ProductEditDto input);
 
+        /// <summary>
         /// 获取特色商品
         /// </summary>
         Task<RareProductDto> GetRareProduct(int? tenantId);
+
+        /// <summary>
+        /// 根据关键字搜索特色商品
+        /// </summary>
+        /// <returns></returns>
+        Task<List<RareProductSearchDto>> GetRareProductByKey(int? tenantId, string key);
 
         /// <summary>
         /// 通过指定id获取ProductListDto信息
