@@ -307,7 +307,7 @@ namespace HC.WeChat.Products
         }
 
         [AbpAllowAnonymous]
-        public async Task<List<RareProductSearchDto>> GetRareProductByKey(int? tenantId, string key)
+        public async Task<List<RareProductSearchDto>> GetRareProductByKeyAsync(int? tenantId, string key)
         {
             using (CurrentUnitOfWork.SetTenantId(tenantId))
             {
