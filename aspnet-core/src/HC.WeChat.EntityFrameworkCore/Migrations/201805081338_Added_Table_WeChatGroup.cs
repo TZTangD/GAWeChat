@@ -33,13 +33,13 @@ namespace HC.WeChat.Migrations
 
             migrationBuilder.AddColumn<string>(
              name: "OperatorOpenId",
-             table: "IntegralDetails",
+             table: "PurchaseRecords",
              maxLength: 50,
              nullable: true);
 
             migrationBuilder.AddColumn<string>(
              name: "OperatorName",
-             table: "IntegralDetails",
+             table: "PurchaseRecords",
              maxLength: 50,
              nullable: true);
 
@@ -66,11 +66,11 @@ namespace HC.WeChat.Migrations
 
             migrationBuilder.DropColumn(
              name: "OperatorOpenId",
-             table: "IntegralDetails");
+             table: "PurchaseRecords");
 
             migrationBuilder.DropColumn(
               name: "OperatorName",
-              table: "IntegralDetails");
+              table: "PurchaseRecords");
 
             migrationBuilder.AlterColumn<Guid?>(
             name: "RefId",
@@ -78,11 +78,11 @@ namespace HC.WeChat.Migrations
             nullable: true);
 
             migrationBuilder.DropColumn(
-            name: "QQLongitude",
+            name: "QqLongitude",
             table: "Shops");
 
             migrationBuilder.DropColumn(
-              name: "QQLatitude",
+              name: "QqLatitude",
               table: "Shops");
         }
     }

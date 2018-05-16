@@ -1652,8 +1652,6 @@ namespace HC.WeChat.Migrations
                 b.Property<string>("RefId").HasMaxLength(500);
                 b.Property<DateTime>("CreationTime").IsRequired();
                 b.Property<int?>("TenantId");
-                b.Property<string>("OperatorOpenId").HasMaxLength(50);
-                b.Property<string>("OperatorName").HasMaxLength(50);
 
                 b.HasKey("Id");
 
@@ -1733,6 +1731,8 @@ namespace HC.WeChat.Migrations
                 b.Property<int?>("Integral");
                 b.Property<string>("Remark").HasMaxLength(500);
                 b.Property<DateTime>("CreationTime").IsRequired();
+                b.Property<string>("OperatorOpenId").HasMaxLength(50);
+                b.Property<string>("OperatorName").HasMaxLength(50);
 
                 b.HasKey("Id");
 
