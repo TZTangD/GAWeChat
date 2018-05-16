@@ -6,3 +6,4 @@ export * from './httpclient';
 export * from './personal-center/feedback.service';
 export * from './article/article.service';
 export * from './personal-center/integral-detail.service';
+export * from './personal-center/purchaserecord.service';

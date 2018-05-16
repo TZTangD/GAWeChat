@@ -1681,6 +1681,7 @@ namespace HC.WeChat.Migrations
             {
                 b.Property<Guid>("Id").ValueGeneratedOnAdd();
                 b.Property<int?>("Type");
+                b.Property<int?>("TenantId");
                 b.Property<int?>("Code");
                 b.Property<string>("Value");
                 b.Property<DateTime>("CreationTime").IsRequired();
@@ -1706,6 +1707,7 @@ namespace HC.WeChat.Migrations
                 b.Property<DateTime>("CreationTime").IsRequired();
                 b.Property<int?>("TenantId");
                 b.Property<long?>("CreatorUserId");
+                b.Property<string>("PhotoUrl").HasMaxLength(500);
 
                 b.HasKey("Id");
 
@@ -1752,6 +1754,7 @@ namespace HC.WeChat.Migrations
                 b.Property<DateTime?>("AuditTime");
                 b.Property<DateTime>("CreationTime").IsRequired();
                 b.Property<int?>("TenantId");
+                b.Property<string>("Tel").HasMaxLength(20);
 
                 b.HasKey("Id");
 

@@ -37,34 +37,36 @@
             </div>
         </div>
     </div>
-    <div class="weui-cells__title">积分详情</div>
-    <div class="weui-panel weui-panel_access ">
-        <div class="weui-panel__bd ">
-            <a href="javascript:void(0); " class="weui-media-box weui-media-box_appmsg " *ngFor="let item of integralDetail">
-                <div class="weui-media-box__bd ">
-                    <div class="weui-flex">
-                        <div class="weui-flex__item">
-                            <div class="placeholder">
-                                <h4 class="weui-media-box__info" style="font-weight:normal ;font-size: 15px;font-family: -apple-system-font, Helvetica Neue, Helvetica, sans-serif;color: black">{{item.desc}}</h4>
+    <weui-infiniteloader (loadmore)="onLoadMore($event)" #comp>
+        <div class="weui-cells__title">积分详情</div>
+        <div class="weui-panel weui-panel_access ">
+            <div class="weui-panel__bd ">
+                <a href="javascript:void(0); " class="weui-media-box weui-media-box_appmsg " *ngFor="let item of purchaseRecord">
+                    <div class="weui-media-box__bd ">
+                        <div class="weui-flex">
+                            <div class="weui-flex__item">
+                                <div class="placeholder">
+                                    <h4 class="weui-media-box__info" style="font-weight:normal ;font-size: 15px;font-family: -apple-system-font, Helvetica Neue, Helvetica, sans-serif;color: black">{{item.desc}}</h4>
+                                </div>
+                            </div>
+                            <div class="weui-flex__item" *ngIf="item.integral>=0">
+                                <div class="placeholder">
+                                    <h4 class="weui-media-box__desc  " style="font-size: 17px;color:#D1A06C;text-align: right">+{{item.integral}}</h4>
+                                </div>
+                            </div>
+                            <div class="weui-flex__item" *ngIf="item.integral<0">
+                                <div class="placeholder">
+                                    <h4 class="weui-media-box__desc  " style="font-size: 17px;color:#FF0000;text-align: right">{{item.integral}}</h4>
+                                </div>
                             </div>
                         </div>
-                        <div class="weui-flex__item" *ngIf="item.integral>=0">
-                            <div class="placeholder">
-                                <h4 class="weui-media-box__desc  " style="font-size: 17px;color:#D1A06C;text-align: right">+{{item.integral}}</h4>
-                            </div>
-                        </div>
-                        <div class="weui-flex__item" *ngIf="item.integral<0">
-                            <div class="placeholder">
-                                <h4 class="weui-media-box__desc  " style="font-size: 17px;color:#FF0000;text-align: right">{{item.integral}}</h4>
-                            </div>
-                        </div>
+                        <ul class="weui-media-box__info ">
+                            <li class="weui-media-box__info__meta ">{{item.typeName}}</li>
+                            <li class="weui-media-box__info__meta " style="text-align: right ">{{item.creationTime| date:'yyyy-MM-dd HH:mm'}}</li>
+                        </ul>
                     </div>
-                    <ul class="weui-media-box__info ">
-                        <li class="weui-media-box__info__meta ">{{item.typeName}}</li>
-                        <li class="weui-media-box__info__meta " style="text-align: right ">{{item.creationTime| date:'yyyy-MM-dd HH:mm'}}</li>
-                    </ul>
-                </div>
-            </a>
+                </a>
+            </div>
         </div>
-    </div>
+    </weui-infiniteloader>
 </Page>

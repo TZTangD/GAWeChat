@@ -27,7 +27,7 @@ export class PersonalComponent extends AppComponentBase implements OnInit {
         });
     }
 
-    goIntegralTotal(openId: string, integralTotal: number) {
+    goIntegralTotal(openId: string) {
         this.router.navigate(["/integrals/integral", { openId: openId }]);
     }
 
@@ -38,7 +38,10 @@ export class PersonalComponent extends AppComponentBase implements OnInit {
     goBindPhone() {
         this.router.navigate(["/personals/bind-member"]);
     }
-    goFeedBack(){
+    goFeedBack() {
         this.router.navigate(['/feedbacks/feedback']);
+    }
+    goPurchaseRecord(openId: string) {
+        this.router.navigate(['/purchaserecords/purchaserecord', { openId: openId }]);
     }
 } 

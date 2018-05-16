@@ -21,6 +21,8 @@ using HC.WeChat.WeChatUsers;
 using HC.WeChat.MemberConfigs;
 using HC.WeChat.WechatEnums;
 using HC.WeChat.Shops;
+using HC.WeChat.Products;
+using HC.WeChat.Products.Dtos;
 
 namespace HC.WeChat.PurchaseRecords
 {
@@ -34,6 +36,7 @@ namespace HC.WeChat.PurchaseRecords
         private readonly IRepository<PurchaseRecord, Guid> _purchaserecordRepository;
         private readonly IRepository<IntegralDetail, Guid> _integralDetailRepository;
         private readonly IRepository<WeChatUser, Guid> _weChatUserRepository;
+        private readonly IRepository<Product, Guid> _productRepository;
         private readonly IRepository<MemberConfig, Guid> _memberConfigRepository;
         private readonly IRepository<Shop, Guid> _shopRepository;
         private readonly IPurchaseRecordManager _purchaserecordManager;
@@ -46,6 +49,7 @@ namespace HC.WeChat.PurchaseRecords
         , IRepository<WeChatUser, Guid> weChatUserRepository
         , IRepository<MemberConfig, Guid> memberConfigRepository
         , IRepository<Shop, Guid> shopRepository
+         , IRepository<Product, Guid> productRepository
         , IPurchaseRecordManager purchaserecordManager
         )
         {
@@ -54,6 +58,7 @@ namespace HC.WeChat.PurchaseRecords
             _weChatUserRepository = weChatUserRepository;
             _memberConfigRepository = memberConfigRepository;
             _shopRepository = shopRepository;
+            _productRepository = productRepository;
             _purchaserecordManager = purchaserecordManager;
         }
 
@@ -345,6 +350,56 @@ namespace HC.WeChat.PurchaseRecords
                 result.Msg = "积分兑换成功";
                 result.Data = new { RetailerIntegral = rintegral, UserIntegral = xintegral };
                 return result;
+            }
+        }
+
+        /// <summary>
+        /// 根据openId查询购买记录
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="openId"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task<List<PurchaseRecordListDto>> GetWXPagedPurchaseRecordAsync(int? tenantId, string openId, int pageIndex, int pageSize)
+        {
+            using (CurrentUnitOfWork.SetTenantId(tenantId))
+            {
+                var query = _purchaserecordRepository.GetAll().Where(p => p.OpenId == openId);
+                var records = from pr in query
+                             select new PurchaseRecordListDto()
+                             {
+                                 Id = pr.Id,
+                                 CreationTime = pr.CreationTime,
+                                 Integral = pr.Integral,
+                                 OpenId = pr.OpenId,
+                                 ShopName = pr.ShopName,
+                                 Specification =pr.Specification,
+                                 Quantity = pr.Quantity,
+                                 ProductId =pr.ProductId
+                             };
+                var products = from p in _productRepository.GetAll()
+                               select new ProductListDto()
+                               {
+                                   Id = p.Id,
+                                   PhotoUrl = p.PhotoUrl
+                               };
+                var entity = from pr in records
+                             join p in products on pr.ProductId equals p.Id
+                             select new PurchaseRecordListDto()
+                             {
+                                 Id = pr.Id,
+                                 CreationTime = pr.CreationTime,
+                                 Integral = pr.Integral,
+                                 OpenId = pr.OpenId,
+                                 ShopName = pr.ShopName,
+                                 Specification = pr.Specification,
+                                 Quantity = pr.Quantity,
+                                 ProductId = pr.ProductId,
+                                 PhotoUrl = p.PhotoUrl
+                             };
+                return await entity.OrderByDescending(v => v.CreationTime).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
             }
         }
     }
