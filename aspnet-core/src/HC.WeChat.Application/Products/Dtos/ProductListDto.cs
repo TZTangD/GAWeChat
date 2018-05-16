@@ -31,6 +31,26 @@ namespace HC.WeChat.Products.Dtos
                 return Type.ToString();
             }
         }
+
+        /// <summary>
+        /// 产品营销系统Id
+        /// </summary>
+        public string ItemId { get; set; }
+
+        /// <summary>
+        /// 营销系统code
+        /// </summary>
+        public string ItemCode { get; set; }
+
+        /// <summary>
+        /// 地区编码Id
+        /// </summary>
+        public string MfrId { get; set; }
+
+        /// <summary>
+        /// 商标所属公司
+        /// </summary>
+        public string Company { get; set; }
     }
 
     public class RareProductDto

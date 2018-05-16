@@ -12,6 +12,7 @@ namespace HC.WeChat.Migrations
             migrationBuilder.AlterColumn<string>(
                name: "CoverPhoto",
                table: "Articles",
+               maxLength: 500,
                nullable: true);
 
             migrationBuilder.AddColumn<int?>(
@@ -22,11 +23,13 @@ namespace HC.WeChat.Migrations
             migrationBuilder.AddColumn<string>(
               name: "Tel",
               table: "Shops",
+              maxLength: 20,
               nullable: true);
 
             migrationBuilder.AddColumn<string>(
              name: "PhotoUrl",
              table: "Products",
+             maxLength: 500,
              nullable: true);
 
         }

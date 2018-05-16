@@ -80,5 +80,25 @@ namespace HC.WeChat.Products
         /// 产品图片
         /// </summary>
         public virtual string PhotoUrl { get; set; }
+
+        /// <summary>
+        /// 产品营销系统Id
+        /// </summary>
+        public virtual string ItemId { get; set; }
+
+        /// <summary>
+        /// 营销系统code
+        /// </summary>
+        public virtual string ItemCode { get; set; }
+
+        /// <summary>
+        /// 地区编码Id
+        /// </summary>
+        public virtual string MfrId { get; set; }
+
+        /// <summary>
+        /// 商标所属公司
+        /// </summary>
+        public virtual string Company { get; set; }
     }
 }
