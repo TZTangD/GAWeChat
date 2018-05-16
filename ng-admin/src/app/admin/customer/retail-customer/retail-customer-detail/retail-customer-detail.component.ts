@@ -67,7 +67,7 @@ export class RetailCustomerDetailComponent extends AppComponentBase implements O
             telephone: [null, Validators.compose([Validators.maxLength(100)])],
             isAction: [null, Validators.compose([Validators.required])],
             branchCompany: [null, Validators.compose([Validators.maxLength(200)])],
-            department: [null, Validators.compose([Validators.maxLength(100)])],
+            department: [null, Validators.compose([Validators.required, Validators.maxLength(100)])],
             manager: [null, Validators.compose([Validators.maxLength(50)])],
             orderMode: [null],
             terminalType: [null],
