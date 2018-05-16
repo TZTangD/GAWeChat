@@ -1479,6 +1479,12 @@ namespace HC.WeChat.Migrations
                 b.Property<long?>("DeleterUserId");
                 b.Property<string>("LicenseKey").HasMaxLength(50);
                 b.Property<string>("VerificationCode").HasMaxLength(50);
+                b.Property<string>("CustId").HasMaxLength(30);
+                b.Property<string>("DisLineCode").HasMaxLength(50);
+                b.Property<string>("Category").HasMaxLength(6);
+                b.Property<string>("DepartmentId").HasMaxLength(50);
+                b.Property<string>("SlsmanId").HasMaxLength(50);
+                b.Property<string>("SlsmanName").HasMaxLength(100);
 
                 b.HasKey("Id");
 

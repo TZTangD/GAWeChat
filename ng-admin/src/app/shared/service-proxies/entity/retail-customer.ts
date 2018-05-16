@@ -35,6 +35,14 @@ export class RetailCustomer implements IRetailCustomer {
     creatorUserId: number;
     verificationCode: string;
     retailerVerificationCode: string;
+
+    custId: string;
+    disLineCode: string;
+    category: string;
+    departmentId: string;
+    slsmanId: string;
+    slsmanName: string;
+
     constructor(data?: IRetailCustomer) {
         if (data) {
             for (var property in data) {
@@ -80,7 +88,13 @@ export class RetailCustomer implements IRetailCustomer {
             this.deleterUserId = data["deleterUserId"];
             this.verificationCode = data["verificationCode"];
             this.retailerVerificationCode = data["retailerVerificationCode"];
-            
+            this.custId = data["custId"];
+            this.disLineCode = data["disLineCode"];
+            this.category = data["category"];
+            this.departmentId = data["departmentId"];
+            this.slsmanId = data["slsmanId"];
+            this.slsmanName = data["slsmanName"];
+
         }
     }
 
@@ -119,6 +133,12 @@ export class RetailCustomer implements IRetailCustomer {
         data["creatorUserId"] = this.creatorUserId;
         data["deletionTime"] = this.deletionTime;
         data["deleterUserId"] = this.deleterUserId;
+        data["custId"] = this.custId;
+        data["disLineCode"] = this.disLineCode;
+        data["category"] = this.category;
+        data["departmentId"] = this.departmentId;
+        data["slsmanId"] = this.slsmanId;
+        data["slsmanName"] = this.slsmanName;
         return data;
     }
 
@@ -154,4 +174,10 @@ export interface IRetailCustomer {
     id: string;
     verificationCode: string;
     retailerVerificationCode: string;
+    custId: string;
+    disLineCode: string;
+    category: string;
+    departmentId: string;
+    slsmanId: string;
+    slsmanName: string;
 }
