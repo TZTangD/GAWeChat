@@ -1,0 +1,24 @@
+<!--component html goes here -->
+<Page [ngClass]="'panel'" [title]="'Panel'" [showTitle]="false" [spacing]="false">
+    <div class="weui-cells__title">购买记录</div>
+    <div class="weui-panel weui-panel_access">
+        <div class="weui-panel__bd">
+            <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg" *ngFor="let item of purchaseRecord">
+                <div class="weui-media-box__hd">
+                    <img class="weui-media-box__thumb" src="{{item.photoUrl| hostUrl}}" alt="">
+                </div>
+                <div class="weui-media-box__bd">
+                    <ul class="weui-media-box__info">
+                        <li class="weui-media-box__info__meta">品规:{{item.specification}}</li>
+                    </ul>
+
+                    <ul class="weui-media-box__info">
+                        <li class="weui-media-box__info__meta">数量:{{item.quantity}}</li>
+                        <li class="weui-media-box__info__meta">店铺名:{{item.shopName}}</li>
+                        <li class="weui-media-box__info__meta">日期:{{item.creationTime| date:'yyyy-MM-dd HH:mm'}}</li>
+                    </ul>
+                </div>
+            </a>
+        </div>
+    </div>
+</Page>

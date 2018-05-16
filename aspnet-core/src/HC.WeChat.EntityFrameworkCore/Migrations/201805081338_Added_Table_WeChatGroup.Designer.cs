@@ -1687,6 +1687,7 @@ namespace HC.WeChat.Migrations
             {
                 b.Property<Guid>("Id").ValueGeneratedOnAdd();
                 b.Property<int?>("Type");
+                b.Property<int?>("TenantId");
                 b.Property<int?>("Code");
                 b.Property<string>("Value");
                 b.Property<DateTime>("CreationTime").IsRequired();
