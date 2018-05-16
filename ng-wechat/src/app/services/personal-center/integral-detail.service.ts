@@ -10,7 +10,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '../httpclient'
 import { Observable } from 'rxjs/Observable';
 import * as moment from 'moment';
-import { ApiResult, IntegralDetail } from '../model/index';
+import { ApiResult, IntegralDetail, MemberConfigs } from '../model/index';
 
 
 @Injectable()
@@ -21,6 +21,16 @@ export class IntegralDetailService {
         return this.http.get('/api/services/app/IntegralDetail/GetWXPagedIntegralDetailAsync', params).map(data => {
             if (data.result) {
                 return IntegralDetail.fromJSArray(data.result);
+            } else {
+                return null;
+            }
+        });
+    }
+
+    GetMemberConfigsByTenantId(params: any): Observable<MemberConfigs[]> {
+        return this.http.get('/api/services/app/MemberConfig/GetWXMemberConfigByTenantIdAsync', params).map(data => {
+            if (data.result) {
+                return MemberConfigs.fromJSArray(data.result);
             } else {
                 return null;
             }
