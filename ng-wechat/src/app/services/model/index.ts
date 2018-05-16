@@ -7,3 +7,5 @@ export * from './js.api.config';
 export * from './article';
 export * from './pagemodel';
 export * from './integraldetail';
+export * from './member-config';
+export * from './configcode';
