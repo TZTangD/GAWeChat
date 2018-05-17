@@ -16,7 +16,7 @@ import { WechatModule } from './wechat/wechat.module';
 import { AppComponent } from './app.component';
 //import { JsonpModule } from '@angular/http';
 //import { ServiceModule } from './services/service.module';
-import { HttpClient, SettingsService } from './services';
+import { HttpClient, SettingsService, CommonService } from './services';
 
 export function StartupServiceFactory(injector: Injector): Function {
     //return () => settingSer.load();
@@ -52,6 +52,7 @@ export function StartupServiceFactory(injector: Injector): Function {
     providers:[
         HttpClient, 
         SettingsService,
+        CommonService,
         {
             provide: APP_INITIALIZER,
             useFactory: StartupServiceFactory,

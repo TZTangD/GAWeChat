@@ -18,6 +18,8 @@ using HC.WeChat.Authorization;
 using HC.WeChat.Retailers;
 using HC.WeChat.WeChatUsers.DomainServices;
 using HC.WeChat.WechatEnums;
+using HC.WeChat.ShopProducts;
+using HC.WeChat.Products;
 
 namespace HC.WeChat.Shops
 {
@@ -34,19 +36,25 @@ namespace HC.WeChat.Shops
         private readonly IShopManager _shopManager;
         private readonly IRepository<Retailer, Guid> _retailerRepository;
         private readonly IWeChatUserManager _wechatuserManager;
+        private readonly IRepository<ShopProduct, Guid> _shopProductRepository;
+        private readonly IRepository<Product, Guid> _productRepository;
 
         /// <summary>
         /// 构造函数
         /// </summary>
         public ShopAppService(IRepository<Shop, Guid> shopRepository
-      , IShopManager shopManager, IRepository<Retailer, Guid> retailerRepository
+        , IShopManager shopManager, IRepository<Retailer, Guid> retailerRepository
         , IWeChatUserManager wechatuserManager
+        , IRepository<ShopProduct, Guid> shopProductRepository
+        , IRepository<Product, Guid> productRepository
         )
         {
             _shopRepository = shopRepository;
             _shopManager = shopManager;
             _retailerRepository = retailerRepository;
             _wechatuserManager = wechatuserManager;
+            _shopProductRepository = shopProductRepository;
+            _productRepository = productRepository;
         }
 
         /// <summary>
@@ -384,6 +392,22 @@ namespace HC.WeChat.Shops
                 var shop = await _shopRepository.GetAsync(id);
                 shop.ReadTotal++;
                 return shop.MapTo<ShopListDto>();
+            }
+        }
+
+        [AbpAllowAnonymous]
+        public async Task<List<ShopListDto>> GetShopListByGoodsIdAsync(int? tenantId, Guid goodsId)
+        {
+            using (CurrentUnitOfWork.SetTenantId(tenantId))
+            {
+                var product = await _productRepository.GetAsync(goodsId);
+                product.SearchCount = product.SearchCount ?? 0;
+                product.SearchCount++;
+                var shopIds = await _shopProductRepository.GetAll()
+                    .Where(s => s.ProductId == goodsId)
+                    .Select(s => s.ShopId).ToArrayAsync();
+                var shops = await _shopRepository.GetAll().Where(s => shopIds.Contains(s.Id)).ToListAsync();
+                return shops.MapTo<List<ShopListDto>>();
             }
         }
     }

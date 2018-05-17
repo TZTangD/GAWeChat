@@ -29,6 +29,12 @@ using HC.WeChat.ShopEvaluations;
 using HC.WeChat.ShopProducts;
 using HC.WeChat.StatisticalDetails;
 using HC.WeChat.WeChatGroups;
+using HC.WeChat.EPCos;
+using HC.WeChat.EPCoLines;
+using HC.WeChat.GACustPoints;
+using HC.WeChat.GAGoodses;
+using HC.WeChat.GAGrades;
+using HC.WeChat.GoodSources;
 
 namespace HC.WeChat.EntityFrameworkCore
 {
@@ -94,6 +100,16 @@ namespace HC.WeChat.EntityFrameworkCore
         public virtual DbSet<StatisticalDetail> StatisticalDetails { get; set; }
         public virtual DbSet<WeChatGroup> WeChatGroups { get; set; }
 
+        public virtual DbSet<EPCo> EPCos { get; set; }
 
+        public virtual DbSet<EPCoLine> EPCoLines { get; set; }
+
+        public virtual DbSet<GACustPoint> GACustPoints { get; set; }
+
+        public virtual DbSet<GAGoods> GAGoodses { get; set; }
+
+        public virtual DbSet<GAGrade> GAGrades { get; set; }
+
+        public virtual DbSet<GoodSource> GoodSources { get; set; }
     }
 }

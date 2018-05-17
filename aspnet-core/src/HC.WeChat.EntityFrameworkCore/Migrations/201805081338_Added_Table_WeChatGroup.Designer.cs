@@ -1479,6 +1479,12 @@ namespace HC.WeChat.Migrations
                 b.Property<long?>("DeleterUserId");
                 b.Property<string>("LicenseKey").HasMaxLength(50);
                 b.Property<string>("VerificationCode").HasMaxLength(50);
+                b.Property<string>("CustId").HasMaxLength(30);
+                b.Property<string>("DisLineCode").HasMaxLength(50);
+                b.Property<string>("Category").HasMaxLength(6);
+                b.Property<string>("DepartmentId").HasMaxLength(50);
+                b.Property<string>("SlsmanId").HasMaxLength(50);
+                b.Property<string>("SlsmanName").HasMaxLength(100);
 
                 b.HasKey("Id");
 
@@ -1652,8 +1658,6 @@ namespace HC.WeChat.Migrations
                 b.Property<string>("RefId").HasMaxLength(500);
                 b.Property<DateTime>("CreationTime").IsRequired();
                 b.Property<int?>("TenantId");
-                b.Property<string>("OperatorOpenId").HasMaxLength(50);
-                b.Property<string>("OperatorName").HasMaxLength(50);
 
                 b.HasKey("Id");
 
@@ -1713,6 +1717,7 @@ namespace HC.WeChat.Migrations
                 b.Property<DateTime>("CreationTime").IsRequired();
                 b.Property<int?>("TenantId");
                 b.Property<long?>("CreatorUserId");
+                b.Property<string>("PhotoUrl").HasMaxLength(500);
 
                 b.HasKey("Id");
 
@@ -1734,6 +1739,8 @@ namespace HC.WeChat.Migrations
                 b.Property<int?>("Integral");
                 b.Property<string>("Remark").HasMaxLength(500);
                 b.Property<DateTime>("CreationTime").IsRequired();
+                b.Property<string>("OperatorOpenId").HasMaxLength(50);
+                b.Property<string>("OperatorName").HasMaxLength(50);
 
                 b.HasKey("Id");
 
@@ -1761,6 +1768,7 @@ namespace HC.WeChat.Migrations
                 b.Property<DateTime?>("AuditTime");
                 b.Property<DateTime>("CreationTime").IsRequired();
                 b.Property<int?>("TenantId");
+                b.Property<string>("Tel").HasMaxLength(20);
 
                 b.HasKey("Id");
 

@@ -67,7 +67,7 @@ export class RetailCustomerDetailComponent extends AppComponentBase implements O
             telephone: [null, Validators.compose([Validators.maxLength(100)])],
             isAction: [null, Validators.compose([Validators.required])],
             branchCompany: [null, Validators.compose([Validators.maxLength(200)])],
-            department: [null, Validators.compose([Validators.maxLength(100)])],
+            department: [null, Validators.compose([Validators.required, Validators.maxLength(100)])],
             manager: [null, Validators.compose([Validators.maxLength(50)])],
             orderMode: [null],
             terminalType: [null],
@@ -76,6 +76,12 @@ export class RetailCustomerDetailComponent extends AppComponentBase implements O
             marketType: [null],
             deliveryLine: [null, Validators.compose([Validators.maxLength(500)])],
             licenseKey: [null, Validators.compose([Validators.maxLength(50)])],
+            custId: [null, Validators.compose([Validators.required, Validators.maxLength(50)])],
+            disLineCode: [null, Validators.compose([Validators.maxLength(50)])],
+            category: [null, Validators.compose([Validators.maxLength(50)])],
+            departmentId: [null, Validators.compose([Validators.required, Validators.maxLength(50)])],
+            slsmanId: [null, Validators.compose([Validators.maxLength(50)])],
+            slsmanName: [null, Validators.compose([Validators.maxLength(50)])],
         });
         this.getSingleRetailCustomer();
     }

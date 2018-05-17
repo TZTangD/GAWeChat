@@ -57,6 +57,17 @@ export class ShopService {
     });
   }
 
+  GetRareProductByKeyAsync(params: any): Observable<ShopProduct[]> {
+    return this.http.get('/api/services/app/Product/GetRareProductByKeyAsync', params).map(data => {
+      if (data.result) {
+        let rel = ShopProduct.fromJSArray(data.result);
+        return rel;
+      } else {
+        return null;
+      }
+    });
+  }
+
   GetRareProduct(params: any): Observable<any> {
     return this.http.get('/api/services/app/Product/GetRareProduct', params).map(data => {
       if (data.result) {
@@ -95,6 +106,16 @@ export class ShopService {
         let rel = Shop.fromJS(data.result);
         rel.evaluationArry = rel.evaluation.split(',');
         return rel;
+      } else {
+        return null;
+      }
+    });
+  }
+
+  GetShopListByGoodsIdAsync(params: any): Observable<Shop[]> {
+    return this.http.get('/api/services/app/Shop/GetShopListByGoodsIdAsync', params).map(data => {
+      if (data.result) {
+        return Shop.fromJSArray(data.result);
       } else {
         return null;
       }

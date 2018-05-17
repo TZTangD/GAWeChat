@@ -88,14 +88,14 @@ export class SettingsService {
         });
     }
 
-    GetWeChatUserAsync(oId:string, tId:string): Observable<WechatUser> {
+    GetWeChatUserAsync(oId: string, tId: string): Observable<WechatUser> {
         let param: any = {};
         param.openId = oId;
-        if(tId){
-          param.tenantId = tId;
+        if (tId) {
+            param.tenantId = tId;
         }
         return this.httpClient.get('/api/services/app/WeChatUser/GetWeChatUserAsync', param).map(data => {
-          return WechatUser.fromJS(data.result);
+            return WechatUser.fromJS(data.result);
         });
-      }
+    }
 }

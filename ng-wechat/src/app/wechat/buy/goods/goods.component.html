@@ -6,29 +6,28 @@
             </div>
         </div>
     </div>
-    <weui-searchbar (search)="onSearch($event)" placeholder="输入商品名称" (cancel)="onCancel()" (clear)="onClear()" (submit)="onSubmit($event)"></weui-searchbar>
+    <weui-searchbar (search)="onSearch($event)" [(value)]="value" placeholder="输入商品名称" (cancel)="onCancel()"
+        [debounceTime]="500" (clear)="onClear()" ></weui-searchbar>
     <div class="weui-panel" style="margin-top: 0px;" *ngIf="value">
-        <div class="weui-panel__hd">查询商品【{{value}}】</div>
-        <div class="weui-panel__bd" *ngIf="items | async; let items; else loading">
-            <div class="weui-cell weui-cell_access" *ngFor="let item of items">
+        <div class="weui-panel__hd">查询商品【{{value}}】,点击商品查找店铺</div>
+        <div class="weui-panel__bd" *ngIf="goodes | async; let goodes; else loading">
+            <a class="weui-cell weui-cell_access" *ngFor="let item of goodes" (click)="onSelectGoods(item)" >
                 <div class="weui-cell__bd weui-cell_primary">
-                    <p>{{item}}</p>
+                    <p>{{item.specification}}</p>
                 </div>
-            </div>
-            <div class="weui-media-box weui-media-box_text" *ngIf="items?.length === 0">Can't find any！</div>
+                <div class="weui-cell__ft">
+                    {{item.typeName}}
+                </div>
+            </a>
+            <div class="weui-media-box weui-media-box_text" *ngIf="goodes?.length === 0">没有该商品信息</div>
         </div>
         <ng-template #loading>
             <div class="weui-panel__bd">
-                <div class="weui-media-box weui-media-box_text">Loading...</div>
+                <div class="weui-media-box weui-media-box_text">加载中...</div>
             </div>
         </ng-template>
-        <a class="weui-panel__ft" href="javascript:void(0);">
-            <div class="weui-cell weui-cell_access weui-cell_link">
-                <div class="weui-cell__bd">More</div>
-                <div class="weui-cell__ft"></div>
-            </div>
-        </a>
     </div>
+    <div class="weui-cells__title" *ngIf="shops && shops.length > 0" >包含【{{sgoods.specification}}】的店铺</div>
     <div class="weui-cells" *ngIf="shops && shops.length > 0">
         <a class="weui-cell weui-cell_access" *ngFor="let s of shops" (click)="goShop(s.id)">
             <div class="weui-cell__hd weui-cell_img" [ngStyle]="{'background-image':'url('+ hostUrl + s.coverPhoto +')'}">
@@ -39,9 +38,8 @@
                     <br/>电话：{{s.tel}}</p>
             </div>
             <div class="weui-cell__ft">
-                {{s.distance}}米
             </div>
         </a>
     </div>
-    <weui-loadmore type="line" *ngIf="!shops || shops.length == 0"></weui-loadmore>
+    <weui-loadmore type="line" [lineText]="lineDesc" *ngIf="!shops || shops.length == 0"></weui-loadmore>
 </Page>
