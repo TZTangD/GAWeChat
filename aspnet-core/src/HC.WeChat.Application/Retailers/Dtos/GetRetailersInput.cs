@@ -34,4 +34,19 @@ namespace HC.WeChat.Retailers.Dtos
         }
 
     }
+    public class GetRetailersWeChatInput : PagedAndSortedInputDto, IShouldNormalize
+    {
+        /// <summary>
+        /// 编码或电话
+        /// </summary>
+        public string CodeOrPhone { get; set; }
+        public int? tenantId { get; set; }
+        public void Normalize()
+        {
+            if (string.IsNullOrEmpty(Sorting))
+            {
+                Sorting = "Id";
+            }
+        }
+    }
 }

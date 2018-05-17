@@ -44,4 +44,13 @@ export class PersonalComponent extends AppComponentBase implements OnInit {
     goPurchaseRecord(openId: string) {
         this.router.navigate(['/purchaserecords/purchaserecord', { openId: openId }]);
     }
+    goArchivalLevel() {
+
+        //2：内部员工，1：零售用户
+        if (this.user.userType = 2) {
+            this.router.navigate(['/customer-searchs/customer-search']);
+        } else if (this.user.userType = 1) {
+            this.router.navigate(['/customer-searchs/customer-search']);
+        }
+    }
 } 

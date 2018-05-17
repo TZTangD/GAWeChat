@@ -1,16 +1,34 @@
 <!--component html goes here -->
-<weui-infiniteloader (loadmore)="onLoadMore($event)" #comp>
-    <Page [ngClass]="'infiniteloader'" [title]="'Infinite Loader'" [subTitle]="'滚动加载'" [spacing]="false" [noBottom]="true">
+<Page [ngClass]="'infiniteloader'" [title]="'零售户信息'" [subTitle]="" [spacing]="false" [noBottom]="true">
 
-        <div class="weui-cells__title">List with 50 Max</div>
-        <div class="weui-cells">
-            <a *ngFor="let i of items" class="weui-cell weui-cell_access" href="javascript:;">
-                <div class="weui-cell__bd">{{i}}</div>
-                <div class="weui-cell__bd">{{i}}</div>
-                <div class="weui-cell__ft">aa</div>
-            </a>
+    <!-- <div class="weui-cells__title">List with 50 Max</div> -->
+
+    <div class="weui-cells search">
+        <div class="weui-cell" >
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" [(ngModel)]="search.codeOrPhone" placeholder="请输入编码或电话" name="title" weui-input="title" weui-required>
+            </div>
+            <div class="weui-cell__ft">
+                <button weui-button class="weui-vcode-img " [weui-mini]="'mini'" (click)="getCustomer(true)">搜索</button>
+                <!-- <i  class="weui-vcode-img weui-icon-search"></i> -->
+            </div>
         </div>
-        
-        <weui-button *ngIf="restartBtn" (click)="restart()">重新开始</weui-button>
-    </Page>
-</weui-infiniteloader>
+    </div>
+    <div class="weui-cells__title">
+        <a class="weui-cell weui-cells__title">
+            <div class="weui-cell__hd">姓名</div>
+            <div class="weui-cell__bd" style="text-align:center;">电话</div>
+            <div class="weui-cell__ft">编码</div>
+        </a>
+    </div>
+    <div class="weui-cells">
+        <weui-infiniteloader (loadmore)="onLoadMore($event)" #comp>
+            <a *ngFor="let i of customers" class="weui-cell weui-cell_access" (click)="goCustomerLeavel()">
+                <div class="weui-cell__hd">{{i.name}}</div>
+                <div class="weui-cell__bd" style="text-align:center;">{{i.telephone}}</div>
+                <div class="weui-cell__ft">{{i.code}}</div>
+            </a>
+        </weui-infiniteloader>
+    </div>
+    <!-- <weui-button *ngIf="restartBtn" (click)="restart()">重新开始</weui-button> -->
+</Page>
