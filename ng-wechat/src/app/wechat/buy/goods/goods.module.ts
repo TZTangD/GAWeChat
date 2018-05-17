@@ -5,6 +5,7 @@ import { SharedModule } from '../../../shared/shared.module';
 import { ComponentsModule } from '../../components/components.module';
 
 import { GoodsComponent } from './goods.component';
+import { ShopService } from '../../../services';
 
 // region: components
 
@@ -26,7 +27,7 @@ const routes: Routes = [
         ...COMPONENTS
     ],
     providers: [
-        //ShopService
+        ShopService
     ]
 })
 export class GoodsModule {

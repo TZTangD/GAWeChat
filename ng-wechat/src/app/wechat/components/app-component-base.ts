@@ -1,11 +1,12 @@
 import { Injector, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { SettingsService } from '../../services';
+import { SettingsService, CommonService } from '../../services';
 
 export abstract class AppComponentBase {
 
     activatedRoute: ActivatedRoute;
     settingsService: SettingsService;
+    commonService: CommonService;
 
     query: any = {
         pageIndex: 1,
@@ -20,6 +21,7 @@ export abstract class AppComponentBase {
     constructor(injector: Injector) {
         this.activatedRoute = injector.get(ActivatedRoute);
         this.settingsService = injector.get(SettingsService);
+        this.commonService = injector.get(CommonService);
         this.activatedRoute.params.subscribe((params: Params) => {
             //let openId = params['openId'];
             //let tenantId = params['tenantId'];

@@ -57,6 +57,17 @@ export class Shop implements IShop {
         return result;
     }
 
+    static fromJSArray(dataArray: any[]): Shop[] {
+        let array = [];
+        dataArray.forEach(result => {
+            let item = new Shop();
+            item.init(result);
+            array.push(item);
+        });   
+      
+        return array;
+    }
+
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
