@@ -23,10 +23,7 @@ export class CustomerSearchComponent extends AppComponentBase implements OnInit 
     }
     ngOnInit(): void {
         this.isLastPage = false;
-
-        // this.query.pageSize = 5;
-        // this.onLoadMore();
-        this.getCustomer(false);
+        // this.getCustomer(false);
     }
 
     // items: any[] = Array(20)
