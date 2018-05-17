@@ -17,6 +17,9 @@ using System;
 using HC.WeChat.PurchaseRecords;
 using HC.WeChat.WeChatUsers;
 using HC.WeChat.Authorization;
+using HC.WeChat.PurchaseRecords.Dtos;
+using HC.WeChat.Products;
+using HC.WeChat.Products.Dtos;
 
 namespace HC.WeChat.ShopEvaluations
 {
@@ -33,18 +36,23 @@ namespace HC.WeChat.ShopEvaluations
         private readonly IShopEvaluationManager _shopevaluationManager;
         private readonly IRepository<PurchaseRecord, Guid> _purchaserecordRepository;
         private readonly IRepository<WeChatUser, Guid> _wechatuserRepository;
+        private readonly IRepository<Product, Guid> _productRepository;
+
+
         /// <summary>
         /// 构造函数
         /// </summary>
         public ShopEvaluationAppService(IRepository<ShopEvaluation, Guid> shopevaluationRepository
       , IShopEvaluationManager shopevaluationManager, IRepository<PurchaseRecord, Guid> purchaserecordRepository,
-            IRepository<WeChatUser, Guid> wechatuserRepository
+            IRepository<WeChatUser, Guid> wechatuserRepository, IRepository<Product, Guid> productRepository
+
         )
         {
             _shopevaluationRepository = shopevaluationRepository;
             _shopevaluationManager = shopevaluationManager;
             _purchaserecordRepository = purchaserecordRepository;
             _wechatuserRepository = wechatuserRepository;
+            _productRepository = productRepository;
         }
 
         /// <summary>
@@ -246,6 +254,56 @@ namespace HC.WeChat.ShopEvaluations
 
         }
 
+        /// <summary>
+        /// 微信根据openId获取当前用户评价
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="openId"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task<List<PurchaseRecordListDto>> GetWXNotEvaluationByIdAsync(int? tenantId, string openId)
+        {
+            using (CurrentUnitOfWork.SetTenantId(tenantId))
+            {
+                var records = from pr in _purchaserecordRepository.GetAll().Where(p => p.OpenId == openId)
+                              select new PurchaseRecordListDto()
+                              {
+                                  Id = pr.Id,
+                                  ShopName =pr.ShopName,
+                                  ShopId = pr.ShopId,
+                                  ProductId = pr.ProductId
+                              };
+                var products = from p in _productRepository.GetAll()
+                               select new ProductListDto()
+                               {
+                                   Id = p.Id,
+                                   PhotoUrl = p.PhotoUrl
+                               };
+                var evaluation = from e in _shopevaluationRepository.GetAll().Where(e => e.OpenId == openId)
+                                 select new ShopEvaluationListDto()
+                                 {
+                                     PurchaseRecordId = e.PurchaseRecordId
+                                 };
+                var entity = from pr in records
+                             join p in products on pr.ProductId equals p.Id
+                             select new PurchaseRecordListDto()
+                             {
+                                 Id = pr.Id,
+                                 CreationTime = pr.CreationTime,
+                                 OpenId = pr.OpenId,
+                                 ShopName = pr.ShopName,
+                                 Specification = pr.Specification,
+                                 Quantity = pr.Quantity,
+                                 ProductId = pr.ProductId,
+                                 PhotoUrl = p.PhotoUrl
+                             };
+
+                var result = await entity.OrderByDescending(v => v.CreationTime).ToListAsync();
+                return result;
+            }
+        }
     }
 }
 

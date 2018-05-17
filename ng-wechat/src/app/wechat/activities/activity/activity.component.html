@@ -8,7 +8,7 @@
         </div>
         <weui-infiniteloader (loadmore)="onLoadMore($event)" #comp>
             <div class="weui-panel__bd">
-                <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg" *ngFor="let item of activity" (click)="goDetailActivity(item.id)">
+                <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg" *ngFor="let item of activityList" (click)="goDetailActivity(item.id)">
                     <div class="weui-media-box__hd">
                         <img class="weui-media-box__thumb" src="{{item.coverPhoto | hostUrl}}" alt="">
                     </div>

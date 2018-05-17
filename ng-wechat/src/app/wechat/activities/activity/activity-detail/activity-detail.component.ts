@@ -16,7 +16,7 @@ import { ActivatedRoute } from '@angular/router';
     encapsulation: ViewEncapsulation.None
 })
 export class ActivityDetailComponent extends AppComponentBase implements OnInit {
-    activity: Article;
+    activity: Article = new Article();
     id: string = this.route.snapshot.params['id'];
     constructor(injector: Injector, private router: Router,
         private articleService: ArticleService,

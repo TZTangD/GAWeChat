@@ -372,7 +372,6 @@ namespace HC.WeChat.PurchaseRecords
                              {
                                  Id = pr.Id,
                                  CreationTime = pr.CreationTime,
-                                 Integral = pr.Integral,
                                  OpenId = pr.OpenId,
                                  ShopName = pr.ShopName,
                                  Specification =pr.Specification,
@@ -399,7 +398,25 @@ namespace HC.WeChat.PurchaseRecords
                                  ProductId = pr.ProductId,
                                  PhotoUrl = p.PhotoUrl
                              };
-                return await entity.OrderByDescending(v => v.CreationTime).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+                var query2 =  entity.Select(e => e.ProductId);
+                var query3 =  await entity.Select(e => e.ProductId)
+                        .Except(query2).ToListAsync();
+                var entity2 = from p in query3
+                              join pr in entity on p equals pr.Id
+                             select new PurchaseRecordListDto()
+                             {
+                                 Id = pr.Id,
+                                 CreationTime = pr.CreationTime,
+                                 Integral = pr.Integral,
+                                 OpenId = pr.OpenId,
+                                 ShopName = pr.ShopName,
+                                 Specification = pr.Specification,
+                                 Quantity = pr.Quantity,
+                                 ProductId = pr.ProductId,
+                                 PhotoUrl = pr.PhotoUrl
+                             };
+                var result =  entity2.OrderByDescending(v => v.CreationTime).Skip((pageIndex - 1) * pageSize).Take(pageSize);
+                return result.ToList();
             }
         }
     }

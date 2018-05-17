@@ -1,22 +1,23 @@
 import { Component, ViewEncapsulation, OnInit, Injector, ViewChild } from '@angular/core';
 import { AppComponentBase } from '../../components/app-component-base';
-import { PageModel, WechatUser, PurchaseRecord } from '../../../services/model';
+import { PageModel, WechatUser, ShopEvaluation, PurchaseRecord } from '../../../services/model';
 import { Router } from '@angular/router';
-import { PurchaserecordService, AppConsts } from '../../../services';
 import { InfiniteLoaderComponent } from 'ngx-weui';
 import { ActivatedRoute } from '@angular/router';
+import { ShopEvaluationService, PurchaserecordService } from '../../../services';
 
 @Component({
     moduleId: module.id,
-    selector: 'purchaserecord',
-    templateUrl: 'purchaserecord.component.html',
-    styleUrls: ['purchaserecord.component.scss'],
-    encapsulation: ViewEncapsulation.None
+    selector: 'shopevaluation',
+    templateUrl: 'shopevaluation.component.html',
+    styleUrls: ['shopevaluation.component.scss']
 })
-export class PurchaserecordComponent extends AppComponentBase implements OnInit {
+
+export class ShopEvaluationComponent extends AppComponentBase implements OnInit {
     pageModel: PageModel = new PageModel(); // 分页信息
     user: WechatUser;
     purchaseRecordList: PurchaseRecord[] = [];
+    // shopEvaluationList: ShopEvaluation[] = [];
     openId: string = this.route.snapshot.params['openId'];
 
     constructor(injector: Injector, private purchaserecordService: PurchaserecordService, private route: ActivatedRoute, private router: Router) {
@@ -36,13 +37,8 @@ export class PurchaserecordComponent extends AppComponentBase implements OnInit 
             params.tenantId = this.settingsService.tenantId;
         }
         params.openId = this.openId;
-        params.pageIndex = this.pageModel.pageIndex;
-        params.pageSize = this.pageModel.pageSize;
-        this.purchaserecordService.GetPurchaseRecordById(params).subscribe(result => {
-            this.purchaseRecordList.push(...result);
-            if (result && result.length < this.pageModel.pageSize) {
-                this.pageModel.isLast = true;
-            }
+        this.purchaserecordService.GetPurchaseRecordById2(params).subscribe(result => {
+            this.purchaseRecordList = result;
         });
     }
 }

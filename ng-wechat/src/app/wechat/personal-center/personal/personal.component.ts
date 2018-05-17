@@ -44,4 +44,7 @@ export class PersonalComponent extends AppComponentBase implements OnInit {
     goPurchaseRecord(openId: string) {
         this.router.navigate(['/purchaserecords/purchaserecord', { openId: openId }]);
     }
+    goShopEvaluation(openId: string) {
+        this.router.navigate(['/shopevaluations/shopevaluation', { openId: openId }]);
+    }
 } 

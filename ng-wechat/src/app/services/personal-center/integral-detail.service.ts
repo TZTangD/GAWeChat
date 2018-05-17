@@ -19,8 +19,6 @@ export class IntegralDetailService {
 
     GetIntegralDetailById(params: any): Observable<IntegralDetail[]> {
         return this.http.get('/api/services/app/IntegralDetail/GetWXPagedIntegralDetailAsync', params).map(data => {
-            console.log(data);
-            console.log(data.result)
             if (data.result) {
                 return IntegralDetail.fromJSArray(data.result);
             } else {

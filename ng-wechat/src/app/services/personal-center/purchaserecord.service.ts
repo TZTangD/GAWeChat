@@ -19,8 +19,15 @@ export class PurchaserecordService {
     GetPurchaseRecordById(params: any): Observable<PurchaseRecord[]> {
         return this.http.get('/api/services/app/PurchaseRecord/GetWXPagedPurchaseRecordAsync', params).map(data => {
             if (data.result) {
-                console.log(data);
-                console.log(data.result)
+                return PurchaseRecord.fromJSArray(data.result);
+            } else {
+                return null;
+            }
+        });
+    }
+    GetPurchaseRecordById2(params: any): Observable<PurchaseRecord[]> {
+        return this.http.get('/api/services/app/ShopProduct/GetWXNotEvaluationByIdAsync', params).map(data => {
+            if (data.result) {
                 return PurchaseRecord.fromJSArray(data.result);
             } else {
                 return null;

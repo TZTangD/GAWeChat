@@ -5,6 +5,7 @@ using Abp.Application.Services.Dto;
 using HC.WeChat.ShopEvaluations.Dtos;
 using HC.WeChat.ShopEvaluations;
 using System;
+using HC.WeChat.PurchaseRecords.Dtos;
 
 namespace HC.WeChat.ShopEvaluations
 {
@@ -63,5 +64,6 @@ namespace HC.WeChat.ShopEvaluations
         /// <param name="input"></param>
         /// <returns></returns>
         Task<PagedResultDto<ShopEvaluationListDto>> GetPagedShopEvaluationsByPurchaseRecord(GetShopEvaluationsInput input);
+        Task<List<PurchaseRecordListDto>> GetWXNotEvaluationByIdAsync(int? tenantId, string openId);
     }
 }

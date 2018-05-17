@@ -14,7 +14,7 @@ import { timer } from 'rxjs/observable/timer';
 })
 
 export class ArticleComponent extends AppComponentBase implements OnInit {
-    activity: Article[] = [];
+    activityList: Article[] = [];
     pageModel: PageModel = new PageModel(); // 分页信息
     @ViewChild(InfiniteLoaderComponent) il;
 
@@ -49,7 +49,7 @@ export class ArticleComponent extends AppComponentBase implements OnInit {
         params.pageIndex = this.pageModel.pageIndex;
         params.pageSize = this.pageModel.pageSize;
         this.articleService.GetPagedArticles(params).subscribe(result => {
-            this.activity.push(...result);
+            this.activityList.push(...result);
             if (result && result.length < this.pageModel.pageSize) {
                 this.pageModel.isLast = true;
             }
