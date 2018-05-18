@@ -1,9 +1,9 @@
 import { Component, ViewEncapsulation, Injector, OnInit } from '@angular/core';
 import { AppComponentBase } from '../../components/app-component-base';
 import { Observable } from 'rxjs';
-import { ShopService } from '../../../services';
-import { ShopProduct } from '../../../services/model';
-import { switchMap } from 'rxjs/operators';
+import { ShopService, AppConsts } from '../../../services';
+import { ShopProduct, Shop } from '../../../services/model';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'wechat-goods',
@@ -12,28 +12,28 @@ import { switchMap } from 'rxjs/operators';
     encapsulation: ViewEncapsulation.None
 })
 export class GoodsComponent extends AppComponentBase implements OnInit {
-
-    items: Observable<string[]>;
     value: string;
-    goodes: ShopProduct[] = [];
+    goodes: Observable<ShopProduct[]>;
+    shops: Shop[];
+    sgoods: ShopProduct;
+    lineDesc: string = '搜索并选择特色商品';
+    hostUrl: string = AppConsts.remoteServiceBaseUrl;
 
     constructor(injector: Injector,
-        private shopService: ShopService) {
+        private shopService: ShopService,
+        private router: Router) {
         super(injector);
     }
 
     ngOnInit() {
-        this.commonService.config(switchMap<string, ShopProduct[]>(word => {
-            this.shopService.GetRareProductByKey({ tenantId: this.settingsService.tenantId, key: word }).subscribe(res => {
-                this.goodes = res;
-            });
-            return null;
-        }));
+
     }
 
     onSearch(term: string) {
         this.value = term;
-        this.commonService.search(this.value);
+        if (term) {
+            this.goodes = this.shopService.GetRareProductByKeyAsync({ tenantId: this.settingsService.tenantId, key: term });
+        }
     }
 
     onCancel() {
@@ -44,7 +44,18 @@ export class GoodsComponent extends AppComponentBase implements OnInit {
         console.log('onCancel');
     }
 
-    onSubmit(value: string) {
-        console.log('onSubmit', value);
+    onSelectGoods(gds: ShopProduct) {
+        this.value = '';
+        this.sgoods = gds;
+        this.shopService.GetShopListByGoodsIdAsync({tenantId: this.settingsService.tenantId, goodsId: gds.id}).subscribe(res =>{
+            this.shops = res;
+            if(!this.shops || this.shops.length == 0){
+                this.lineDesc = '没有售卖【'+ this.sgoods.specification +'】的店铺';
+            }
+        });
+    }
+
+    goShop(id) {
+        this.router.navigate(['/shops/shop', { shopId: id }]);
     }
 } 

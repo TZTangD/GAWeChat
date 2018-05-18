@@ -77,5 +77,19 @@ namespace HC.WeChat.Retailers
         /// <param name="code"></param>
         /// <returns></returns>
         bool CheckName(string code, Guid? id);
+
+        /// <summary>
+        /// 分页获取零售户信息
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        Task<List<RetailerListDto>> GetAllRetailByPageAsync(GetRetailersWeChatInput input);
+
+        /// <summary>
+        /// 通过指定id获取RetailerListDto信息
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        Task<RetailerListDto> GetRetailerByIdDtoForWeChatAsync(Guid input);
     }
 }

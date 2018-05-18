@@ -2,16 +2,20 @@
 import { NgModule } from '@angular/core';
 
 // This Module's Components
-import { CustomerSearchComponent } from './customer-search.component';
-import { RouterModule, Router, Routes } from '@angular/router';
+import { AccountLevelComponent } from './account-level.component';
+import { Routes, RouterModule } from '@angular/router';
 import { SharedModule } from '../../../shared/shared.module';
 import { AngularSplitModule } from 'angular-split';
 import { ComponentsModule } from '../../components/components.module';
-import { CustomerService } from '../../../services';
-const COMPONENTS = [CustomerSearchComponent];
-const routes:Routes=[
-    {path:'customer-search',component:CustomerSearchComponent}
-]
+import { WechatUserService, CustomerService } from '../../../services';
+
+const COMPONENTS=[
+    AccountLevelComponent
+];
+ const routes:Routes=[
+    {path:'account-level',component:AccountLevelComponent}
+
+ ];
 @NgModule({
     imports: [
         SharedModule,
@@ -20,15 +24,16 @@ const routes:Routes=[
         RouterModule.forChild(routes)
     ],
     declarations: [
-        ...COMPONENTS
+        COMPONENTS
     ],
     exports: [
-        ...COMPONENTS
+        COMPONENTS
     ],
     providers:[
+        WechatUserService,
         CustomerService,
     ]
 })
-export class CustomerSearchModule {
+export class AccountLevelModule {
 
 }

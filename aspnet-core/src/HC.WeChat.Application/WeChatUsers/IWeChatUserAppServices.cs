@@ -82,5 +82,13 @@ namespace HC.WeChat.WeChatUsers
         /// 获取店员信息
         /// </summary>
         Task<PagedResultDto<WeChatUserListDto>> GetPagedShopWeChatUsers(GetShopWeChatUsersInput input);
+
+        /// <summary>
+        /// 获取单个微信用户
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="tenantId"></param>
+        /// <returns></returns>
+        Task<WeChatUserListDto> GetSingleWeChatUser(Guid userId, int? tenantId);
     }
 }

@@ -426,6 +426,22 @@ namespace HC.WeChat.WeChatUsers
                 return entity.MapTo<WeChatUserListDto>();
             }
         }
+
+        /// <summary>
+        /// 获取单个微信用户
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="tenantId"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task<WeChatUserListDto> GetSingleWeChatUser(Guid userId, int? tenantId)
+        {
+            using (CurrentUnitOfWork.SetTenantId(tenantId))
+            {
+                var entity = await _wechatuserRepository.GetAll().Where(w => w.UserId == userId).SingleOrDefaultAsync();
+                return entity.MapTo<WeChatUserListDto>();
+            }
+        }
     }
 }
 

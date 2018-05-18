@@ -55,13 +55,13 @@ namespace HC.WeChat.Retailers
                 .WhereIf(!string.IsNullOrEmpty(input.Name), r => r.Name.Contains(input.Name) || r.Code.Contains(input.Name))
                 .WhereIf(input.Scale.HasValue, r => r.Scale == input.Scale)
                 .WhereIf(input.Markets.HasValue, r => r.MarketType == input.Markets)
-                .WhereIf(mid.HasValue,r=>r.EmployeeId==mid);
+                .WhereIf(mid.HasValue, r => r.EmployeeId == mid);
 
             //TODO:根据传入的参数添加过滤条件
             var retailerCount = await query.CountAsync();
 
             var retailers = await query
-                .OrderByDescending(r=>r.CreationTime)
+                .OrderByDescending(r => r.CreationTime)
                 .PageBy(input)
                 .ToListAsync();
 
@@ -216,7 +216,7 @@ namespace HC.WeChat.Retailers
         /// <returns></returns>
         public async Task<RetailerListDto> GetRetailerByIdDtoAsync(EntityDto<Guid> input)
         {
-            var entity =await _retailerRepository.GetAll().Where(r => r.Id == input.Id).FirstOrDefaultAsync();
+            var entity = await _retailerRepository.GetAll().Where(r => r.Id == input.Id).FirstOrDefaultAsync();
             return entity.MapTo<RetailerListDto>();
         }
 
@@ -224,9 +224,9 @@ namespace HC.WeChat.Retailers
         /// 检查零售户编码是否可用
         /// </summary>
         /// <returns></returns>
-        public bool CheckName(string code,Guid?id)
+        public bool CheckName(string code, Guid? id)
         {
-            var count = _retailerRepository.GetAll().Where(r => r.Code==code).Count();
+            var count = _retailerRepository.GetAll().Where(r => r.Code == code).Count();
             var entity = _retailerRepository.GetAll().Where(e => e.Id == id).FirstOrDefault();
             if (entity != null)
             {
@@ -248,6 +248,49 @@ namespace HC.WeChat.Retailers
                 return count <= 0;
             }
         }
+
+        #region 微信
+
+        /// <summary>
+        /// 分页获取零售户信息
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task<List<RetailerListDto>> GetAllRetailByPageAsync(GetRetailersWeChatInput input)
+        {
+            using (CurrentUnitOfWork.SetTenantId(input.tenantId))
+            {
+                var retailList = new List<RetailerListDto>();
+                if (input.IsMore)
+                {
+                    var retailListQ = await _retailerRepository.GetAll().Where(r => r.Telephone.Contains(input.Filter) || r.LicenseKey.Contains(input.Filter) || r.Name.Contains(input.Filter))
+                   .OrderBy(r => r.Name).Skip(input.SkipCount).Take(input.MaxResultCount).ToListAsync();
+                    retailList = retailListQ.MapTo<List<RetailerListDto>>();
+                }
+                else
+                {
+                    var retailListQ = await _retailerRepository.GetAll().Where(r => r.Telephone.Contains(input.Filter) || r.LicenseKey.Contains(input.Filter) || r.Name.Contains(input.Filter))
+                    .OrderBy(r => r.Name).Skip(0).Take(5).ToListAsync();
+                    retailList = retailListQ.MapTo<List<RetailerListDto>>();
+                }
+                return retailList;
+            }
+        }
+
+        /// <summary>
+        /// 通过指定id获取RetailerListDto信息
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task<RetailerListDto> GetRetailerByIdDtoForWeChatAsync(Guid id)
+        {
+            var entity = await _retailerRepository.GetAll().Where(r => r.Id == id).FirstOrDefaultAsync();
+            return entity.MapTo<RetailerListDto>();
+        }
+
+        #endregion
 
     }
 }

@@ -46,7 +46,7 @@ export class FeedbackComponent extends AppComponentBase implements OnInit {
             this.loading = false;
             if (data && data.code === 0) {
                 // this.srv['success']('提交成功');
-                this.router.navigate(['/feedbacks/feedback-success']);
+                this.router.navigate(['/feedbacks/feedback-success',{successType:'feedback'}]);
             } else {
                 this.srv['warn']('提交失败，请重试');
             }

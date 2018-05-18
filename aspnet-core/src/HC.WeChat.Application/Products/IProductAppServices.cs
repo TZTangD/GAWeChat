@@ -73,7 +73,7 @@ namespace HC.WeChat.Products
         /// 根据关键字搜索特色商品
         /// </summary>
         /// <returns></returns>
-        Task<List<RareProductSearchDto>> GetRareProductByKey(int? tenantId, string key);
+        Task<List<RareProductSearchDto>> GetRareProductByKeyAsync(int? tenantId, string key);
 
         /// <summary>
         /// 通过指定id获取ProductListDto信息
