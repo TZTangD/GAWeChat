@@ -37,10 +37,11 @@ namespace HC.WeChat.Retailers.Dtos
     public class GetRetailersWeChatInput : PagedAndSortedInputDto, IShouldNormalize
     {
         /// <summary>
-        /// 编码或电话
+        /// 专卖号或电话或姓名
         /// </summary>
-        public string CodeOrPhone { get; set; }
+        public string Filter { get; set; }
         public int? tenantId { get; set; }
+        public bool IsMore { get; set; }
         public void Normalize()
         {
             if (string.IsNullOrEmpty(Sorting))

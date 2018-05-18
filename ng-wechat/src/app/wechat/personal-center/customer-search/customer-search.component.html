@@ -1,19 +1,7 @@
-<!--component html goes here -->
-<Page [ngClass]="'infiniteloader'" [title]="'零售户信息'" [subTitle]="" [spacing]="false" [noBottom]="true">
+<Page [ngClass]="'infiniteloader'" [showTitle]="false" [subTitle]="" [spacing]="false" [noBottom]="true">
 
-    <!-- <div class="weui-cells__title">List with 50 Max</div> -->
-
-    <div class="weui-cells search">
-        <div class="weui-cell" >
-            <div class="weui-cell__bd">
-                <input class="weui-input" type="text" [(ngModel)]="search.codeOrPhone" placeholder="请输入编码或电话" name="title" weui-input="title" weui-required>
-            </div>
-            <div class="weui-cell__ft">
-                <button weui-button class="weui-vcode-img " [weui-mini]="'mini'" (click)="getCustomer(true)">搜索</button>
-                <!-- <i  class="weui-vcode-img weui-icon-search"></i> -->
-            </div>
-        </div>
-    </div>
+    <weui-searchbar (search)="getCustomer(true,$event)" (cancel)="onCancel()" placeholder="请输入姓名、专卖号或电话" (clear)="onClear()"
+        [debounceTime]="500"></weui-searchbar>
     <div class="weui-cells__title">
         <a class="weui-cell weui-cells__title">
             <div class="weui-cell__hd">姓名</div>
@@ -21,14 +9,39 @@
             <div class="weui-cell__ft">编码</div>
         </a>
     </div>
-    <div class="weui-cells">
+    <div class="weui-cells" *ngIf="isMore">
+
         <weui-infiniteloader (loadmore)="onLoadMore($event)" #comp>
-            <a *ngFor="let i of customers" class="weui-cell weui-cell_access" (click)="goCustomerLeavel()">
+            <a *ngFor="let i of customers" class="weui-cell weui-cell_access" (click)="goCustomerLeavel(i)">
                 <div class="weui-cell__hd">{{i.name}}</div>
                 <div class="weui-cell__bd" style="text-align:center;">{{i.telephone}}</div>
-                <div class="weui-cell__ft">{{i.code}}</div>
+                <div class="weui-cell__ft">{{i.licenseKey}}</div>
             </a>
+            <!-- <a class="weui-panel__ft" *ngIf="showMore" (click)="aboutMore()">
+                <div class="weui-cell weui-cell_access weui-cell_link">
+                    <div class="weui-cell__bd">更多>>></div>
+                    <div class="weui-cell__ft"></div>
+                </div>
+            </a> -->
         </weui-infiniteloader>
     </div>
-    <!-- <weui-button *ngIf="restartBtn" (click)="restart()">重新开始</weui-button> -->
+
+    <div class="weui-panel" style="margin-top: 0px;" *ngIf="!isMore">
+        <a *ngFor="let i of customers" class="weui-cell weui-cell_access" (click)="goCustomerLeavel(i)">
+            <div class="weui-cell__hd">{{i.name}}</div>
+            <div class="weui-cell__bd" style="text-align:center;">{{i.telephone}}</div>
+            <div class="weui-cell__ft">{{i.licenseKey}}</div>
+        </a>
+        <!-- <ng-template #loading>
+            <div class="weui-panel__bd">
+                <div class="weui-media-box weui-media-box_text">Loading...</div>
+            </div>
+        </ng-template> -->
+        <a class="weui-panel__ft" *ngIf="showMore" (click)="aboutMore()">
+            <div class="weui-cell weui-cell_access weui-cell_link">
+                <div class="weui-cell__bd">更多>>></div>
+                <div class="weui-cell__ft"></div>
+            </div>
+        </a>
+    </div>
 </Page>

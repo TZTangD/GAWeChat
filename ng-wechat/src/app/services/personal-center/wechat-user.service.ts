@@ -47,5 +47,11 @@ export class WechatUserService {
       return result;
     });
   }
+
+  getSingleWeChatUser(params:any):Observable<WechatUser>{
+    return this.http.get('/api/services/app/WeChatUser/GetSingleWeChatUser',params).map(data=>{
+      return WechatUser.fromJS(data);
+    })
+  }
   
 }

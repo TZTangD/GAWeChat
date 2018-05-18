@@ -20,9 +20,10 @@
             <div class="weui-cell__ft">{{user.userTypeName}}</div>
         </div>
     </div>
-    <div class="weui-cells__title">意见反馈信息</div>
+
     <form #f="ngForm" (ngSubmit)="save()">
-        <div class="weui-cells weui-cells_form">
+        <div class="weui-cells__title">意见反馈信息</div>
+        <div class="weui-cells">
             <div class="weui-cell">
                 <div class="weui-cell__hd">
                     <label class="weui-label">标题</label>
@@ -33,8 +34,8 @@
             </div>
             <div class="weui-cell">
                 <div class="weui-cell__bd">
-                    <textarea class="weui-textarea" placeholder="内容" rows="4" [(ngModel)]="feedback.content" weui-input="content" name="content" weui-textarea weui-cn="2"
-                        maxlength="500" weui-required></textarea>
+                    <textarea class="weui-textarea" placeholder="内容" rows="4" [(ngModel)]="feedback.content" weui-input="content" name="content"
+                        weui-textarea weui-cn="2" maxlength="500" weui-required></textarea>
                 </div>
             </div>
             <div class="weui-cell">

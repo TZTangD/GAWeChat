@@ -17,7 +17,11 @@ export class CustomerSearchComponent extends AppComponentBase implements OnInit 
     search: any = [];
     customers: Customers[] = [];
     isLastPage = false;
-
+    //是否显示更多组件
+    showMore = false;
+    //是否查询所有符合条件的
+    isMore = false;
+    test = false;
     constructor(injector: Injector, private router: Router, private customerService: CustomerService) {
         super(injector);
     }
@@ -26,29 +30,9 @@ export class CustomerSearchComponent extends AppComponentBase implements OnInit 
         // this.getCustomer(false);
     }
 
-    // items: any[] = Array(20)
-    //     .fill(0)
-    //     .map((v: any, i: number) => i);
-
-
     onLoadMore(comp: InfiniteLoaderComponent) {
-        // this.restartBtn = false;
-        // timer(1500).subscribe(() => {
-        //     this.items.push(
-        //         ...Array(10)
-        //             .fill(this.items.length)
-        //             .map((v, i) => v + i),
-        //     );
-
-        //     if (this.items.length >= 50) {
-        //         this.restartBtn = true;
-        //         comp.setFinished();
-        //         return;
-        //     }
-        //     comp.resolveLoading();
-        // });
         this.query.pageIndex++;
-        this.getCustomer(false);
+        this.getCustomer(false,this.search.filter);
         if (this.isLastPage) {
             comp.setFinished();
             return;
@@ -56,31 +40,53 @@ export class CustomerSearchComponent extends AppComponentBase implements OnInit 
         comp.resolveLoading();
 
     }
-
-
-    getCustomer(initialize:boolean) {
-        if(initialize){
+    getCustomer(initialize: boolean, filter?: string) {
+        //初始查询
+        if (initialize) {
             this.query.pageIndex = 1;
-            this.customers=[];
+            this.customers = [];
+            this.showMore = false;
+            this.isMore = false;
         }
         this.search.tenantId = this.settingsService.tenantId;
-        this.search.skipCount = this.query.skipCount();
         this.search.pageSize = this.query.pageSize;
+        this.search.skipCount = this.query.skipCount();
+        this.search.filter = filter;
+        this.search.isMore = this.isMore;
         this.customerService.getAll(this.search).subscribe(data => {
-            if(data){
+            if (data) {
                 this.customers.push(...data);
+            }
+            if(data.length>0){
+                this.showMore = this.isMore ? false : true;
+            }else{
+                this.showMore=false;
             }
             if (data && data.length < this.query.pageSize) {
                 this.isLastPage = true;
             }
+            
         });
     }
+    aboutMore() {
+        this.showMore = false;
+        this.isMore = true;
+        this.query.pageIndex = 1;
+        this.customers = [];
+        this.getCustomer(false,this.search.filter);
+    }
+    onCancel() {
+        console.log('onCancel');
+    }
 
+    onClear() {
+        console.log('onCancel');
+    }
 
     /**
      * 前往台账、档级
      */
-    goCustomerLeavel() {
-        this.router.navigate(['']);
+    goCustomerLeavel(customer: Customers) {
+        this.router.navigate(['/account-levels/account-level', { id: customer.id }]);
     }
 }

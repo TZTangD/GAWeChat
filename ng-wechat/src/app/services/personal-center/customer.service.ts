@@ -17,12 +17,17 @@ import { Customers } from '../model';
 export class CustomerService {
     constructor(private http: HttpClient) { }
     getAll(input: any): Observable<Customers[]> {
-        return this.http.get('/api/services/app/Retailer/GetAllRetailByPage', input).map(data => {
+        return this.http.get('/api/services/app/Retailer/GetAllRetailByPageAsync', input).map(data => {
             if (data.result) {
                 return Customers.fromJSArray(data.result);
             } else {
                 null;
             }
+        });
+    }
+    getSingle(params:any):Observable<Customers>{
+        return this.http.get('/api/services/app/Retailer/GetRetailerByIdDtoForWeChatAsync',params).map(data=>{
+            return data.result;
         });
     }
 }

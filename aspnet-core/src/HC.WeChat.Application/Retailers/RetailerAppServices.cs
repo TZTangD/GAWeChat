@@ -257,17 +257,39 @@ namespace HC.WeChat.Retailers
         /// <param name="input"></param>
         /// <returns></returns>
         [AbpAllowAnonymous]
-        public async Task<List<RetailerListDto>> GetAllRetailByPage(GetRetailersWeChatInput input)
+        public async Task<List<RetailerListDto>> GetAllRetailByPageAsync(GetRetailersWeChatInput input)
         {
             using (CurrentUnitOfWork.SetTenantId(input.tenantId))
             {
-                var retailList =await _retailerRepository.GetAll().WhereIf(!string.IsNullOrEmpty(input.CodeOrPhone), r => r.Telephone.Contains(input.CodeOrPhone) || r.Code.Contains(input.CodeOrPhone))
-                    .OrderBy(r=>r.Name).Skip(input.SkipCount).Take(input.MaxResultCount)
-                    .ToListAsync();
-                var result = retailList.MapTo<List<RetailerListDto>>();
-                return result;
+                var retailList = new List<RetailerListDto>();
+                if (input.IsMore)
+                {
+                    var retailListQ = await _retailerRepository.GetAll().Where(r => r.Telephone.Contains(input.Filter) || r.LicenseKey.Contains(input.Filter) || r.Name.Contains(input.Filter))
+                   .OrderBy(r => r.Name).Skip(input.SkipCount).Take(input.MaxResultCount).ToListAsync();
+                    retailList = retailListQ.MapTo<List<RetailerListDto>>();
+                }
+                else
+                {
+                    var retailListQ = await _retailerRepository.GetAll().Where(r => r.Telephone.Contains(input.Filter) || r.LicenseKey.Contains(input.Filter) || r.Name.Contains(input.Filter))
+                    .OrderBy(r => r.Name).Skip(0).Take(5).ToListAsync();
+                    retailList = retailListQ.MapTo<List<RetailerListDto>>();
+                }
+                return retailList;
             }
         }
+
+        /// <summary>
+        /// 通过指定id获取RetailerListDto信息
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task<RetailerListDto> GetRetailerByIdDtoForWeChatAsync(Guid id)
+        {
+            var entity = await _retailerRepository.GetAll().Where(r => r.Id == id).FirstOrDefaultAsync();
+            return entity.MapTo<RetailerListDto>();
+        }
+
         #endregion
 
     }

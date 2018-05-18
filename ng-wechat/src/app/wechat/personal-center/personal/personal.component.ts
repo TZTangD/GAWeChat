@@ -52,9 +52,9 @@ export class PersonalComponent extends AppComponentBase implements OnInit {
     goArchivalLevel() {
 
         //2：内部员工，1：零售用户
-        if (this.user.userType = 2) {
+        if (this.user.userType = UserType.Staff) {
             this.router.navigate(['/customer-searchs/customer-search']);
-        } else if (this.user.userType = 1) {
+        } else if (this.user.userType = UserType.Retailer) {
             this.router.navigate(['/customer-searchs/customer-search']);
         }
     }
