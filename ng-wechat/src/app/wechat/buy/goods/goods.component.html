@@ -8,7 +8,7 @@
     </div>
     <weui-searchbar (search)="onSearch($event)" placeholder="输入商品名称" (cancel)="onCancel()" (clear)="onClear()" (submit)="onSubmit($event)"></weui-searchbar>
     <div class="weui-panel" style="margin-top: 0px;" *ngIf="value">
-        <div class="weui-panel__hd">查询商品【{{value}}】</div>
+        <div class="weui-panel__hd">查找包含【{{value}}】的商品</div>
         <div class="weui-panel__bd" *ngIf="goodes | async; let goodes; else loading">
             <div class="weui-cell weui-cell_access" *ngFor="let item of goodes">
                 <div class="weui-cell__bd weui-cell_primary">
@@ -23,7 +23,7 @@
             </div>
         </ng-template>
     </div>
-    <div class="weui-cells__title">包含【{{value}}】的店铺列表</div>
+    <div class="weui-cells__title">售卖【{{value}}】的店铺列表</div>
     <div class="weui-cells" *ngIf="shops && shops.length > 0">
         <a class="weui-cell weui-cell_access" *ngFor="let s of shops" (click)="goShop(s.id)">
             <div class="weui-cell__hd weui-cell_img" [ngStyle]="{'background-image':'url('+ hostUrl + s.coverPhoto +')'}">
