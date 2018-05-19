@@ -52,10 +52,10 @@ namespace HC.WeChat.Shops.Dtos
         /// </summary>
         [StringLength(100)]
         public string Evaluation { get; set; }
-        public decimal? Longitude { get; set; }
-        public decimal? Latitude { get; set; }
-        public decimal? QqLongitude { get; set; }
-        public decimal? QqLatitude { get; set; }
+        public double? Longitude { get; set; }
+        public double? Latitude { get; set; }
+        public double? QqLongitude { get; set; }
+        public double? QqLatitude { get; set; }
         public ShopAuditStatus? Status { get; set; }
         public DateTime? AuditTime { get; set; }
 

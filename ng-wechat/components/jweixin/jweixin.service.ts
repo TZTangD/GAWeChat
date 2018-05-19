@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { LoaderService } from './../utils/loader.service';
 
+declare var wx: any;
+declare var qq: any;
 @Injectable()
 export class JWeiXinService {
 

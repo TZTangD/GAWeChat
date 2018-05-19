@@ -1748,8 +1748,8 @@ namespace HC.WeChat.Migrations
                 b.Property<int?>("SaleTotal");
                 b.Property<int?>("ReadTotal");
                 b.Property<string>("Evaluation").HasMaxLength(100);
-                b.Property<decimal?>("Longitude").HasColumnType("decimal(11,8)");
-                b.Property<decimal?>("Latitude").HasColumnType("decimal(11,8)");
+                b.Property<double?>("Longitude").HasColumnType("decimal(11,8)");
+                b.Property<double?>("Latitude").HasColumnType("decimal(11,8)");
                 b.Property<int?>("Status");
                 b.Property<DateTime?>("AuditTime");
                 b.Property<DateTime>("CreationTime").IsRequired();

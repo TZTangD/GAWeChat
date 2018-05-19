@@ -19,10 +19,10 @@ namespace HC.WeChat.Shops.Dtos
         public int? SaleTotal { get; set; }
         public int? ReadTotal { get; set; }
         public string Evaluation { get; set; }
-        public decimal? Longitude { get; set; }
-        public decimal? Latitude { get; set; }
-        public decimal? QqLongitude { get; set; }
-        public decimal? QqLatitude { get; set; }
+        public double? Longitude { get; set; }
+        public double? Latitude { get; set; }
+        public double? QqLongitude { get; set; }
+        public double? QqLatitude { get; set; }
         public ShopAuditStatus? Status { get; set; }
         public DateTime? AuditTime { get; set; }
         public DateTime CreationTime { get; set; }
@@ -51,11 +51,11 @@ namespace HC.WeChat.Shops.Dtos
         public string Name { get; set; }
         public string Address { get; set; }
         public string CoverPhoto { get; set; }
-        public decimal? Longitude { get; set; }
-        public decimal? Latitude { get; set; }
-        public decimal? QqLongitude { get; set; }
-        public decimal? QqLatitude { get; set; }
+        public double? Longitude { get; set; }
+        public double? Latitude { get; set; }
+        public double? QqLongitude { get; set; }
+        public double? QqLatitude { get; set; }
         public string Tel { get; set; }
-        public decimal Distance { get; set; }
+        public double Distance { get; set; }
     }
 }

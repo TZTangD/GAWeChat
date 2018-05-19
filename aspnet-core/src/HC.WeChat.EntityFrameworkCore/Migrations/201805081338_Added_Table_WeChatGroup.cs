@@ -49,12 +49,12 @@ namespace HC.WeChat.Migrations
              maxLength: 500,
              nullable: true);
 
-            migrationBuilder.AddColumn<decimal?>(
+            migrationBuilder.AddColumn<double?>(
              name: "QqLongitude",
              table: "Shops",
              nullable: true);
 
-            migrationBuilder.AddColumn<decimal?>(
+            migrationBuilder.AddColumn<double?>(
             name: "QqLatitude",
             table: "Shops",
             nullable: true);
