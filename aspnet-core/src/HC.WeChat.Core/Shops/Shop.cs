@@ -65,22 +65,22 @@ namespace HC.WeChat.Shops
         /// <summary>
         /// 经度
         /// </summary>
-        public virtual decimal? Longitude { get; set; }
+        public virtual double? Longitude { get; set; }
 
         /// <summary>
         /// 纬度
         /// </summary>
-        public virtual decimal? Latitude { get; set; }
+        public virtual double? Latitude { get; set; }
 
         /// <summary>
         /// 腾讯地图经度
         /// </summary>
-        public virtual decimal? QqLongitude { get; set; }
+        public virtual double? QqLongitude { get; set; }
 
         /// <summary>
         /// 腾讯地图纬度
         /// </summary>
-        public virtual decimal? QqLatitude { get; set; }
+        public virtual double? QqLatitude { get; set; }
 
         /// <summary>
         /// 审核状态（枚举：提交申请、审核通过、审核未通过）
