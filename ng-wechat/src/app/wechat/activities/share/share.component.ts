@@ -1,11 +1,11 @@
 import {AppComponentBase} from '../../components/app-component-base';
 import {Component, Injector, OnInit, ViewEncapsulation} from '@angular/core';
 import 'rxjs/add/observable/timer';
-import {ShareService} from '../../../services/share/share.services';
 import {Router} from '@angular/router';
 import {JWeiXinService} from 'ngx-weui/jweixin';
-import {Share} from '../../../services/model/share';
 import {Observable} from 'rxjs/Observable';
+import {ArticleService} from '../../../services';
+import {Article} from '../../../services/model';
 
 @Component({
     selector: 'share',
@@ -22,12 +22,12 @@ export class ShareComponent extends AppComponentBase implements OnInit {
     _loading: boolean = false;
     _finished: boolean = false;
 
-    items: Share[] = [];
+    items: Article[] = [];
 
     constructor(injector: Injector
         , private wxService: JWeiXinService
         , private router: Router
-        , private shareService: ShareService) {
+        , private shareService: ArticleService) {
         super(injector);
     }
 
@@ -36,7 +36,6 @@ export class ShareComponent extends AppComponentBase implements OnInit {
     }
 
     // = Array(20).fill(this.pageIndex).map((v: any, i: number) => i);
-
     onLoadMore(comp: ShareComponent) {
         Observable.timer(1500).subscribe(() => {
             this.items.push(...Array(this.pageSize).fill(this.items.length).map((v, i) => v + i));
