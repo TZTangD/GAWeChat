@@ -1,0 +1,18 @@
+<Page [ngClass]="'article'" [title]="'Article'" [showTitle]="false" [spacing]="false">
+    <article class="weui-article">
+        <h1>{{mDetailsOfShare.title}}</h1>
+        <section>
+            <section>
+                <p>
+                    <img src="{{mDetailsOfShare.coverPhoto|hostUrl}}" alt="">
+                </p>
+                <p>
+                    {{mDetailsOfShare.content}}
+                </p>
+                <p>
+                    {{mDetailsOfShare.pushTime| date:'yyyy-MM-dd'}}
+                </p>
+            </section>
+        </section>
+    </article>
+</Page>

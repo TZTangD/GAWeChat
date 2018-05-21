@@ -70,4 +70,8 @@ export class ShareComponent extends AppComponentBase implements OnInit {
             this.items = res;
         });
     }
+
+    goShareDetails(id: string) {
+        this.router.navigate(['shares/share-details', {id: id}]);
+    }
 }
