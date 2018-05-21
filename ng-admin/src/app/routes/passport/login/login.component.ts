@@ -105,7 +105,7 @@ export class UserLoginComponent implements OnDestroy {
         if (environment.production)
             callback = 'https://cipchk.github.io/ng-alain/callback/' + type;
         else
-            callback = 'http://localhost:4200/callback/' + type;
+            callback = 'http://localhost:4201/callback/' + type;
         switch (type) {
             case 'auth0':
                 url = `//cipchk.auth0.com/login?client=8gcNydIDzGBYxzqV0Vm1CX_RXH-wsWo5&redirect_uri=${decodeURIComponent(callback)}`;

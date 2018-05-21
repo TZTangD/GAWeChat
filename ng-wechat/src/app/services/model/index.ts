@@ -11,4 +11,8 @@ export * from './integraldetail';
 export * from './member-config';
 export * from './configcode';
 export * from './purchaserecord';
+export * from './shopevaluation';
 export * from './customer';
+export * from './customer';
+export * from './account';
+export * from './level';

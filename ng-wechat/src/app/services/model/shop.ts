@@ -30,24 +30,24 @@ export class Shop implements IShop {
 
     init(data?: any) {
         if (data) {
-            this.id = data["id"];
-            this.name = data["name"];
-            this.address = data["address"];
-            this.desc = data["desc"];
-            this.retailerId = data["retailerId"];
-            this.coverPhoto = data["coverPhoto"];
-            this.saleTotal = data["saleTotal"];
-            this.readTotal = data["readTotal"];
-            this.evaluation = data["evaluation"];
-            this.longitude = data["longitude"];
-            this.latitude = data["latitude"];
-            this.qqLongitude = data["qqLongitude"];
-            this.qqLatitude = data["qqLatitude"];
-            this.status = data["status"];
-            this.auditTime = data["auditTime"];
-            this.creationTime = data["creationTime"];
-            this.tenantId = data["tenantId"];
-            this.tel = data["tel"];
+            data["id"] = this.id;
+            data["name"] = this.name;
+            data["address"] = this.address;
+            data["desc"] = this.desc;
+            data["retailerId"] = this.retailerId;
+            data["coverPhoto"] = this.coverPhoto;
+            data["saleTotal"] = this.saleTotal;
+            data["readTotal"] = this.readTotal;
+            data["evaluation"] = this.evaluation;
+            data["longitude"] = this.longitude;
+            data["latitude"] = this.latitude;
+            data["qqLongitude"] = this.qqLongitude;
+            data["qqLatitude"] = this.qqLatitude;
+            data["status"] = this.status;
+            data["auditTime"] = this.auditTime;
+            data["creationTime"] = this.creationTime;
+            data["tenantId"] = this.tenantId;
+            data["tel"] = this.tel;
         }
     }
 
@@ -70,24 +70,24 @@ export class Shop implements IShop {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["name"] = this.name;
-        data["address"] = this.address;
-        data["desc"] = this.desc;
-        data["retailerId"] = this.retailerId;
-        data["coverPhoto"] = this.coverPhoto;
-        data["saleTotal"] = this.saleTotal;
-        data["readTotal"] = this.readTotal;
-        data["evaluation"] = this.evaluation;
-        data["longitude"] = this.longitude;
-        data["latitude"] = this.latitude;
-        data["qqLongitude"] = this.qqLongitude;
-        data["qqLatitude"] = this.qqLatitude;
-        data["status"] = this.status;
-        data["auditTime"] = this.auditTime;
-        data["creationTime"] = this.creationTime;
-        data["tenantId"] = this.tenantId;
-        data["tel"] = this.tel;
+        this.id = data["id"];
+        this.name = data["name"];
+        this.address = data["address"];
+        this.desc = data["desc"];
+        this.retailerId = data["retailerId"];
+        this.coverPhoto = data["coverPhoto"];
+        this.saleTotal = data["saleTotal"];
+        this.readTotal = data["readTotal"];
+        this.evaluation = data["evaluation"];
+        this.longitude = data["longitude"];
+        this.latitude = data["latitude"];
+        this.qqLongitude = data["qqLongitude"];
+        this.qqLatitude = data["qqLatitude"];
+        this.status = data["status"];
+        this.auditTime = data["auditTime"];
+        this.creationTime = data["creationTime"];
+        this.tenantId = data["tenantId"];
+        this.tel = data["tel"];
         return data;
     }
 
@@ -167,8 +167,8 @@ export class NearbyShop implements INearbyShop {
             let item = new NearbyShop();
             item.init(result);
             array.push(item);
-        });   
-      
+        });
+
         return array;
     }
 

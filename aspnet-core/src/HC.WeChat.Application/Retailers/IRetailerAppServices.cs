@@ -91,5 +91,12 @@ namespace HC.WeChat.Retailers
         /// <param name="input"></param>
         /// <returns></returns>
         Task<RetailerListDto> GetRetailerByIdDtoForWeChatAsync(Guid input);
+
+        /// <summary>
+        /// 通过指定licenseKey获取RetailerListDto信息
+        /// </summary>
+        /// <param name="licenseKey"></param>
+        /// <returns></returns>
+        Task<RetailerListDto> GetRetailerByIdDtoByLKeyForWeChatAsync(string licenseKey);
     }
 }

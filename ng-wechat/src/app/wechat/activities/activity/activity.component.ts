@@ -2,7 +2,7 @@ import { Component, ViewEncapsulation, OnInit, Injector, ViewChild } from '@angu
 import { Article, WechatUser, PageModel } from '../../../services/model';
 import { AppComponentBase } from '../../components/app-component-base';
 import { Router } from '@angular/router';
-import { ArticleService } from '../../../services';
+import { ArticleService, AppConsts } from '../../../services';
 import { JWeiXinService, InfiniteLoaderComponent, PTRComponent } from 'ngx-weui';
 import { timer } from 'rxjs/observable/timer';
 
@@ -14,9 +14,10 @@ import { timer } from 'rxjs/observable/timer';
 })
 
 export class ArticleComponent extends AppComponentBase implements OnInit {
-    activity: Article[] = [];
+    activityList: Article[] = [];
     pageModel: PageModel = new PageModel(); // 分页信息
     @ViewChild(InfiniteLoaderComponent) il;
+    hostUrl: string = AppConsts.remoteServiceBaseUrl;
 
     constructor(injector: Injector, private router: Router,
         private articleService: ArticleService, private wxService: JWeiXinService,
@@ -49,7 +50,7 @@ export class ArticleComponent extends AppComponentBase implements OnInit {
         params.pageIndex = this.pageModel.pageIndex;
         params.pageSize = this.pageModel.pageSize;
         this.articleService.GetPagedArticles(params).subscribe(result => {
-            this.activity.push(...result);
+            this.activityList.push(...result);
             if (result && result.length < this.pageModel.pageSize) {
                 this.pageModel.isLast = true;
             }

@@ -57,5 +57,7 @@ namespace HC.WeChat.PurchaseRecords.Dtos
 
         [StringLength(50)]
         public string OperatorName { get; set; }
+
+        public bool? IsEvaluation { get; set; }
     }
 }

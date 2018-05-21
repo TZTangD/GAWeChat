@@ -7,7 +7,7 @@ import { ComponentsModule } from '../../components/components.module';
 import { BindMemberComponent } from './bind-member/bind-member.component';
 import { BindRetailerComponent } from './bind-retailer/bind-retailer.component';
 import { BindStaffComponent } from './bind-staff/bind-staff.component';
-import { WechatUserService } from '../../../services';
+import { WechatUserService, PurchaserecordService } from '../../../services';
 
 // region: components
 
@@ -35,7 +35,8 @@ const routes: Routes = [
         ...COMPONENTS
     ],
     providers: [
-        WechatUserService
+        WechatUserService,
+        PurchaserecordService
     ]
 })
 export class PersonalModule {

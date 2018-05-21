@@ -8,4 +8,5 @@ export * from './personal-center/feedback.service';
 export * from './article/article.service';
 export * from './personal-center/integral-detail.service';
 export * from './personal-center/purchaserecord.service';
+export * from './personal-center/shopevaluation.service';
 export * from './personal-center/customer.service';

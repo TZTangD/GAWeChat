@@ -17,6 +17,13 @@ using System;
 using HC.WeChat.PurchaseRecords;
 using HC.WeChat.WeChatUsers;
 using HC.WeChat.Authorization;
+using HC.WeChat.PurchaseRecords.Dtos;
+using HC.WeChat.Products;
+using HC.WeChat.Products.Dtos;
+using HC.WeChat.Dto;
+using HC.WeChat.Shops;
+using HC.WeChat.Shops.Dtos;
+using HC.WeChat.WechatEnums;
 
 namespace HC.WeChat.ShopEvaluations
 {
@@ -33,18 +40,27 @@ namespace HC.WeChat.ShopEvaluations
         private readonly IShopEvaluationManager _shopevaluationManager;
         private readonly IRepository<PurchaseRecord, Guid> _purchaserecordRepository;
         private readonly IRepository<WeChatUser, Guid> _wechatuserRepository;
+        private readonly IRepository<Product, Guid> _productRepository;
+        private readonly IRepository<Shop, Guid> _shopRepository;
+
+
         /// <summary>
         /// 构造函数
         /// </summary>
         public ShopEvaluationAppService(IRepository<ShopEvaluation, Guid> shopevaluationRepository
-      , IShopEvaluationManager shopevaluationManager, IRepository<PurchaseRecord, Guid> purchaserecordRepository,
-            IRepository<WeChatUser, Guid> wechatuserRepository
+            , IShopEvaluationManager shopevaluationManager
+            , IRepository<PurchaseRecord, Guid> purchaserecordRepository
+            , IRepository<WeChatUser, Guid> wechatuserRepository
+            , IRepository<Product, Guid> productRepository
+            , IRepository<Shop, Guid> shopRepository
         )
         {
             _shopevaluationRepository = shopevaluationRepository;
             _shopevaluationManager = shopevaluationManager;
             _purchaserecordRepository = purchaserecordRepository;
             _wechatuserRepository = wechatuserRepository;
+            _productRepository = productRepository;
+            _shopRepository = shopRepository;
         }
 
         /// <summary>
@@ -202,8 +218,8 @@ namespace HC.WeChat.ShopEvaluations
             //    return new PagedResultDto<ShopEvaluationListDto>(0, new List<ShopEvaluationListDto>());
             //}
             var queryEvaluation = _shopevaluationRepository.GetAll()
-                .Where(e=>e.ShopId==input.ShopId)
-                .WhereIf(input.Evaluation.HasValue,e=>e.Evaluation==input.Evaluation);
+                .Where(e => e.ShopId == input.ShopId)
+                .WhereIf(input.Evaluation.HasValue, e => e.Evaluation == input.Evaluation);
             var queryPurchase = _purchaserecordRepository.GetAll();
             var queryWeChat = _wechatuserRepository.GetAll();
             var query = from e in queryEvaluation
@@ -231,7 +247,7 @@ namespace HC.WeChat.ShopEvaluations
             var shopevaluationCount = await query.CountAsync();
 
             var shopevaluations = await query
-                .OrderByDescending(e=>e.CreationTime)
+                .OrderByDescending(e => e.CreationTime)
                 .ThenBy(input.Sorting)
                 .PageBy(input)
                 .ToListAsync();
@@ -246,6 +262,213 @@ namespace HC.WeChat.ShopEvaluations
 
         }
 
+        /// <summary>
+        /// 微信根据openId获取当前用户未评价过的商品记录
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="openId"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task<List<PurchaseRecordListDto>> GetWXNotEvaluationByIdAsync(int? tenantId, string openId)
+        {
+            using (CurrentUnitOfWork.SetTenantId(tenantId))
+            {
+                var records = from pr in _purchaserecordRepository.GetAll().Where(p => p.OpenId == openId)
+                              select new PurchaseRecordListDto()
+                              {
+                                  Id = pr.Id,
+                                  CreationTime = pr.CreationTime,
+                                  OpenId = pr.OpenId,
+                                  ShopName = pr.ShopName,
+                                  Specification = pr.Specification,
+                                  Quantity = pr.Quantity,
+                                  ProductId = pr.ProductId,
+                              };
+                var products = from p in _productRepository.GetAll()
+                               select new ProductListDto()
+                               {
+                                   Id = p.Id,
+                                   PhotoUrl = p.PhotoUrl
+                               };
+                var entity = from pr in records
+                             join p in products on pr.ProductId equals p.Id
+                             select new PurchaseRecordListDto()
+                             {
+                                 Id = pr.Id,
+                                 CreationTime = pr.CreationTime,
+                                 OpenId = pr.OpenId,
+                                 ShopName = pr.ShopName,
+                                 Specification = pr.Specification,
+                                 Quantity = pr.Quantity,
+                                 ProductId = pr.ProductId,
+                                 PhotoUrl = p.PhotoUrl
+                             };
+                //评价表找出PRid
+                var ePRidList = _shopevaluationRepository.GetAll().Where(e=>e.OpenId==openId).Select(e => e.PurchaseRecordId);
+                //记录表找出PRid 
+                var PRidList = entity.Select(e => e.Id);
+                //找出没评价的实体列表
+                var finallyEntity = from p in PRidList
+                              join pr in entity on p equals pr.Id
+                              where !(ePRidList).Contains(pr.Id)
+                              select new PurchaseRecordListDto()
+                              {
+                                  Id = pr.Id,
+                                  CreationTime = pr.CreationTime,
+                                  Integral = pr.Integral,
+                                  OpenId = pr.OpenId,
+                                  ShopName = pr.ShopName,
+                                  Specification = pr.Specification,
+                                  Quantity = pr.Quantity,
+                                  ProductId = pr.ProductId,
+                                  PhotoUrl = pr.PhotoUrl
+                              };
+                return await finallyEntity.OrderByDescending(v => v.CreationTime).ToListAsync();
+            }
+        }
+
+        /// <summary>
+        /// 查询未评价的个数
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="openId"></param>
+        /// <returns></returns>
+
+        [AbpAllowAnonymous]  
+        public async Task<int> GetWXCountNotEvaluationByIdAsync(int? tenantId, string openId)
+        {
+            using (CurrentUnitOfWork.SetTenantId(tenantId))
+            {
+                var records = _purchaserecordRepository.GetAll().Where(r => r.OpenId == openId)
+                              .Select(r => r.Id);
+                var ePRidList = _shopevaluationRepository.GetAll().Where(e => e.OpenId == openId).Select(e => e.PurchaseRecordId);
+                var finallyEntity = from p in records
+                                    where !(ePRidList).Contains(p)
+                                    select new PurchaseRecordListDto()
+                                    {
+                                        Id = p,
+                                    };
+                return await finallyEntity.CountAsync();
+            }
+        }
+
+
+        /// <summary>
+        /// 查看评价
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="shopEvaluationId"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task<ShopEvaluationListDto> GetWXEvaluationByIdAsync(int? tenantId, Guid? Id)
+        {
+            using (CurrentUnitOfWork.SetTenantId(tenantId))
+            {
+                var query = _shopevaluationRepository.GetAll().Where(e => e.PurchaseRecordId== Id);
+                var finallyEntity = from se in query                              
+                                    select new ShopEvaluationListDto()
+                                    {
+                                        Id=se.Id,
+                                        IsCorrectQuantity =se.IsCorrectQuantity,
+                                        Evaluation = se.Evaluation,
+                                        CreationTime =se.CreationTime,
+                                        PurchaseRecordId=se.PurchaseRecordId
+                                    };
+                return await finallyEntity.FirstOrDefaultAsync();
+            }
+        }
+
+        /// <summary>
+        /// 商品详情-评价
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="openId"></param>
+        /// <param name="productId"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task<PurchaseRecordListDto> GetWXProductsDetailsByIdAsync(int? tenantId, string openId, Guid? productId,Guid?id)
+        {
+            using (CurrentUnitOfWork.SetTenantId(tenantId))
+            {
+                var query = _purchaserecordRepository.GetAll().Where(p => p.OpenId == openId && p.ProductId==productId&&p.Id==id);
+                var records = from pr in query
+                              select new PurchaseRecordListDto()
+                              {
+                                  Id = pr.Id,
+                                  CreationTime = pr.CreationTime,
+                                  OpenId = pr.OpenId,
+                                  ShopName = pr.ShopName,
+                                  Specification = pr.Specification,
+                                  Quantity = pr.Quantity,
+                                  ProductId = pr.ProductId,
+                                  Integral =pr.Integral,
+                                  ShopId =pr.ShopId,
+                                  IsEvaluation =pr.IsEvaluation
+                              };
+                var products = from p in _productRepository.GetAll()
+                               select new ProductListDto()
+                               {
+                                   Id = p.Id,
+                                   PhotoUrl = p.PhotoUrl
+                               };
+                var entity = from pr in records
+                             join p in products on pr.ProductId equals p.Id
+                             select new PurchaseRecordListDto()
+                             {
+                                 Id = pr.Id,
+                                 CreationTime = pr.CreationTime,
+                                 Integral = pr.Integral,
+                                 OpenId = pr.OpenId,
+                                 ShopName = pr.ShopName,
+                                 Specification = pr.Specification,
+                                 Quantity = pr.Quantity,
+                                 ProductId = pr.ProductId,
+                                 PhotoUrl = p.PhotoUrl,
+                                 ShopId =pr.ShopId,
+                                 IsEvaluation =pr.IsEvaluation
+                             };
+                return await entity.FirstOrDefaultAsync();
+            }
+        }
+
+        /// <summary>
+        /// 提交评价信息并更新店铺评价&购买记录
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task<APIResultDto> SubmitShopEvaluationAsync(ShopEvaluation input)
+        {
+            //新增评价
+            var result = input.MapTo<ShopEvaluation>();
+            result.CreationTime = DateTime.Now;
+            await _shopevaluationRepository.InsertAsync(result);
+
+            //修改店铺评价
+            var shopEntity = _shopRepository.GetAll().Where(s => s.Id == input.ShopId).FirstOrDefault();     
+            var evaluationIds = shopEntity.Evaluation.Split(',');
+            int[] intEvaluationIds = Array.ConvertAll<string, int>(evaluationIds, s => int.Parse(s));
+            if (input.Evaluation == ScoreLevelEmun.好)
+            {
+                intEvaluationIds[0]++;
+            }
+            else if (input.Evaluation == ScoreLevelEmun.中)
+            {
+                intEvaluationIds[1]++;
+            }
+            else
+            {
+                intEvaluationIds[2]++;
+            }
+            string evaluation = intEvaluationIds[0].ToString() + ',' + intEvaluationIds[1].ToString() + ',' + intEvaluationIds[2].ToString();
+            shopEntity.Evaluation = evaluation;
+            await _shopRepository.UpdateAsync(shopEntity);
+            //更新购买记录
+            var record = _purchaserecordRepository.GetAll().Where(pr => pr.Id == input.PurchaseRecordId).FirstOrDefault();
+            record.IsEvaluation = true;
+            await _purchaserecordRepository.UpdateAsync(record);
+            return new APIResultDto() { Code = 0, Msg = "提交成功，您的评价已生效" };
+        }
     }
 }
 

@@ -9,7 +9,44 @@
     overflow: hidden;
 }
 
+.weui-cell_img {
+    width: 60px;
+    height: 60px;
+    background: no-repeat center center;
+    background-size: cover;
+    position: relative;
+    margin-right: 10px;
+}
+
 .weui-media-box {
     padding-top: 8px;
     padding-bottom: 8px;
+}
+
+// .weui-media-box_appmsg .weui-media-box__thumb {
+//     width: 60px;
+//     height: 60px;
+// }
+.sp {
+    padding-bottom: 5px;
+}
+
+.s {
+    float: left;
+}
+
+.t {
+    float: right;
+}
+
+.pc {
+    height: 18px;
+}
+
+.sn {
+    height: 18px;
+}
+
+.weui-form-preview__btn {
+    font-size: 15px;
 }

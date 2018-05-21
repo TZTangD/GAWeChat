@@ -2,7 +2,7 @@ import { Component, ViewEncapsulation, OnInit, Injector, ViewChild } from '@angu
 import { AppComponentBase } from '../../components/app-component-base';
 import { PageModel, WechatUser, PurchaseRecord } from '../../../services/model';
 import { Router } from '@angular/router';
-import { PurchaserecordService } from '../../../services';
+import { PurchaserecordService, AppConsts } from '../../../services';
 import { InfiniteLoaderComponent } from 'ngx-weui';
 import { ActivatedRoute } from '@angular/router';
 
@@ -16,9 +16,11 @@ import { ActivatedRoute } from '@angular/router';
 export class PurchaserecordComponent extends AppComponentBase implements OnInit {
     pageModel: PageModel = new PageModel(); // 分页信息
     user: WechatUser;
-    purchaseRecord: PurchaseRecord[] = [];
+    purchaseRecordList: PurchaseRecord[] = [];
     openId: string = this.route.snapshot.params['openId'];
-
+    pageType: string = this.route.snapshot.params['pageType'];
+    hostUrl: string = AppConsts.remoteServiceBaseUrl;
+    tittleType: boolean = false;
     constructor(injector: Injector, private purchaserecordService: PurchaserecordService, private route: ActivatedRoute, private router: Router) {
         super(injector);
     }
@@ -27,7 +29,13 @@ export class PurchaserecordComponent extends AppComponentBase implements OnInit 
         this.settingsService.getUser().subscribe(result => {
             this.user = result;
         });
-        this.GetPagedPurchaseRecord();
+        if (this.pageType == 'shopEvaluation') {
+            this.tittleType = true;
+            this.GetWXNotEvaluationByIdAsync();
+        } else {
+            this.tittleType = false;
+            this.GetPagedPurchaseRecord();
+        }
     }
 
     GetPagedPurchaseRecord() {
@@ -39,11 +47,31 @@ export class PurchaserecordComponent extends AppComponentBase implements OnInit 
         params.pageIndex = this.pageModel.pageIndex;
         params.pageSize = this.pageModel.pageSize;
         this.purchaserecordService.GetPurchaseRecordById(params).subscribe(result => {
-            // console.log(result)
-            this.purchaseRecord.push(...result);
+            this.purchaseRecordList.push(...result);
             if (result && result.length < this.pageModel.pageSize) {
                 this.pageModel.isLast = true;
             }
         });
+    }
+
+    GetWXNotEvaluationByIdAsync() {
+        let params: any = {};
+        if (this.settingsService.tenantId) {
+            params.tenantId = this.settingsService.tenantId;
+        }
+        params.openId = this.openId;
+        this.purchaserecordService.GetWXNotEvaluationByIdAsync(params).subscribe(result => {
+            this.purchaseRecordList = result;
+        });
+    }
+
+    goEvaluation(productId: string, purchaseRecordId: string, pageType: string) {
+        this.router.navigate(['/shopevaluations/evaluation-detail', { id: purchaseRecordId, productId: productId }]);
+    }
+    goDetail(productId: string, purchaseRecordId: string, pageType: string) {
+        this.router.navigate(['/shopevaluations/evaluation-detail', { id: purchaseRecordId, productId: productId, pageType: 'detail' }]);
+    }
+    goFindGoods() {
+        this.router.navigate(['/goodses/goods']);
     }
 }

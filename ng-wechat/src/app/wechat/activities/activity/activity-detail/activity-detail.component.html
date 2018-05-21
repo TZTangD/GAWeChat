@@ -1,4 +1,5 @@
 <Page [ngClass]="'article'" [title]="'Article'" [showTitle]="false" [spacing]="false">
+    <weui-loadmore type="line" *ngIf="!activity"></weui-loadmore>
     <article class="weui-article">
         <h1>{{activity.title}}</h1>
         <section>

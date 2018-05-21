@@ -8,20 +8,20 @@
         </div>
         <weui-infiniteloader (loadmore)="onLoadMore($event)" #comp>
             <div class="weui-panel__bd">
-                <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg" *ngFor="let item of activity" (click)="goDetailActivity(item.id)">
-                    <div class="weui-media-box__hd">
-                        <img class="weui-media-box__thumb" src="{{item.coverPhoto | hostUrl}}" alt="">
+                <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg" *ngFor="let item of activityList" (click)="goDetailActivity(item.id)">
+                    <!-- <div class="weui-media-box__hd"> -->
+                    <div class="weui-media-box__hd weui-cell_img" [ngStyle]="{'background-image':'url('+ hostUrl + item.coverPhoto +')'}">
                     </div>
+                    <!-- </div> -->
                     <div class="weui-media-box__bd">
                         <h4 class="weui-media-box__title">{{item.title}}</h4>
                         <p class="weui-media-box__desc">{{item.content}}</p>
                     </div>
-                    <div>
-                        <div class="placeholder ">
-                            <p class="weui-media-box__desc">{{item.creationTime| date:'yyyy-MM-dd'}}</p>
-                        </div>
+                    <div class="weui-media-box__ft" style="font-size: 14px;">
+                        {{item.creationTime| date:'yyyy-MM-dd'}}
                     </div>
                 </a>
+                <weui-loadmore type="line" *ngIf="!activityList || activityList.length == 0"></weui-loadmore>
             </div>
         </weui-infiniteloader>
     </div>
