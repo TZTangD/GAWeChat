@@ -20,6 +20,7 @@ using HC.WeChat.WeChatUsers.DomainServices;
 using HC.WeChat.WechatEnums;
 using HC.WeChat.ShopProducts;
 using HC.WeChat.Products;
+using HC.WeChat.Helpers;
 
 namespace HC.WeChat.Shops
 {
@@ -374,13 +375,33 @@ namespace HC.WeChat.Shops
         /// </summary>
         /// <returns></returns>
         [AbpAllowAnonymous]
-        public async Task<List<NearbyShopDto>> GetNearbyShopByLocationAsync(decimal latitude, decimal longitude, int? tenantId, string openId)
+        public async Task<List<NearbyShopDto>> GetNearbyShopByLocationAsync(double latitude, double longitude, int? tenantId, string openId)
         {
+            var mbr = new MapMBR(latitude, longitude, 3.1);//确定搜索范围3.1公里 搜索范围扩大0.1公里
             using (CurrentUnitOfWork.SetTenantId(tenantId))
             {
-                var dataList = await _shopRepository.GetAll().Where(s => s.Status == ShopAuditStatus.审核通过).ToListAsync();
+                //根据经纬度范围过滤数据
+                var dataList = await _shopRepository.GetAll()
+                    .Where(s => s.Status == ShopAuditStatus.审核通过
+                    && s.Latitude > mbr.MinLatitude 
+                    && s.Latitude < mbr.MaxLatitude
+                    && s.Longitude > mbr.MinLongitude
+                    && s.Longitude < mbr.MaxLongitude).ToListAsync();
 
-                return dataList.MapTo<List<NearbyShopDto>>();
+                var resultList = dataList.MapTo<List<NearbyShopDto>>();
+                foreach (var item in resultList)
+                {
+                    if (item.Latitude.HasValue && item.Longitude.HasValue)
+                    {
+                        item.Distance = AbpMapByGoogle.GetDistance(latitude, longitude, item.Latitude.Value, item.Longitude.Value);
+                    }
+                    else
+                    {
+                        item.Distance = 4000;//后面会被过滤
+                    }
+                }
+
+                return resultList.Where(r => r.Distance <= 3000).OrderBy(r => r.Distance).ToList();
             }
         }
 

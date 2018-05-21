@@ -28,6 +28,8 @@ export class NearbyShopComponent extends AppComponentBase implements OnInit {
     shops: NearbyShop[] = [];
     latitude: number;//当前纬度
     longitude: number;//当前经度
+    gpslat: number;//当前纬度gps
+    gpslong: number;//当前经度gps
     hostUrl: string = AppConsts.remoteServiceBaseUrl;
 
     constructor(injector: Injector,
@@ -90,6 +92,8 @@ export class NearbyShopComponent extends AppComponentBase implements OnInit {
     getWXLocation(): Promise<any> {
         return (new Promise<any>((resolve, reject) => {
             this.wxService.getLocation().then((res) => {
+                this.gpslat = res.latitude;
+                this.gpslong = res.longitude;
                 this.wxService.translate(res.latitude, res.longitude).then((result) => {
                     resolve(result);
                 })
@@ -118,8 +122,8 @@ export class NearbyShopComponent extends AppComponentBase implements OnInit {
 
     getShops() {
         let param: any = {
-            latitude: this.latitude,
-            longitude: this.longitude,
+            latitude: this.gpslat,
+            longitude: this.gpslong,
             openId: this.settingsService.openId,
             tenantId: this.settingsService.tenantId
         };
