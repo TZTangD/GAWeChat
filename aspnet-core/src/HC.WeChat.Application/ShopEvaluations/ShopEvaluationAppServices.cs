@@ -381,26 +381,6 @@ namespace HC.WeChat.ShopEvaluations
         }
 
         /// <summary>
-        /// 判断是否已经评价
-        /// </summary>
-        /// <param name="tenantId"></param>
-        /// <param name="purchaseRecordId"></param>
-        /// <returns></returns>
-        [AbpAllowAnonymous]
-        public async Task<bool> GetWXIsEvaluationByIdAsync(int? tenantId, Guid? purchaseRecordId)
-        {
-            using (CurrentUnitOfWork.SetTenantId(tenantId))
-            {
-                var check = await _shopevaluationRepository.GetAll().FirstOrDefaultAsync(se => se.PurchaseRecordId == purchaseRecordId);
-                if (check != null)
-                {
-                    return true;
-                }
-                return false;
-            }
-        }
-
-        /// <summary>
         /// 商品详情-评价
         /// </summary>
         /// <param name="tenantId"></param>
@@ -452,19 +432,21 @@ namespace HC.WeChat.ShopEvaluations
         }
 
         /// <summary>
-        /// 提交评价信息并更新店铺评价
+        /// 提交评价信息并更新店铺评价&购买记录
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
         [AbpAllowAnonymous]
         public async Task<APIResultDto> SubmitShopEvaluationAsync(ShopEvaluation input)
         {
+            //新增评价
             var result = input.MapTo<ShopEvaluation>();
             result.CreationTime = DateTime.Now;
             await _shopevaluationRepository.InsertAsync(result);
 
-            var evaluation = await GetShopEvaluationByIdAsync(input.ShopId);
-            var evaluationIds = evaluation.Split(',');
+            //修改店铺评价
+            var shopEntity = _shopRepository.GetAll().Where(s => s.Id == input.ShopId).FirstOrDefault();     
+            var evaluationIds = shopEntity.Evaluation.Split(',');
             int[] intEvaluationIds = Array.ConvertAll<string, int>(evaluationIds, s => int.Parse(s));
             if (input.Evaluation == ScoreLevelEmun.好)
             {
@@ -478,22 +460,14 @@ namespace HC.WeChat.ShopEvaluations
             {
                 intEvaluationIds[2]++;
             }
-            evaluation = intEvaluationIds[0].ToString() + ',' + intEvaluationIds[1].ToString() + ',' + intEvaluationIds[2].ToString();
-            var shopEntity = _shopRepository.GetAll().Where(s => s.Id == input.ShopId).FirstOrDefault();
+            string evaluation = intEvaluationIds[0].ToString() + ',' + intEvaluationIds[1].ToString() + ',' + intEvaluationIds[2].ToString();
             shopEntity.Evaluation = evaluation;
             await _shopRepository.UpdateAsync(shopEntity);
+            //更新购买记录
+            var record = _purchaserecordRepository.GetAll().Where(pr => pr.Id == input.PurchaseRecordId).FirstOrDefault();
+            record.IsEvaluation = true;
+            await _purchaserecordRepository.UpdateAsync(record);
             return new APIResultDto() { Code = 0, Msg = "提交成功，您的评价已生效" };
-        }
-
-        /// <summary>
-        /// 获取店铺评价字段
-        /// </summary>
-        /// <param name="shopId"></param>
-        /// <returns></returns>
-        public async Task<string> GetShopEvaluationByIdAsync(Guid? shopId)
-        {
-            var evaluation = _shopRepository.GetAll().Where(s => s.Id == shopId).Select(s => s.Evaluation).FirstOrDefaultAsync();
-            return await evaluation;
         }
     }
 }

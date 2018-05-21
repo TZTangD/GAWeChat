@@ -26,7 +26,6 @@ namespace HC.WeChat.ShopEvaluations
         /// 通过指定id获取ShopEvaluationListDto信息
         /// </summary>
         Task<ShopEvaluationListDto> GetShopEvaluationByIdAsync(EntityDto<Guid> input);
-
         /// <summary>
         /// 导出ShopEvaluation为excel表
         /// </summary>

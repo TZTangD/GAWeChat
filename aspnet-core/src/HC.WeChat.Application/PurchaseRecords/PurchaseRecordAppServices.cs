@@ -380,7 +380,8 @@ namespace HC.WeChat.PurchaseRecords
                                   ShopName = pr.ShopName,
                                   Specification = pr.Specification,
                                   Quantity = pr.Quantity,
-                                  ProductId = pr.ProductId
+                                  ProductId = pr.ProductId,
+                                  IsEvaluation =pr.IsEvaluation
                               };
                 var products = from p in _productRepository.GetAll()
                                select new ProductListDto()
@@ -399,44 +400,10 @@ namespace HC.WeChat.PurchaseRecords
                                  Specification = pr.Specification,
                                  Quantity = pr.Quantity,
                                  ProductId = pr.ProductId,
-                                 PhotoUrl = p.PhotoUrl
+                                 PhotoUrl = p.PhotoUrl,
+                                 IsEvaluation =pr.IsEvaluation
                              };
-                //var entity = (from pr in records
-                //              join p in products on pr.ProductId equals p.Id
-                //              select new PurchaseRecordListDto()
-                //              {
-                //                  Id = pr.Id,
-                //                  CreationTime = pr.CreationTime,
-                //                  OpenId = pr.OpenId,
-                //                  ShopName = pr.ShopName,
-                //                  Specification = pr.Specification,
-                //                  Quantity = pr.Quantity,
-                //                  ProductId = pr.ProductId,
-                //                  PhotoUrl = p.PhotoUrl
-                //              }).ToListAsync();
-                //await GetWXIsEvaluationByIdAsync(tenantId, );
-
                 return await entity.OrderByDescending(v => v.CreationTime).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
-            }
-        }
-
-        /// <summary>
-        /// 判断是否已经评价
-        /// </summary>
-        /// <param name="tenantId"></param>
-        /// <param name="purchaseRecordId"></param>
-        /// <returns></returns>
-        [AbpAllowAnonymous]
-        public async Task<bool> GetWXIsEvaluationByIdAsync(int? tenantId, Guid? purchaseRecordId)
-        {
-            using (CurrentUnitOfWork.SetTenantId(tenantId))
-            {
-                var check = await _shopevaluationRepository.GetAll().FirstOrDefaultAsync(se => se.PurchaseRecordId == purchaseRecordId);
-                if (check != null)
-                {
-                    return true;
-                }
-                return false;
             }
         }
     }

@@ -14,6 +14,7 @@ export class PurchaseRecord
     operatorOpenId: string;
     operatorName: string;
     photoUrl: string;
+    isEvaluation: boolean;
     constructor(data?: IPurchaseRecord) {
         if (data) {
             for (var property in data) {
@@ -39,6 +40,8 @@ export class PurchaseRecord
             this.operatorOpenId = data["operatorOpenId"];
             this.operatorName = data["operatorName"];
             this.photoUrl = data["photoUrl"];
+            this.isEvaluation = data["isEvaluation"];
+
         }
     }
 
@@ -75,6 +78,7 @@ export class PurchaseRecord
         data["operatorOpenId"] = this.operatorOpenId;
         data["operatorName"] = this.operatorName;
         data["photoUrl"] = this.photoUrl;
+        data["isEvaluation"] = this.isEvaluation;
         return data;
     }
 
@@ -100,4 +104,5 @@ export interface IPurchaseRecord {
     operatorOpenId: string;
     operatorName: string;
     photoUrl: string;
+    isEvaluation: boolean;
 }

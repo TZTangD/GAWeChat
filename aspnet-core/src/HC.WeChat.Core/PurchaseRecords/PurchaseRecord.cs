@@ -74,5 +74,7 @@ namespace HC.WeChat.PurchaseRecords
         public virtual string OperatorOpenId { get; set; }
         [StringLength(50)]
         public virtual string OperatorName { get; set; }
+
+        public virtual bool? IsEvaluation { get; set; }
     }
 }

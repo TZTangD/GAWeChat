@@ -24,9 +24,22 @@
                     </ul>
                 </div>
             </div>
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <p>购买数量是否一致</p>
+                </div>
+                <div class="weui-cell__ft">一致</div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <p>我的评价</p>
+                </div>
+                <div class="weui-cell__ft">好评</div>
+            </div>
         </div>
     </div>
-    <form #f="ngForm" (ngSubmit)="save()">
+
+    <!-- <form #f="ngForm" (ngSubmit)="save()">
         <div class="weui-cells__title">购买数量是否一致</div>
         <div class="weui-cells weui-cells_radio">
             <label class="weui-cell weui-check__label" for="radio-{{i.id}}" *ngFor="let i of radio">
@@ -54,6 +67,6 @@
         <div class="weui-btn-area">
             <button weui-button [weui-loading]="loading" [disabled]="!f.form.valid" [ngClass]="{'weui-btn_disabled': !f.form.valid}">提交</button>
         </div>
-    </form>
+    </form> -->
     <weui-loadmore type="line " *ngIf="!purchaseRecord "></weui-loadmore>
 </Page>

@@ -55,4 +55,13 @@ export class PurchaserecordService {
             }
         });
     }
+    GetWXEvaluationByIdAsync(params: any) {
+        return this.http.get('/api/services/app/ShopEvaluation/GetWXEvaluationByIdAsync', params).map(data => {
+            if (data.result) {
+                return PurchaseRecord.fromJS(data.result);
+            } else {
+                return null;
+            }
+        });
+    }
 }
