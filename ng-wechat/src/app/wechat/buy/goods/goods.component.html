@@ -6,16 +6,12 @@
             </div>
         </div>
     </div>
-    <weui-searchbar (search)="onSearch($event)" [(value)]="value" placeholder="输入商品名称" (cancel)="onCancel()"
-        [debounceTime]="500" (clear)="onClear()" ></weui-searchbar>
+    <weui-searchbar (search)="onSearch($event)" [(value)]="value" placeholder="输入商品名称" (cancel)="onCancel()" [debounceTime]="500"
+        (clear)="onClear()"></weui-searchbar>
     <div class="weui-panel" style="margin-top: 0px;" *ngIf="value">
-<<<<<<< HEAD
-        <div class="weui-panel__hd">查找包含【{{value}}】的商品</div>
-=======
-        <div class="weui-panel__hd">查询商品【{{value}}】,点击商品查找店铺</div>
->>>>>>> 090c358dd3109c3d6f17f6d95ccdc6718896b354
+        <div class="weui-panel__hd">查找包含【{{value}}】的商品,点击商品查找店铺</div>
         <div class="weui-panel__bd" *ngIf="goodes | async; let goodes; else loading">
-            <a class="weui-cell weui-cell_access" *ngFor="let item of goodes" (click)="onSelectGoods(item)" >
+            <a class="weui-cell weui-cell_access" *ngFor="let item of goodes" (click)="onSelectGoods(item)">
                 <div class="weui-cell__bd weui-cell_primary">
                     <p>{{item.specification}}</p>
                 </div>
@@ -31,11 +27,7 @@
             </div>
         </ng-template>
     </div>
-<<<<<<< HEAD
-    <div class="weui-cells__title">售卖【{{value}}】的店铺列表</div>
-=======
-    <div class="weui-cells__title" *ngIf="shops && shops.length > 0" >包含【{{sgoods.specification}}】的店铺</div>
->>>>>>> 090c358dd3109c3d6f17f6d95ccdc6718896b354
+    <div class="weui-cells__title" *ngIf="shops && shops.length > 0">售卖【{{sgoods.specification}}】的店铺</div>
     <div class="weui-cells" *ngIf="shops && shops.length > 0">
         <a class="weui-cell weui-cell_access" *ngFor="let s of shops" (click)="goShop(s.id)">
             <div class="weui-cell__hd weui-cell_img" [ngStyle]="{'background-image':'url('+ hostUrl + s.coverPhoto +')'}">
