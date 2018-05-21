@@ -16,6 +16,13 @@ using HC.WeChat.Products;
 using System;
 using HC.WeChat.Authorization;
 using Microsoft.AspNetCore.Hosting;
+using HC.WeChat.Retailers;
+using HC.WeChat.WeChatUsers;
+using HC.WeChat.WechatEnums;
+using HC.WeChat.EPCos;
+using HC.WeChat.EPCoLines;
+using HC.WeChat.GACustPoints;
+using HC.WeChat.GAGrades;
 //using System.Linq;
 
 namespace HC.WeChat.Products
@@ -32,17 +39,33 @@ namespace HC.WeChat.Products
         private readonly IRepository<Product, Guid> _productRepository;
         private readonly IProductManager _productManager;
         private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IRetailerAppService _retailerService;
+        private readonly IRepository<WeChatUser, Guid> _wechatuserRepository;
+        private readonly IRepository<EPCo, Guid> _epcoRepository;
+        private readonly IRepository<EPCoLine, Guid> _epcolineRepository;
+        private readonly IRepository<GACustPoint, int> _gacustpointRepository;
+        private readonly IRepository<GAGrade, int> _gagradeRepository;
+
 
         /// <summary>
         /// 构造函数
         /// </summary>
         public ProductAppService(IRepository<Product, Guid> productRepository
-      , IProductManager productManager, IHostingEnvironment hostingEnvironment
+      , IProductManager productManager, IHostingEnvironment hostingEnvironment,
+            IRetailerAppService retailerService, IRepository<WeChatUser, Guid> wechatuserRepository,
+            IRepository<EPCo, Guid> epcoRepository, IRepository<EPCoLine, Guid> epcolineRepository,
+            IRepository<GACustPoint, int> gacustpointRepository, IRepository<GAGrade, int> gagradeRepository
         )
         {
             _productRepository = productRepository;
             _productManager = productManager;
             _hostingEnvironment = hostingEnvironment;
+            _retailerService = retailerService;
+            _wechatuserRepository = wechatuserRepository;
+            _epcoRepository = epcoRepository;
+            _epcolineRepository = epcolineRepository;
+            _gacustpointRepository = gacustpointRepository;
+            _gagradeRepository = gagradeRepository;
         }
 
         /// <summary>
@@ -313,6 +336,184 @@ namespace HC.WeChat.Products
             {
                 var query = await _productRepository.GetAll().Where(p => p.IsRare == true && p.IsAction == true && p.Specification.Contains(key)).ToListAsync();
                 return query.MapTo<List<RareProductSearchDto>>();
+            }
+        }
+
+        /// <summary>
+        /// 获取台账档级信息
+        /// </summary>
+        /// <param name="code">专卖证号</param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task<RetailAllInfo> GetCustAndAccountInfoAsync(string code)
+        {
+            RetailAllInfo result = new RetailAllInfo() { BasicInfo = new RetailInfoDto(), AccountBooks = new List<RetailAccount>() };
+            var retail = await _retailerService.GetRetailerByIdDtoByLKeyForWeChatAsync(code);
+            if (retail != null)
+            {
+                #region  基础信息
+                var weChatUser = _wechatuserRepository.GetAll().Where(w => w.BindStatus == BindStatusEnum.已绑定 && w.UserId == retail.Id).FirstOrDefaultAsync().Result;
+                RetailInfoDto retailInfo = new RetailInfoDto();
+                retailInfo.CustId = retail.CustId;
+                retailInfo.Code = retail.Code;
+                retailInfo.BusinessAddress = retail.BusinessAddress;
+                retailInfo.HeadImgUrl = weChatUser.HeadImgUrl;
+                retailInfo.LicenseKey = retail.LicenseKey;
+                retailInfo.OpenId = weChatUser.OpenId;
+                //计算月订单金额
+                //当月
+                int currentYear = DateTime.Now.Year;
+                int currentMonth = DateTime.Now.Month;
+                string queryMonth = currentYear.ToString();
+                if (currentMonth < 10)
+                {
+                    queryMonth = queryMonth + "0" + currentMonth.ToString();
+                }
+                else
+                {
+                    queryMonth = queryMonth + currentMonth.ToString();
+                }
+                //上月
+                int preYear = DateTime.Now.AddMonths(-1).Year;
+                int preOdMonth = DateTime.Now.AddMonths(-1).Month;
+                string queryPreMonth = preYear.ToString();
+                if (preOdMonth < 10)
+                {
+                    queryPreMonth = queryPreMonth + "0" + preOdMonth.ToString();
+                }
+                else
+                {
+                    queryPreMonth = queryPreMonth + preOdMonth.ToString();
+                }
+                //本月订单统计
+                var mothOrders = await _epcoRepository.GetAll().Where(f => f.CUST_ID == retail.CustId && f.POSE_DATE.Contains(queryMonth)).ToListAsync();
+                retailInfo.MonthOrderMoney = mothOrders.Count == 0 ? 0 : mothOrders.Sum(f => f.AMT_SUM.Value);
+                retailInfo.MonthOrderQty = mothOrders.Count == 0 ? 0 : (int)mothOrders.Sum(f => f.QTY_SUM);
+
+                //计算川烟量
+                IList<string> siChuanIds = await _productRepository.GetAll().Where(f => f.MfrId == "20510002").Select(t => t.ItemId).ToListAsync();
+                IList<string> coNums = mothOrders.Select(f => f.CO_NUM).ToList();
+
+
+                var siChuanOrders = await _epcolineRepository.GetAll().Where(f => coNums.Contains(f.CO_NUM) && siChuanIds.Contains(f.ITEM_ID)).ToListAsync();
+                retailInfo.SiChuanQty = siChuanOrders.Count == 0 ? 0 : (int)siChuanOrders.Sum(f => f.QTY_ORD.Value);
+
+
+                var allPoints = await _gacustpointRepository.GetAll().Where(f => f.LicenseCode == retail.CustId).ToListAsync();//LicenseCode实际指的是CustId（名字取得有误）
+                var totalPoints = allPoints.Count == 0 ? 0 : allPoints.Sum(t => t.Point);
+                int monthPoints = 0;
+                if (allPoints.Count != 0)
+                {
+                    var mothPointData = allPoints.SingleOrDefault(t => t.Pmonth == queryMonth);
+                    monthPoints = mothPointData == null ? 0 : mothPointData.Point;
+                }
+                //积分暂未获得？
+                retailInfo.TotalPoint = totalPoints;
+                retailInfo.MonthPoint = monthPoints;
+                //档级
+                retailInfo.Level = retail.ArchivalLevel;
+                #region 已达档级
+                var gradLevel = await _gagradeRepository.GetAll().Where(f => f.StartPoint <= monthPoints).OrderByDescending(f => f.StartPoint).FirstOrDefaultAsync();
+
+                retailInfo.CurrentLevel = gradLevel == null ? "1档" : gradLevel.GradeLevel.ToString() + "档";
+                #endregion
+
+                result.BasicInfo = retailInfo;
+                #endregion
+
+                #region 台账
+
+                var totalOrders = await _epcoRepository.GetAll().Where(f => f.CUST_ID == retail.CustId).ToListAsync();
+                var orderCodes = totalOrders.Select(t => t.CO_NUM).ToList();
+
+                var orderDetails = await _epcolineRepository.GetAll().Where(f => orderCodes.Contains(f.CO_NUM)).ToListAsync();
+
+                var groupItems = orderDetails.GroupBy(f => f.ITEM_ID).ToList();
+                IList<string> orderItemIds = groupItems.Select(f => f.Key).ToList();
+                var goods = await _productRepository.GetAll().Where(f => orderItemIds.Contains(f.ItemId)).ToListAsync();
+                string sumMonth = DateTime.Now.Year.ToString();
+                //月度
+                //当月
+                if (DateTime.Now.Month < 10)
+                {
+                    sumMonth = sumMonth + "0" + DateTime.Now.Month.ToString();
+                }
+                else
+                {
+                    sumMonth = sumMonth + DateTime.Now.Month.ToString();
+                }
+                //上月
+                string preMonth = DateTime.Now.AddMonths(-1).Year.ToString();
+                if (DateTime.Now.AddMonths(-1).Month < 10)
+                {
+                    preMonth = preMonth + "0" + DateTime.Now.AddMonths(-1).Month.ToString();
+                }
+                else
+                {
+                    preMonth = preMonth + DateTime.Now.AddMonths(-1).Month.ToString();
+                }
+                //季度
+                var quarterlySpan = GetDate(3);
+                //年度
+                var yearSpan = GetDate(6);
+                foreach (var item in orderItemIds)
+                {
+                    var gd = goods.SingleOrDefault(f => f.ItemId == item);
+                    //上月
+                    var preMonthOrderCoNums = totalOrders.Where(f => f.POSE_DATE.Contains(preMonth)).Select(f => f.CO_NUM).ToList();
+                    var preMonthOd = orderDetails.Where(f => f.ITEM_ID == item && preMonthOrderCoNums.Contains(f.CO_NUM)).ToList();
+                    var preMothQty = preMonthOd.Count == 0 ? 0 : preMonthOd.Sum(t => t.QTY_ORD);
+
+                    //本月
+                    var thisMonthOrderCoNums = totalOrders.Where(f => f.POSE_DATE.Contains(sumMonth)).Select(f => f.CO_NUM).ToList();
+                    var thisMonthOd = orderDetails.Where(f => f.ITEM_ID == item && thisMonthOrderCoNums.Contains(f.CO_NUM)).ToList();
+                    var thisMonthQty = thisMonthOd.Count == 0 ? 0 : thisMonthOd.Sum(t => t.QTY_ORD);
+
+                    //季度  where Convert.ToDateTime(t.Date.Trim()).CompareTo(Convert.ToDateTime("2009/9/9")) >= 0 && Convert.ToDateTime(t.Date.Trim()).CompareTo(Convert.ToDateTime("2009/10/9")) <= 0) 
+
+                    var quarterlySpanOrderCoNums = totalOrders.Where(f => f.POSE_DATE.CompareTo(quarterlySpan) >= 0 && f.POSE_DATE.CompareTo(sumMonth) <= 0).Select(f => f.CO_NUM).ToList();
+                    var quarterlySpanOd = orderDetails.Where(f => f.ITEM_ID == item && quarterlySpanOrderCoNums.Contains(f.CO_NUM)).ToList();
+                    var quarterlySpanQty = quarterlySpanOd.Count == 0 ? 0 : quarterlySpanOd.Sum(t => t.QTY_ORD);
+
+                    //年度
+                    var yearSpanOrderCoNums = totalOrders.Where(f => f.POSE_DATE.CompareTo(yearSpan) >= 0 && f.POSE_DATE.CompareTo(sumMonth) <= 0).Select(f => f.CO_NUM).ToList();
+                    var yearSpanOd = orderDetails.Where(f => f.ITEM_ID == item && yearSpanOrderCoNums.Contains(f.CO_NUM)).ToList();
+                    var yearSpanQty = yearSpanOd.Count == 0 ? 0 : yearSpanOd.Sum(t => t.QTY_ORD);
+
+                    RetailAccount book = new RetailAccount
+                    {
+                        BookDate = sumMonth,
+                        ITEM_CODE = gd == null ? string.Empty : gd.ItemCode,
+                        ITEM_NAME = gd == null ? string.Empty : gd.Specification,
+                        LicenseCode = retail.LicenseKey,
+                        PreMonthQty = preMothQty.Value,
+                        ThsMonthQty = thisMonthQty.Value,
+                        QuarterlyDate= quarterlySpan,
+                        QuarterlyQty = quarterlySpanQty.Value,
+                        YearDate= yearSpan,
+                        YearQty = yearSpanQty.Value
+                    };
+                    if (book.PreMonthQty != 0 || book.ThsMonthQty != 0 || book.QuarterlyQty != 0 || book.YearQty != 0) {
+                        result.AccountBooks.Add(book);
+                    }
+                }
+             
+                #endregion
+            }
+
+            return result;
+        }
+
+        public string GetDate(int span)
+        {
+            var year = DateTime.Now.AddMonths(-span).Year.ToString();
+            if (DateTime.Now.AddMonths(-span).Month < 10)
+            {
+                return year + "0" + DateTime.Now.AddMonths(-span).Month.ToString();
+            }
+            else
+            {
+                return year + DateTime.Now.AddMonths(-span).Month.ToString();
             }
         }
     }

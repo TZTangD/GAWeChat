@@ -92,5 +92,12 @@ namespace HC.WeChat.Products
         /// <returns></returns>
         Task<int> GetCheckCode(CheckInput input);
 
+        /// <summary>
+        /// 获取台账档级信息
+        /// </summary>
+        /// <param name="code">专卖证号</param>
+        /// <returns></returns>
+        Task<RetailAllInfo> GetCustAndAccountInfoAsync(string code);
+
     }
 }

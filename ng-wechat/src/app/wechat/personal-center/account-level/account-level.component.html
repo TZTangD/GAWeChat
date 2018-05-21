@@ -30,7 +30,7 @@
                         <span style="font-size: 14px;color: #888888;float: right;margin: 5px auto;">{{customer.archivalLevel}}</span>
                     </p> -->
                     <p>
-                        <span >{{customer.name}}</span>
+                        <span>{{customer.name}}</span>
                     </p>
                     <p>
                         <span style="font-size: 13px;color: #888888;">{{customer.licenseKey}}</span>
@@ -44,15 +44,15 @@
                 </div>
 
             </div>
-            
-                <div class="weui-cell weui-cell_access" (click)="goCustomerLeavel(i)">
-                    <div class="weui-cell__bd">
-                        <span style="vertical-align: middle; font-size: 14px;">档级货源</span>
-                    </div>
-                    <div class="weui-cell__ft">
-                            <span style="margin-left: 5px; color: #1aad19">{{customer.archivalLevel}}</span>
-                       </div>
+
+            <div class="weui-cell weui-cell_access" (click)="goCustomerLeavel(i)" style="font-size: 14px;">
+                <div class="weui-cell__bd">
+                    <span style="vertical-align: middle; font-size: 14px;">档级货源</span>
                 </div>
+                <div class="weui-cell__ft">
+                    {{customer.archivalLevel}}
+                </div>
+            </div>
         </div>
         <div class="weui-cells__title">基础信息</div>
         <div class="weui-cells">
@@ -78,7 +78,7 @@
                 <div class="weui-cell__bd">
                     <p>上月订货总量</p>
                 </div>
-                <div class="weui-cell__ft infoCss" >9087</div>
+                <div class="weui-cell__ft infoCss">9087</div>
             </div>
             <div class="weui-cell">
                 <div class="weui-cell__bd">
@@ -116,7 +116,7 @@
             <button weui-button [weui-loading]="loading" (click)="goBack()">返回</button>
         </div>
     </weui-tab>
-    <weui-tab heading="客户订货台账" >
+    <weui-tab heading="客户订货台账">
         <!-- <article class="weui-article">
                 <h1 style="color: white;">台账信息</h1>
         </article> -->
@@ -127,23 +127,32 @@
         </div>
         <!-- 月度 -->
         <div class="weui-cells" *ngIf="tableShow===1">
-            <a class="weui-cell weui-cells__title">
+
+            <div class="weui-cells__title">本月</div>
+            <a class="weui-cell">
                 <div class="weui-cell__hd hdcss">日期</div>
                 <div class="weui-cell__bd" style="text-align:center;">名称</div>
                 <!-- <div class="weui-cell__bd" style="text-align:center;">上月购数量</div> -->
-                <div class="weui-cell__ft ftcss">本月购数量</div>
+                <div class="weui-cell__ft ftcss">购买数量</div>
             </a>
-            <div class="weui-cells__title">本月购数量</div>
-            <a class="weui-cell " (click)="goCustomerLeavel(i)">
+            <a class="weui-cell" (click)="goCustomerLeavel(i)">
                 <div class="weui-cell__hd hdcss">20180512</div>
                 <div class="weui-cell__bd" style="text-align:center;">（娇子）中华</div>
                 <!-- <div class="weui-cell__bd" style="text-align:center;">200</div> -->
                 <div class="weui-cell__ft ftcss">300</div>
             </a>
-            <div class="weui-cells__title">上月购数量</div>
+
+
+            <div class="weui-cells__title">上月</div>
+            <a class="weui-cell">
+                <div class="weui-cell__hd hdcss">日期</div>
+                <div class="weui-cell__bd" style="text-align:center;">名称</div>
+                <!-- <div class="weui-cell__bd" style="text-align:center;">上月购数量</div> -->
+                <div class="weui-cell__ft ftcss">购买数量</div>
+            </a>
             <a class="weui-cell " (click)="goCustomerLeavel(i)">
                 <div class="weui-cell__hd hdcss">20180512</div>
-                <div class="weui-cell__bd" style="text-align:center;">（娇子）中华</div>
+                <div class="weui-cell__bd" style="text-align:center;">（娇子（蓝格调）</div>
                 <!-- <div class="weui-cell__bd" style="text-align:center;">200</div> -->
                 <div class="weui-cell__ft ftcss">300</div>
             </a>

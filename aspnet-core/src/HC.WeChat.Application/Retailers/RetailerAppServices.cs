@@ -289,7 +289,18 @@ namespace HC.WeChat.Retailers
             var entity = await _retailerRepository.GetAll().Where(r => r.Id == id).FirstOrDefaultAsync();
             return entity.MapTo<RetailerListDto>();
         }
+        /// <summary>
+        /// 通过指定licenseKey获取RetailerListDto信息
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task<RetailerListDto> GetRetailerByIdDtoByLKeyForWeChatAsync(string licenseKey)
+        {
+            var entity = await _retailerRepository.GetAll().Where(r => r.LicenseKey == licenseKey).FirstOrDefaultAsync();
 
+            return entity.MapTo<RetailerListDto>();
+        }
         #endregion
 
     }
