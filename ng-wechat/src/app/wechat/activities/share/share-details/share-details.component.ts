@@ -1,19 +1,10 @@
 ///<reference path="../../../../../../node_modules/@angular/core/src/metadata/directives.d.ts"/>
-<<<<<<< HEAD
 import { Component, Injector, OnInit, ViewEncapsulation } from '@angular/core';
 import { AppComponentBase } from '../../../components/app-component-base';
-import { ShareService } from '../../../../services/share/share.services';
 import { JWeiXinService } from 'ngx-weui/jweixin';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Article } from '../../../../services/model';
-=======
-import {Component, Injector, OnInit, ViewEncapsulation} from '@angular/core';
-import {AppComponentBase} from '../../../components/app-component-base';
-import {JWeiXinService} from 'ngx-weui/jweixin';
-import {ActivatedRoute, Router} from '@angular/router';
-import {Article} from '../../../../services/model';
-import {ArticleService} from '../../../../services';
->>>>>>> dev
+import { ArticleService } from '../../../../services';
 
 @Component({
     selector: 'share-details',
