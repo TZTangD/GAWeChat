@@ -17,6 +17,9 @@ export class EvaluationDetailComponent extends AppComponentBase implements OnIni
     //传参
     productId: string = this.route.snapshot.params['productId'];
     id: string = this.route.snapshot.params['id'];
+    pageType: string = this.route.snapshot.params['pageType'];
+    isCQ: string = null; // 数量是否一致
+    evaluationText: string = null; // 评价等级
 
     hostUrl: string = AppConsts.remoteServiceBaseUrl;
     loading = false;
@@ -33,6 +36,9 @@ export class EvaluationDetailComponent extends AppComponentBase implements OnIni
         this.res.radioType = this.radioType[2];
         this.res.radio = this.radio[0];
         this.GetWXProductsDetailsByIdAsync();
+        if (this.pageType == 'detail') {
+            this.GetWXEvaluationByIdAsync();
+        }
     }
 
     GetWXProductsDetailsByIdAsync() {
@@ -47,6 +53,30 @@ export class EvaluationDetailComponent extends AppComponentBase implements OnIni
             this.purchaseRecord = result;
         });
     }
+
+    GetWXEvaluationByIdAsync() {
+        let params: any = {};
+        if (this.settingsService.tenantId) {
+            params.tenantId = this.settingsService.tenantId;
+        }
+        params.id = this.id;
+        this.purchaserecordService.GetWXEvaluationByIdAsync(params).subscribe(result => {
+            this.shopEvaluation = result;
+            if (this.shopEvaluation.isCorrectQuantity == true) {
+                this.isCQ = "一致";
+            } else {
+                this.isCQ = "不一致";
+            }
+            if (this.shopEvaluation.evaluation == 5) {
+                this.evaluationText = "好评";
+            } else if (this.shopEvaluation.evaluation == 3) {
+                this.evaluationText = "中评";
+            } else {
+                this.evaluationText = "差评";
+            }
+        });
+    }
+
     save() {
         this.loading = true;
         this.shopEvaluation.evaluation = this.res.radioType.value;
@@ -54,6 +84,7 @@ export class EvaluationDetailComponent extends AppComponentBase implements OnIni
         this.shopEvaluation.purchaseRecordId = this.id;
         this.shopEvaluation.openId = this.settingsService.openId;
         this.shopEvaluation.shopId = this.purchaseRecord.shopId;
+        console.log(this.shopEvaluation.shopId)
         this.shopEvaluationService.SubmitShopEvaluationAsync(this.shopEvaluation).subscribe(data => {
             this.loading = false;
             if (data && data.code === 0) {

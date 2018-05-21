@@ -324,8 +324,6 @@ namespace HC.WeChat.ShopEvaluations
                                   PhotoUrl = pr.PhotoUrl
                               };
                 return await finallyEntity.OrderByDescending(v => v.CreationTime).ToListAsync();
-                //var a = finallyEntity.ToList();
-                //return  a;
             }
         }
 
@@ -362,11 +360,11 @@ namespace HC.WeChat.ShopEvaluations
         /// <param name="shopEvaluationId"></param>
         /// <returns></returns>
         [AbpAllowAnonymous]
-        public async Task<ShopEvaluationListDto> GetWXEvaluationByIdAsync(int? tenantId, Guid? shopEvaluationId)
+        public async Task<ShopEvaluationListDto> GetWXEvaluationByIdAsync(int? tenantId, Guid? Id)
         {
             using (CurrentUnitOfWork.SetTenantId(tenantId))
             {
-                var query = _shopevaluationRepository.GetAll().Where(e => e.Id==shopEvaluationId);
+                var query = _shopevaluationRepository.GetAll().Where(e => e.PurchaseRecordId== Id);
                 var finallyEntity = from se in query                              
                                     select new ShopEvaluationListDto()
                                     {
@@ -404,7 +402,8 @@ namespace HC.WeChat.ShopEvaluations
                                   Quantity = pr.Quantity,
                                   ProductId = pr.ProductId,
                                   Integral =pr.Integral,
-                                  ShopId =pr.ShopId
+                                  ShopId =pr.ShopId,
+                                  IsEvaluation =pr.IsEvaluation
                               };
                 var products = from p in _productRepository.GetAll()
                                select new ProductListDto()
@@ -425,7 +424,8 @@ namespace HC.WeChat.ShopEvaluations
                                  Quantity = pr.Quantity,
                                  ProductId = pr.ProductId,
                                  PhotoUrl = p.PhotoUrl,
-                                 ShopId =pr.ShopId
+                                 ShopId =pr.ShopId,
+                                 IsEvaluation =pr.IsEvaluation
                              };
                 return await entity.FirstOrDefaultAsync();
             }

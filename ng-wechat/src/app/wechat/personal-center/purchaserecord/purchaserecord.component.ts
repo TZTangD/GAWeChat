@@ -65,10 +65,12 @@ export class PurchaserecordComponent extends AppComponentBase implements OnInit 
         });
     }
 
-    goDetail(productId: string, purchaseRecordId: string) {
+    goEvaluation(productId: string, purchaseRecordId: string, pageType: string) {
         this.router.navigate(['/shopevaluations/evaluation-detail', { id: purchaseRecordId, productId: productId }]);
     }
-
+    goDetail(productId: string, purchaseRecordId: string, pageType: string) {
+        this.router.navigate(['/shopevaluations/evaluation-detail', { id: purchaseRecordId, productId: productId, pageType: 'detail' }]);
+    }
     goFindGoods() {
         this.router.navigate(['/goodses/goods']);
     }

@@ -7,14 +7,12 @@ import { AngularSplitModule } from 'angular-split';
 import { ComponentsModule } from '../../components/components.module';
 import { RouterModule, Routes } from '@angular/router';
 import { ShopEvaluationService, PurchaserecordService } from '../../../services';
-import { ShopEvaluationComponent } from './shopevaluation.component';
 import { EvaluationDetailComponent } from './evaluation-detail/evaluation-detail.component';
 
-const COMPONENTS = [ShopEvaluationComponent, EvaluationDetailComponent];
+const COMPONENTS = [EvaluationDetailComponent];
 
 const routes: Routes = [
     { path: '', redirectTo: 'shopevaluation' },
-    { path: 'shopevaluation', component: ShopEvaluationComponent },
     { path: 'evaluation-detail', component: EvaluationDetailComponent },
 ];
 
@@ -29,7 +27,6 @@ const routes: Routes = [
         ...COMPONENTS
     ],
     exports: [
-        ShopEvaluationComponent,
         EvaluationDetailComponent
     ],
 

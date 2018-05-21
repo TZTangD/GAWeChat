@@ -10,7 +10,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '../httpclient'
 import { Observable } from 'rxjs/Observable';
 import * as moment from 'moment';
-import { ApiResult, PurchaseRecord } from '../model/index';
+import { ApiResult, PurchaseRecord, ShopEvaluation } from '../model/index';
 
 
 @Injectable()
@@ -58,7 +58,7 @@ export class PurchaserecordService {
     GetWXEvaluationByIdAsync(params: any) {
         return this.http.get('/api/services/app/ShopEvaluation/GetWXEvaluationByIdAsync', params).map(data => {
             if (data.result) {
-                return PurchaseRecord.fromJS(data.result);
+                return ShopEvaluation.fromJS(data.result);
             } else {
                 return null;
             }

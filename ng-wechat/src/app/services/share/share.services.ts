@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {Share} from '../model/share';
-import {HttpClient} from '../httpclient';
-import {Article} from '../model';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { Share } from '../model/share';
+import { HttpClient } from '../httpclient';
+import { Article } from '../model';
 
 @Injectable()
 export class ShareService {
