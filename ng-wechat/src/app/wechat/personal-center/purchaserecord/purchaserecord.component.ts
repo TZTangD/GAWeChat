@@ -18,7 +18,9 @@ export class PurchaserecordComponent extends AppComponentBase implements OnInit 
     user: WechatUser;
     purchaseRecordList: PurchaseRecord[] = [];
     openId: string = this.route.snapshot.params['openId'];
-
+    pageType: string = this.route.snapshot.params['pageType'];
+    hostUrl: string = AppConsts.remoteServiceBaseUrl;
+    tittleType: boolean = false;
     constructor(injector: Injector, private purchaserecordService: PurchaserecordService, private route: ActivatedRoute, private router: Router) {
         super(injector);
     }
@@ -27,7 +29,13 @@ export class PurchaserecordComponent extends AppComponentBase implements OnInit 
         this.settingsService.getUser().subscribe(result => {
             this.user = result;
         });
-        this.GetPagedPurchaseRecord();
+        if (this.pageType == 'shopEvaluation') {
+            this.tittleType = true;
+            this.GetWXNotEvaluationByIdAsync();
+        } else {
+            this.tittleType = false;
+            this.GetPagedPurchaseRecord();
+        }
     }
 
     GetPagedPurchaseRecord() {
@@ -44,5 +52,24 @@ export class PurchaserecordComponent extends AppComponentBase implements OnInit 
                 this.pageModel.isLast = true;
             }
         });
+    }
+
+    GetWXNotEvaluationByIdAsync() {
+        let params: any = {};
+        if (this.settingsService.tenantId) {
+            params.tenantId = this.settingsService.tenantId;
+        }
+        params.openId = this.openId;
+        this.purchaserecordService.GetWXNotEvaluationByIdAsync(params).subscribe(result => {
+            this.purchaseRecordList = result;
+        });
+    }
+
+    goDetail(productId: string, purchaseRecordId: string) {
+        this.router.navigate(['/shopevaluations/evaluation-detail', { id: purchaseRecordId, productId: productId }]);
+    }
+
+    goFindGoods() {
+        this.router.navigate(['/goodses/goods']);
     }
 }

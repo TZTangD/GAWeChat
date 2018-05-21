@@ -1,0 +1,59 @@
+<!--component html goes here -->
+<Page [ngClass]="'panel'" [title]="'Panel'" [showTitle]="false" [spacing]="false">
+    <div class="weui-cells__title">商品评价</div>
+    <div class="weui-panel weui-panel_access" *ngIf="purchaseRecord">
+        <div class="weui-panel__bd">
+            <div class="weui-media-box weui-media-box_appmsg">
+                <!-- <div class="weui-media-box__hd"> -->
+                <!-- <img class="weui-media-box__thumb" src="{{purchaseRecord.photoUrl|hostUrl}}" alt=""> -->
+                <div class="weui-cell__hd weui-cell_img" [ngStyle]="{'background-image':'url('+ hostUrl + purchaseRecord.photoUrl +')'}">
+                </div>
+                <!-- </div> -->
+                <div class="weui-media-box__bd">
+                    <ul class="weui-media-box__info">
+                        <li class="weui-media-box__info__meta sp">{{purchaseRecord.specification}}</li>
+                        <li class="weui-media-box__info__meta i">积分:+{{purchaseRecord.integral}}</li>
+                    </ul>
+
+                    <ul class="weui-media-box__info sn">
+                        <li class="weui-media-box__info__meta s">{{purchaseRecord.shopName}}</li>
+                    </ul>
+                    <ul class="weui-media-box__info pc">
+                        <li class="weui-media-box__info__meta ">数量:{{purchaseRecord.quantity}}</li>
+                        <li class="weui-media-box__info__meta t">{{purchaseRecord.creationTime| date:'yyyy-MM-dd HH:mm'}}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <form #f="ngForm" (ngSubmit)="save()">
+        <div class="weui-cells__title">购买数量是否一致</div>
+        <div class="weui-cells weui-cells_radio">
+            <label class="weui-cell weui-check__label" for="radio-{{i.id}}" *ngFor="let i of radio">
+            <div class="weui-cell__bd">
+                <p>{{i.name}}</p>
+            </div>
+            <div class="weui-cell__ft">
+                <input type="radio" class="weui-check" [(ngModel)]="res.radio" name="radio1" [value]="i" id="radio-{{i.id}}" weui-required>
+                <span class="weui-icon-checked"></span>
+            </div>
+        </label>
+        </div>
+        <div class="weui-cells__title">店铺评价</div>
+        <div class="weui-cells weui-cells_radio">
+            <label class="weui-cell weui-check__label" for="radioType-{{index.id}}" *ngFor="let index of radioType">
+            <div class="weui-cell__bd">
+                <p>{{index.name}}</p>
+            </div>
+            <div class="weui-cell__ft">
+                <input type="radio" class="weui-check" [(ngModel)]="res.radioType" name="radioType" [value]="index" id="radioType-{{index.id}}" weui-required>
+                <span class="weui-icon-checked"></span>
+            </div>
+        </label>
+        </div>
+        <div class="weui-btn-area">
+            <button weui-button [weui-loading]="loading" [disabled]="!f.form.valid" [ngClass]="{'weui-btn_disabled': !f.form.valid}">提交</button>
+        </div>
+    </form>
+    <weui-loadmore type="line " *ngIf="!purchaseRecord "></weui-loadmore>
+</Page>

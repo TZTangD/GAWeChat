@@ -4,7 +4,7 @@ import { PageModel, WechatUser, ShopEvaluation, PurchaseRecord } from '../../../
 import { Router } from '@angular/router';
 import { InfiniteLoaderComponent } from 'ngx-weui';
 import { ActivatedRoute } from '@angular/router';
-import { ShopEvaluationService, PurchaserecordService } from '../../../services';
+import { ShopEvaluationService, PurchaserecordService, AppConsts } from '../../../services';
 
 @Component({
     moduleId: module.id,
@@ -14,20 +14,18 @@ import { ShopEvaluationService, PurchaserecordService } from '../../../services'
 })
 
 export class ShopEvaluationComponent extends AppComponentBase implements OnInit {
-    pageModel: PageModel = new PageModel(); // 分页信息
     user: WechatUser;
     purchaseRecordList: PurchaseRecord[] = [];
-    // shopEvaluationList: ShopEvaluation[] = [];
     openId: string = this.route.snapshot.params['openId'];
+    hostUrl: string = AppConsts.remoteServiceBaseUrl;
 
     constructor(injector: Injector, private purchaserecordService: PurchaserecordService, private route: ActivatedRoute, private router: Router) {
         super(injector);
     }
     ngOnInit() {
-        this.pageModel.isLast = false;
-        this.settingsService.getUser().subscribe(result => {
-            this.user = result;
-        });
+        // this.settingsService.getUser().subscribe(result => {
+        //     this.user = result;
+        // });
         this.GetPagedPurchaseRecord();
     }
 
@@ -37,8 +35,12 @@ export class ShopEvaluationComponent extends AppComponentBase implements OnInit 
             params.tenantId = this.settingsService.tenantId;
         }
         params.openId = this.openId;
-        this.purchaserecordService.GetPurchaseRecordById2(params).subscribe(result => {
+        this.purchaserecordService.GetWXNotEvaluationByIdAsync(params).subscribe(result => {
             this.purchaseRecordList = result;
         });
+    }
+
+    goDetail(productId: string, purchaseRecordId: string) {
+        this.router.navigate(['/shopevaluations/evaluation-detail', { id: purchaseRecordId, productId: productId }]);
     }
 }

@@ -23,6 +23,7 @@ using HC.WeChat.WechatEnums;
 using HC.WeChat.Shops;
 using HC.WeChat.Products;
 using HC.WeChat.Products.Dtos;
+using HC.WeChat.ShopEvaluations;
 
 namespace HC.WeChat.PurchaseRecords
 {
@@ -38,6 +39,7 @@ namespace HC.WeChat.PurchaseRecords
         private readonly IRepository<WeChatUser, Guid> _weChatUserRepository;
         private readonly IRepository<Product, Guid> _productRepository;
         private readonly IRepository<MemberConfig, Guid> _memberConfigRepository;
+        private readonly IRepository<ShopEvaluation, Guid> _shopevaluationRepository;
         private readonly IRepository<Shop, Guid> _shopRepository;
         private readonly IPurchaseRecordManager _purchaserecordManager;
 
@@ -51,6 +53,7 @@ namespace HC.WeChat.PurchaseRecords
         , IRepository<Shop, Guid> shopRepository
          , IRepository<Product, Guid> productRepository
         , IPurchaseRecordManager purchaserecordManager
+            , IRepository<ShopEvaluation, Guid> shopevaluationRepository
         )
         {
             _purchaserecordRepository = purchaserecordRepository;
@@ -60,6 +63,7 @@ namespace HC.WeChat.PurchaseRecords
             _shopRepository = shopRepository;
             _productRepository = productRepository;
             _purchaserecordManager = purchaserecordManager;
+            _shopevaluationRepository = shopevaluationRepository;
         }
 
         /// <summary>
@@ -272,7 +276,7 @@ namespace HC.WeChat.PurchaseRecords
             {
                 //获取积分配置
                 var config = await GetIntegralConfig(input.TenantId);
-               
+
                 int? xintegral = 0;//消费者获得积分
                 int? rintegral = 0;//零售客户获得积分
                 string refIds = string.Empty;
@@ -368,16 +372,16 @@ namespace HC.WeChat.PurchaseRecords
             {
                 var query = _purchaserecordRepository.GetAll().Where(p => p.OpenId == openId);
                 var records = from pr in query
-                             select new PurchaseRecordListDto()
-                             {
-                                 Id = pr.Id,
-                                 CreationTime = pr.CreationTime,
-                                 OpenId = pr.OpenId,
-                                 ShopName = pr.ShopName,
-                                 Specification =pr.Specification,
-                                 Quantity = pr.Quantity,
-                                 ProductId =pr.ProductId
-                             };
+                              select new PurchaseRecordListDto()
+                              {
+                                  Id = pr.Id,
+                                  CreationTime = pr.CreationTime,
+                                  OpenId = pr.OpenId,
+                                  ShopName = pr.ShopName,
+                                  Specification = pr.Specification,
+                                  Quantity = pr.Quantity,
+                                  ProductId = pr.ProductId
+                              };
                 var products = from p in _productRepository.GetAll()
                                select new ProductListDto()
                                {
@@ -390,7 +394,6 @@ namespace HC.WeChat.PurchaseRecords
                              {
                                  Id = pr.Id,
                                  CreationTime = pr.CreationTime,
-                                 Integral = pr.Integral,
                                  OpenId = pr.OpenId,
                                  ShopName = pr.ShopName,
                                  Specification = pr.Specification,
@@ -398,25 +401,42 @@ namespace HC.WeChat.PurchaseRecords
                                  ProductId = pr.ProductId,
                                  PhotoUrl = p.PhotoUrl
                              };
-                var query2 =  entity.Select(e => e.ProductId);
-                var query3 =  await entity.Select(e => e.ProductId)
-                        .Except(query2).ToListAsync();
-                var entity2 = from p in query3
-                              join pr in entity on p equals pr.Id
-                             select new PurchaseRecordListDto()
-                             {
-                                 Id = pr.Id,
-                                 CreationTime = pr.CreationTime,
-                                 Integral = pr.Integral,
-                                 OpenId = pr.OpenId,
-                                 ShopName = pr.ShopName,
-                                 Specification = pr.Specification,
-                                 Quantity = pr.Quantity,
-                                 ProductId = pr.ProductId,
-                                 PhotoUrl = pr.PhotoUrl
-                             };
-                var result =  entity2.OrderByDescending(v => v.CreationTime).Skip((pageIndex - 1) * pageSize).Take(pageSize);
-                return result.ToList();
+                //var entity = (from pr in records
+                //              join p in products on pr.ProductId equals p.Id
+                //              select new PurchaseRecordListDto()
+                //              {
+                //                  Id = pr.Id,
+                //                  CreationTime = pr.CreationTime,
+                //                  OpenId = pr.OpenId,
+                //                  ShopName = pr.ShopName,
+                //                  Specification = pr.Specification,
+                //                  Quantity = pr.Quantity,
+                //                  ProductId = pr.ProductId,
+                //                  PhotoUrl = p.PhotoUrl
+                //              }).ToListAsync();
+                //await GetWXIsEvaluationByIdAsync(tenantId, );
+
+                return await entity.OrderByDescending(v => v.CreationTime).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+            }
+        }
+
+        /// <summary>
+        /// 判断是否已经评价
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="purchaseRecordId"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task<bool> GetWXIsEvaluationByIdAsync(int? tenantId, Guid? purchaseRecordId)
+        {
+            using (CurrentUnitOfWork.SetTenantId(tenantId))
+            {
+                var check = await _shopevaluationRepository.GetAll().FirstOrDefaultAsync(se => se.PurchaseRecordId == purchaseRecordId);
+                if (check != null)
+                {
+                    return true;
+                }
+                return false;
             }
         }
     }

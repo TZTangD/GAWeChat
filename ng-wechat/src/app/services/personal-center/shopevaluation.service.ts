@@ -25,4 +25,10 @@ export class ShopEvaluationService {
             }
         });
     }
+
+    SubmitShopEvaluationAsync(input: any): Observable<any> {
+        return this.http.post('/api/services/app/ShopEvaluation/SubmitShopEvaluationAsync', input).map(data => {
+            return data.result;
+        });
+    }
 }

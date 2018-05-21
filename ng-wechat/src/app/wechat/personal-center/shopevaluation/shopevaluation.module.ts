@@ -8,12 +8,14 @@ import { ComponentsModule } from '../../components/components.module';
 import { RouterModule, Routes } from '@angular/router';
 import { ShopEvaluationService, PurchaserecordService } from '../../../services';
 import { ShopEvaluationComponent } from './shopevaluation.component';
+import { EvaluationDetailComponent } from './evaluation-detail/evaluation-detail.component';
 
-const COMPONENTS = [ShopEvaluationComponent];
+const COMPONENTS = [ShopEvaluationComponent, EvaluationDetailComponent];
 
 const routes: Routes = [
     { path: '', redirectTo: 'shopevaluation' },
     { path: 'shopevaluation', component: ShopEvaluationComponent },
+    { path: 'evaluation-detail', component: EvaluationDetailComponent },
 ];
 
 @NgModule({
@@ -28,6 +30,7 @@ const routes: Routes = [
     ],
     exports: [
         ShopEvaluationComponent,
+        EvaluationDetailComponent
     ],
 
     providers: [

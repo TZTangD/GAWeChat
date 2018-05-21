@@ -9,43 +9,63 @@
             </div>
         </div>
     </div>
-    <div class="weui-cells__title">积分规则</div>
-    <div class="weui-cells ">
-        <div class="weui-cell ">
-            <div class="weui-cell__bd ">
-                <div class="weui-media-box__desc" style="text-align:left ">
-                    <img src="assets/images/integral/samleintegral1.png"> 店铺扫码店铺管理员可获赠{{configCode.rcValue}}积分
-                </div>
-            </div>
-        </div>
-        <div class="weui-cell__bd ">
-            <div class="weui-cell ">
-                <div class="weui-cell__bd ">
-                    <div class="weui-media-box__desc" style="text-align:left ">
-                        <img src="assets/images/integral/samleintegral1.png"> 购买商品消费金额1元可获得{{configCode.cValue}}积分
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="weui-cell__bd ">
-            <div class="weui-cell ">
-                <div class="weui-cell__bd ">
-                    <div class="weui-media-box__desc" style="text-align:left ">
-                        <img src="assets/images/integral/samleintegral1.png"> 店铺评价1次可获得{{configCode.eValue}}积分
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <weui-infiniteloader (loadmore)="onLoadMore($event)" #comp>
+        <div class="weui-cells__title">积分规则</div>
+        <div class="weui-cells ">
+            <div class="weui-cell weui-cell_access">
+                <div class="weui-cell__hd">
+                    <img src="assets/images/integral/samleintegral1.png" alt="" style="width:16px;margin-right:5px;display:block">
+                </div>
+                <div class="weui-cell__bd weui-cell_primary">
+                    <p>店铺扫码店铺管理员可获赠{{configCode.rcValue}}积分</p>
+                </div>
+            </div>
+            <div class="weui-cell weui-cell_access">
+                <div class="weui-cell__hd">
+                    <img src="assets/images/integral/samleintegral1.png" alt="" style="width:16px;margin-right:5px;display:block">
+                </div>
+                <div class="weui-cell__bd weui-cell_primary">
+                    <p> 购买商品消费金额1元可获得{{configCode.cValue}}积分</p>
+                </div>
+            </div>
+            <div class="weui-cell weui-cell_access">
+                <div class="weui-cell__hd">
+                    <img src="assets/images/integral/samleintegral1.png" alt="" style="width:16px;margin-right:5px;display:block">
+                </div>
+                <div class="weui-cell__bd weui-cell_primary">
+                    <p>店铺评价1次可获得{{configCode.eValue}}积分</p>
+                </div>
+            </div>
+            <!-- <div class="weui-cell ">
+                <div class="weui-cell__bd ">
+                    <div class="weui-media-box__desc" style="text-align:left ">
+                        <img src="assets/images/integral/samleintegral1.png"> 店铺扫码店铺管理员可获赠{{configCode.rcValue}}积分
+                    </div>
+                </div>
+            </div>
+            <div class="weui-cell__bd ">
+                <div class="weui-cell ">
+                    <div class="weui-cell__bd ">
+                        <div class="weui-media-box__desc" style="text-align:left ">
+                            <img src="assets/images/integral/samleintegral1.png"> 购买商品消费金额1元可获得{{configCode.cValue}}积分
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="weui-cell__bd ">
+                <div class="weui-cell ">
+                    <div class="weui-cell__bd ">
+                        <div class="weui-media-box__desc" style="text-align:left ">
+                            <img src="assets/images/integral/samleintegral1.png"> 店铺评价1次可获得{{configCode.eValue}}积分
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+        </div>
         <div class="weui-cells__title">积分详情</div>
         <div class="weui-panel weui-panel_access ">
             <div class="weui-panel__bd ">
-<<<<<<< HEAD
-                <div class="weui-media-box weui-media-box_appmsg " *ngFor="let item of integralDetail">
-=======
-                <a href="javascript:void(0); " class="weui-media-box weui-media-box_appmsg " *ngFor="let item of integralDetail">
->>>>>>> dev
+                <div class="weui-media-box weui-media-box_appmsg " *ngFor="let item of integralDetailList">
                     <div class="weui-media-box__bd ">
                         <div class="weui-flex">
                             <div class="weui-flex__item">
@@ -70,6 +90,7 @@
                         </ul>
                     </div>
                 </div>
+                <weui-loadmore type="line" *ngIf="!integralDetailList || integralDetailList.length == 0"></weui-loadmore>
             </div>
         </div>
     </weui-infiniteloader>

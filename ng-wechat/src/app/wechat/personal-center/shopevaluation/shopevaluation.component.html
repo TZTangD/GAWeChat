@@ -3,9 +3,11 @@
     <div class="weui-cells__title">店铺评价</div>
     <div class="weui-panel weui-panel_access">
         <div class="weui-panel__bd">
-            <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg" *ngFor="let item of purchaseRecordList">
+            <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg" *ngFor="let item of purchaseRecordList" (click)="goDetail(item.productId,item.id)">
                 <div class="weui-media-box__hd">
-                    <img class="weui-media-box__thumb" src="{{item.photoUrl|hostUrl}}" alt="">
+                    <!-- <img class="weui-media-box__thumb" src="{{item.photoUrl|hostUrl}}" alt=""> -->
+                    <div class="weui-cell__hd weui-cell_img" [ngStyle]="{'background-image':'url('+ hostUrl + item.photoUrl +')'}">
+                    </div>
                 </div>
                 <div class="weui-media-box__bd">
                     <ul class="weui-media-box__info">
@@ -19,6 +21,7 @@
                     </ul>
                 </div>
             </a>
+            <weui-loadmore type="line" *ngIf="!purchaseRecordList || purchaseRecordList.length == 0"></weui-loadmore>
         </div>
     </div>
 </Page>

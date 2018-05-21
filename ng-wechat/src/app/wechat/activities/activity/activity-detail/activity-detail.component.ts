@@ -20,7 +20,7 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
     id: string = this.route.snapshot.params['id'];
     constructor(injector: Injector, private router: Router,
         private articleService: ArticleService,
-        private wxService: JWeiXinService, private route: ActivatedRoute) {
+        private route: ActivatedRoute) {
         super(injector);
     }
     ngOnInit() {

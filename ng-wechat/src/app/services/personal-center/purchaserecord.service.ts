@@ -25,10 +25,31 @@ export class PurchaserecordService {
             }
         });
     }
-    GetPurchaseRecordById2(params: any): Observable<PurchaseRecord[]> {
-        return this.http.get('/api/services/app/ShopProduct/GetWXNotEvaluationByIdAsync', params).map(data => {
+
+    GetWXNotEvaluationByIdAsync(params: any): Observable<PurchaseRecord[]> {
+        return this.http.get('/api/services/app/ShopEvaluation/GetWXNotEvaluationByIdAsync', params).map(data => {
             if (data.result) {
                 return PurchaseRecord.fromJSArray(data.result);
+            } else {
+                return null;
+            }
+        });
+    }
+
+    GetWXCountNotEvaluationByIdAsync(params: any): Observable<any> {
+        return this.http.get('/api/services/app/ShopEvaluation/GetWXCountNotEvaluationByIdAsync', params).map(data => {
+            if (data.result) {
+                return data.result;
+            } else {
+                return null;
+            }
+        });
+    }
+
+    GetWXProductsDetailsByIdAsync(params: any): Observable<PurchaseRecord> {
+        return this.http.get('/api/services/app/ShopEvaluation/GetWXProductsDetailsByIdAsync', params).map(data => {
+            if (data.result) {
+                return PurchaseRecord.fromJS(data.result);
             } else {
                 return null;
             }

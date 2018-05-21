@@ -6,6 +6,7 @@ using HC.WeChat.ShopEvaluations.Dtos;
 using HC.WeChat.ShopEvaluations;
 using System;
 using HC.WeChat.PurchaseRecords.Dtos;
+using HC.WeChat.Dto;
 
 namespace HC.WeChat.ShopEvaluations
 {
@@ -65,5 +66,9 @@ namespace HC.WeChat.ShopEvaluations
         /// <returns></returns>
         Task<PagedResultDto<ShopEvaluationListDto>> GetPagedShopEvaluationsByPurchaseRecord(GetShopEvaluationsInput input);
         Task<List<PurchaseRecordListDto>> GetWXNotEvaluationByIdAsync(int? tenantId, string openId);
+        Task<int> GetWXCountNotEvaluationByIdAsync(int? tenantId, string openId);
+        Task<PurchaseRecordListDto> GetWXProductsDetailsByIdAsync(int? tenantId, string openId, Guid? productId, Guid? id);
+        Task<APIResultDto> SubmitShopEvaluationAsync(ShopEvaluation input);
+        Task<ShopEvaluationListDto> GetWXEvaluationByIdAsync(int? tenantId, Guid? shopEvaluationId);
     }
 }

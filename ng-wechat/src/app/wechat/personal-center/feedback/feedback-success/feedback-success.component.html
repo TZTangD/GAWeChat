@@ -1,14 +1,19 @@
 <!--component html goes here -->
-<Page [ngClass]="'icons'" [spacing]="true" >
-   
-            <div class="aa">
-            <div class="icon-box">
-                <i class="weui-icon-success weui-icon_msg"></i>
-                <div class="icon-box__ctn">
-                    <h3 class="icon-box__title">提交成功</h3>
-                    <p class="icon-box__desc">意见反馈提交成功</p>
-                </div>
+<Page [ngClass]="'icons'" [spacing]="true">
+
+    <div class="aa">
+        <div class="icon-box" *ngIf="result.length == 2">
+            <i class="weui-icon-success weui-icon_msg"></i>
+            <div class="icon-box__ctn">
+                <h3 class="icon-box__title">提交成功</h3>
+                <p class="icon-box__desc">意见反馈提交成功</p>
             </div>
         </div>
-     
+        <div class="icon-box" *ngIf="result.length == 1">
+            <i class="weui-icon-success weui-icon_msg"></i>
+            <div class="icon-box__ctn">
+                <h3 class="icon-box__title">评价成功</h3>
+            </div>
+        </div>
+    </div>
 </Page>

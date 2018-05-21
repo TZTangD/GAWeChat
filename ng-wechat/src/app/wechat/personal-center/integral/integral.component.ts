@@ -15,7 +15,7 @@ import { ActivatedRoute } from '@angular/router';
 
 export class IntegralComponent extends AppComponentBase implements OnInit {
     openId: string = this.route.snapshot.params['openId'];
-    integralDetail: IntegralDetail[] = [];
+    integralDetailList: IntegralDetail[] = [];
     pageModel: PageModel = new PageModel(); // 分页信息
     user: WechatUser;
     config: MemberConfigs[] = [];
@@ -37,7 +37,6 @@ export class IntegralComponent extends AppComponentBase implements OnInit {
 
     onLoadMore(comp: InfiniteLoaderComponent) {
         this.pageModel.pageIndex++;
-        console.log(this.pageModel.isLast);
         if (this.pageModel.isLast) {
             comp.setFinished();
             return;
@@ -79,7 +78,7 @@ export class IntegralComponent extends AppComponentBase implements OnInit {
         params.pageIndex = this.pageModel.pageIndex;
         params.pageSize = this.pageModel.pageSize;
         this.integralDetailService.GetIntegralDetailById(params).subscribe(result => {
-            this.integralDetail.push(...result);
+            this.integralDetailList.push(...result);
             if (result && result.length < this.pageModel.pageSize) {
                 this.pageModel.isLast = true;
             }
