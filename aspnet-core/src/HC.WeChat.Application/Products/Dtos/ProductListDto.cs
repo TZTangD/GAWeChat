@@ -98,4 +98,163 @@ namespace HC.WeChat.Products.Dtos
             }
         }
     }
+
+    /// <summary>
+    /// 零售户
+    /// </summary>
+    public class RetailInfoDto
+    {
+        /// <summary>
+        /// 客户ID
+        /// </summary>
+        public string CustId { get; set; }
+
+        /// <summary>
+        /// 客户编码
+        /// </summary>
+        public string Code { get; set; }
+
+        /// <summary>
+        /// 零售户姓名
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// 头像
+        /// </summary>
+        public string HeadImgUrl { get; set; }
+
+        /// <summary>
+        /// 经营地址
+        /// </summary>
+        public string BusinessAddress { get; set; }
+
+        /// <summary>
+        /// 微信OPENID
+        /// </summary>
+        public string OpenId { get; set; }
+
+        /// <summary>
+        /// 专卖证号
+        /// </summary>
+        public string LicenseKey { get; set; }
+
+        /// <summary>
+        /// 本月订货金额
+        /// </summary>
+        public decimal MonthOrderMoney { get; set; }
+
+        /// <summary>
+        /// 本月订货总量
+        /// </summary>
+        public int MonthOrderQty { get; set; }
+
+        /// <summary>
+        /// 上月订货金额
+        /// </summary>
+        public decimal PreMonthOrderMoney { get; set; }
+
+        /// <summary>
+        /// 上月订货总量
+        /// </summary>
+        public int PreMonthOrderQty { get; set; }
+
+        /// <summary>
+        /// 川烟数量
+        /// </summary>
+        public int SiChuanQty { get; set; }
+
+        /// <summary>
+        /// 档级
+        /// </summary>
+        public string Level { get; set; }
+
+        /// <summary>
+        /// 已达档级
+        /// </summary>
+        public string CurrentLevel { get; set; }
+
+        /// <summary>
+        /// 上月档级
+        /// </summary>
+        public string PreLevel { get; set; }
+
+        /// <summary>
+        /// 累计积分
+        /// </summary>
+        public decimal TotalPoint { get; set; }
+
+        /// <summary>
+        /// 当月积分
+        /// </summary>
+        public decimal MonthPoint { get; set; }
+    }
+    public class RetailAccount
+    {
+        /// <summary>
+        /// 专卖证号
+        /// </summary>
+        public string LicenseCode { get; set; }
+
+        /// <summary>
+        /// 日期
+        /// </summary>
+        public string BookDate { get; set; }
+
+        /// <summary>
+        /// 卷烟编码
+        /// </summary>
+        public string ITEM_CODE { get; set; }
+
+        /// <summary>
+        /// 卷烟名称
+        /// </summary>
+        public string ITEM_NAME { get; set; }
+
+        /// <summary>
+        /// 上月订购数
+        /// </summary>
+        public decimal PreMonthQty { get; set; }
+
+        /// <summary>
+        ///  本月订购数
+        /// </summary>
+        public decimal ThsMonthQty { get; set; }
+
+        /// <summary>
+        /// 季度起始时间
+        /// </summary>
+        public string QuarterlyDate { get; set; }
+
+        /// <summary>
+        /// 季度订购数
+        /// </summary>
+        public decimal QuarterlyQty { get; set; }
+
+        /// <summary>
+        /// 年度起始时间
+        /// </summary>
+        public string YearDate { get; set; }
+
+        /// <summary>
+        /// 年度订购数
+        /// </summary>
+        public decimal YearQty { get; set; }
+    }
+    /// <summary>
+    /// 零售户所有信息
+    /// </summary>
+    public class RetailAllInfo
+    {
+        /// <summary>
+        /// 基础信息
+        /// </summary>
+        public RetailInfoDto BasicInfo { get; set; }
+
+        /// <summary>
+        /// 台账信息
+        /// </summary>
+        public IList<RetailAccount> AccountBooks { get; set; }
+
+    }
 }
