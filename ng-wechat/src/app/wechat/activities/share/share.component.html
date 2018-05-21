@@ -1,0 +1,13 @@
+<weui-infiniteloader (loadmore)="onLoadMore($event)" #comp>
+    <Page [ngClass]="'aaa'" [showTitle]="false" [spacing]="false" [noBottom]="true" style="margin: 0px; padding: 0px;">
+        <div style="text-align: center; width: 100%;">
+            <img src="assets/images/activity/ic_exp_share.jpg" style="width:100%;">
+        </div>
+        <div class="weui-cells">
+            <a *ngFor="let item of items" class="weui-cell weui-cell_access" href="javascript:;">
+                <div class="weui-cell__bd">{{item.title}}</div>
+                <div class="weui-cell__ft">{{item.creationTime | date:'yyyy-MM-dd'}}</div>
+            </a>
+        </div>
+    </Page>
+</weui-infiniteloader>
