@@ -20,6 +20,7 @@ export const routes = [
     { path: 'purchaserecords', loadChildren: './personal-center/purchaserecord/purchaserecord.module#PurchaserecordModule' },
     { path: 'customer-searchs', loadChildren: './personal-center/customer-search/customer-search.module#CustomerSearchModule' },
     { path: 'account-levels', loadChildren: './personal-center/account-level/account-level.module#AccountLevelModule' },
+    { path: 'shopevaluations', loadChildren: './personal-center/shopevaluation/shopevaluation.module#ShopEvaluationModule' },
 
     // Not found
     { path: '**', redirectTo: '' }
