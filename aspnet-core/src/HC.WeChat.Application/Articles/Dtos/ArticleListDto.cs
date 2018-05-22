@@ -19,6 +19,7 @@ namespace HC.WeChat.Articles.Dtos
         public int? TenantId { get; set; }
         public ArticleTypeEnum? Type { get; set; }
         public ArticlePushStatusEnum? PushStatus { get; set; }
+
         public string PushStatusName
         {
             get
@@ -27,7 +28,5 @@ namespace HC.WeChat.Articles.Dtos
             }
         }
         public DateTime? PushTime { get; set; }
-
-
     }
 }

@@ -5,6 +5,7 @@ using Abp.Application.Services.Dto;
 using HC.WeChat.StatisticalDetails.Dtos;
 using HC.WeChat.StatisticalDetails;
 using System;
+using HC.WeChat.Dto;
 
 namespace HC.WeChat.StatisticalDetails
 {
@@ -56,5 +57,9 @@ namespace HC.WeChat.StatisticalDetails
         /// 批量删除StatisticalDetail
         /// </summary>
         Task BatchDeleteStatisticalDetailsAsync(List<Guid> input);
+        Task<APIResultDto> AddStatisticalAsync(StatisticalDetailEditDto input);
+        Task<bool> GetIsGoodAsync(int? tenantId, string openId, Guid? articleId);
+        Task<APIResultDto> AddGoodAsync(StatisticalDetailEditDto input);
+
     }
 }

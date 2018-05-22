@@ -16,6 +16,7 @@ using HC.WeChat.Articles;
 using System;
 using HC.WeChat.WechatEnums;
 using HC.WeChat.Authorization;
+using HC.WeChat.StatisticalDetails;
 
 namespace HC.WeChat.Articles
 {
@@ -30,14 +31,18 @@ namespace HC.WeChat.Articles
         ////ECC/ END CUSTOM CODE SECTION
         private readonly IRepository<Article, Guid> _articleRepository;
         private readonly IArticleManager _articleManager;
+        private readonly IRepository<StatisticalDetail, Guid> _statisticaldetailRepository;
+
 
         /// <summary>
         /// 构造函数
         /// </summary>
         public ArticleAppService(IRepository<Article, Guid> articleRepository
       , IArticleManager articleManager
+            , IRepository<StatisticalDetail, Guid> statisticaldetailRepository
         )
         {
+            _statisticaldetailRepository = statisticaldetailRepository;
             _articleRepository = articleRepository;
             _articleManager = articleManager;
         }

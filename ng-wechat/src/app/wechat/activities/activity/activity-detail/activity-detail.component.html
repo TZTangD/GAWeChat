@@ -15,5 +15,16 @@
                 </p>
             </section>
         </section>
+        <div class="weui-flex">
+            <div class="weui-flex__item">
+                <div class="placeholder read">阅读 {{activity.readTotal}}</div>
+            </div>
+            <div class="placeholder good" *ngIf="!isGood">
+                <img src="assets/images/activity/good_false.png" style="width:16px;" alt="" (click)="addGood()"> {{activity.goodTotal}}
+            </div>
+            <div class="placeholder good" *ngIf="isGood">
+                <img src="assets/images/activity/good_true.png" style="width:16px;" alt="" (click)="addGood()"> {{activity.goodTotal}}
+            </div>
+        </div>
     </article>
 </Page>

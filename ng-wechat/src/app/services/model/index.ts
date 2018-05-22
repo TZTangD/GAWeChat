@@ -16,3 +16,4 @@ export * from './customer';
 export * from './customer';
 export * from './account';
 export * from './level';
+export * from './statisticaldetail';

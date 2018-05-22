@@ -84,7 +84,6 @@ export class EvaluationDetailComponent extends AppComponentBase implements OnIni
         this.shopEvaluation.purchaseRecordId = this.id;
         this.shopEvaluation.openId = this.settingsService.openId;
         this.shopEvaluation.shopId = this.purchaseRecord.shopId;
-        console.log(this.shopEvaluation.shopId)
         this.shopEvaluationService.SubmitShopEvaluationAsync(this.shopEvaluation).subscribe(data => {
             this.loading = false;
             if (data && data.code === 0) {

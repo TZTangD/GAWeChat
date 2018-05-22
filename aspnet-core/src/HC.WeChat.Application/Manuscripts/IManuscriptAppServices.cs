@@ -5,6 +5,7 @@ using Abp.Application.Services.Dto;
 using HC.WeChat.Manuscripts.Dtos;
 using HC.WeChat.Manuscripts;
 using System;
+using HC.WeChat.Dto;
 
 namespace HC.WeChat.Manuscripts
 {
@@ -63,5 +64,6 @@ namespace HC.WeChat.Manuscripts
         /// <param name="input"></param>
         /// <returns></returns>
         Task<ManuscriptEditDto> CreateOrUpdateManuscriptDto(ManuscriptEditDto input);
+        Task<APIResultDto> CreatWXManuscript(ManuscriptEditDto input);
     }
 }

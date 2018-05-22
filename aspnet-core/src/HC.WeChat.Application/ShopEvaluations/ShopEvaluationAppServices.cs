@@ -441,7 +441,6 @@ namespace HC.WeChat.ShopEvaluations
         {
             //新增评价
             var result = input.MapTo<ShopEvaluation>();
-            result.CreationTime = DateTime.Now;
             await _shopevaluationRepository.InsertAsync(result);
 
             //修改店铺评价

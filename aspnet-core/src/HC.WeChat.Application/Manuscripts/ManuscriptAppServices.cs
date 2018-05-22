@@ -15,6 +15,8 @@ using HC.WeChat.Manuscripts.DomainServices;
 using HC.WeChat.Manuscripts;
 using System;
 using HC.WeChat.Authorization;
+using HC.WeChat.WechatEnums;
+using HC.WeChat.Dto;
 
 namespace HC.WeChat.Manuscripts
 {
@@ -207,6 +209,27 @@ namespace HC.WeChat.Manuscripts
             {
                return await CreateManuscriptAsync(input);
             }
+        }
+
+        /// <summary>
+        /// 微信投稿
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task<APIResultDto> CreatWXManuscript(ManuscriptEditDto input)
+        {
+            //新增评价
+            var result = input.MapTo<Manuscript>();
+            result.CreationTime = DateTime.Now;
+            result.Status = ProcessTypeEnum.未处理;
+            result.OpenId = input.OpenId;
+            result.Phone = input.Phone;
+            result.Type = ArticleTypeEnum.经验分享;
+            result.UserName = input.UserName;
+            result.Content = input.Content;
+            await _manuscriptRepository.InsertAsync(result);        
+            return new APIResultDto() { Code = 0, Msg = "投稿成功，请等待后台审核" };
         }
 
     }

@@ -6,10 +6,10 @@ import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/catch';
 
-import {Injectable} from '@angular/core';
-import {HttpClient} from '../httpclient';
-import {Observable} from 'rxjs/Observable';
-import {Article} from '../model/index';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '../httpclient';
+import { Observable } from 'rxjs/Observable';
+import { Article } from '../model/index';
 
 
 @Injectable()
@@ -36,23 +36,49 @@ export class ArticleService {
     });
   }
 
-    GetWXPagedExpAsync(params: any): Observable<Article[]> {
-        return this.http.get('/api/services/app/Article/GetWXPagedExpAsync', params).map(data => {
-            if (data.result) {
-                return Article.fromJSArray(data.result);
-            } else {
-                return null;
-            }
-        });
-    }
+  GetWXPagedExpAsync(params: any): Observable<Article[]> {
+    return this.http.get('/api/services/app/Article/GetWXPagedExpAsync', params).map(data => {
+      if (data.result) {
+        return Article.fromJSArray(data.result);
+      } else {
+        return null;
+      }
+    });
+  }
 
-    GetWXExpByIdAsync(params: any): Observable<Article> {
-        return this.http.get('/api/services/app/Article/GetWXExpByIdAsync', params).map(data => {
-            if (data.result) {
-                return Article.fromJS(data.result);
-            } else {
-                return null;
-            }
-        });
-    }
+  GetWXExpByIdAsync(params: any): Observable<Article> {
+    return this.http.get('/api/services/app/Article/GetWXExpByIdAsync', params).map(data => {
+      if (data.result) {
+        return Article.fromJS(data.result);
+      } else {
+        return null;
+      }
+    });
+  }
+
+  AddStatisticalAsync(input: any): Observable<any> {
+    return this.http.post('/api/services/app/StatisticalDetail/AddStatisticalAsync', input).map(data => {
+      return data.result;
+    });
+  }
+
+  GetIsGoodAsync(params: any): Observable<any> {
+    return this.http.get('/api/services/app/StatisticalDetail/GetIsGoodAsync', params).map(data => {
+      if (data.result) {
+        return data.result;
+      } else {
+        return null;
+      }
+    });
+  }
+
+  AddGoodAsync(params: any): Observable<any> {
+    return this.http.post('/api/services/app/StatisticalDetail/AddGoodAsync', params).map(data => {
+      if (data.result) {
+        return data.result;
+      } else {
+        return null;
+      }
+    });
+  }
 }

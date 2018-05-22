@@ -21,6 +21,7 @@ export class PurchaserecordComponent extends AppComponentBase implements OnInit 
     pageType: string = this.route.snapshot.params['pageType'];
     hostUrl: string = AppConsts.remoteServiceBaseUrl;
     tittleType: boolean = false;
+    @ViewChild(InfiniteLoaderComponent) il;
     constructor(injector: Injector, private purchaserecordService: PurchaserecordService, private route: ActivatedRoute, private router: Router) {
         super(injector);
     }
@@ -36,6 +37,17 @@ export class PurchaserecordComponent extends AppComponentBase implements OnInit 
             this.tittleType = false;
             this.GetPagedPurchaseRecord();
         }
+    }
+
+    onLoadMore(comp: InfiniteLoaderComponent) {
+        this.pageModel.pageIndex++;
+        if (this.pageModel.isLast) {
+            comp.setFinished();
+            return;
+        }
+        this.GetPagedPurchaseRecord();
+        comp.resolveLoading();
+
     }
 
     GetPagedPurchaseRecord() {
