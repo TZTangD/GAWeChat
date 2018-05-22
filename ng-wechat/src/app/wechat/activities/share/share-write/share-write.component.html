@@ -1,0 +1,42 @@
+<Page [ngClass]="'input'"  [showTitle]="false"  [spacing]="false">
+    <form #f="ngForm" (ngSubmit)="onSave()">
+        <div class="weui-cells__title">标题</div>
+        <div class="weui-cells">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="请输入您的标题" [(ngModel)]="res.title" name="txt">
+                </div>
+            </div>
+        </div>
+        <div class="weui-cells__title">经验分享</div>
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <textarea class="weui-textarea" placeholder="在这里分享您的经验" rows="3" [(ngModel)]="res.content" name="txta"
+                              weui-textarea weui-cn="2" maxlength="20"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="weui-cells__title">姓名</div>
+        <div class="weui-cells">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="请输入您的姓名" [(ngModel)]="res.userName" name="txt">
+                </div>
+            </div>
+        </div>
+        <div class="weui-cells__title">手机号</div>
+        <div class="weui-cells">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="请输入您的手机号" [(ngModel)]="res.phone" name="txt">
+                </div>
+            </div>
+        </div>
+        <div class="weui-btn-area">
+            <button class="weui-btn weui-btn_primary"
+                    [disabled]="!f.form.valid || !f.form.dirty"
+                    [ngClass]="{'weui-btn_disabled': !f.form.valid || !f.form.dirty}">提交</button>
+        </div>
+    </form>
+</Page>

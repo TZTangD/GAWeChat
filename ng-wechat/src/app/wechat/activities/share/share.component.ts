@@ -5,7 +5,8 @@ import {Router} from '@angular/router';
 import {JWeiXinService} from 'ngx-weui/jweixin';
 import {Observable} from 'rxjs/Observable';
 import {ArticleService} from '../../../services';
-import {Article} from '../../../services/model';
+import {Article, StatisticalDetail} from '../../../services/model';
+import {ToptipsService} from 'ngx-weui';
 
 @Component({
     selector: 'share',
@@ -23,11 +24,13 @@ export class ShareComponent extends AppComponentBase implements OnInit {
     _finished: boolean = false;
 
     items: Article[] = [];
+    statisticalDetail: StatisticalDetail = new StatisticalDetail();
 
     constructor(injector: Injector
         , private wxService: JWeiXinService
         , private router: Router
-        , private shareService: ArticleService) {
+        , private shareService: ArticleService
+        , private srv: ToptipsService) {
         super(injector);
     }
 
@@ -71,6 +74,15 @@ export class ShareComponent extends AppComponentBase implements OnInit {
     }
 
     goShareDetails(id: string) {
-        this.router.navigate(['shares/share-details', {id: id}]);
+        this.statisticalDetail.articleId = id;
+        this.statisticalDetail.type = 1;
+        this.statisticalDetail.openId = this.settingsService.openId;
+        this.shareService.AddStatisticalAsync(this.statisticalDetail).subscribe(data => {
+            if (data && data.code === 0) {
+                this.router.navigate(['shares/share-details', {id: id}]);
+            } else {
+                this.srv['warn']('请重试');
+            }
+        });
     }
 }
