@@ -45,14 +45,18 @@
 
             </div>
 
-            <div class="weui-cell weui-cell_access" (click)="goCustomerLeavel(i)" style="font-size: 14px;">
+            <div class="weui-cell weui-cell_access">
                 <div class="weui-cell__bd">
                     <span style="vertical-align: middle; font-size: 14px;">档级货源</span>
                 </div>
                 <div class="weui-cell__ft">
-                    {{customer.archivalLevel}}
+                    <span style="margin-left: 5px; color: #1aad19">{{customer.archivalLevel}}</span>
                 </div>
             </div>
+            <div class="weui-cell__ft">
+                {{customer.archivalLevel}}
+            </div>
+        </div>
         </div>
         <div class="weui-cells__title">基础信息</div>
         <div class="weui-cells">
@@ -113,7 +117,7 @@
         </div>
         <div class="weui-cells__tips">以上信息仅供参考，如有差异请以订货系统为准</div>
         <div class="weui-btn-area">
-            <button weui-button [weui-loading]="loading" (click)="goBack()">返回</button>
+            <button weui-button (click)="goBack()">返回</button>
         </div>
     </weui-tab>
     <weui-tab heading="客户订货台账">
@@ -135,7 +139,8 @@
                 <!-- <div class="weui-cell__bd" style="text-align:center;">上月购数量</div> -->
                 <div class="weui-cell__ft ftcss">购买数量</div>
             </a>
-            <a class="weui-cell" (click)="goCustomerLeavel(i)">
+
+            <a class="weui-cell ">
                 <div class="weui-cell__hd hdcss">20180512</div>
                 <div class="weui-cell__bd" style="text-align:center;">（娇子）中华</div>
                 <!-- <div class="weui-cell__bd" style="text-align:center;">200</div> -->
@@ -150,7 +155,7 @@
                 <!-- <div class="weui-cell__bd" style="text-align:center;">上月购数量</div> -->
                 <div class="weui-cell__ft ftcss">购买数量</div>
             </a>
-            <a class="weui-cell " (click)="goCustomerLeavel(i)">
+            <a class="weui-cell">
                 <div class="weui-cell__hd hdcss">20180512</div>
                 <div class="weui-cell__bd" style="text-align:center;">（娇子（蓝格调）</div>
                 <!-- <div class="weui-cell__bd" style="text-align:center;">200</div> -->
@@ -165,7 +170,7 @@
                 <!-- <div class="weui-cell__bd" style="text-align:center;">上月购数量</div> -->
                 <div class="weui-cell__ft ftcss">购买数量</div>
             </a>
-            <a class="weui-cell " (click)="goCustomerLeavel(i)">
+            <a class="weui-cell ">
                 <div class="weui-cell__hd hdcss">20180512</div>
                 <div class="weui-cell__bd" style="text-align:center;">（娇子）宽窄</div>
                 <div class="weui-cell__ft ftcss">300</div>
@@ -178,7 +183,7 @@
                 <div class="weui-cell__bd" style="text-align:center;">名称</div>
                 <div class="weui-cell__ft ftcss">购买数量</div>
             </a>
-            <a class="weui-cell " (click)="goCustomerLeavel(i)">
+            <a class="weui-cell ">
                 <div class="weui-cell__hd hdcss">20180512</div>
                 <div class="weui-cell__bd" style="text-align:center;">娇子（蓝格调）</div>
                 <div class="weui-cell__ft ftcss">1000000</div>
