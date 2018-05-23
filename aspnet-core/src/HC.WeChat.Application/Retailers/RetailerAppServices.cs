@@ -295,9 +295,9 @@ namespace HC.WeChat.Retailers
         /// <param name="input"></param>
         /// <returns></returns>
         [AbpAllowAnonymous]
-        public async Task<RetailerListDto> GetRetailerByIdDtoByLKeyForWeChatAsync(string licenseKey)
+        public async Task<RetailerListDto> GetRetailerByIdDtoByLKeyForWeChatAsync(Guid userId)
         {
-            var entity = await _retailerRepository.GetAll().Where(r => r.LicenseKey == licenseKey).FirstOrDefaultAsync();
+            var entity = await _retailerRepository.GetAll().Where(r => r.Id == userId).FirstOrDefaultAsync();
 
             return entity.MapTo<RetailerListDto>();
         }

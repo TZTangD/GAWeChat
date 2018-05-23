@@ -10,18 +10,21 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '../httpclient'
 import { Observable } from 'rxjs/Observable';
 import * as moment from 'moment';
-import { Accounts, Level } from '../model';
-import { AccountLevel } from '../model/account-level';
+import { Accounts, Level, AccountLevels } from '../model';
 
 
 @Injectable()
-export class LevelAccpintService {
+export class LevelAccountAccpintService {
     constructor(private http: HttpClient) { }
 
-    // getAll(code: any): Observable<AccountLevel>{
-
-    //     this.http.get('/api/services/app/Product/GetCustAndAccountInfoAsync',code).map(data=>{
-    //        return data.result;
-    //     });
-    // }
+    getAccount(code: any): Observable<AccountLevels>{
+       return this.http.get('/api/services/app/Product/GetCustAndAccountInfoAsync',code).map(data=>{
+           return data.result;
+        });
+    }
+    getLevel(input :any):Observable<Level>{
+        return this.http.get('/api/services/app/Product/GetRetailBasicInfoAsync',input).map(data=>{
+            return data.result;
+        });
+    }
 }

@@ -16,7 +16,9 @@ export class Level implements ILevel {
     preLevel: string;
     totalPoint: number;
     monthPoint: number;
-
+    verificationCode:string;
+    isShopkeeper: boolean;
+    
     constructor(data?: ILevel) {
         if (data) {
             for (var property in data) {
@@ -45,6 +47,9 @@ export class Level implements ILevel {
             this.preLevel = data["preLevel"];
             this.totalPoint = data["totalPoint"];
             this.monthPoint = data["monthPoint"];
+            this.verificationCode = data["verificationCode"];
+            this.isShopkeeper = data["isShopkeeper"];
+            
         }
     }
 
@@ -83,6 +88,9 @@ export class Level implements ILevel {
         data["preLevel"] = this.preLevel;
         data["totalPoint"] = this.totalPoint;
         data["monthPoint"] = this.monthPoint;
+        data["verificationCode"] = this.verificationCode;
+        data["isShopkeeper"] = this.isShopkeeper;
+        
         return data;
     }
 
@@ -111,4 +119,7 @@ export interface ILevel {
     preLevel: string;
     totalPoint: number;
     monthPoint: number;
+    verificationCode:string;
+    isShopkeeper: boolean;
+    
 }

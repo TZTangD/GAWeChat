@@ -50,6 +50,11 @@ namespace HC.WeChat.Products.Dtos
         public string PhotoUrl { get; set; }
 
         /// <summary>
+        /// 产品营销系统Id
+        /// </summary>
+        public virtual string ItemId { get; set; }
+
+        /// <summary>
         /// 营销系统code
         /// </summary>
         public string ItemCode { get; set; }

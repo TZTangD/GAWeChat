@@ -118,7 +118,10 @@ namespace HC.WeChat.Products.Dtos
         /// 零售户姓名
         /// </summary>
         public string Name { get; set; }
-
+        /// <summary>
+        /// 是否是店主 针对零售客户
+        /// </summary>
+        public virtual bool? IsShopkeeper { get; set; }
         /// <summary>
         /// 头像
         /// </summary>
@@ -188,7 +191,16 @@ namespace HC.WeChat.Products.Dtos
         /// 当月积分
         /// </summary>
         public decimal MonthPoint { get; set; }
+
+        /// <summary>
+        /// 验证码
+        /// </summary>
+        public string VerificationCode { get; set; }
     }
+
+    /// <summary>
+    /// (暂时未用)
+    /// </summary>
     public class RetailAccount
     {
         /// <summary>
@@ -202,14 +214,19 @@ namespace HC.WeChat.Products.Dtos
         public string BookDate { get; set; }
 
         /// <summary>
+        /// 上月日期
+        /// </summary>
+        public string PreDate { get; set; }
+
+        /// <summary>
         /// 卷烟编码
         /// </summary>
-        public string ITEM_CODE { get; set; }
+        public string ItemCode { get; set; }
 
         /// <summary>
         /// 卷烟名称
         /// </summary>
-        public string ITEM_NAME { get; set; }
+        public string ItemName { get; set; }
 
         /// <summary>
         /// 上月订购数
@@ -241,8 +258,10 @@ namespace HC.WeChat.Products.Dtos
         /// </summary>
         public decimal YearQty { get; set; }
     }
+
+
     /// <summary>
-    /// 零售户所有信息
+    /// 零售户所有信息（暂时未用）
     /// </summary>
     public class RetailAllInfo
     {
@@ -255,6 +274,68 @@ namespace HC.WeChat.Products.Dtos
         /// 台账信息
         /// </summary>
         public IList<RetailAccount> AccountBooks { get; set; }
-
     }
+
+    public class RetailAccountDe
+    {
+        /// <summary>
+        /// 专卖证号
+        /// </summary>
+        public string LicenseCode { get; set; }
+
+        /// <summary>
+        /// 日期
+        /// </summary>
+        public string BookDate { get; set; }
+
+        /// <summary>
+        /// 上月日期
+        /// </summary>
+        public string PreDate { get; set; }
+
+        /// <summary>
+        /// 卷烟编码
+        /// </summary>
+        public string ItemCode { get; set; }
+
+        /// <summary>
+        /// 卷烟名称
+        /// </summary>
+        public string ItemName { get; set; }
+
+        /// <summary>
+        /// 订购数
+        /// </summary>
+        public decimal MonthQty { get; set; }
+
+        /// <summary>
+        /// 季度起始时间
+        /// </summary>
+        public string QuarterlyDate { get; set; }
+
+        /// <summary>
+        /// 年度起始时间
+        /// </summary>
+        public string YearDate { get; set; }
+    }
+
+    public class RetailAllInfoDe
+    {
+        /// <summary>
+        /// 本月台账信息
+        /// </summary>
+        public IList<RetailAccountDe> MonthAccountBooks { get; set; }
+
+        /// <summary>
+        /// 上月台账信息
+        /// </summary>
+        public IList<RetailAccountDe> PreMonthAccountBooks { get; set; }
+
+        /// <summary>
+        /// 台账信息(季度、年度)
+        /// </summary>
+        public IList<RetailAccountDe> AccountBooks { get; set; }
+    }
+
+
 }

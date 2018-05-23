@@ -87,6 +87,6 @@ export class CustomerSearchComponent extends AppComponentBase implements OnInit 
      * 前往台账、档级
      */
     goCustomerLeavel(customer: Customers) {
-        this.router.navigate(['/account-levels/account-level', { id: customer.id }]);
+        this.router.navigate(['/account-levels/account-level', { id: customer.id,licenseKey:customer.licenseKey }]);
     }
 }

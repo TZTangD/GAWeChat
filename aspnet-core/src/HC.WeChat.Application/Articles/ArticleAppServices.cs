@@ -148,6 +148,8 @@ namespace HC.WeChat.Articles
         protected virtual async Task<ArticleEditDto> CreateArticleAsync(ArticleEditDto input)
         {
             //TODO:新增前的逻辑判断，是否允许新增
+            input.ReadTotal = 0;
+            input.GoodTotal = 0;
             var entity = ObjectMapper.Map<Article>(input);
 
             entity = await _articleRepository.InsertAsync(entity);
@@ -251,7 +253,7 @@ namespace HC.WeChat.Articles
         {
             using (CurrentUnitOfWork.SetTenantId(tenantId))
             {
-                var query = _articleRepository.GetAll().Where(a => a.Type == ArticleTypeEnum.营销活动&&a.PushStatus==ArticlePushStatusEnum.已发布);
+                var query = _articleRepository.GetAll().Where(a => a.Type == ArticleTypeEnum.营销活动 && a.PushStatus == ArticlePushStatusEnum.已发布);
                 var entity = from a in query
                              select new ArticleListDto()
                              {

@@ -7,7 +7,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { SharedModule } from '../../../shared/shared.module';
 import { AngularSplitModule } from 'angular-split';
 import { ComponentsModule } from '../../components/components.module';
-import { WechatUserService, CustomerService } from '../../../services';
+import { WechatUserService, CustomerService, LevelAccountAccpintService } from '../../../services';
 
 const COMPONENTS=[
     AccountLevelComponent
@@ -32,6 +32,7 @@ const COMPONENTS=[
     providers:[
         WechatUserService,
         CustomerService,
+        LevelAccountAccpintService,
     ]
 })
 export class AccountLevelModule {

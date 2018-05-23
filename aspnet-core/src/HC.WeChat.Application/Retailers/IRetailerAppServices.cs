@@ -93,10 +93,10 @@ namespace HC.WeChat.Retailers
         Task<RetailerListDto> GetRetailerByIdDtoForWeChatAsync(Guid input);
 
         /// <summary>
-        /// 通过指定licenseKey获取RetailerListDto信息
+        /// 通过指定userId获取RetailerListDto信息
         /// </summary>
-        /// <param name="licenseKey"></param>
+        /// <param name="userId"></param>
         /// <returns></returns>
-        Task<RetailerListDto> GetRetailerByIdDtoByLKeyForWeChatAsync(string licenseKey);
+        Task<RetailerListDto> GetRetailerByIdDtoByLKeyForWeChatAsync(Guid userId);
     }
 }
