@@ -1745,6 +1745,7 @@ namespace HC.WeChat.Migrations
                 b.Property<DateTime>("CreationTime").IsRequired();
                 b.Property<string>("OperatorOpenId").HasMaxLength(50);
                 b.Property<string>("OperatorName").HasMaxLength(50);
+                b.Property<bool?>("IsEvaluation");
 
                 b.HasKey("Id");
 

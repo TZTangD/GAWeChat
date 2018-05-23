@@ -13,6 +13,10 @@ using HC.WeChat.StatisticalDetails.Dtos;
 using HC.WeChat.StatisticalDetails.DomainServices;
 using HC.WeChat.StatisticalDetails;
 using System;
+using HC.WeChat.Dto;
+using System.Linq;
+using HC.WeChat.Articles;
+using HC.WeChat.WechatEnums;
 
 namespace HC.WeChat.StatisticalDetails
 {
@@ -26,14 +30,17 @@ namespace HC.WeChat.StatisticalDetails
         ////ECC/ END CUSTOM CODE SECTION
         private readonly IRepository<StatisticalDetail, Guid> _statisticaldetailRepository;
         private readonly IStatisticalDetailManager _statisticaldetailManager;
+        private readonly IRepository<Article, Guid> _articleRepository;
 
         /// <summary>
         /// 构造函数
         /// </summary>
         public StatisticalDetailAppService(IRepository<StatisticalDetail, Guid> statisticaldetailRepository
       , IStatisticalDetailManager statisticaldetailManager
+            , IRepository<Article, Guid> articleRepository
         )
         {
+            _articleRepository = articleRepository;
             _statisticaldetailRepository = statisticaldetailRepository;
             _statisticaldetailManager = statisticaldetailManager;
         }
@@ -181,6 +188,66 @@ namespace HC.WeChat.StatisticalDetails
             await _statisticaldetailRepository.DeleteAsync(s => input.Contains(s.Id));
         }
 
+        /// <summary>
+        /// 添加阅读量
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task<APIResultDto> AddStatisticalAsync(StatisticalDetailEditDto input)
+        {
+            var result = input.MapTo<StatisticalDetail>();
+            var readCount = await _statisticaldetailRepository.GetAll().Where(v => v.OpenId == input.OpenId && v.ArticleId == input.ArticleId &&v.Type== CountTypeEnum.阅读量).CountAsync();
+            if (readCount == 0)
+            {
+                await _statisticaldetailRepository.InsertAsync(result);
+                var article = await _articleRepository.GetAll().Where(v => v.Id == input.ArticleId).FirstOrDefaultAsync();
+                article.ReadTotal++;
+                await _articleRepository.UpdateAsync(article);
+            }
+            return new APIResultDto() { Code = 0, Msg = "成功" };
+        }
+
+        /// <summary>
+        /// 添加点赞量
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task<APIResultDto> AddGoodAsync(StatisticalDetailEditDto input)
+        {
+            var result = input.MapTo<StatisticalDetail>();
+            var goodCount = await _statisticaldetailRepository.GetAll().Where(v => v.OpenId == input.OpenId && v.ArticleId == input.ArticleId && v.Type == CountTypeEnum.点赞).CountAsync();
+            if (goodCount == 0)
+            {
+                await _statisticaldetailRepository.InsertAsync(result);
+                var article = await _articleRepository.GetAll().Where(v => v.Id == input.ArticleId).FirstOrDefaultAsync();
+                article.GoodTotal++;
+                await _articleRepository.UpdateAsync(article);
+            }
+            return new APIResultDto() { Code = 0, Msg = "成功" };
+        }
+
+        /// <summary>
+        /// 判断当前用户是否点赞
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="openId"></param>
+        /// <param name="articleId"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task<bool> GetIsGoodAsync(int? tenantId,string openId,Guid? articleId)
+        {
+            using (CurrentUnitOfWork.SetTenantId(tenantId))
+            {
+                var IsGood = await _statisticaldetailRepository.GetAll().Where(v => v.OpenId == openId && v.ArticleId == articleId && v.Type == CountTypeEnum.点赞).CountAsync();
+                if (IsGood == 0)
+                {
+                    return false;
+                }
+                return true;
+            }
+        }
     }
 }
 

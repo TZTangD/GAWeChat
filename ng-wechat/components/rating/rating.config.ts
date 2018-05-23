@@ -5,7 +5,7 @@ export class RatingConfig {
     /**
      * 图标数量（默认：5个）
      */
-    max?: number = 5;
+    max?: number = 3;
 
     /**
      * 样式名

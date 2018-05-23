@@ -1,11 +1,12 @@
 import {AppComponentBase} from '../../components/app-component-base';
 import {Component, Injector, OnInit, ViewEncapsulation} from '@angular/core';
 import 'rxjs/add/observable/timer';
-import {ShareService} from '../../../services/share/share.services';
 import {Router} from '@angular/router';
 import {JWeiXinService} from 'ngx-weui/jweixin';
-import {Share} from '../../../services/model/share';
 import {Observable} from 'rxjs/Observable';
+import {ArticleService} from '../../../services';
+import {Article, StatisticalDetail} from '../../../services/model';
+import {ToptipsService} from 'ngx-weui';
 
 @Component({
     selector: 'share',
@@ -22,12 +23,14 @@ export class ShareComponent extends AppComponentBase implements OnInit {
     _loading: boolean = false;
     _finished: boolean = false;
 
-    items: Share[] = [];
+    items: Article[] = [];
+    statisticalDetail: StatisticalDetail = new StatisticalDetail();
 
     constructor(injector: Injector
         , private wxService: JWeiXinService
         , private router: Router
-        , private shareService: ShareService) {
+        , private shareService: ArticleService
+        , private srv: ToptipsService) {
         super(injector);
     }
 
@@ -36,7 +39,6 @@ export class ShareComponent extends AppComponentBase implements OnInit {
     }
 
     // = Array(20).fill(this.pageIndex).map((v: any, i: number) => i);
-
     onLoadMore(comp: ShareComponent) {
         Observable.timer(1500).subscribe(() => {
             this.items.push(...Array(this.pageSize).fill(this.items.length).map((v, i) => v + i));
@@ -72,6 +74,15 @@ export class ShareComponent extends AppComponentBase implements OnInit {
     }
 
     goShareDetails(id: string) {
-        this.router.navigate(['shares/share-details', {id: id}]);
+        this.statisticalDetail.articleId = id;
+        this.statisticalDetail.type = 1;
+        this.statisticalDetail.openId = this.settingsService.openId;
+        this.shareService.AddStatisticalAsync(this.statisticalDetail).subscribe(data => {
+            if (data && data.code === 0) {
+                this.router.navigate(['shares/share-details', {id: id}]);
+            } else {
+                this.srv['warn']('请重试');
+            }
+        });
     }
 }

@@ -46,14 +46,22 @@
 
             </div>
 
-            <div class="weui-cell weui-cell_access" (click)="goCustomerLeavel(i)" style="font-size: 14px;">
+            <div class="weui-cell weui-cell_access">
                 <div class="weui-cell__bd">
                     <span style="vertical-align: middle; font-size: 14px;">档级货源</span>
                 </div>
                 <div class="weui-cell__ft">
+<<<<<<< HEAD
                     {{level.level}}
+=======
+                    <span style="margin-left: 5px; color: #1aad19">{{customer.archivalLevel}}</span>
+>>>>>>> 991c3c20b90fbe42ce1fefb5c361fa6a033463f8
                 </div>
             </div>
+            <div class="weui-cell__ft">
+                {{customer.archivalLevel}}
+            </div>
+        </div>
         </div>
         <div class="weui-cells__title">基础信息</div>
         <div class="weui-cells">
@@ -114,7 +122,7 @@
         </div>
         <div class="weui-cells__tips">以上信息仅供参考，如有差异请以订货系统为准</div>
         <div class="weui-btn-area">
-            <button weui-button [weui-loading]="loading" (click)="goBack()">返回</button>
+            <button weui-button (click)="goBack()">返回</button>
         </div>
     </weui-tab>
     <weui-tab heading="客户订货台账" >

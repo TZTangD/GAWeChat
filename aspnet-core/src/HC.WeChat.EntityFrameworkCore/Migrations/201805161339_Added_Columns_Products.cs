@@ -32,6 +32,11 @@ namespace HC.WeChat.Migrations
              table: "Products",
              maxLength: 100,
              nullable: true);
+
+            migrationBuilder.AddColumn<bool?>(
+             name: "IsEvaluation",
+             table: "PurchaseRecords",
+             nullable: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -51,6 +56,11 @@ namespace HC.WeChat.Migrations
             migrationBuilder.DropColumn(
             name: "Company",
             table: "Products");
+
+
+            migrationBuilder.DropColumn(
+            name: "IsEvaluation",
+            table: "PurchaseRecords");
         }
     }
 }

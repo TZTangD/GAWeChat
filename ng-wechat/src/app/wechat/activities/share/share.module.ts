@@ -4,15 +4,19 @@ import {AngularSplitModule} from 'angular-split';
 import {SharedModule} from '../../../shared/shared.module';
 import {NgModule} from '@angular/core';
 import {ComponentsModule} from '../../components/components.module';
-import {ShareService} from '../../../services/share/share.services';
 import {ShareDetailComponent} from './share-details/share-details.component';
+import {ArticleService} from '../../../services';
+import {ShareWriteComponent} from './share-write/share-write.component';
+import {ShareSuccessComponent} from './share-success/share-success.component';
 
-const COMPONENTS = [ShareComponent, ShareDetailComponent];
+const COMPONENTS = [ShareComponent, ShareDetailComponent, ShareWriteComponent,ShareSuccessComponent];
 
 const routes: Routes = [
-    { path: '', redirectTo: 'share' },
+    {path: '', redirectTo: 'share'},
     {path: 'share', component: ShareComponent},
-    {path: 'share-details', component: ShareDetailComponent}
+    {path: 'share-details', component: ShareDetailComponent},
+    {path: 'share-write', component: ShareWriteComponent},
+    {path: 'share-success', component: ShareSuccessComponent}
 ];
 
 @NgModule({
@@ -26,7 +30,8 @@ const routes: Routes = [
         ...COMPONENTS
     ],
     providers: [
-        ShareService
+        // ShareService
+        ArticleService
     ]
 })
 export class ShareModule {

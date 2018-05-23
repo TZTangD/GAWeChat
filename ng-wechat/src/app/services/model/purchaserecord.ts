@@ -14,6 +14,7 @@ export class PurchaseRecord
     operatorOpenId: string;
     operatorName: string;
     photoUrl: string;
+    isEvaluation: boolean;
     constructor(data?: IPurchaseRecord) {
         if (data) {
             for (var property in data) {
@@ -25,20 +26,22 @@ export class PurchaseRecord
 
     init(data?: any) {
         if (data) {
-            data["id"] = this.id;
-            data["productId"] = this.productId;
-            data["specification"] = this.specification;
-            data["quantity"] = this.quantity;
-            data["shopId"] = this.shopId;
-            data["shopName"] = this.shopName;
-            data["openId"] = this.openId;
-            data["tenantId"] = this.tenantId;
-            data["integral"] = this.integral;
-            data["remark"] = this.remark;
-            data["creationTime"] = this.creationTime;
-            data["operatorOpenId"] = this.operatorOpenId;
-            data["operatorName"] = this.operatorName;
-            data["photoUrl"] = this.photoUrl;
+            this.id = data["id"];
+            this.productId = data["productId"];
+            this.specification = data["specification"];
+            this.quantity = data["quantity"];
+            this.shopId = data["shopId"];
+            this.shopName = data["shopName"];
+            this.openId = data["openId"];
+            this.tenantId = data["tenantId"];
+            this.integral = data["integral"];
+            this.remark = data["remark"];
+            this.creationTime = data["creationTime"];
+            this.operatorOpenId = data["operatorOpenId"];
+            this.operatorName = data["operatorName"];
+            this.photoUrl = data["photoUrl"];
+            this.isEvaluation = data["isEvaluation"];
+
         }
     }
 
@@ -61,19 +64,21 @@ export class PurchaseRecord
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        this.id = data["id"];
-        this.productId = data["productId"];
-        this.specification = data["specification"];
-        this.quantity = data["quantity"];
-        this.shopId = data["shopId"];
-        this.shopName = data["shopName"];
-        this.openId = data["openId"];
-        this.tenantId = data["tenantId"];
-        this.integral = data["integral"];
-        this.remark = data["remark"];
-        this.creationTime = data["creationTime"];
-        this.operatorOpenId = data["operatorOpenId"];
-        this.operatorName = data["operatorName"];
+        data["id"] = this.id;
+        data["productId"] = this.productId;
+        data["specification"] = this.specification;
+        data["quantity"] = this.quantity;
+        data["shopId"] = this.shopId;
+        data["shopName"] = this.shopName;
+        data["openId"] = this.openId;
+        data["tenantId"] = this.tenantId;
+        data["integral"] = this.integral;
+        data["remark"] = this.remark;
+        data["creationTime"] = this.creationTime;
+        data["operatorOpenId"] = this.operatorOpenId;
+        data["operatorName"] = this.operatorName;
+        data["photoUrl"] = this.photoUrl;
+        data["isEvaluation"] = this.isEvaluation;
         return data;
     }
 
@@ -99,4 +104,5 @@ export interface IPurchaseRecord {
     operatorOpenId: string;
     operatorName: string;
     photoUrl: string;
+    isEvaluation: boolean;
 }

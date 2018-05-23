@@ -1,9 +1,9 @@
 import { Component, ViewEncapsulation, OnInit, Injector, ViewChild } from '@angular/core';
-import { Article, WechatUser, PageModel } from '../../../services/model';
+import { Article, WechatUser, PageModel, StatisticalDetail } from '../../../services/model';
 import { AppComponentBase } from '../../components/app-component-base';
 import { Router } from '@angular/router';
-import { ArticleService } from '../../../services';
-import { JWeiXinService, InfiniteLoaderComponent, PTRComponent } from 'ngx-weui';
+import { ArticleService, AppConsts } from '../../../services';
+import { JWeiXinService, InfiniteLoaderComponent, PTRComponent, ToptipsService } from 'ngx-weui';
 import { timer } from 'rxjs/observable/timer';
 
 @Component({
@@ -14,12 +14,14 @@ import { timer } from 'rxjs/observable/timer';
 })
 
 export class ArticleComponent extends AppComponentBase implements OnInit {
-    activity: Article[] = [];
+    activityList: Article[] = [];
+    statisticalDetail: StatisticalDetail = new StatisticalDetail();
     pageModel: PageModel = new PageModel(); // 分页信息
     @ViewChild(InfiniteLoaderComponent) il;
+    hostUrl: string = AppConsts.remoteServiceBaseUrl;
 
     constructor(injector: Injector, private router: Router,
-        private articleService: ArticleService, private wxService: JWeiXinService,
+        private articleService: ArticleService, private srv: ToptipsService, private wxService: JWeiXinService,
     ) {
         super(injector);
     }
@@ -31,7 +33,6 @@ export class ArticleComponent extends AppComponentBase implements OnInit {
 
     onLoadMore(comp: InfiniteLoaderComponent) {
         this.pageModel.pageIndex++;
-        console.log(this.pageModel.isLast);
         if (this.pageModel.isLast) {
             comp.setFinished();
             return;
@@ -49,7 +50,7 @@ export class ArticleComponent extends AppComponentBase implements OnInit {
         params.pageIndex = this.pageModel.pageIndex;
         params.pageSize = this.pageModel.pageSize;
         this.articleService.GetPagedArticles(params).subscribe(result => {
-            this.activity.push(...result);
+            this.activityList.push(...result);
             if (result && result.length < this.pageModel.pageSize) {
                 this.pageModel.isLast = true;
             }
@@ -57,7 +58,16 @@ export class ArticleComponent extends AppComponentBase implements OnInit {
     }
 
     goDetailActivity(id: string) {
-        this.router.navigate(['/activities/activity-detail', { id: id }]);
+        this.statisticalDetail.articleId = id;
+        this.statisticalDetail.type = 1;
+        this.statisticalDetail.openId = this.settingsService.openId;
+        this.articleService.AddStatisticalAsync(this.statisticalDetail).subscribe(data => {
+            if (data && data.code === 0) {
+                this.router.navigate(['/activities/activity-detail', { id: id }]);
+            } else {
+                this.srv['warn']('请重试');
+            }
+        });
     }
 
     /**

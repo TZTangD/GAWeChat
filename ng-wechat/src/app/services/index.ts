@@ -10,3 +10,4 @@ export * from './personal-center/integral-detail.service';
 export * from './personal-center/purchaserecord.service';
 export * from './personal-center/customer.service';
 export * from './personal-center/level-account.service';
+export * from './personal-center/shopevaluation.service';

@@ -393,7 +393,7 @@ namespace HC.WeChat.Shops
                 {
                     if (item.Latitude.HasValue && item.Longitude.HasValue)
                     {
-                        item.Distance = AbpMapByGoogle.GetDistance(latitude, longitude, item.Latitude.Value, item.Longitude.Value);
+                        item.Distance = Math.Round(AbpMapByGoogle.GetDistance(latitude, longitude, item.Latitude.Value, item.Longitude.Value), 0);//不保留小数
                     }
                     else
                     {

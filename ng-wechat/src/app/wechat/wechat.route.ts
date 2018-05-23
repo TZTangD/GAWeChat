@@ -8,7 +8,7 @@ export const routes = [
     { path: 'activities', loadChildren: './activities/activities.module#ActivitiesModule' },
     // { path: 'buy', loadChildren: './buy/buy.module#BuyModule' },
     // { path: 'center', loadChildren: './personal-center/personal-center.module#PersonalCenterModule' },
-    {path: 'shares', loadChildren: './activities/share/share.module#ShareModule'},
+    { path: 'shares', loadChildren: './activities/share/share.module#ShareModule' },
     { path: 'members', loadChildren: './personal-center/member-card/member-card.module#MemberCardModule' },
     { path: 'personals', loadChildren: './personal-center/personal/personal.module#PersonalModule' },
     { path: 'shops', loadChildren: './personal-center/shop/shop.module#ShopModule' },
@@ -20,6 +20,7 @@ export const routes = [
     { path: 'purchaserecords', loadChildren: './personal-center/purchaserecord/purchaserecord.module#PurchaserecordModule' },
     { path: 'customer-searchs', loadChildren: './personal-center/customer-search/customer-search.module#CustomerSearchModule' },
     { path: 'account-levels', loadChildren: './personal-center/account-level/account-level.module#AccountLevelModule' },
+    { path: 'shopevaluations', loadChildren: './personal-center/shopevaluation/shopevaluation.module#ShopEvaluationModule' },
 
     // Not found
     { path: '**', redirectTo: '' }
