@@ -219,19 +219,16 @@ namespace HC.WeChat.Manuscripts
         [AbpAllowAnonymous]
         public async Task<APIResultDto> CreatWXManuscript(ManuscriptEditDto input)
         {
-            //新增评价
-            var result = input.MapTo<Manuscript>();
-            result.CreationTime = DateTime.Now;
-            result.Status = ProcessTypeEnum.未处理;
-            result.OpenId = input.OpenId;
-            result.Phone = input.Phone;
-            result.Type = ArticleTypeEnum.经验分享;
-            result.UserName = input.UserName;
-            result.Content = input.Content;
-            await _manuscriptRepository.InsertAsync(result);        
-            return new APIResultDto() { Code = 0, Msg = "投稿成功，请等待后台审核" };
+            using (CurrentUnitOfWork.SetTenantId(input.TenantId))
+            {
+                //新增评价
+                var result = input.MapTo<Manuscript>();
+                result.Status = ProcessTypeEnum.未处理;
+                result.Type = ArticleTypeEnum.经验分享;
+                await _manuscriptRepository.InsertAsync(result);
+                return new APIResultDto() { Code = 0, Msg = "投稿成功，请等待后台审核" };
+            }
         }
-
     }
 }
 

@@ -12,12 +12,18 @@ import { LayoutModule } from "../../layout/layout.module";
 import { ActivityDetailComponent } from "./activity/activity-detail/activity-detail.component";
 import { ExperienceDetailComponent } from "./experience-share/experience-detail/experience-detail.component";
 import { ContributeDetailComponent } from "./contribute-management/contribute-detail/contribute-detail.component";
+import { NgxTinymceModule } from 'ngx-tinymce';
+import { EditorModule } from '@tinymce/tinymce-angular';
 
 @NgModule({
     imports: [
         SharedModule,
         LayoutModule,
-        MarkettingRoutingModule
+        MarkettingRoutingModule,
+        EditorModule,// <- Important part
+        NgxTinymceModule.forRoot({
+            baseURL: './assets/tinymce/',
+        })
     ],
     declarations: [
         EmployeesComponent,
@@ -31,7 +37,7 @@ import { ContributeDetailComponent } from "./contribute-management/contribute-de
         ContributeDetailComponent,
     ],
     providers: [
-        AppRouteGuard  
+        AppRouteGuard
     ]
 
 })

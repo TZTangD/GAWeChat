@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web;
 using Abp.Authorization;
 using HC.WeChat.Configuration;
 using HC.WeChat.Controllers;
@@ -228,7 +229,23 @@ namespace HC.WeChat.Web.Host.Controllers
 
             return Ok(new { imageName });
         }
-
+        //
+        [RequestFormSizeLimit(valueCountLimit: 2147483647)]
+        [HttpPost]
+        public async Task<IActionResult> MarketingHTMLPosts([FromBody]string input)
+        {
+            //var files = Request.Form.Files;
+            string webRootPath = _hostingEnvironment.WebRootPath;
+            string contentRootPath = _hostingEnvironment.ContentRootPath;
+            string path = Path.Combine(webRootPath, "Introduce", input.ToString() + ".html");
+            using (StreamWriter sw = new StreamWriter(path)) // 把HTML内容写入文件
+            {
+                var html = HttpUtility.UrlDecode(input); // url 解码
+                await sw.WriteAsync(html);
+            }
+            return Ok(new { msg = "OK" });
+        }
+        //
         [RequestFormSizeLimit(valueCountLimit: 2147483647)]
         [HttpPost]
         [AbpAllowAnonymous]

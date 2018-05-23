@@ -17,6 +17,9 @@ using System;
 using HC.WeChat.WechatEnums;
 using HC.WeChat.Authorization;
 using HC.WeChat.StatisticalDetails;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
+using System.Web;
 
 namespace HC.WeChat.Articles
 {
@@ -32,6 +35,7 @@ namespace HC.WeChat.Articles
         private readonly IRepository<Article, Guid> _articleRepository;
         private readonly IArticleManager _articleManager;
         private readonly IRepository<StatisticalDetail, Guid> _statisticaldetailRepository;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
 
         /// <summary>
@@ -40,11 +44,13 @@ namespace HC.WeChat.Articles
         public ArticleAppService(IRepository<Article, Guid> articleRepository
       , IArticleManager articleManager
             , IRepository<StatisticalDetail, Guid> statisticaldetailRepository
+            , IHostingEnvironment hostingEnvironment
         )
         {
             _statisticaldetailRepository = statisticaldetailRepository;
             _articleRepository = articleRepository;
             _articleManager = articleManager;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         /// <summary>
@@ -170,7 +176,15 @@ namespace HC.WeChat.Articles
             //TODO:更新前的逻辑判断，是否允许更新
             var entity = await _articleRepository.GetAsync(input.Id.Value);
             input.MapTo(entity);
-
+            //string sWebRootFolder = _hostingEnvironment.WebRootPath;
+            //string path = Path.Combine(sWebRootFolder, "upload/activity", entity.Id.ToString() + ".html");
+            //using (StreamWriter sw = new StreamWriter(path)) // 把HTML内容写入文件
+            //{
+            //    var html = HttpUtility.UrlDecode(input.Content); // url 解码
+            //    await sw.WriteAsync(html);
+            //}
+            //var fileDire = sWebRootFolder + string.Format("/upload/activity/", entity.Id.ToString() + ".html");
+            //entity.Content = fileDire;
             // ObjectMapper.Map(input, entity);
             var result = await _articleRepository.UpdateAsync(entity);
             return result.MapTo<ArticleEditDto>();

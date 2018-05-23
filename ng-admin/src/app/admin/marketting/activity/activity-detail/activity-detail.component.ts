@@ -1,4 +1,4 @@
-import { Component, OnInit, Injector } from '@angular/core';
+import { Component, OnInit, Injector, EventEmitter, AfterViewInit, OnDestroy, Input, Output } from '@angular/core';
 import { AppComponentBase } from '@shared/app-component-base';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -24,14 +24,43 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
     isDelete = false;
     successMsg = '';
     cardTitle = '';
-
     host = '';
     actionUrl = '';
+
+    config_classic: any = {
+        height: 550,
+
+        plugins: [
+            'advlist autolink autosave link image lists charmap print preview hr anchor pagebreak',
+            'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
+            'table contextmenu directionality emoticons template textcolor paste fullpage textcolor colorpicker textpattern'
+        ],
+        toolbar1: 'bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | styleselect formatselect fontselect fontsizeselect',
+        // toolbar1: 'newdocument fullpage | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | styleselect formatselect fontselect fontsizeselect',
+        toolbar2: 'bullist numlist | outdent indent blockquote | undo redo | image code| insertdatetime preview | forecolor backcolor',
+        // toolbar2: 'cut copy paste | searchreplace | bullist numlist | outdent indent blockquote | undo redo | link unlink anchor image media code | insertdatetime preview | forecolor backcolor',
+        // toolbar3: 'table | hr removeformat | subscript superscript | charmap emoticons | print fullscreen | ltr rtl | visualchars visualblocks nonbreaking template pagebreak restoredraft',
+        toolbar3: 'table | hr removeformat | charmap | ltr rtl | visualchars visualblocks template pagebreak restoredraft',
+        // content_css: [
+        //     '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
+        //     '//www.tinymce.com/css/codepen.min.css'],
+        language: 'zh_CN',
+        menubar: false,
+        toolbar_items_size: 'small',
+        init_instance_callback: function () {
+        }
+    };
     constructor(injector: Injector, private fb: FormBuilder, private actRouter: ActivatedRoute,
         private activityService: ArticleServiceProxy, private router: Router, private modal: NzModalService) {
         super(injector);
         this.id = this.actRouter.snapshot.params['id'];
     }
+
+    // set(key: string, value: any) {
+    //     const obj: any = {};
+    //     obj[key] = value;
+    //     this.config = Object.assign({}, this.config, obj);
+    // }
     ngOnInit(): void {
         this.form = this.fb.group({
             title: [null, Validators.compose([Validators.required, Validators.maxLength(200)])],
