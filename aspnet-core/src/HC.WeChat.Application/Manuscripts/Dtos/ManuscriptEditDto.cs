@@ -49,7 +49,6 @@ namespace HC.WeChat.Manuscripts.Dtos
         /// <summary>
         /// CreationTime
         /// </summary>
-        [Required]
         public DateTime CreationTime { get; set; }
 
         /// <summary>
