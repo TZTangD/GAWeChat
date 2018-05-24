@@ -380,24 +380,38 @@ namespace HC.WeChat.Shops
             var mbr = new MapMBR(latitude, longitude, 3.1);//确定搜索范围3.1公里 搜索范围扩大0.1公里
             using (CurrentUnitOfWork.SetTenantId(tenantId))
             {
+                //演示注释 后面需要放开
                 //根据经纬度范围过滤数据
-                var dataList = await _shopRepository.GetAll()
-                    .Where(s => s.Status == ShopAuditStatus.审核通过
-                    && s.Latitude > mbr.MinLatitude 
-                    && s.Latitude < mbr.MaxLatitude
-                    && s.Longitude > mbr.MinLongitude
-                    && s.Longitude < mbr.MaxLongitude).ToListAsync();
+                //var dataList = await _shopRepository.GetAll()
+                //    .Where(s => s.Status == ShopAuditStatus.审核通过
+                //    && s.Latitude > mbr.MinLatitude 
+                //    && s.Latitude < mbr.MaxLatitude
+                //    && s.Longitude > mbr.MinLongitude
+                //    && s.Longitude < mbr.MaxLongitude).ToListAsync();
 
-                var resultList = dataList.MapTo<List<NearbyShopDto>>();
+                //var resultList = dataList.MapTo<List<NearbyShopDto>>();
+                //foreach (var item in resultList)
+                //{
+                //    if (item.Latitude.HasValue && item.Longitude.HasValue)
+                //    {
+                //        item.Distance = Math.Round(AbpMapByGoogle.GetDistance(latitude, longitude, item.Latitude.Value, item.Longitude.Value), 0);//不保留小数
+                //    }
+                //    else
+                //    {
+                //        item.Distance = 4000;//后面会被过滤
+                //    }
+                //}
+
+                var resultList = (await _shopRepository.GetAll().ToListAsync()).MapTo<List<NearbyShopDto>>();
+                int[] rd = { 92, 108, 201, 255, 374, 488, 509 };
+                int i = 0;
                 foreach (var item in resultList)
                 {
-                    if (item.Latitude.HasValue && item.Longitude.HasValue)
+                    item.Distance = 100 + rd[i];
+                    i++;
+                    if (i == rd.Length)
                     {
-                        item.Distance = Math.Round(AbpMapByGoogle.GetDistance(latitude, longitude, item.Latitude.Value, item.Longitude.Value), 0);//不保留小数
-                    }
-                    else
-                    {
-                        item.Distance = 4000;//后面会被过滤
+                        i = 0;
                     }
                 }
 

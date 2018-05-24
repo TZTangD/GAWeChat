@@ -298,6 +298,7 @@ namespace HC.WeChat.WeChatUsers
                 entity.OpenId = input.OpenId;
                 entity.TenantId = input.TenantId;
                 var result = await _wechatuserManager.BindWeChatUserAsync(entity);
+                /*
                 //绑定成功后打标签
                 if (result.BindStatus == BindStatusEnum.已绑定)
                 {
@@ -317,7 +318,7 @@ namespace HC.WeChat.WeChatUsers
                         var resultGroup = await _wechatGroupAppService.CreateWeChatGroup(group);
                         await UserTagApi.BatchTaggingAsync(AppConfig.AppId, resultGroup.TagId, openId_list);
                     }
-                }
+                }*/
                 return new APIResultDto() { Code = 0, Msg = "绑定成功", Data = entity.MapTo<WeChatUserListDto>() };
             }
         }

@@ -200,6 +200,16 @@ namespace HC.WeChat.Web.Host.Controllers
                         ViewBag.PageUrl = _weChatOAuthAppService.GetAuthorizeUrl(url, "123", Senparc.Weixin.MP.OAuthScope.snsapi_base);
                     }
                     break;
+                case GAAuthorizationPageEnum.Share:
+                    {
+                        if (!string.IsNullOrEmpty(UserOpenId))
+                        {
+                            return Redirect(GAAuthorizationPageUrl.ShareUrl);
+                        }
+                        var url = host + "/GAWX/Share";
+                        ViewBag.PageUrl = _weChatOAuthAppService.GetAuthorizeUrl(url, "123", Senparc.Weixin.MP.OAuthScope.snsapi_base);
+                    }
+                    break;
                 default:
                     {
                         return Redirect("/gawechat/index.html");
@@ -283,6 +293,17 @@ namespace HC.WeChat.Web.Host.Controllers
 
             return Redirect(GAAuthorizationPageUrl.ActivityUrl);
         }
+
+        /// <summary>
+        /// 经验分享
+        /// </summary>
+        public IActionResult Share(string code, string state)
+        {
+            //存储openId 避免重复提交
+            SetUserOpenId(code);
+
+            return Redirect(GAAuthorizationPageUrl.ShareUrl);
+        }
     }
 
     public enum GAAuthorizationPageEnum
@@ -293,7 +314,8 @@ namespace HC.WeChat.Web.Host.Controllers
         MyShop = 4,
         NearbyShop = 201,
         Goods = 202,
-        Activity = 101
+        Activity = 101,
+        Share = 102
     }
 
     public class GAAuthorizationPageUrl
@@ -307,5 +329,6 @@ namespace HC.WeChat.Web.Host.Controllers
         public static string GoodsUrl = "/gawechat/index.html#/goodses/goods";
 
         public static string ActivityUrl = "/gawechat/index.html#/activities/activity";
+        public static string ShareUrl = "/gawechat/index.html#/shares/share";
     }
 }

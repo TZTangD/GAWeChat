@@ -30,7 +30,7 @@
     <div class="weui-cells weui-cells_img" [ngStyle]="{'background-image':'url('+ hostUrl + shop.coverPhoto +')'}">
         <div class="weui-cell" style="height: 120px;">
         </div>
-        <div class="weui-cell weui-cell_img" *ngIf="shop" >
+        <div class="weui-cell weui-shop-cell_img" *ngIf="shop" >
             <div class="weui-cell__hd">
                 <img src="./assets/images/shop/network-o-4.png" alt="" style="width:24px;margin-right:5px;display:block">
             </div>
@@ -40,7 +40,7 @@
             <div class="weui-cell__ft">
                 <p>
                     <img class="weui-icon-h18" src="./assets/images/shop/wave.png" alt="人气"><span style="color:rgb(221, 41, 77);">人气：{{shop.readTotal}}</span>
-                    <img class="weui-icon-h18" alt="销量" src="./assets/images/shop/trend-chart-2.png"><span style="color:rgb(48, 156, 48);">销量：{{shop.saleTotal}}</span></p>
+                    <img class="weui-icon-h18" alt="销量" src="./assets/images/shop/trend-chart-2.png"><span style="color:rgb(95, 231, 95);">销量：{{shop.saleTotal}}</span></p>
             </div>
         </div>
     </div>

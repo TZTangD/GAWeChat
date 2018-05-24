@@ -202,6 +202,10 @@ namespace HC.WeChat.StatisticalDetails
             {
                 await _statisticaldetailRepository.InsertAsync(result);
                 var article = await _articleRepository.GetAll().Where(v => v.Id == input.ArticleId).FirstOrDefaultAsync();
+                if(article.ReadTotal == null)
+                {
+                    article.ReadTotal = 0;
+                }
                 article.ReadTotal++;
                 await _articleRepository.UpdateAsync(article);
             }
@@ -222,6 +226,10 @@ namespace HC.WeChat.StatisticalDetails
             {
                 await _statisticaldetailRepository.InsertAsync(result);
                 var article = await _articleRepository.GetAll().Where(v => v.Id == input.ArticleId).FirstOrDefaultAsync();
+                if (article.ReadTotal == null)
+                {
+                    article.GoodTotal = 0;
+                }
                 article.GoodTotal++;
                 await _articleRepository.UpdateAsync(article);
             }
