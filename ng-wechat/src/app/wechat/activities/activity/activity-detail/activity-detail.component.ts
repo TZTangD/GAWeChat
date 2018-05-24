@@ -45,6 +45,9 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
         params.articleId = this.id;
         this.articleService.GetIsGoodAsync(params).subscribe(data => {
             this.isGood = data;
+            if (this.isGood == null) {
+                this.isGood == false;
+            }
         });
     }
 
@@ -52,9 +55,10 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
         this.statisticalDetail.articleId = this.id;
         this.statisticalDetail.type = 2;
         this.statisticalDetail.openId = this.settingsService.openId;
-        this.isGood = true;
         if (!this.isGood) {
+            this.isGood = true;
             this.activity.goodTotal++;
+
         }
         this.articleService.AddGoodAsync(this.statisticalDetail).subscribe(data => {
             if (data && data.code === 0) {
