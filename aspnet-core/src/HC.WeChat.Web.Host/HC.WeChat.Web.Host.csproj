@@ -50,5 +50,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="wwwroot\upload\activity\activity-content\" />
   </ItemGroup>
 </Project>
