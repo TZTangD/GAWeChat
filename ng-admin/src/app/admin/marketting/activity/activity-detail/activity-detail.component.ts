@@ -7,6 +7,7 @@ import { Article } from '@shared/entity/marketting';
 import { ResourceLoader } from '@angular/compiler';
 import { NzModalService, UploadFile } from 'ng-zorro-antd';
 import { AppConsts } from '@shared/AppConsts';
+// import { ConsoleReporter } from 'jasmine';
 
 @Component({
     moduleId: module.id,
@@ -15,6 +16,7 @@ import { AppConsts } from '@shared/AppConsts';
     styleUrls: ['activity-detail.component.scss']
 })
 export class ActivityDetailComponent extends AppComponentBase implements OnInit {
+    test: any;
     form: FormGroup;
     id: number;
     article: Article = new Article();
@@ -46,38 +48,45 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
         init_instance_callback: function () {
         },
         // selector: 'textarea',  // change this value according to your html
-        images_upload_url: 'postAcceptor.php',
         images_upload_base_path: this.host + '/WeChatFile/MarketingHTMLContentPosts',
         images_upload_credentials: true,
+        automatic_uploads: true,
+        images_upload_url: 'http://localhost:21021/WeChatFile/MarketingHTMLContentPosts?',
         // images_upload_handler: function (blobInfo, success, failure) {
-        //     var xhr, formData;
-        //     xhr = new XMLHttpRequest();
-        //     xhr.withCredentials = false;
-        //     xhr.open('POST', 'postAcceptor.php');
-        //     xhr.onload = function () {
-        //         var json;
-
-        //         if (xhr.status != 200) {
-        //             failure('HTTP Error: ' + xhr.status);
-        //             return;
-        //         }
-        //         json = JSON.parse(xhr.responseText);
-
-        //         if (!json || typeof json.location != 'string') {
-        //             failure('Invalid JSON: ' + xhr.responseText);
-        //             return;
-        //         }
-        //         success(json.location);
-        //     };
-        //     formData = new FormData();
-        //     formData.append('file', blobInfo.blob(), fileName(blobInfo));
-        //     xhr.send(formData);
+        //     success('');
         // }
+        images_upload_handler: function (blobInfo, success, failure) {
+            var xhr, formData;
+            xhr = new XMLHttpRequest();
+            xhr.withCredentials = false;
+            xhr.open('POST', 'http://localhost:21021/WeChatFile/MarketingHTMLContentPosts?');
+            xhr.onload = function () {
+                var json;
+
+                if (xhr.status != 200) {
+                    failure('HTTP Error: ' + xhr.status);
+                    return;
+                }
+                json = JSON.parse(xhr.responseText);
+
+                if (!json || typeof json.location != 'string') {
+                    failure('Invalid JSON: ' + xhr.responseText);
+                    return;
+                }
+                success(json.location);
+                console.log(success);
+            };
+            formData = new FormData();
+            // formData.append('file', blobInfo.blob(), fileName(blobInfo));
+            xhr.send(formData);
+        }
     };
     constructor(injector: Injector, private fb: FormBuilder, private actRouter: ActivatedRoute,
         private activityService: ArticleServiceProxy, private router: Router, private modal: NzModalService) {
         super(injector);
         this.id = this.actRouter.snapshot.params['id'];
+        this.test = AppConsts.remoteServiceBaseUrl + '/WeChatFile/MarketingHTMLContentPosts?'
+        console.log(this.test);
     }
 
     ngOnInit(): void {
@@ -91,7 +100,8 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
         this.getSingleActivity();
         this.host = AppConsts.remoteServiceBaseUrl;
         this.actionUrl = this.host + '/WeChatFile/MarketingInfoPosts?fileName=activity';
-        // this.uploadImageUrl = this.host + '/WeChatFile/MarketingHTMLContentPosts';
+        this.uploadImageUrl = this.host + '/WeChatFile/MarketingHTMLContentPosts?';
+        console.log(this.uploadImageUrl);
     }
 
     getSingleActivity() {
@@ -120,8 +130,11 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
 
     saveActivity() {
         //获取body
-        let reg = /<body[^>]*>([\s\S]*)<\/body>/;
-        this.article.content = reg.exec(this.article.content).toString();
+        var start = "<body>";
+        var end = "</body>";
+        var s = this.article.content.indexOf(start) + start.length;
+        var e = this.article.content.indexOf(end);
+        this.article.content = this.article.content.substring(s, e);
         this.activityService.update(this.article)
             .finally(() => { this.isConfirmLoading = false; })
             .subscribe((result: Article) => {

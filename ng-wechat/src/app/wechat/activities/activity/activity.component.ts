@@ -50,6 +50,9 @@ export class ArticleComponent extends AppComponentBase implements OnInit {
         params.pageIndex = this.pageModel.pageIndex;
         params.pageSize = this.pageModel.pageSize;
         this.articleService.GetPagedArticles(params).subscribe(result => {
+            result.filter(v => {
+                v.content = v.content.replace(/<\/?[^>]*>/g, "");
+            })
             this.activityList.push(...result);
             if (result && result.length < this.pageModel.pageSize) {
                 this.pageModel.isLast = true;
