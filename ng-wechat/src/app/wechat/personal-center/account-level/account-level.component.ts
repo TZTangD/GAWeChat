@@ -96,7 +96,7 @@ export class AccountLevelComponent extends AppComponentBase implements OnInit {
         this.verCode = this.level.verificationCode;
     }
     goSourceOfGoods() {
-        this.router.navigate(['']);
+        this.router.navigate(['/good-sources/good-source',{code:this.level.code}]);
     }
     goBack() {
         this.router.navigate(['/personals/personal']);

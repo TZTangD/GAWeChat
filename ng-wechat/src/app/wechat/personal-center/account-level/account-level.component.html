@@ -46,23 +46,19 @@
 
             </div>
 
-            <div class="weui-cell weui-cell_access">
+            <div class="weui-cell weui-cell_access" (click)="goSourceOfGoods()">
                 <div class="weui-cell__bd">
                     <span style="vertical-align: middle; font-size: 14px;">档级货源</span>
                 </div>
                 <div class="weui-cell__ft">
-<<<<<<< HEAD
                     {{level.level}}
-=======
-                    <span style="margin-left: 5px; color: #1aad19">{{customer.archivalLevel}}</span>
->>>>>>> 991c3c20b90fbe42ce1fefb5c361fa6a033463f8
                 </div>
             </div>
             <div class="weui-cell__ft">
                 {{customer.archivalLevel}}
             </div>
         </div>
-        </div>
+        <!-- </div> -->
         <div class="weui-cells__title">基础信息</div>
         <div class="weui-cells">
             <div class="weui-cell">
@@ -126,7 +122,7 @@
         </div>
     </weui-tab>
     <weui-tab heading="客户订货台账" >
-        <div style="padding: 20px;">
+        <div style="padding-left: 10px;padding-top: 0px;padding-bottom: 10px;">
             <button weui-button [weui-mini]="'mini'" [ngClass]="{clickbuttonCss: tableShow==1,defaultbuttonCss:tableShow!=1}" (click)="showTable(1)">月度</button>
             <button weui-button [weui-mini]="'mini'" [ngClass]="{clickbuttonCss: tableShow==3,defaultbuttonCss:tableShow!=3}" (click)="showTable(3)">季度</button>
             <button weui-button [weui-mini]="'mini'" [ngClass]="{clickbuttonCss: tableShow==6,defaultbuttonCss:tableShow!=6}" (click)="showTable(6)">半年</button>
@@ -134,8 +130,8 @@
         <!-- 月度 -->
         <div class="weui-cells" *ngIf="tableShow===1">
 
-            <div class="weui-cells__title">本月</div>
-            <a class="weui-cell">
+            <div class="weui-cells__title ">本月</div>
+            <a class="weui-cell accounttitle" *ngIf="mothAccounts.length>0">
                 <div class="weui-cell__hd hdcss">日期</div>
                 <div class="weui-cell__bd" style="text-align:center;">名称</div>
                 <!-- <div class="weui-cell__bd" style="text-align:center;">上月购数量</div> -->
@@ -151,8 +147,8 @@
                 <span class="weui-loadmore__tips">暂无数据</span>
             </div>
 
-            <div class="weui-cells__title">上月</div>
-            <a class="weui-cell">
+            <div class="weui-cells__title ">上月</div>
+            <a class="weui-cell accounttitle" *ngIf="preAccount.length>0">
                 <div class="weui-cell__hd hdcss">日期</div>
                 <div class="weui-cell__bd" style="text-align:center;">名称</div>
                 <!-- <div class="weui-cell__bd" style="text-align:center;">上月购数量</div> -->
@@ -171,15 +167,15 @@
         <!-- 季度 -->
         <div class="weui-cells" *ngIf="tableShow===3">
             <div class="weui-cells__title" *ngIf="qypreData">{{qypreData}}-{{nowDate}}</div>
-            <a class="weui-cell">
+            <a class="weui-cell accounttitle" *ngIf="accounts.length>0">
                 <!-- <div class="weui-cell__hd hdcss">日期</div> -->
-                <div class="weui-cell__bd" style="text-align:center;">名称</div>
+                <div class="weui-cell__bd" >名称</div>
                 <!-- <div class="weui-cell__bd" style="text-align:center;">上月购数量</div> -->
                 <div class="weui-cell__ft qftcss">购买数量</div>
             </a>
             <a class="weui-cell " *ngFor="let q of accounts">
                 <!-- <div class="weui-cell__hd hdcss">{{q.bookDate}}</div> -->
-                <div class="weui-cell__bd" style="text-align:center;">{{q.itemName}}</div>
+                <div class="weui-cell__bd" >{{q.itemName}}</div>
                 <div class="weui-cell__ft qftcss">{{q.monthQty}}</div>
             </a>
             <div *ngIf="accounts.length<=0 && tableShow===3" class="weui-loadmore weui-loadmore_line">
@@ -189,14 +185,14 @@
         <!-- 半年 -->
         <div class="weui-cells" *ngIf="tableShow===6">
             <div class="weui-cells__title" *ngIf="qypreData">{{qypreData}}-{{nowDate}}</div>
-            <a class="weui-cell ">
+            <a class="weui-cell  accounttitle" *ngIf="accounts.length>0">
                 <!-- <div class="weui-cell__hd hdcss">日期</div> -->
-                <div class="weui-cell__bd" style="text-align:center;">名称</div>
+                <div class="weui-cell__bd" >名称</div>
                 <div class="weui-cell__ft qftcss">购买数量</div>
             </a>
             <a class="weui-cell" *ngFor="let y of accounts">
                 <!-- <div class="weui-cell__hd hdcs">{{y.bookDate}}</div> -->
-                <div class="weui-cell__bd" style="text-align:center;">{{y.itemName}}</div>
+                <div class="weui-cell__bd" >{{y.itemName}}</div>
                 <div class="weui-cell__ft qftcss">{{y.monthQty}}</div>
             </a>
             <div *ngIf="accounts.length<=0 && tableShow===6" class="weui-loadmore weui-loadmore_line">
