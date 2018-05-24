@@ -252,6 +252,7 @@ namespace HC.WeChat.WeChatGroups
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
+        [AbpAllowAnonymous]
         public async Task<WeChatGroupEditDto> CreateWeChatGroup(WeChatGroupListDto input)
         {
             //var checkResult = CheckTagName(input.TagName).Result;

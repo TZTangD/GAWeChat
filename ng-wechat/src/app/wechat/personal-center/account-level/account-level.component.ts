@@ -42,12 +42,12 @@ export class AccountLevelComponent extends AppComponentBase implements OnInit {
         this.nowDate = this.dateFormat(date);
     }
     ngOnInit(): void {
+        this.getCurrentUser();
+        
         if (this.id) {
             this.getLevel();
             this.getAccount(1);
-        } else {
-            this.getCurrentUser();
-        }
+        } 
     }
 
     /**
@@ -66,6 +66,7 @@ export class AccountLevelComponent extends AppComponentBase implements OnInit {
     getCurrentUser() {
         this.settingsService.getUser().subscribe(data => {
             this.user = data;
+            this.headImg = this.user.headImgUrl;
             this.id = data.userId;
             this.getLevel();
             this.getAccount(1);
@@ -83,7 +84,7 @@ export class AccountLevelComponent extends AppComponentBase implements OnInit {
     getLevel() {
         this.levelAccountAccpintService.getLevel({ tenantId: this.settingsService.tenantId, userId: this.id }).subscribe(data => {
             this.level = data
-            this.headImg = (data.headImgUrl == null || data.headImgUrl == '') ? this.defaultHed : data.headImgUrl;
+            //this.headImg = (data.headImgUrl == null || data.headImgUrl == '') ? this.defaultHed : data.headImgUrl;
             if (this.user.userType === UserType.Staff || data.isShopkeeper) {
                 this.showCode = true;
             } else {

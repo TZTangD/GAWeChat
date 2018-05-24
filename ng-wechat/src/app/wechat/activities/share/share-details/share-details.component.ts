@@ -60,10 +60,10 @@ export class ShareDetailComponent extends AppComponentBase implements OnInit {
         this.statisticalDetail.articleId = this.mShareId;
         this.statisticalDetail.type = 2;
         this.statisticalDetail.openId = this.settingsService.openId;
-        this.isGood = true;
         if (!this.isGood) {
             this.sDetailsOfShare.goodTotal++;
         }
+        this.isGood = true;
         this.shareService.AddGoodAsync(this.statisticalDetail).subscribe(data => {
             if (data && data.code === 0) {
             } else {

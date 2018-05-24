@@ -26,8 +26,8 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
     isDelete = false;
     successMsg = '';
     cardTitle = '';
-    host = '';
-    actionUrl = '';
+    host = AppConsts.remoteServiceBaseUrl;
+    actionUrl = this.host + '/WeChatFile/MarketingInfoPosts?fileName=activity';
     uploadImageUrl = '';
     config_classic: any = {
         height: 550,

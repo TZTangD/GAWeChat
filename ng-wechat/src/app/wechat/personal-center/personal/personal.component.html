@@ -22,7 +22,7 @@
         </div>
     </div>
     <div class="weui-cells__title">个人信息</div>
-    <div class="weui-cells">
+    <div class="weui-cells" *ngIf="user">
         <div class="weui-cell weui-cell_access" (click)="goPurchaseRecord(user.openId)">
             <div class="weui-cell__bd">
                 <span style="vertical-align: middle">购买记录</span>
@@ -37,7 +37,7 @@
             </div>
             <div class="weui-cell__ft" style="font-size: 13px;">评价送积分</div>
         </div>
-        <div class="weui-cell weui-cell_access" (click)="goBindPhone()" *ngIf="user">
+        <div class="weui-cell weui-cell_access" (click)="goBindPhone()">
             <div class="weui-cell__bd">
                 <span style="vertical-align: middle">换绑手机</span>
             </div>
