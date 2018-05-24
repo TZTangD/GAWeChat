@@ -12,20 +12,21 @@
                         <div class="weui-media-box__bd">
                             <ul class="weui-media-box__info">
                                 <li class="weui-media-box__info__meta sp">{{item.specification}}</li>
+                                <li class="weui-media-box__info__meta t">{{item.quantity}}包</li>
                             </ul>
 
                             <ul class="weui-media-box__info sn">
                                 <li class="weui-media-box__info__meta s">{{item.shopName}}</li>
                             </ul>
                             <ul class="weui-media-box__info pc">
-                                <li class="weui-media-box__info__meta ">数量:{{item.quantity}}</li>
+                                <li class="weui-media-box__info__meta ">购买日期</li>
                                 <li class="weui-media-box__info__meta t">{{item.creationTime| date:'yyyy-MM-dd HH:mm'}}</li>
                             </ul>
                         </div>
                     </div>
                     <div class="weui-cell weui-cell_access">
-                        <a class="weui-form-preview__btn weui-form-preview__btn_primary" href="javascript:" *ngIf="!item.isEvaluation" (click)="goEvaluation(item.productId,item.id)">评价</a>
-                        <a class="weui-form-preview__btn weui-form-preview__btn_primary" href="javascript:" *ngIf="item.isEvaluation" (click)="goDetail(item.productId,item.id)">详情</a>
+                        <a class="weui-form-preview__btn weui-form-preview__btn_primary" href="javascript:" *ngIf="!item.isEvaluation" (click)="goEvaluation(item.productId,item.id)">去评价</a>
+                        <a class="weui-form-preview__btn weui-form-preview__btn_primary" href="javascript:" *ngIf="item.isEvaluation" (click)="goDetail(item.productId,item.id)">查看详情</a>
                     </div>
                 </div>
             </div>

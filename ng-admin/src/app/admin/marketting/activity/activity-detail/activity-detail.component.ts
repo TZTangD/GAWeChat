@@ -24,8 +24,8 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
     isDelete = false;
     successMsg = '';
     cardTitle = '';
-    host = '';
-    actionUrl = '';
+    host = AppConsts.remoteServiceBaseUrl;
+    actionUrl = this.host + '/WeChatFile/MarketingInfoPosts?fileName=activity';
 
     config_classic: any = {
         height: 550,
@@ -48,7 +48,14 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
         menubar: false,
         toolbar_items_size: 'small',
         init_instance_callback: function () {
-        }
+        },
+        images_upload_url: this.actionUrl,
+        images_upload_handler: function (blobInfo, success, failure) {
+            setTimeout(function() {
+              // no matter what you upload, we will turn it into TinyMCE logo :)
+              success('http://moxiecode.cachefly.net/tinymce/v9/images/logo.png');
+            }, 2000);
+          }
     };
     constructor(injector: Injector, private fb: FormBuilder, private actRouter: ActivatedRoute,
         private activityService: ArticleServiceProxy, private router: Router, private modal: NzModalService) {
@@ -70,8 +77,6 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
             content: [null],
         });
         this.getSingleActivity();
-        this.host = AppConsts.remoteServiceBaseUrl;
-        this.actionUrl = this.host + '/WeChatFile/MarketingInfoPosts?fileName=activity';
     }
 
     getSingleActivity() {

@@ -6,7 +6,7 @@
         <div class="weui-cells">
             <a *ngFor="let item of items" class="weui-cell weui-cell_access" href="javascript:;" (click)="goShareDetails(item.id)">
                 <div class="weui-cell__bd">{{item.title}}</div>
-                <div class="weui-cell__ft">{{item.creationTime | date:'yyyy-MM-dd'}}</div>
+                <div class="weui-cell__ft" style="font-size: 14px;" >{{item.pushTime | date:'yyyy-MM-dd'}}</div>
             </a>
         </div>
     </Page>

@@ -7,8 +7,8 @@
         </article> -->
         <div class="weui-cells">
             <div class="weui-cell">
-                <div class="weui-cell__hd headImage" style="position: relative;margin-right: 10px;">
-                    <img src="{{headImg|hostUrl}}" style="width: 50px;display: block" />
+                <div class="weui-cell__hd" style="position: relative;margin-right: 10px;">
+                    <img src="{{headImg}}" style="width: 50px;display: block" />
                     <!-- <span class="weui-badge" style="position: absolute;top: -.4em;right: -.4em;">8</span> -->
                 </div>
                 <div class="weui-cell__bd">
@@ -51,17 +51,12 @@
                     <span style="vertical-align: middle; font-size: 14px;">档级货源</span>
                 </div>
                 <div class="weui-cell__ft">
-<<<<<<< HEAD
                     {{level.level}}
-=======
-                    <span style="margin-left: 5px; color: #1aad19">{{customer.archivalLevel}}</span>
->>>>>>> 991c3c20b90fbe42ce1fefb5c361fa6a033463f8
                 </div>
             </div>
             <div class="weui-cell__ft">
                 {{customer.archivalLevel}}
             </div>
-        </div>
         </div>
         <div class="weui-cells__title">基础信息</div>
         <div class="weui-cells">
@@ -125,7 +120,7 @@
             <button weui-button (click)="goBack()">返回</button>
         </div>
     </weui-tab>
-    <weui-tab heading="客户订货台账" >
+    <weui-tab heading="客户订货台账">
         <div style="padding: 20px;">
             <button weui-button [weui-mini]="'mini'" [ngClass]="{clickbuttonCss: tableShow==1,defaultbuttonCss:tableShow!=1}" (click)="showTable(1)">月度</button>
             <button weui-button [weui-mini]="'mini'" [ngClass]="{clickbuttonCss: tableShow==3,defaultbuttonCss:tableShow!=3}" (click)="showTable(3)">季度</button>
@@ -150,7 +145,6 @@
             <div *ngIf="mothAccounts.length<=0" class="weui-loadmore weui-loadmore_line">
                 <span class="weui-loadmore__tips">暂无数据</span>
             </div>
-
             <div class="weui-cells__title">上月</div>
             <a class="weui-cell">
                 <div class="weui-cell__hd hdcss">日期</div>
