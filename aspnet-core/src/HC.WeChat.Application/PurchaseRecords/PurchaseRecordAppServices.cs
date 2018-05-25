@@ -383,12 +383,14 @@ namespace HC.WeChat.PurchaseRecords
                                   ProductId = pr.ProductId,
                                   IsEvaluation =pr.IsEvaluation
                               };
+                var z = records.ToList();
                 var products = from p in _productRepository.GetAll()
                                select new ProductListDto()
                                {
                                    Id = p.Id,
                                    PhotoUrl = p.PhotoUrl
                                };
+                var y = products.ToList();
                 var entity = from pr in records
                              join p in products on pr.ProductId equals p.Id
                              select new PurchaseRecordListDto()
@@ -403,6 +405,7 @@ namespace HC.WeChat.PurchaseRecords
                                  PhotoUrl = p.PhotoUrl,
                                  IsEvaluation =pr.IsEvaluation
                              };
+                var x = entity.ToList();
                 return await entity.OrderByDescending(v => v.CreationTime).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
             }
         }

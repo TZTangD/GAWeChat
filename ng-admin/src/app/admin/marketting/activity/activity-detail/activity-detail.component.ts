@@ -51,7 +51,6 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
             xhr = new XMLHttpRequest();
             xhr.withCredentials = false;
             var uploadImageUrl = AppConsts.remoteServiceBaseUrl + '/WeChatFile/MarketingHTMLContentPosts';
-            console.log(uploadImageUrl)
             xhr.open('POST', uploadImageUrl);
             xhr.onload = function () {
                 var json;
