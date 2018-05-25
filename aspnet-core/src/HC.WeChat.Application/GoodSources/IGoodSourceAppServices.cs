@@ -56,5 +56,12 @@ namespace HC.WeChat.GoodSources
         /// 批量删除GoodSource
         /// </summary>
         Task BatchDeleteGoodSourcesAsync(List<Guid> input);
+
+        /// <summary>
+        /// 获取指定零售户
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        Task<List<GoodSourceListForWeChatDto>> GetPagedGoodSourcesForWeChatAsync(GetGoodSourcesInput input);
     }
 }

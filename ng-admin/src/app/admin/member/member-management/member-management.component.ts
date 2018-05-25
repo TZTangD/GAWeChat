@@ -60,7 +60,8 @@ export class MemberManagementComponent extends AppComponentBase implements OnIni
             onOk: () => {
                 wechatUser.userType = 4;
                 wechatUser.bindStatus = 0;
-                wechatUser.unBindTime = new Date;
+                wechatUser.unBindTime = new Date();
+                wechatUser.userId=null;
                 this.wechatUserService.update(wechatUser).subscribe(() => {
                     this.notify.info(this.l('解除绑定成功！'));
                     this.refreshData();

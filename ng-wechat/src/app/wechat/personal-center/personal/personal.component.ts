@@ -16,6 +16,7 @@ export class PersonalComponent extends AppComponentBase implements OnInit {
     isShowRetailer: boolean = false;
     accountTitle: string = '我的台账';
     countNotEvaluation: number;
+
     constructor(injector: Injector, private router: Router, private purchaserecordService: PurchaserecordService) {
         super(injector);
     }
