@@ -5,6 +5,7 @@ using Abp.Authorization;
 using Abp.AutoMapper;
 using Abp.Domain.Repositories;
 using Abp.Linq.Extensions;
+using System.Linq;
 
 using System.Linq.Dynamic.Core;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,7 @@ using HC.WeChat.GoodSources.Dtos;
 using HC.WeChat.GoodSources.DomainServices;
 using HC.WeChat.GoodSources;
 using System;
+using HC.WeChat.Products;
 
 namespace HC.WeChat.GoodSources
 {
@@ -26,16 +28,18 @@ namespace HC.WeChat.GoodSources
         ////ECC/ END CUSTOM CODE SECTION
         private readonly IRepository<GoodSource, Guid> _goodsourceRepository;
         private readonly IGoodSourceManager _goodsourceManager;
+        private readonly IRepository<Product, Guid> _productRepository;
 
         /// <summary>
         /// 构造函数
         /// </summary>
         public GoodSourceAppService(IRepository<GoodSource, Guid> goodsourceRepository
-      , IGoodSourceManager goodsourceManager
+      , IGoodSourceManager goodsourceManager, IRepository<Product, Guid> productRepository
         )
         {
             _goodsourceRepository = goodsourceRepository;
             _goodsourceManager = goodsourceManager;
+            _productRepository = productRepository;
         }
 
         /// <summary>
@@ -179,6 +183,33 @@ namespace HC.WeChat.GoodSources
         {
             //TODO:批量删除前的逻辑判断，是否允许删除
             await _goodsourceRepository.DeleteAsync(s => input.Contains(s.Id));
+        }
+
+        /// <summary>
+        /// 获取指定零售户
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task<List<GoodSourceListForWeChatDto>> GetPagedGoodSourcesForWeChatAsync(GetGoodSourcesInput input)
+        {
+            using (CurrentUnitOfWork.SetTenantId(input.tenantId))
+            {
+                var goodSource = _goodsourceRepository.GetAll().Where(g => g.custCode == input.CustCode).OrderBy(g => g.goodCode).Skip(input.SkipCount).Take(input.MaxResultCount);
+                var puduct = _productRepository.GetAll();
+                var result = await (from g in goodSource
+                                    join p in puduct on g.goodCode equals p.ItemId
+                                    select new GoodSourceListForWeChatDto
+                                    {
+                                        Id = g.Id,
+                                        CustCode = input.CustCode,
+                                        ItemId = g.custCode,
+                                        ItemName = p.Specification,
+                                        Amount = g.amount
+                                    }).ToListAsync();
+
+                return result;
+            }
         }
 
     }

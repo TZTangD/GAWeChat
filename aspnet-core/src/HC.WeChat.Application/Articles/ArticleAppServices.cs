@@ -267,6 +267,7 @@ namespace HC.WeChat.Articles
                                  Content = a.Content,
                                  CoverPhoto = a.CoverPhoto
                              };
+               
                 return await entity.OrderByDescending(q => q.PushTime).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
             }
         }

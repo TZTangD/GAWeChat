@@ -3,34 +3,35 @@
     <div class="weui-cells__title" *ngIf="!tittleType">购买记录</div>
     <div class="weui-cells__title" *ngIf="tittleType">店铺评价</div>
     <div *ngIf="!tittleType">
-        <weui-infiniteloader (loadmore)="onLoadMore($event)" #comp>
-            <div class="weui-panel weui-panel_access" *ngFor="let item of purchaseRecordList">
-                <div class="weui-panel__bd">
-                    <div href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
-                        <div class="weui-cell__hd weui-cell_img" [ngStyle]="{'background-image':'url('+ hostUrl + item.photoUrl +')'}">
-                        </div>
-                        <div class="weui-media-box__bd">
-                            <ul class="weui-media-box__info">
-                                <li class="weui-media-box__info__meta sp">{{item.specification}}</li>
-                                <li class="weui-media-box__info__meta t">{{item.quantity}}包</li>
-                            </ul>
+        <div class="weui-panel weui-panel_access" *ngFor="let item of purchaseRecordList">
+            <!-- <weui-infiniteloader (loadmore)="onLoadMore($event)" #comp> -->
 
-                            <ul class="weui-media-box__info sn">
-                                <li class="weui-media-box__info__meta s">{{item.shopName}}</li>
-                            </ul>
-                            <ul class="weui-media-box__info pc">
-                                <li class="weui-media-box__info__meta ">购买日期</li>
-                                <li class="weui-media-box__info__meta t">{{item.creationTime| date:'yyyy-MM-dd HH:mm'}}</li>
-                            </ul>
-                        </div>
+            <div class="weui-panel__bd">
+                <div href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+                    <div class="weui-cell__hd weui-cell_img" [ngStyle]="{'background-image':'url('+ hostUrl + item.photoUrl +')'}">
                     </div>
-                    <div class="weui-cell weui-cell_access">
-                        <a class="weui-form-preview__btn weui-form-preview__btn_primary" href="javascript:" *ngIf="!item.isEvaluation" (click)="goEvaluation(item.productId,item.id)">去评价</a>
-                        <a class="weui-form-preview__btn weui-form-preview__btn_primary" href="javascript:" *ngIf="item.isEvaluation" (click)="goDetail(item.productId,item.id)">查看详情</a>
+                    <div class="weui-media-box__bd">
+                        <ul class="weui-media-box__info">
+                            <li class="weui-media-box__info__meta sp">{{item.specification}}</li>
+                        </ul>
+
+                        <ul class="weui-media-box__info sn">
+                            <li class="weui-media-box__info__meta s">{{item.shopName}}</li>
+                        </ul>
+                        <ul class="weui-media-box__info pc">
+                            <li class="weui-media-box__info__meta ">数量:{{item.quantity}}</li>
+                            <li class="weui-media-box__info__meta t">{{item.creationTime| date:'yyyy-MM-dd HH:mm'}}</li>
+                        </ul>
                     </div>
                 </div>
+                <div class="weui-cell weui-cell_access">
+                    <a class="weui-form-preview__btn weui-form-preview__btn_primary" href="javascript:" *ngIf="!item.isEvaluation" (click)="goEvaluation(item.productId,item.id)">评价</a>
+                    <a class="weui-form-preview__btn weui-form-preview__btn_primary" href="javascript:" *ngIf="item.isEvaluation" (click)="goDetail(item.productId,item.id)">详情</a>
+                </div>
             </div>
-        </weui-infiniteloader>
+            <!-- </weui-infiniteloader> -->
+
+        </div>
     </div>
     <div *ngIf="tittleType">
         <div class="weui-panel weui-panel_access" *ngFor="let item of purchaseRecordList">
