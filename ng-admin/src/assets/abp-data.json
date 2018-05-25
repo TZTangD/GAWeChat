@@ -158,7 +158,8 @@
                         {
                             "text": "会员管理",
                             "link": "/admin/member/member-management",
-                            "translate": "member-management"
+                            "translate": "member-management",
+                            "reuse": false
                         },
                         {
                             "text": "积分查询",

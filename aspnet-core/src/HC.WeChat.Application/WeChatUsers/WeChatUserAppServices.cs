@@ -443,6 +443,44 @@ namespace HC.WeChat.WeChatUsers
                 return entity.MapTo<WeChatUserListDto>();
             }
         }
+
+        /// <summary>
+        /// 解除绑定
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task UpdateWeChatUserBindStatusAsync(WeChatUserEditDto input)
+        {
+            input.UnBindTime = DateTime.Now;
+            await UpdateWeChatUserAsync(input);
+        }
+
+        /// <summary>
+        /// 获取店员信息
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task<List<WeChatUserListDto>> GetShopEmployeesAsync(int? tenantId, Guid userId)
+        {
+            using (CurrentUnitOfWork.SetTenantId(tenantId))
+            {
+                var result = await _wechatuserRepository.GetAll().Where(w => w.UserId == userId && w.BindStatus == BindStatusEnum.已绑定).OrderByDescending(w => w.IsShopkeeper).ToListAsync();
+                return result.MapTo<List<WeChatUserListDto>>();
+            }
+
+        }
+        /// <summary>
+        /// 审核店员
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task CheckShopEmployeeAsync(WeChatUserEditDto input)
+        {
+            await UpdateWeChatUserAsync(input);
+        }
     }
 }
 

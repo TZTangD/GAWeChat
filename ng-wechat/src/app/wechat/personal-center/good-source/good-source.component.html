@@ -23,7 +23,10 @@
                 <div class="weui-cell__bd" style="text-align:center;">{{i.amount}}</div>
                 <!-- <div class="weui-cell__ft">{{i.licenseKey}}</div> -->
             </a>
-
+            <div *ngIf="goodSources.length<=0" class="weui-loadmore weui-loadmore_line">
+                <span class="weui-loadmore__tips">暂无数据</span>
+            </div>
         </weui-infiniteloader>
+       
     </div>
 </Page>

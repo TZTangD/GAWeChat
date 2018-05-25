@@ -18,7 +18,7 @@ export class AccountLevelComponent extends AppComponentBase implements OnInit {
     preAccount: Accounts[] = [];
     accounts: Accounts[] = [];
     levelClass = '';
-    defaultHed = '/assets/img/default-head.png';
+    defaultHed = './assets/images/timg-4.jpeg';
     headImg = '';
     id = '';
     licenseKey = '';
@@ -42,12 +42,12 @@ export class AccountLevelComponent extends AppComponentBase implements OnInit {
         this.nowDate = this.dateFormat(date);
     }
     ngOnInit(): void {
-        this.getCurrentUser();
-        
         if (this.id) {
             this.getLevel();
             this.getAccount(1);
-        } 
+        } else {
+            this.getCurrentUser();
+        }
     }
 
     /**
@@ -83,8 +83,10 @@ export class AccountLevelComponent extends AppComponentBase implements OnInit {
     // }
     getLevel() {
         this.levelAccountAccpintService.getLevel({ tenantId: this.settingsService.tenantId, userId: this.id }).subscribe(data => {
-            this.level = data
-            //this.headImg = (data.headImgUrl == null || data.headImgUrl == '') ? this.defaultHed : data.headImgUrl;
+            this.level = data;
+            if (this.id !== this.user.userId) {
+                this.headImg = (data.headImgUrl === '' || data.headImgUrl === null) ? this.defaultHed:data.headImgUrl;
+            }
             if (this.user.userType === UserType.Staff || data.isShopkeeper) {
                 this.showCode = true;
             } else {
@@ -97,7 +99,7 @@ export class AccountLevelComponent extends AppComponentBase implements OnInit {
         this.verCode = this.level.verificationCode;
     }
     goSourceOfGoods() {
-        this.router.navigate(['/good-sources/good-source',{code:this.level.code}]);
+        this.router.navigate(['/good-sources/good-source', { code: this.level.code }]);
     }
     goBack() {
         this.router.navigate(['/personals/personal']);
@@ -115,7 +117,7 @@ export class AccountLevelComponent extends AppComponentBase implements OnInit {
             this.mothAccounts = data.monthAccountBooks;
             this.preAccount = data.preMonthAccountBooks;
             this.accounts = data.accountBooks;
-            if (this.accounts.length>0) {
+            if (this.accounts.length > 0) {
                 this.qypreData = this.accounts[0].bookDate;
             }
         });
