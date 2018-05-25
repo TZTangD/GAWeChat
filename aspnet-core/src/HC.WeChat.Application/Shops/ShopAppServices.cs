@@ -21,6 +21,10 @@ using HC.WeChat.WechatEnums;
 using HC.WeChat.ShopProducts;
 using HC.WeChat.Products;
 using HC.WeChat.Helpers;
+using Senparc.Weixin.MP.AdvancedAPIs.TemplateMessage;
+using HC.WeChat.WechatAppConfigs.Dtos;
+using HC.WeChat.WechatAppConfigs;
+using Senparc.Weixin.MP.AdvancedAPIs;
 
 namespace HC.WeChat.Shops
 {
@@ -39,6 +43,10 @@ namespace HC.WeChat.Shops
         private readonly IWeChatUserManager _wechatuserManager;
         private readonly IRepository<ShopProduct, Guid> _shopProductRepository;
         private readonly IRepository<Product, Guid> _productRepository;
+        IWechatAppConfigAppService _wechatAppConfigAppService;
+
+        private int? TenantId { get; set; }
+        private WechatAppConfigInfo AppConfig { get; set; }
 
         /// <summary>
         /// 构造函数
@@ -48,6 +56,7 @@ namespace HC.WeChat.Shops
         , IWeChatUserManager wechatuserManager
         , IRepository<ShopProduct, Guid> shopProductRepository
         , IRepository<Product, Guid> productRepository
+            , IWechatAppConfigAppService wechatAppConfigAppService
         )
         {
             _shopRepository = shopRepository;
@@ -56,6 +65,9 @@ namespace HC.WeChat.Shops
             _wechatuserManager = wechatuserManager;
             _shopProductRepository = shopProductRepository;
             _productRepository = productRepository;
+            _wechatAppConfigAppService = wechatAppConfigAppService;
+            TenantId = null;
+            AppConfig = _wechatAppConfigAppService.GetWechatAppConfig(TenantId).Result;
         }
 
         /// <summary>
@@ -445,6 +457,16 @@ namespace HC.WeChat.Shops
                 return shops.MapTo<List<ShopListDto>>();
             }
         }
+
+        //[AbpAllowAnonymous]
+        //public async Task<ShopListDto> CreateWeChatGroup(ShopEditDto input)
+        //{
+        //   // var result = new ShopEditDto();
+        //   //var data = await TemplateApi.
+        //   // ;
+
+        //   // return result;
+        //}
     }
 }
 

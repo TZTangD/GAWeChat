@@ -238,21 +238,17 @@ namespace HC.WeChat.Web.Host.Controllers
         /// <returns></returns>
         [RequestFormSizeLimit(valueCountLimit: 2147483647)]
         [HttpPost]
-        public async Task<IActionResult> MarketingHTMLContentPosts(IFormFile[] image, Guid name)
+        public async Task<IActionResult> MarketingHTMLContentPosts(IFormFile[] file)
         {
-            //var files = Request.Form.Files;
             string webRootPath = _hostingEnvironment.WebRootPath;
-            string contentRootPath = _hostingEnvironment.ContentRootPath;
-            var imageName = "";
-            foreach (var formFile in image)
+            string location = Guid.NewGuid().ToString();
+            foreach (var formFile in file)
             {
                 if (formFile.Length > 0)
                 {
                     string fileExt = Path.GetExtension(formFile.FileName); //文件扩展名，不含“.”
-                    long fileSize = formFile.Length; //获得文件大小，以字节为单位        
-                    name = name == Guid.Empty ? Guid.NewGuid() : name;
-                    string newName = name + fileExt; //新的文件名
-                    var fileDire = webRootPath + string.Format("/upload/activity-content/");
+                    string newName = location + fileExt; //新的文件名
+                    var fileDire = webRootPath + string.Format("/upload/activity/activity-content/");
                     if (!Directory.Exists(fileDire))
                     {
                         Directory.CreateDirectory(fileDire);
@@ -264,12 +260,12 @@ namespace HC.WeChat.Web.Host.Controllers
                     {
                         await formFile.CopyToAsync(stream);
                     }
-                    imageName = filePath.Substring(webRootPath.Length);
+                    location = filePath.Substring(webRootPath.Length);
                 }
             }
-            return Ok(new { imageName });
+            return Ok(new { location });
         }
-        //
+
         [RequestFormSizeLimit(valueCountLimit: 2147483647)]
         [HttpPost]
         [AbpAllowAnonymous]

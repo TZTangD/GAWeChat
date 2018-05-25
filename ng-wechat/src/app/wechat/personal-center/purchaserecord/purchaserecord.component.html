@@ -3,9 +3,8 @@
     <div class="weui-cells__title" *ngIf="!tittleType">购买记录</div>
     <div class="weui-cells__title" *ngIf="tittleType">店铺评价</div>
     <div *ngIf="!tittleType">
+        <!-- <weui-infiniteloader (loadmore)="onLoadMore($event)" #comp> -->
         <div class="weui-panel weui-panel_access" *ngFor="let item of purchaseRecordList">
-            <!-- <weui-infiniteloader (loadmore)="onLoadMore($event)" #comp> -->
-
             <div class="weui-panel__bd">
                 <div href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
                     <div class="weui-cell__hd weui-cell_img" [ngStyle]="{'background-image':'url('+ hostUrl + item.photoUrl +')'}">
@@ -29,9 +28,8 @@
                     <a class="weui-form-preview__btn weui-form-preview__btn_primary" href="javascript:" *ngIf="item.isEvaluation" (click)="goDetail(item.productId,item.id)">详情</a>
                 </div>
             </div>
-            <!-- </weui-infiniteloader> -->
-
         </div>
+        <!-- </weui-infiniteloader> -->
     </div>
     <div *ngIf="tittleType">
         <div class="weui-panel weui-panel_access" *ngFor="let item of purchaseRecordList">

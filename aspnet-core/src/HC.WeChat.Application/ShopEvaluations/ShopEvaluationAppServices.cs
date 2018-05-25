@@ -24,6 +24,8 @@ using HC.WeChat.Dto;
 using HC.WeChat.Shops;
 using HC.WeChat.Shops.Dtos;
 using HC.WeChat.WechatEnums;
+using HC.WeChat.IntegralDetails;
+using HC.WeChat.MemberConfigs;
 
 namespace HC.WeChat.ShopEvaluations
 {
@@ -42,7 +44,8 @@ namespace HC.WeChat.ShopEvaluations
         private readonly IRepository<WeChatUser, Guid> _wechatuserRepository;
         private readonly IRepository<Product, Guid> _productRepository;
         private readonly IRepository<Shop, Guid> _shopRepository;
-
+        private readonly IRepository<IntegralDetail, Guid> _integraldetailRepository;
+        private readonly IRepository<MemberConfig, Guid> _memberConfigRepository;
 
         /// <summary>
         /// 构造函数
@@ -53,14 +56,19 @@ namespace HC.WeChat.ShopEvaluations
             , IRepository<WeChatUser, Guid> wechatuserRepository
             , IRepository<Product, Guid> productRepository
             , IRepository<Shop, Guid> shopRepository
+            , IRepository<IntegralDetail, Guid> integraldetailRepository
+            , IRepository<MemberConfig, Guid> memberConfigRepository
+
         )
         {
+            _integraldetailRepository = integraldetailRepository;
             _shopevaluationRepository = shopevaluationRepository;
             _shopevaluationManager = shopevaluationManager;
             _purchaserecordRepository = purchaserecordRepository;
             _wechatuserRepository = wechatuserRepository;
             _productRepository = productRepository;
             _shopRepository = shopRepository;
+            _memberConfigRepository = memberConfigRepository;
         }
 
         /// <summary>
@@ -432,7 +440,7 @@ namespace HC.WeChat.ShopEvaluations
         }
 
         /// <summary>
-        /// 提交评价信息并更新店铺评价&购买记录
+        /// 提交评价信息并更新店铺评价&购买记录&积分详情
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
@@ -441,8 +449,8 @@ namespace HC.WeChat.ShopEvaluations
         {
             //新增评价
             var result = input.MapTo<ShopEvaluation>();
+            result.Id = Guid.NewGuid();
             await _shopevaluationRepository.InsertAsync(result);
-
             //修改店铺评价
             var shopEntity = _shopRepository.GetAll().Where(s => s.Id == input.ShopId).FirstOrDefault();     
             var evaluationIds = shopEntity.Evaluation.Split(',');
@@ -466,7 +474,37 @@ namespace HC.WeChat.ShopEvaluations
             var record = _purchaserecordRepository.GetAll().Where(pr => pr.Id == input.PurchaseRecordId).FirstOrDefault();
             record.IsEvaluation = true;
             await _purchaserecordRepository.UpdateAsync(record);
+            //新增积分详情
+            var config = await GetIntegralConfig(input.TenantId);
+            var user = await _wechatuserRepository.GetAll().Where(u => u.OpenId == input.OpenId).FirstOrDefaultAsync();
+            var intDetail = new IntegralDetail();
+            intDetail.InitialIntegral = user.IntegralTotal;
+            intDetail.Integral = int.Parse(config);
+            intDetail.FinalIntegral = user.IntegralTotal + intDetail.Integral;
+            intDetail.OpenId = user.OpenId;
+            intDetail.RefId = result.Id.ToString();
+            intDetail.TenantId = input.TenantId;
+            intDetail.Type = IntegralTypeEnum.评价店铺赠送;
+            intDetail.Desc = "评价店铺赠送";
+            await _integraldetailRepository.InsertAsync(intDetail);
+            //更新用户总积分
+            user.IntegralTotal = intDetail.FinalIntegral.Value;
+            await _wechatuserRepository.UpdateAsync(user);
             return new APIResultDto() { Code = 0, Msg = "提交成功，您的评价已生效" };
+        }
+
+        private async Task<string> GetIntegralConfig(int? tenantId)
+        {
+            using (CurrentUnitOfWork.SetTenantId(tenantId))
+            {
+                //获取积分配置
+                var configValue = await _memberConfigRepository.GetAll().Where(c => c.Type == DeployTypeEnum.积分配置&&c.Code==DeployCodeEnum.商品评价).Select(c=>c.Value).FirstOrDefaultAsync();
+                if (configValue == null)
+                {
+                    configValue = "5";  
+                }
+                return configValue;
+            }
         }
     }
 }
