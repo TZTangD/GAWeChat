@@ -28,7 +28,6 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
     cardTitle = '';
     host = AppConsts.remoteServiceBaseUrl;
     actionUrl = this.host + '/WeChatFile/MarketingInfoPosts?fileName=activity';
-    uploadImageUrl = '';
     config_classic: any = {
         height: 550,
         plugins: [
@@ -47,37 +46,29 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
         toolbar_items_size: 'small',
         init_instance_callback: function () {
         },
-        // selector: 'textarea',  // change this value according to your html
-        images_upload_base_path: this.host + '/WeChatFile/MarketingHTMLContentPosts',
-        images_upload_credentials: true,
-        automatic_uploads: true,
-        images_upload_url: 'http://localhost:21021/WeChatFile/MarketingHTMLContentPosts?',
-        // images_upload_handler: function (blobInfo, success, failure) {
-        //     success('');
-        // }
         images_upload_handler: function (blobInfo, success, failure) {
             var xhr, formData;
             xhr = new XMLHttpRequest();
             xhr.withCredentials = false;
-            xhr.open('POST', 'http://localhost:21021/WeChatFile/MarketingHTMLContentPosts?');
+            var uploadImageUrl = AppConsts.remoteServiceBaseUrl + '/WeChatFile/MarketingHTMLContentPosts';
+            console.log(uploadImageUrl)
+            xhr.open('POST', uploadImageUrl);
             xhr.onload = function () {
                 var json;
-
                 if (xhr.status != 200) {
                     failure('HTTP Error: ' + xhr.status);
                     return;
                 }
                 json = JSON.parse(xhr.responseText);
 
-                if (!json || typeof json.location != 'string') {
+                if (!json || typeof json.result.location != 'string') {
                     failure('Invalid JSON: ' + xhr.responseText);
                     return;
                 }
-                success(json.location);
-                console.log(success);
+                success(AppConsts.remoteServiceBaseUrl + json.result.location);
             };
             formData = new FormData();
-            // formData.append('file', blobInfo.blob(), fileName(blobInfo));
+            formData.append('file', blobInfo.blob(), blobInfo.filename());
             xhr.send(formData);
         }
     };
@@ -85,8 +76,6 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
         private activityService: ArticleServiceProxy, private router: Router, private modal: NzModalService) {
         super(injector);
         this.id = this.actRouter.snapshot.params['id'];
-        this.test = AppConsts.remoteServiceBaseUrl + '/WeChatFile/MarketingHTMLContentPosts?'
-        console.log(this.test);
     }
 
     ngOnInit(): void {
@@ -100,8 +89,6 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
         this.getSingleActivity();
         this.host = AppConsts.remoteServiceBaseUrl;
         this.actionUrl = this.host + '/WeChatFile/MarketingInfoPosts?fileName=activity';
-        this.uploadImageUrl = this.host + '/WeChatFile/MarketingHTMLContentPosts?';
-        console.log(this.uploadImageUrl);
     }
 
     getSingleActivity() {
