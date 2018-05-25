@@ -365,7 +365,7 @@ namespace HC.WeChat.Shops
         {
             var entity = await _shopRepository.GetAsync(input.Id);
             entity.Status = input.Status;
-            entity.AuditTime = input.AuditTime;
+            entity.AuditTime = DateTime.Now;
             var result = _shopRepository.UpdateAsync(entity);
             //return result.MapTo<ShopEditDto>();
         }

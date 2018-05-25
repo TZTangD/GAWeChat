@@ -17,7 +17,7 @@ export class WechatUser implements IWechatUser {
     integralTotal: number;
     isShopkeeper: boolean;
     status: number;
-
+    statusName:string;
     constructor(data?: IWechatUser) {
         if (data) {
             for (var property in data) {
@@ -47,6 +47,8 @@ export class WechatUser implements IWechatUser {
             this.integralTotal = data["integralTotal"];
             this.isShopkeeper = data["isShopkeeper"];
             this.status = data["status"];
+            this.statusName = data["statusName"];
+            
         }
     }
 
@@ -54,6 +56,16 @@ export class WechatUser implements IWechatUser {
         let result = new WechatUser();
         result.init(data);
         return result;
+    }
+
+    static fromJSArray(data: any[]): WechatUser[] {
+        let arry = []
+        data.map(i => {
+            let item = new WechatUser();
+            item.init(i);
+            arry.push(item);
+        })
+        return arry;
     }
 
     toJSON(data?: any) {
@@ -74,6 +86,8 @@ export class WechatUser implements IWechatUser {
         data["integralTotal"] = this.integralTotal;
         data["isShopkeeper"] = this.isShopkeeper;
         data["status"] = this.status;
+        data["statusName"] = this.statusName;
+        
         return data;
     }
 
@@ -101,6 +115,8 @@ export interface IWechatUser {
     integralTotal: number;
     isShopkeeper: boolean;
     status: number;
+    statusName:string;
+    
 }
 
 export enum UserType {

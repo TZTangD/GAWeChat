@@ -173,7 +173,7 @@ export class StoreDetailComponent extends AppComponentBase implements OnInit {
             cancelText: '否',
             onOk: () => {
                 this.shop.status = status;
-                this.shop.auditTime = this.dateFormat(new Date);
+                // this.shop.auditTime = this.dateFormat(new Date);
                 this.shopService.CheckShop(this.shop).subscribe((result: Shop) => {
                     this.shop = result;
                     this.getSingleShop();

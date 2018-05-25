@@ -17,10 +17,10 @@ import { WechatUser, ApiResult } from '../model/index';
 export class WechatUserService {
   constructor(private http: HttpClient) { }
 
-  GetWeChatUserByMemberBarCodeAsync(mCode:string, tId:string): Observable<WechatUser> {
+  GetWeChatUserByMemberBarCodeAsync(mCode: string, tId: string): Observable<WechatUser> {
     let param: any = {};
     param.memberBarCode = mCode;
-    if(tId){
+    if (tId) {
       param.tenantId = tId;
     }
     return this.http.get('/api/services/app/WeChatUser/GetWeChatUserByMemberBarCodeAsync', param).map(data => {
@@ -28,7 +28,7 @@ export class WechatUserService {
     });
   }
 
-  BindMemberAsync(params: any): Observable<ApiResult<WechatUser>>{
+  BindMemberAsync(params: any): Observable<ApiResult<WechatUser>> {
     return this.http.post('/api/services/app/WeChatUser/BindMemberAsync', params).map(data => {
       let result = new ApiResult<WechatUser>();
       result.code = data.result.code;
@@ -38,7 +38,7 @@ export class WechatUserService {
     });
   }
 
-  BindWeChatUserAsync(params: any): Observable<ApiResult<WechatUser>>{
+  BindWeChatUserAsync(params: any): Observable<ApiResult<WechatUser>> {
     return this.http.post('/api/services/app/WeChatUser/BindWeChatUserAsync', params).map(data => {
       let result = new ApiResult<WechatUser>();
       result.code = data.result.code;
@@ -48,10 +48,33 @@ export class WechatUserService {
     });
   }
 
-  getSingleWeChatUser(params:any):Observable<WechatUser>{
-    return this.http.get('/api/services/app/WeChatUser/GetSingleWeChatUser',params).map(data=>{
+  getSingleWeChatUser(params: any): Observable<WechatUser> {
+    return this.http.get('/api/services/app/WeChatUser/GetSingleWeChatUser', params).map(data => {
       return WechatUser.fromJS(data);
     })
   }
-  
+
+  getShopemployee(input: any): Observable<WechatUser[]> {
+    return this.http.get('/api/services/app/WeChatUser/GetShopEmployeesAsync', input).map(data => {
+      return data.result;
+    });
+  }
+
+  checkShopEmployee(input: WechatUser): Observable<any> {
+    return this.http.post('/api/services/app/WeChatUser/CheckShopEmployeeAsync', input, null, true).map(data => {
+      return data.result;
+    });
+  }
+  unBindShopEmployee(input:any):Observable<any>{
+    return this.http.post('/api/services/app/WeChatUser/CheckWeChatUserBindStatusAsync',input,null,true).map(data=>{
+      return data.result;
+    });
+  }
+
+  getNoCheckShopEmployeeCount(input:any):Observable<number>{
+    return this.http.get('/api/services/app/WeChatUser/GetShopEmployeesNoCheckCountAsync',input).map(data=>{
+      return data.result;
+    });
+  }
+
 }

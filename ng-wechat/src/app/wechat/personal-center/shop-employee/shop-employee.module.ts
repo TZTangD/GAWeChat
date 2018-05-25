@@ -2,16 +2,17 @@
 import { NgModule } from '@angular/core';
 
 // This Module's Components
-import { GoodSourceComponent } from './good-source.component';
+import { ShopEmployeeComponent } from './shop-employee.component';
+import { Routes, RouterModule } from '@angular/router';
 import { SharedModule } from '../../../shared/shared.module';
 import { AngularSplitModule } from 'angular-split';
 import { ComponentsModule } from '../../components/components.module';
-import { RouterModule, Routes } from '@angular/router';
-import { GoodSourceService } from '../../../services/personal-center/good-source.service';
-const COMPONENTS = [GoodSourceComponent];
-const routes:Routes=[
-    {path:'good-source',component:GoodSourceComponent}
-]
+import { WechatUserService } from '../../../services';
+
+const COMPONENTS = [ShopEmployeeComponent,];
+const routes: Routes = [
+    { path: 'shop-employee', component: ShopEmployeeComponent },
+];
 @NgModule({
     imports: [
         SharedModule,
@@ -26,9 +27,10 @@ const routes:Routes=[
         ...COMPONENTS,
     ],
     providers:[
-        GoodSourceService,
+        WechatUserService,
     ]
+    
 })
-export class GoodSourceModule {
+export class ShopEmployeeModule {
 
 }

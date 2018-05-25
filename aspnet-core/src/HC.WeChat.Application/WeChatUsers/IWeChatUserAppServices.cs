@@ -96,7 +96,7 @@ namespace HC.WeChat.WeChatUsers
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task UpdateWeChatUserBindStatusAsync(WeChatUserEditDto input);
+        Task CheckWeChatUserBindStatusAsync(WeChatUserEditDto input);
 
         /// <summary>
         /// 获取店员信息
@@ -111,6 +111,14 @@ namespace HC.WeChat.WeChatUsers
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task CheckShopEmployeeAsync(WeChatUserEditDto input);
+        Task<APIResultDto> CheckShopEmployeeAsync(WeChatUserEditDto input);
+
+        /// <summary>
+        /// 获取未审核店员人数
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        Task<int> GetShopEmployeesNoCheckCountAsync(int? tenantId, Guid userId);
     }
 }
