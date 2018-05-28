@@ -17,6 +17,8 @@ using System;
 using HC.WeChat.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Abp.IdentityFramework;
+using Abp.Domain.Uow;
+using HC.WeChat.Dto;
 
 namespace HC.WeChat.Retailers
 {
@@ -249,6 +251,23 @@ namespace HC.WeChat.Retailers
             }
         }
 
+        //[UnitOfWork(isTransactional: false)]
+        //public async Task<APIResultDto> ExportRetailerLevelExcel(GetRetailersInput input)
+        //{
+        //    try
+        //    {
+        //        var exportData = await GetRetailerLevelListAsync(input);
+        //        var result = new APIResultDto();
+        //        result.Code = 0;
+        //        result.Data = SaveRetailerLevelExcel("零售客户档级.xlsx", exportData);
+        //        return result;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Logger.ErrorFormat("ExportPostInfoExcel errormsg:{0} Exception:{1}", ex.Message, ex);
+        //        return new APIResultDto() { Code = 901, Msg = "网络忙... 请待会重试！" };
+        //    }
+        //}
         #region 微信
 
         /// <summary>
