@@ -4,14 +4,17 @@ import { RetailCustomer, Parameter } from '@shared/service-proxies/entity';
 import { RetailCustomerServiceProxy, PagedResultDtoOfRetailCustomer } from '@shared/service-proxies/customer-service';
 import { NzModalService } from 'ng-zorro-antd';
 import { Router } from '@angular/router';
+import { AppConsts } from '@shared/AppConsts';
 
 @Component({
     moduleId: module.id,
     selector: 'retail-customer',
     templateUrl: 'retail-customer.component.html',
 })
-export class RetailCustomerComponent extends AppComponentBase implements OnInit{
+export class RetailCustomerComponent extends AppComponentBase implements OnInit {
     loading = false;
+    exportExcelUrl: string;
+    exportLoading = false;
     search: any = {};
     status = [
         { text: '有效', value: false, type: 'success' },
@@ -89,5 +92,23 @@ export class RetailCustomerComponent extends AppComponentBase implements OnInit{
     }
     createRetail() {
         this.router.navigate(['admin/customer/retail-detail']);
+    }
+
+    /**
+ * 导出档级
+ */
+    exportExcel() {
+        this.exportLoading = true;
+        this.retailService.exportRetailerLevelExcel({ name: this.search.name, scale: this.search.scale, markets: this.search.market }).subscribe(result => {
+            if (result.code == 0) {
+                //var url = 'http://localhost:21021/files/测试客户经理.xlsx';
+                var url = AppConsts.remoteServiceBaseUrl + result.data;
+                document.getElementById('aRetailExcelUrl').setAttribute('href', url);
+                document.getElementById('btnRetailHref').click();
+            } else {
+                this.notify.error(result.msg);
+            }
+            this.exportLoading = false;
+        });
     }
 }

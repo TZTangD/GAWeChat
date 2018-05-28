@@ -45,9 +45,14 @@
                     <div nz-form-label nz-col [nzSm]="4">
                         <label for="content">经验内容</label>
                     </div>
-                    <div nz-form-control nz-col [nzSm]="20" nzHasFeedback [nzValidateStatus]="getFormControl('content')">
+                    <!-- <div nz-form-control nz-col [nzSm]="20" nzHasFeedback [nzValidateStatus]="getFormControl('content')">
                         <nz-input nzType="textarea" nzRows="6" formControlName="content" [(ngModel)]="article.content" [nzId]="'content'"></nz-input>
                         <div nz-form-explain *ngIf="getFormControl('content').dirty&&getFormControl('content').hasError('required')">经验内容不能为空</div>
+                    </div> -->
+                    <div nz-form-control nz-col [nzSm]="20" nzHasFeedback [nzValidateStatus]="getFormControl('content')">
+                        <tinymce [config]="config_classic" loading="loading……" [ngModelOptions]="{standalone: true}" [(ngModel)]="article.content">
+
+                        </tinymce>
                     </div>
                 </div>
             </div>
