@@ -5,6 +5,7 @@ using Abp.Application.Services.Dto;
 using HC.WeChat.GoodSources.Dtos;
 using HC.WeChat.GoodSources;
 using System;
+using HC.WeChat.Dto;
 
 namespace HC.WeChat.GoodSources
 {
@@ -63,5 +64,9 @@ namespace HC.WeChat.GoodSources
         /// <param name="input"></param>
         /// <returns></returns>
         Task<List<GoodSourceListForWeChatDto>> GetPagedGoodSourcesForWeChatAsync(GetGoodSourcesInput input);
+        Task<List<GoodSourceListDto>> GetGoodSourceListAsync(GetGoodSourcesInput input);
+
+        Task<APIResultDto> ExportGoodSourceExcel(GetGoodSourcesInput input);
+        Task<APIResultDto> ImportGoodSourceExcelAsync();
     }
 }

@@ -17,8 +17,13 @@ using System;
 using HC.WeChat.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Abp.IdentityFramework;
-using Abp.Domain.Uow;
+using Microsoft.AspNetCore.Hosting;
 using HC.WeChat.Dto;
+using Abp.Domain.Uow;
+using HC.WeChat.Helpers;
+using System.IO;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
 
 namespace HC.WeChat.Retailers
 {
@@ -33,14 +38,18 @@ namespace HC.WeChat.Retailers
         ////ECC/ END CUSTOM CODE SECTION
         private readonly IRepository<Retailer, Guid> _retailerRepository;
         private readonly IRetailerManager _retailerManager;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
         /// <summary>
         /// 构造函数
         /// </summary>
         public RetailerAppService(IRepository<Retailer, Guid> retailerRepository
       , IRetailerManager retailerManager
+            , IHostingEnvironment hostingEnvironment
+
         )
         {
+            _hostingEnvironment = hostingEnvironment;
             _retailerRepository = retailerRepository;
             _retailerManager = retailerManager;
         }
@@ -250,24 +259,169 @@ namespace HC.WeChat.Retailers
                 return count <= 0;
             }
         }
+        #region 导出档级模板
 
-        //[UnitOfWork(isTransactional: false)]
-        //public async Task<APIResultDto> ExportRetailerLevelExcel(GetRetailersInput input)
+        public async Task<List<RetailerListDto>> GetRetailerLevelListAsync(GetRetailersInput input)
+        {
+            var mid = UserManager.GetControlEmployeeId();
+            var query = _retailerRepository.GetAll()
+                  .WhereIf(!string.IsNullOrEmpty(input.Name), r => r.Name.Contains(input.Name) || r.Code.Contains(input.Name))
+                  .WhereIf(input.Scale.HasValue, r => r.Scale == input.Scale)
+                  .WhereIf(input.Markets.HasValue, r => r.MarketType == input.Markets)
+                  .WhereIf(mid.HasValue, r => r.EmployeeId == mid);
+            var retailers = await query.ToListAsync();
+            var retailerListDtos =  query.MapTo<List<RetailerListDto>>();
+
+            //.Select(r => new RetailerListDto()
+            //{
+            //    Code =r.Code,
+            //    Name =r.Name,
+            //    ArchivalLevel =r.ArchivalLevel,
+            //    StoreType=r.StoreType,
+            //    VerificationCode=r.VerificationCode,
+            //    Telephone=r.Telephone,
+            //    Department=r.Department,
+            //    Manager=r.Manager,
+            //});
+            return  retailerListDtos;
+        }
+
+        private string SaveRetailerLevelExcel(string fileName, List<RetailerListDto> data)
+        {
+            var fullPath = ExcelHelper.GetSavePath(_hostingEnvironment.WebRootPath) + fileName;
+            using (var fs = new FileStream(fullPath, FileMode.Create, FileAccess.Write))
+            {
+                IWorkbook workbook = new XSSFWorkbook();
+                ISheet sheet = workbook.CreateSheet("RetailLevel");
+                var rowIndex = 0;
+                IRow titleRow = sheet.CreateRow(rowIndex);
+                string[] titles = { "客户编码", "姓名", "客户分档", "业态", "订货电话", "市场部", "客户经理", "经营规模", "市场类型", "专卖证号", "状态" };
+                var fontTitle = workbook.CreateFont();
+                fontTitle.IsBold = true;
+                for (int i = 0; i < titles.Length; i++)
+                {
+                    var cell = titleRow.CreateCell(i);
+                    cell.CellStyle.SetFont(fontTitle);
+                    cell.SetCellValue(titles[i]);
+                }
+
+                var font = workbook.CreateFont();
+                foreach (var item in data)
+                {
+                    rowIndex++;
+                    IRow row = sheet.CreateRow(rowIndex);
+                    ExcelHelper.SetCell(row.CreateCell(0), font, item.Code);
+                    ExcelHelper.SetCell(row.CreateCell(1), font, item.Name);
+                    ExcelHelper.SetCell(row.CreateCell(2), font, item.ArchivalLevel);
+                    ExcelHelper.SetCell(row.CreateCell(3), font, item.StoreType);
+                    ExcelHelper.SetCell(row.CreateCell(4), font, item.Telephone);
+                    ExcelHelper.SetCell(row.CreateCell(5), font, item.Department);
+                    ExcelHelper.SetCell(row.CreateCell(6), font, item.Manager);
+                    ExcelHelper.SetCell(row.CreateCell(7), font, item.Scale.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(8), font, item.MarketType.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(9), font, item.LicenseKey);
+                    ExcelHelper.SetCell(row.CreateCell(10   ), font, item.IsAction.ToString());
+                }
+
+                workbook.Write(fs);
+            }
+            return "/files/downloadtemp/" + fileName;
+        }
+
+        [UnitOfWork(isTransactional: false)]
+        public async Task<APIResultDto> ExportRetailerLevelExcel(GetRetailersInput input)
+        {
+            try
+            {
+                var exportData = await GetRetailerLevelListAsync(input);
+                var result = new APIResultDto();
+                result.Code = 0;
+                result.Data = SaveRetailerLevelExcel("零售客户.xlsx", exportData);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Logger.ErrorFormat("ExportPostInfoExcel errormsg:{0} Exception:{1}", ex.Message, ex);
+                return new APIResultDto() { Code = 901, Msg = "网络忙... 请待会重试！" };
+            }
+        }
+
+        #endregion
+
+        //#region 导入货源档级
+
+        ///// <summary>
+        ///// 更新到数据库
+        ///// </summary>
+        //private async Task UpdateRetailerLevelsAsync(List<RetailerListDto> retailerLevelList)
         //{
-        //    try
+        //    var rlcodes = retailerLevelList.Select(r => r.Code).ToArray();
+        //    var retailerList = await _retailerRepository.GetAll().Where(r => rlcodes.Contains(r.Code)).ToListAsync();
+        //    foreach (var item in retailerLevelList)
         //    {
-        //        var exportData = await GetRetailerLevelListAsync(input);
-        //        var result = new APIResultDto();
-        //        result.Code = 0;
-        //        result.Data = SaveRetailerLevelExcel("零售客户档级.xlsx", exportData);
-        //        return result;
+        //        var retailer = retailerList.Where(r => r.Code == item.Code).FirstOrDefault();
+        //        if (retailer != null)
+        //        {
+        //            retailer.ArchivalLevel = item.ArchivalLevel;
+        //        }
         //    }
-        //    catch (Exception ex)
+        //    await CurrentUnitOfWork.SaveChangesAsync();
+        //}
+
+        ///// <summary>
+        ///// 从上传的Excel读出数据
+        ///// </summary>
+        //private async Task<List<RetailerListDto>> GetRetailerLevelAsync()
+        //{
+        //    string fileName = _hostingEnvironment.WebRootPath + "/upload/files/RetailLevelUpload.xlsx";
+        //    var resultList = new List<RetailerListDto>();
+        //    using (var fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
         //    {
-        //        Logger.ErrorFormat("ExportPostInfoExcel errormsg:{0} Exception:{1}", ex.Message, ex);
-        //        return new APIResultDto() { Code = 901, Msg = "网络忙... 请待会重试！" };
+        //        IWorkbook workbook = new XSSFWorkbook(fs);
+        //        ISheet sheet = workbook.GetSheet("RetailLevel");
+        //        if (sheet == null) //如果没有找到指定的sheetName对应的sheet，则尝试获取第一个sheet
+        //        {
+        //            sheet = workbook.GetSheetAt(0);
+        //        }
+
+        //        if (sheet != null)
+        //        {
+        //            //最后一列的标号
+        //            int rowCount = sheet.LastRowNum;
+        //            for (int i = 1; i <= rowCount; ++i)//排除首行标题
+        //            {
+        //                IRow row = sheet.GetRow(i);
+        //                if (row == null) continue; //没有数据的行默认是null　　　　　　　
+
+        //                var retailerLevel = new RetailerListDto();
+        //                if (row.GetCell(1) != null && row.GetCell(5) != null)
+        //                {
+        //                    retailerLevel.Code = row.GetCell(1).ToString();
+        //                    retailerLevel.ArchivalLevel = row.GetCell(5).ToString();
+        //                    resultList.Add(retailerLevel);
+        //                }
+        //            }
+        //        }
+
+        //        return await Task.FromResult(resultList);
         //    }
         //}
+
+        ///// <summary>
+        ///// 导入档级
+        ///// </summary>
+        //public async Task<APIResultDto> ImportRetailerLevelExcelAsync()
+        //{
+        //    //获取Excel数据
+        //    var excelList = await GetRetailerLevelAsync();
+
+        //    //循环批量更新
+        //    await UpdateRetailerLevelsAsync(excelList);
+
+        //    return new APIResultDto() { Code = 0, Msg = "导入数据成功" };
+        //}
+
+        //#endregion
         #region 微信
 
         /// <summary>

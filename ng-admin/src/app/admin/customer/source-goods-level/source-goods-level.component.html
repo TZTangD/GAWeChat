@@ -8,7 +8,7 @@
                         <label>客户编码</label>
                     </div>
                     <div nz-form-control class="flex-1">
-                        <nz-input [(ngModel)]="search.name" name="name" [nzSize]="'large'" [nzPlaceHolder]="'请输入店铺名称'" nzId="name"></nz-input>
+                        <nz-input [(ngModel)]="search.custCode" name="custCode" [nzSize]="'large'" [nzPlaceHolder]="'请输入客户编码'" nzId="custCode"></nz-input>
                     </div>
                 </div>
             </div>
@@ -18,7 +18,7 @@
                         <label>客户名称</label>
                     </div>
                     <div nz-form-control class="flex-1">
-                        <nz-input [(ngModel)]="search.tel" name="tel" [nzSize]="'large'" [nzPlaceHolder]="'请输入店铺电话'" nzId="tel"></nz-input>
+                        <nz-input [(ngModel)]="search.cusName" name="cusName" [nzSize]="'large'" [nzPlaceHolder]="'请输入客户名称'" nzId="cusName"></nz-input>
                     </div>
                 </div>
             </div>
@@ -28,10 +28,7 @@
                         <label>投放品牌</label>
                     </div>
                     <div nz-form-control class="flex-1">
-                        <nz-select name="status" [nzPlaceHolder]="'请选择审核状态'" [(ngModel)]="search.status" [nzShowSearch]="true" nzSize="large">
-                            <nz-option *ngFor="let i of statues" [nzLabel]="i.text" [nzValue]="i.value">
-                            </nz-option>
-                        </nz-select>
+                        <nz-input [(ngModel)]="search.goodName" name="goodName" [nzSize]="'large'" [nzPlaceHolder]="'请输入客户名称'" nzId="goodName"></nz-input>
                     </div>
                 </div>
             </div>
@@ -43,26 +40,26 @@
         </div>
         <div nz-row [nzGutter]="24">
             <div nz-col [nzSpan]="6" class="mb-md">
-                <a style="display: none;" id="aRetailExcelUrl" href="#">
-                    <button type="button" id="btnRetailHref">隐藏下载</button>
+                <a style="display: none;" id="aGoodSourceExcelUrl" href="#">
+                    <button type="button" id="btnGoodSourceHref">隐藏下载</button>
                 </a>
                 <button nz-button type="button" (click)="exportExcel()" [nzLoading]="exportLoading" class="mr-sm">
                     <i class="anticon anticon-download"></i>
-                    <span>下载档级</span>
+                    <span>下载货源</span>
                 </button>
-                <nz-upload nzAction="{{host + '/WeChatFile/MarketingInfoPosts?fileName=RetailLevelUpload'}}" [nzBeforeUpload]="beforeExcelUpload" (nzChange)="handleChange($event)" [nzName]="'files'">
+                <nz-upload nzAction="{{host + '/WeChatFile/MarketingExcelInfoPosts?fileName=GoodSourceUpload'}}" [nzBeforeUpload]="beforeExcelUpload" (nzChange)="handleChange($event)" [nzName]="'files'">
                     <button nz-button [nzLoading]="uploadLoading">
                         <i class="anticon anticon-upload"></i>
-                        <span>导入档级</span>
+                        <span>导入货源</span>
                     </button>
                 </nz-upload>
             </div>
             <div nz-col [nzSpan]="18" class="mb-md">
-                注：导入档级请先下载档级模板，导入Excel客户编码和档级必填，其它项可不填
+                注：导入档级请先下载货源模板，导入Excel客户编码和投放品牌必填，其它项可不填
             </div>
         </div>
     </form>
-    <nz-table #nzTable [nzAjaxData]="shops" [nzTotal]="query.total" [(nzPageIndex)]="query.pageIndex" [(nzPageSize)]="query.pageSize" [nzLoading]="loading" [nzShowTotal]="'true'" [nzShowSizeChanger]="true" (nzPageIndexChange)="refreshData()" (nzPageSizeChange)="refreshData()">
+    <nz-table #nzTable [nzAjaxData]="goodSourceList" [nzTotal]="query.total" [(nzPageIndex)]="query.pageIndex" [(nzPageSize)]="query.pageSize" [nzLoading]="loading" [nzShowTotal]="'true'" [nzShowSizeChanger]="true" (nzPageIndexChange)="refreshData()" (nzPageSizeChange)="refreshData()">
         <thead nz-thead>
             <tr>
                 <th nz-th>
@@ -82,14 +79,14 @@
                 </th>
             </tr>
         </thead>
-        <!-- <tbody nz-tbody>
-            <tr nz-tbody-tr *ngFor="let shop of nzTable.data">
-                <td nz-td>{{shop.name}}</td>
-                <td nz-td>{{shop.address}}</td>
-                <td nz-td>{{shop.retailerName}}</td>
-                <td nz-td>{{shop.saleTotal}}</td>
-                <td nz-td>{{shop.readTotal}}</td>
+        <tbody nz-tbody>
+            <tr nz-tbody-tr *ngFor="let item of nzTable.data">
+                <td nz-td>{{item.custCode}}</td>
+                <td nz-td>{{item.cusName}}</td>
+                <td nz-td>{{item.amount}}</td>
+                <td nz-td>{{item.goodName}}</td>
+                <td nz-td>{{item.goodCode}}</td>
             </tr>
-        </tbody> -->
+        </tbody>
     </nz-table>
 </nz-card>
