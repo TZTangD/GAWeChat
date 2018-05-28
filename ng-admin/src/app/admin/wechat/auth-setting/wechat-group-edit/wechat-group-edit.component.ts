@@ -22,7 +22,7 @@ export class WechatGroupEditComponent extends AppComponentBase implements OnInit
     types = [
         { text: '零售客户', value: 1 },
         { text: '内部员工', value: 2 },
-        // { text: '消费者', value: 3 },
+        { text: '消费者', value: 3 },
     ];
     showTypesE = [];
     id: number;
@@ -48,13 +48,14 @@ export class WechatGroupEditComponent extends AppComponentBase implements OnInit
         this.wechatGroupesE = wechatGroupes;
         this.reset();
         this.emodalVisible = true;
-        if (this.wechatGroupE.typeCode) {
-            this.types.map(i => {
-                if (i.value === this.wechatGroupE.typeCode) {
-                    this.wechatGroupE.tagName = i.text;
-                }
-            });
-        }
+
+        // if (this.wechatGroupE.typeCode) {
+        //     this.types.map(i => {
+        //         if (i.value === this.wechatGroupE.typeCode) {
+        //             this.wechatGroupE.tagName = i.text;
+        //         }
+        //     });
+        // }
         this.getSingleWeChatGroup();
     }
 
@@ -62,12 +63,15 @@ export class WechatGroupEditComponent extends AppComponentBase implements OnInit
     * 过滤已经存在的类型+自身的类型
     */
     filterType(result: WeChatGroup) {
-        if (this.wechatGroupesE.length>0) {
-            this.wechatGroupesE.map(i => {
-                this.showTypesE = this.types.filter((item, index, arry) => {
-                    return item.value != i.typeCode;
+        if (this.wechatGroupesE.length > 0) {
+            this.showTypesE = this.types;
+            // this.wechatGroupesE.map(i => {
+                var TypesE = this.types.filter((item, index, arry) => {
+                    return  this.wechatGroupesE.map(i=>{
+                         item.value != i.typeCode;
+                    });
                 });
-            });
+            // });
             this.types.map(j => {
                 if (result.typeCode === j.value) {
                     this.showTypesE.push(j);
@@ -82,7 +86,7 @@ export class WechatGroupEditComponent extends AppComponentBase implements OnInit
     getSingleWeChatGroup() {
         this.wechatGroupService.get(this.id).subscribe((result: WeChatGroup) => {
             this.wechatGroupE = result;
-            this.filterType(result);
+            // this.getFilterArry(result);
         });
     }
 
@@ -137,7 +141,29 @@ export class WechatGroupEditComponent extends AppComponentBase implements OnInit
                     this.notify.info(this.l('保存成功！'));
                     this.emodalVisible = false;
                     this.modalSave.emit(null);
-                })
+                });
         }
     }
+
+    getFilterindex(array: any[], item) {
+        for (let index = 0; index < array.length; index++) {
+            if (item.value === array[index].value) {
+                return index;
+            }
+        }
+    }
+    getFilterArry(result: WeChatGroup) {
+        this.showTypesE = this.types;
+        this.wechatGroupesE.map(i => {
+            var index = this.getFilterindex(this.types, i);
+            this.types = this.types.splice(index, 1);
+        });
+        this.types.map(j => {
+            if (result.typeCode === j.value) {
+                this.types.push(j);
+            }
+        });
+        this.showTypesE=this.types;
+    }
+
 }

@@ -298,29 +298,37 @@ namespace HC.WeChat.WeChatUsers
                 entity.OpenId = input.OpenId;
                 entity.TenantId = input.TenantId;
                 var result = await _wechatuserManager.BindWeChatUserAsync(entity);
-                /*
+
                 //绑定成功后打标签
                 if (result.BindStatus == BindStatusEnum.已绑定)
                 {
-                    var weChatGroup = _wechatgroupRepository.GetAll().Where(g => g.TypeCode == entity.UserType).FirstOrDefaultAsync();
-                    List<string> openId_list = new List<string>();
-                    openId_list.Add(entity.OpenId);
-                    if (weChatGroup.Result != null)
-                    {
-                        await UserTagApi.BatchTaggingAsync(AppConfig.AppId, weChatGroup.Result.TagId, openId_list);
-                    }
-                    else
-                    {
-                        WeChatGroupListDto group = new WeChatGroupListDto();
-                        group.TypeCode = entity.UserType;
-                        group.TypeName = entity.UserType.ToString();
-                        group.TagName = entity.UserType.ToString();
-                        var resultGroup = await _wechatGroupAppService.CreateWeChatGroup(group);
-                        await UserTagApi.BatchTaggingAsync(AppConfig.AppId, resultGroup.TagId, openId_list);
-                    }
-                }*/
+                    await TagForWechatAsync(entity);
+                }
                 return new APIResultDto() { Code = 0, Msg = "绑定成功", Data = entity.MapTo<WeChatUserListDto>() };
             }
+        }
+
+        /// <summary>
+        /// 微信用户绑定成功后打标签
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task TagForWechatAsync(WeChatUser entity)
+        {
+            try
+            {
+                //var weChatGroup = _wechatgroupRepository.GetAll().Where(g => g.TypeCode == entity.UserType).FirstOrDefaultAsync();
+                List<string> openId_list = new List<string>();
+                openId_list.Add(entity.OpenId);
+                var tagId = await _wechatGroupAppService.GetTagIdAsync(entity.UserType);
+                await UserTagApi.BatchTaggingAsync(AppConfig.AppId, tagId, openId_list);
+            }
+            catch (Exception e)
+            {
+                Logger.Error("TagForWechatAsync:" + e.Message);
+            }
+
         }
 
         [AbpAllowAnonymous]
