@@ -40,10 +40,11 @@
     </style>
 </head>
 <body ontouchstart>
-    <div class="preloader">
-        <div class="weui-loadmore">
-            <i class="weui-loading ng-star-inserted"></i>
-            <span class="weui-loadmore__tips">正在加载...</span>
+    <div id="loadingToast">
+        <div class="weui-mask_transparent"></div>
+        <div class="weui-toast">
+            <i class="weui-loading weui-icon_toast"></i>
+            <p class="weui-toast__content">登录中...</p>
         </div>
     </div>
     <a style="display:none" href="@ViewBag.PageUrl">
