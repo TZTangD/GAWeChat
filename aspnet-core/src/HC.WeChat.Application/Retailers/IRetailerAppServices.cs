@@ -5,6 +5,7 @@ using Abp.Application.Services.Dto;
 using HC.WeChat.Retailers.Dtos;
 using HC.WeChat.Retailers;
 using System;
+using HC.WeChat.Dto;
 
 namespace HC.WeChat.Retailers
 {
@@ -98,5 +99,8 @@ namespace HC.WeChat.Retailers
         /// <param name="userId"></param>
         /// <returns></returns>
         Task<RetailerListDto> GetRetailerByIdDtoByLKeyForWeChatAsync(Guid userId);
+        Task<List<RetailerListDto>> GetRetailerLevelListAsync(GetRetailersInput input);
+        Task<APIResultDto> ExportRetailerLevelExcel(GetRetailersInput input);
+
     }
 }
