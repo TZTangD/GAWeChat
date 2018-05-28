@@ -90,5 +90,35 @@ namespace HC.WeChat.WeChatUsers
         /// <param name="tenantId"></param>
         /// <returns></returns>
         Task<WeChatUserListDto> GetSingleWeChatUser(Guid userId, int? tenantId);
+
+        /// <summary>
+        /// 解除绑定
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        Task CheckWeChatUserBindStatusAsync(WeChatUserEditDto input);
+
+        /// <summary>
+        /// 获取店员信息
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        Task<List<WeChatUserListDto>> GetShopEmployeesAsync(int? tenantId, Guid userId);
+
+        /// <summary>
+        /// 审核店员 
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        Task<APIResultDto> CheckShopEmployeeAsync(WeChatUserEditDto input);
+
+        /// <summary>
+        /// 获取未审核店员人数
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        Task<int> GetShopEmployeesNoCheckCountAsync(int? tenantId, Guid userId);
     }
 }

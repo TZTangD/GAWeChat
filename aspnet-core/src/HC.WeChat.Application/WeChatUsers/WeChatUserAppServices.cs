@@ -443,6 +443,75 @@ namespace HC.WeChat.WeChatUsers
                 return entity.MapTo<WeChatUserListDto>();
             }
         }
+
+        /// <summary>
+        /// 解除绑定
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task CheckWeChatUserBindStatusAsync(WeChatUserEditDto input)
+        {
+            input.UserType = UserTypeEnum.消费者;
+            input.BindStatus = BindStatusEnum.未绑定;
+            input.UserId = null;
+            input.UnBindTime = DateTime.Now;
+            input.Status = null;
+            var entity = await _wechatuserRepository.GetAsync(input.Id.Value);
+            input.MapTo(entity);
+            await _wechatuserRepository.UpdateAsync(entity);
+        }
+
+        /// <summary>
+        /// 获取店员信息
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task<List<WeChatUserListDto>> GetShopEmployeesAsync(int? tenantId, Guid userId)
+        {
+            using (CurrentUnitOfWork.SetTenantId(tenantId))
+            {
+                var result = await _wechatuserRepository.GetAll().Where(w => w.UserId == userId && w.UserType == UserTypeEnum.零售客户 && w.BindStatus == BindStatusEnum.已绑定).OrderByDescending(w => w.IsShopkeeper).ToListAsync();
+                return result.MapTo<List<WeChatUserListDto>>();
+            }
+
+        }
+
+        /// <summary>
+        /// 审核店员
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task<APIResultDto> CheckShopEmployeeAsync(WeChatUserEditDto input)
+        {
+            input.BindTime = DateTime.Now;
+            input.Status = UserAuditStatus.已审核;
+            var entity = await _wechatuserRepository.GetAsync(input.Id.Value);
+            input.MapTo(entity);
+            await _wechatuserRepository.UpdateAsync(entity);
+            return new APIResultDto() { Code = 0, Msg = "提交成功，我们会尽快处理" };
+        }
+
+
+        /// <summary>
+        /// 获取未审核店员人数
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task<int> GetShopEmployeesNoCheckCountAsync(int? tenantId, Guid userId)
+        {
+            using (CurrentUnitOfWork.SetTenantId(tenantId))
+            {
+                var result = await _wechatuserRepository.GetAll().Where(w => w.UserId == userId && w.UserType == UserTypeEnum.零售客户 && w.BindStatus == BindStatusEnum.已绑定 && w.Status == UserAuditStatus.未审核).CountAsync();
+                return result;
+            }
+
+        }
     }
 }
 

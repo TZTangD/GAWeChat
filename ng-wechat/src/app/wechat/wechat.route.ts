@@ -22,7 +22,9 @@ export const routes = [
     { path: 'account-levels', loadChildren: './personal-center/account-level/account-level.module#AccountLevelModule' },
     { path: 'shopevaluations', loadChildren: './personal-center/shopevaluation/shopevaluation.module#ShopEvaluationModule' },
     { path: 'good-sources', loadChildren: './personal-center/good-source/good-source.module#GoodSourceModule' },
+    { path: 'shop-employees', loadChildren: './personal-center/shop-employee/shop-employee.module#ShopEmployeeModule' },
 
     // Not found
     { path: '**', redirectTo: '' }
 ];
+

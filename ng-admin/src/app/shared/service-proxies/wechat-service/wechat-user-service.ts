@@ -218,18 +218,18 @@ export class WechatUserServiceProxy {
     }
 
     /**
-     * 新增或修改微信用户信息
+     * 新增或修改微信用户信息(解除绑定)
      * @param input 
      */
     update(input: WechatUser): Observable<WechatUser> {
-        let url_ = this.baseUrl + "/api/services/app/WeChatUser/CreateOrUpdateWeChatUserDto";
+        let url_ = this.baseUrl + "/api/services/app/WeChatUser/UpdateWeChatUserBindStatusAsync";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(input);
 
         let options_ = {
             body: content_,
-            method: "post",
+            method: "put",
             headers: new Headers({
                 "Content-Type": "application/json",
                 "Accept": "application/json"
