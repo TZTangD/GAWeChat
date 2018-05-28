@@ -65,7 +65,6 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
         if (!this.isGood) {
             this.isGood = true;
             this.activity.goodTotal++;
-
         }
         this.articleService.AddGoodAsync(this.statisticalDetail).subscribe(data => {
             if (data && data.code === 0) {

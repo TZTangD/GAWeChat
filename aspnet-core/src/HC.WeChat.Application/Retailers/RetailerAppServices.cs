@@ -320,7 +320,7 @@ namespace HC.WeChat.Retailers
                     ExcelHelper.SetCell(row.CreateCell(7), font, item.Scale.ToString());
                     ExcelHelper.SetCell(row.CreateCell(8), font, item.MarketType.ToString());
                     ExcelHelper.SetCell(row.CreateCell(9), font, item.LicenseKey);
-                    ExcelHelper.SetCell(row.CreateCell(10   ), font, item.IsAction.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(10), font, item.IsAction.ToString());
                 }
 
                 workbook.Write(fs);
@@ -348,80 +348,80 @@ namespace HC.WeChat.Retailers
 
         #endregion
 
-        //#region 导入货源档级
+        #region 导入货源档级
 
-        ///// <summary>
-        ///// 更新到数据库
-        ///// </summary>
-        //private async Task UpdateRetailerLevelsAsync(List<RetailerListDto> retailerLevelList)
-        //{
-        //    var rlcodes = retailerLevelList.Select(r => r.Code).ToArray();
-        //    var retailerList = await _retailerRepository.GetAll().Where(r => rlcodes.Contains(r.Code)).ToListAsync();
-        //    foreach (var item in retailerLevelList)
-        //    {
-        //        var retailer = retailerList.Where(r => r.Code == item.Code).FirstOrDefault();
-        //        if (retailer != null)
-        //        {
-        //            retailer.ArchivalLevel = item.ArchivalLevel;
-        //        }
-        //    }
-        //    await CurrentUnitOfWork.SaveChangesAsync();
-        //}
+        /// <summary>
+        /// 更新到数据库
+        /// </summary>
+        private async Task UpdateRetailerLevelsAsync(List<RetailerListDto> retailerLevelList)
+        {
+            var rlcodes = retailerLevelList.Select(r => r.Code).ToArray();
+            var retailerList = await _retailerRepository.GetAll().Where(r => rlcodes.Contains(r.Code)).ToListAsync();
+            foreach (var item in retailerLevelList)
+            {
+                var retailer = retailerList.Where(r => r.Code == item.Code).FirstOrDefault();
+                if (retailer != null)
+                {
+                    retailer.ArchivalLevel = item.ArchivalLevel;
+                }
+            }
+            await CurrentUnitOfWork.SaveChangesAsync();
+        }
 
-        ///// <summary>
-        ///// 从上传的Excel读出数据
-        ///// </summary>
-        //private async Task<List<RetailerListDto>> GetRetailerLevelAsync()
-        //{
-        //    string fileName = _hostingEnvironment.WebRootPath + "/upload/files/RetailLevelUpload.xlsx";
-        //    var resultList = new List<RetailerListDto>();
-        //    using (var fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
-        //    {
-        //        IWorkbook workbook = new XSSFWorkbook(fs);
-        //        ISheet sheet = workbook.GetSheet("RetailLevel");
-        //        if (sheet == null) //如果没有找到指定的sheetName对应的sheet，则尝试获取第一个sheet
-        //        {
-        //            sheet = workbook.GetSheetAt(0);
-        //        }
+        /// <summary>
+        /// 从上传的Excel读出数据
+        /// </summary>
+        private async Task<List<RetailerListDto>> GetRetailerLevelAsync()
+        {
+            string fileName = _hostingEnvironment.WebRootPath + "/upload/files/CustomerUpload.xlsx";
+            var resultList = new List<RetailerListDto>();
+            using (var fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+            {
+                IWorkbook workbook = new XSSFWorkbook(fs);
+                ISheet sheet = workbook.GetSheet("RetailLevel");
+                if (sheet == null) //如果没有找到指定的sheetName对应的sheet，则尝试获取第一个sheet
+                {
+                    sheet = workbook.GetSheetAt(0);
+                }
 
-        //        if (sheet != null)
-        //        {
-        //            //最后一列的标号
-        //            int rowCount = sheet.LastRowNum;
-        //            for (int i = 1; i <= rowCount; ++i)//排除首行标题
-        //            {
-        //                IRow row = sheet.GetRow(i);
-        //                if (row == null) continue; //没有数据的行默认是null　　　　　　　
+                if (sheet != null)
+                {
+                    //最后一列的标号
+                    int rowCount = sheet.LastRowNum;
+                    for (int i = 1; i <= rowCount; ++i)//排除首行标题
+                    {
+                        IRow row = sheet.GetRow(i);
+                        if (row == null) continue; //没有数据的行默认是null　　　　　　　
 
-        //                var retailerLevel = new RetailerListDto();
-        //                if (row.GetCell(1) != null && row.GetCell(5) != null)
-        //                {
-        //                    retailerLevel.Code = row.GetCell(1).ToString();
-        //                    retailerLevel.ArchivalLevel = row.GetCell(5).ToString();
-        //                    resultList.Add(retailerLevel);
-        //                }
-        //            }
-        //        }
+                        var retailerLevel = new RetailerListDto();
+                        if (row.GetCell(0) != null &&row.GetCell(5)!=null)
+                        {
+                            retailerLevel.Code = row.GetCell(0).ToString();
+                            retailerLevel.ArchivalLevel = row.GetCell(5).ToString();
+                            resultList.Add(retailerLevel);
+                        }
+                    }
+                }
 
-        //        return await Task.FromResult(resultList);
-        //    }
-        //}
+                return await Task.FromResult(resultList);
+            }
+        }
 
-        ///// <summary>
-        ///// 导入档级
-        ///// </summary>
-        //public async Task<APIResultDto> ImportRetailerLevelExcelAsync()
-        //{
-        //    //获取Excel数据
-        //    var excelList = await GetRetailerLevelAsync();
+        /// <summary>
+        /// 导入档级
+        /// </summary>
+        public async Task<APIResultDto> ImportRetailerLevelExcelAsync()
+        {
+            //获取Excel数据
+            var excelList = await GetRetailerLevelAsync();
 
-        //    //循环批量更新
-        //    await UpdateRetailerLevelsAsync(excelList);
+            //循环批量更新
+            await UpdateRetailerLevelsAsync(excelList);
 
-        //    return new APIResultDto() { Code = 0, Msg = "导入数据成功" };
-        //}
+            return new APIResultDto() { Code = 0, Msg = "导入数据成功" };
+        }
 
-        //#endregion
+        #endregion
         #region 微信
 
         /// <summary>
