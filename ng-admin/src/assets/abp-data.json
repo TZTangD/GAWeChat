@@ -72,7 +72,7 @@
                     "icon": "anticon anticon-shop",
                     "children": [
                         {
-                            "text": "营销人员",
+                            "text": "内部员工",
                             "link": "/admin/marketting/employee",
                             "translate": "market-user"
                         },
