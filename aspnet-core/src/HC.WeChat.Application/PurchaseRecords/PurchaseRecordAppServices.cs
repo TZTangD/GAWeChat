@@ -326,6 +326,22 @@ namespace HC.WeChat.PurchaseRecords
                     await _integralDetailRepository.InsertAsync(intDetail);
                     user.IntegralTotal = intDetail.FinalIntegral.Value;
                     await _weChatUserRepository.UpdateAsync(user);
+
+                    //发送微信模板通知-消费者
+                    string appId = AppConfig.AppId;
+                    string openId = user.OpenId;
+                    string templateId = "3Dgkz89yi8e0jXtwBUhdMSgHeZwPvHi2gz8WrD-CUA4";//模版id  
+                    string url = "";
+                    object data = new
+                    {
+                        first = "积分变化通知",
+                        keyword1 = user.MemberBarCode,
+                        keyword2 = intDetail.FinalIntegral,
+                        keyword3 = intDetail.Integral,
+                        keyword4 = DateTime.Now,
+                        remark = "感谢您的光临~"
+                    };
+                    await TemplateApi.SendTemplateMessageAsync(appId, openId, templateId, url, data);
                 }
 
                 //更新店铺管理员总积分 和 积分明细
@@ -348,21 +364,24 @@ namespace HC.WeChat.PurchaseRecords
                         await _integralDetailRepository.InsertAsync(intDetail);
                         shopKeeper.IntegralTotal = intDetail.FinalIntegral.Value;
                         await _weChatUserRepository.UpdateAsync(shopKeeper);
+                        //发送微信模板通知-店铺管理员
+                        string appId = AppConfig.AppId;
+                        string openId = shopKeeper.OpenId;
+                        string templateId = "3Dgkz89yi8e0jXtwBUhdMSgHeZwPvHi2gz8WrD-CUA4";//模版id  
+                        string url = "";
+                        object data = new
+                        {
+                            first = "积分变化通知",
+                            keyword1 = shopKeeper.MemberBarCode,
+                            keyword2 = intDetail.FinalIntegral,
+                            keyword3 = intDetail.Integral,
+                            keyword4 = DateTime.Now,
+                            remark = "感谢您的光临~"
+                        };
+                        await TemplateApi.SendTemplateMessageAsync(appId, openId, templateId, url, data);
                     }
                 }
-                //发送微信模板通知
-                string appId = AppConfig.AppId;
-                string templateId = "3Dgkz89yi8e0jXtwBUhdMSgHeZwPvHi2gz8WrD-CUA4";//模版id  
-                string url = "";
-                object data = new
-                {
-                    first = "积分变化通知",
-                    keyword1 = "123456789",
-                    keyword2 = "535",
-                    keyword3 = DateTime.Now,
-                    remark = "感谢您的光临~"
-                };
-                await TemplateApi.SendTemplateMessageAsync(appId, input.OpenId, templateId, url, data);
+                
 
                 //更新店铺销量
                 var shop = await _shopRepository.GetAsync(input.ShopId.Value);
@@ -378,28 +397,6 @@ namespace HC.WeChat.PurchaseRecords
                 result.Data = new { RetailerIntegral = rintegral, UserIntegral = xintegral };
                 return result;
             }
-        }
-
-        [AbpAllowAnonymous]
-        public async Task<object> SendMessageAsync(object input)
-        {
-            string appId = AppConfig.AppId;
-            string openId = "xxxxxx";   //用户openId  
-            string templateId = "3Dgkz89yi8e0jXtwBUhdMSgHeZwPvHi2gz8WrD-CUA4";   //模版id  
-            //为模版中的各属性赋值  
-            string url = "";
-            object data = new
-            {
-                first = "积分变化通知",
-                keyword1 = "123456789",
-                keyword2 = "535",
-                keyword3 = "2016-11-09 16:50:38",
-                remark = "感谢您的光临~"
-            };
-
-            var tags = await TemplateApi.SendTemplateMessageAsync(appId, openId, templateId, url, data);
-
-            return null;
         }
 
         /// <summary>

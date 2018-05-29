@@ -144,8 +144,7 @@
                     </div>
                 </div>
             </form>
-            <nz-table #nzTable [nzAjaxData]="weChatGroups" [nzTotal]="query.total" [(nzPageIndex)]="query.pageIndex" [(nzPageSize)]="query.pageSize"
-                [nzLoading]="loading" [nzShowSizeChanger]="true" [nzShowTotal]="'true'" (nzPageIndexChange)="refreshData()" (nzPageSizeChange)="refreshData()">
+            <nz-table #nzTable [nzAjaxData]="weChatGroups" [nzTotal]="query.total" [(nzPageIndex)]="query.pageIndex" [(nzPageSize)]="query.pageSize" [nzLoading]="loading" [nzShowSizeChanger]="true" [nzShowTotal]="'true'" (nzPageIndexChange)="refreshData()" (nzPageSizeChange)="refreshData()">
                 <thead nz-thead>
                     <tr>
                         <th nz-th>
