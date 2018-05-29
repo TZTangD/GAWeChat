@@ -59,17 +59,17 @@
                 </a>
                 <button nz-button type="button" (click)="exportExcel()" [nzLoading]="exportLoading" class="mr-sm">
                     <i class="anticon anticon-download"></i>
-                    <span>下载客户</span>
+                    <span>下载档级</span>
                 </button>
                 <nz-upload nzAction="{{host + '/WeChatFile/MarketingExcelInfoPosts?fileName=CustomerUpload'}}" [nzBeforeUpload]="beforeExcelUpload" (nzChange)="handleChange($event)" [nzName]="'files'">
                     <button nz-button [nzLoading]="uploadLoading">
                         <i class="anticon anticon-upload"></i>
-                        <span>导入客户</span>
+                        <span>导入档级</span>
                     </button>
                 </nz-upload>
             </div>
             <div nz-col [nzSpan]="18" class="mb-md">
-                注：导入客户请先下载客户模板，导入Excel客户编码和档级必填，其它项可不填
+                注：导入档级请先下载档级模板，导入Excel客户编码和档级必填，其它项可不填
             </div>
         </div>
     </form>

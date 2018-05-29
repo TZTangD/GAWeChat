@@ -4,12 +4,11 @@
         <h1>{{sDetailsOfShare.title}}</h1>
         <section>
             <section>
-                <p>
+                <!-- <p>
                     <img src="{{sDetailsOfShare.coverPhoto | hostUrl}}" alt="">
-                </p>
-                <p>
-                    {{sDetailsOfShare.content}}
-                </p>
+                </p> -->
+                <div [innerHTML]="assembleHTML(sDetailsOfShare.content)">
+                </div>
                 <p>
                     {{sDetailsOfShare.pushTime| date:'yyyy-MM-dd'}}
                 </p>
@@ -21,12 +20,10 @@
                 <div class="placeholder read">阅读 {{sDetailsOfShare.readTotal}}</div>
             </div>
             <div class="placeholder good" *ngIf="!isGood">
-                <img src="assets/images/activity/good_false.png" style="width:16px;" alt="" (click)="addGood()">
-                {{sDetailsOfShare.goodTotal}}
+                <img src="assets/images/activity/IsGood_Blue_False.png" style="width:16px;" alt="" (click)="addGood()"> {{sDetailsOfShare.goodTotal}}
             </div>
             <div class="placeholder good" *ngIf="isGood">
-                <img src="assets/images/activity/good_true.png" style="width:16px;" alt="" (click)="addGood()">
-                {{sDetailsOfShare.goodTotal}}
+                <img src="assets/images/activity/IsGood_Blue_True.png" style="width:16px;" alt="" (click)="addGood()"> {{sDetailsOfShare.goodTotal}}
             </div>
         </div>
         <div class="weui-flex">

@@ -1,11 +1,12 @@
 ///<reference path="../../../../../../node_modules/@angular/core/src/metadata/directives.d.ts"/>
-import {Component, Injector, OnInit, ViewEncapsulation} from '@angular/core';
-import {AppComponentBase} from '../../../components/app-component-base';
-import {JWeiXinService} from 'ngx-weui/jweixin';
-import {ActivatedRoute, Router} from '@angular/router';
-import {Article, StatisticalDetail} from '../../../../services/model';
-import {ArticleService} from '../../../../services';
-import {ToptipsService} from 'ngx-weui';
+import { Component, Injector, OnInit, ViewEncapsulation } from '@angular/core';
+import { AppComponentBase } from '../../../components/app-component-base';
+import { JWeiXinService } from 'ngx-weui/jweixin';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Article, StatisticalDetail } from '../../../../services/model';
+import { ArticleService } from '../../../../services';
+import { ToptipsService } from 'ngx-weui';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
     selector: 'share-details',
@@ -23,7 +24,9 @@ export class ShareDetailComponent extends AppComponentBase implements OnInit {
         , private shareService: ArticleService
         , private wxService: JWeiXinService
         , private route: ActivatedRoute
-        , private srv: ToptipsService) {
+        , private srv: ToptipsService
+        , private sanitizer: DomSanitizer
+    ) {
         super(injector);
     }
 
@@ -41,7 +44,7 @@ export class ShareDetailComponent extends AppComponentBase implements OnInit {
     }
 
     GetIsGoodAsync() {
-        let params: any = {id: this.id};
+        let params: any = { id: this.id };
         if (this.settingsService.tenantId) {
             params.tenantId = this.settingsService.tenantId;
         }
@@ -56,14 +59,18 @@ export class ShareDetailComponent extends AppComponentBase implements OnInit {
         this.router.navigate(['shares/share-write']);
     }
 
+    assembleHTML(strHTML: any) {
+        return this.sanitizer.bypassSecurityTrustHtml(strHTML);
+    }
+
     addGood() {
         this.statisticalDetail.articleId = this.mShareId;
         this.statisticalDetail.type = 2;
         this.statisticalDetail.openId = this.settingsService.openId;
         if (!this.isGood) {
+            this.isGood = true;
             this.sDetailsOfShare.goodTotal++;
         }
-        this.isGood = true;
         this.shareService.AddGoodAsync(this.statisticalDetail).subscribe(data => {
             if (data && data.code === 0) {
             } else {
