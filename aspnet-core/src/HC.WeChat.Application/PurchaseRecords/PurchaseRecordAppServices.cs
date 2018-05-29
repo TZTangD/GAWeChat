@@ -27,6 +27,7 @@ using HC.WeChat.ShopEvaluations;
 using HC.WeChat.WechatAppConfigs;
 using HC.WeChat.WechatAppConfigs.Dtos;
 using Senparc.Weixin.MP.AdvancedAPIs;
+using Senparc.Weixin.MP.AdvancedAPIs.TemplateMessage;
 
 namespace HC.WeChat.PurchaseRecords
 {
@@ -334,12 +335,10 @@ namespace HC.WeChat.PurchaseRecords
                     string url = "";
                     object data = new
                     {
-                        first = "积分变化通知",
-                        keyword1 = user.MemberBarCode,
-                        keyword2 = intDetail.FinalIntegral,
-                        keyword3 = intDetail.Integral,
-                        keyword4 = DateTime.Now,
-                        remark = "感谢您的光临~"
+                        keyword1 = new TemplateDataItem(user.MemberBarCode.ToString()),
+                        keyword2 = new TemplateDataItem(intDetail.FinalIntegral.ToString()+"积分"),
+                        keyword3 = new TemplateDataItem(intDetail.Integral.ToString() + "积分"),
+                        keyword4 = new TemplateDataItem(DateTime.Now.ToString())
                     };
                     await TemplateApi.SendTemplateMessageAsync(appId, openId, templateId, url, data);
                 }
@@ -371,12 +370,10 @@ namespace HC.WeChat.PurchaseRecords
                         string url = "";
                         object data = new
                         {
-                            first = "积分变化通知",
-                            keyword1 = shopKeeper.MemberBarCode,
-                            keyword2 = intDetail.FinalIntegral,
-                            keyword3 = intDetail.Integral,
-                            keyword4 = DateTime.Now,
-                            remark = "感谢您的光临~"
+                            keyword1 = new TemplateDataItem(shopKeeper.MemberBarCode.ToString()),
+                            keyword2 = new TemplateDataItem(intDetail.FinalIntegral.ToString() + "积分"),
+                            keyword3 = new TemplateDataItem(intDetail.Integral.ToString() + "积分"),
+                            keyword4 = new TemplateDataItem(DateTime.Now.ToString()),
                         };
                         await TemplateApi.SendTemplateMessageAsync(appId, openId, templateId, url, data);
                     }
