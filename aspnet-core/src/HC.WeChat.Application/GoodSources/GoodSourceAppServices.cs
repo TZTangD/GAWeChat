@@ -203,7 +203,7 @@ namespace HC.WeChat.GoodSources
         }
 
         /// <summary>
-        /// 获取指定零售户
+        /// 获取指定零售户档级货源
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>

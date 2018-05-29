@@ -276,7 +276,7 @@ namespace HC.WeChat.Shops
                 .WhereIf(!string.IsNullOrEmpty(input.Tel), s => s.Tel.Contains(input.Tel));
             var queryRetailer = _retailerRepository.GetAll().WhereIf(mid.HasValue, r => r.EmployeeId == mid);
             var query = from s in queryShop
-                        join r in queryRetailer on s.RetailerId equals r.Id 
+                        join r in queryRetailer on s.RetailerId equals r.Id
                         //into queryS
                         //from sr in queryS.DefaultIfEmpty()
                         select new ShopListDto
@@ -297,7 +297,8 @@ namespace HC.WeChat.Shops
                             CreationTime = s.CreationTime,
                             TenantId = s.TenantId,
                             Tel = s.Tel,
-                            RetailerName = r != null ? r.Name : "",
+                            //RetailerName = r != null ? r.Name : "",
+                            RetailerName = r.Name
                         };
 
             //TODO:根据传入的参数添加过滤条件
