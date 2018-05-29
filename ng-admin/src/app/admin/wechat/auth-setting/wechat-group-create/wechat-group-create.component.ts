@@ -22,14 +22,13 @@ export class WechatGroupCreateComponent extends AppComponentBase implements OnIn
     types = [
         { text: '零售客户', value: 1 },
         { text: '内部员工', value: 2 },
-        { text: '消费者', value: 3 },
-        { text: '测试', value: 4 },
-        
+        // { text: '消费者', value: 4 },
     ]
-    showTypes = [];
+    showTypes = [
+       
+    ];
     constructor(injector: Injector, private wechatGroupService: WeChatGroupServiceProxy, private fb: FormBuilder) {
         super(injector);
-        this.showTypes=this.types;
     }
 
     ngOnInit(): void {
@@ -44,38 +43,35 @@ export class WechatGroupCreateComponent extends AppComponentBase implements OnIn
      * 显示模态框（进入新增页）
      */
     show(wechatGroupes: WeChatGroup[]) {
-        // this.showTypes=this.types;
+        this.showTypes = [
+            { text: '零售客户', value: 1 },
+            { text: '内部员工', value: 2 },
+            // { text: '消费者', value: 4 },
+        ];
         this.wechatGroupes = wechatGroupes;
         this.reset();
         this.cdalVisible = true;
         this.wechatGroup = new WeChatGroup();
-        // if (this.wechatGroup.typeCode) {
-        //     this.types.map(i => {
-        //         if (i.value === this.wechatGroup.typeCode) {
-        //             this.wechatGroup.tagName = i.text;
-        //         }
-        //     });
-        // }
-        console.log(this.showTypes);
+       
         this.getFilterArry();
     }
 
     /**
      * 过滤已经存在的类型
      */
-    filterType() {
-        if (this.wechatGroupes.length > 0) {
-            // this.wechatGroupes.map(i => {
-                this.showTypes = this.types.filter((item, index, arry) => {
-                    this.wechatGroupes.map(i=>{
-                        return item.value != i.typeCode;
-                    });
-                });
-            // });
-        } else {
-            this.showTypes = this.types;
-        }
-    }
+    // filterType() {
+    //     if (this.wechatGroupes.length > 0) {
+    //         // this.wechatGroupes.map(i => {
+    //             this.showTypes = this.types.filter((item, index, arry) => {
+    //                 this.wechatGroupes.map(i=>{
+    //                     return item.value != i.typeCode;
+    //                 });
+    //             });
+    //         // });
+    //     } else {
+    //         this.showTypes = this.types;
+    //     }
+    // }
 
 
     getFormControl(name: string) {
@@ -129,25 +125,17 @@ export class WechatGroupCreateComponent extends AppComponentBase implements OnIn
         });
     }
 
-    getFilterindex(array: any[], item) {
-        for (let index = 0; index < array.length; index++) {
-            if (item.typeCode === array[index].value) {
-                return index;
-            }else{
-                return null
-            }
-        }
-    }
+  
     getFilterArry() {
-        // this.showTypes = this.types;
         if (this.wechatGroupes.length > 0) {
-            this.wechatGroupes.map(i => {
-                var index = this.getFilterindex(this.types, i);
-                if(index!==null){
-                    this.showTypes =this.types.splice(index, 1);
+            this.wechatGroupes.forEach((item) =>{
+                for (let index = 0; index < this.showTypes.length; index++) {
+                    if (item.typeCode === this.showTypes[index].value) {
+                        this.showTypes.splice(index, 1);
+                        return;
+                    }
                 }
             });
-            this.showTypes=this.types;
         }
     }
 }
