@@ -15,6 +15,9 @@ namespace HC.WeChat.GoodSources.Dtos
         public string Filter { get; set; }
         public string CustCode { get; set; }
         public int? tenantId { get; set; }
+        public string CusName { get; set; }
+        public string GoodName { get; set; }
+
         /// <summary>
         /// 正常化排序使用
         /// </summary>

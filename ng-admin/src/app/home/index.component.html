@@ -9,8 +9,8 @@
     <div nz-col nzXs="24" nzSm="12" nzMd="6" class="mb-md">
         <div nz-row nzType="flex" nzAlign="middle" class="bg-primary rounded-md">
             <div nz-col nzSpan="12" class="p-md text-white">
-                <div class="h2 mt0">{{activityFormInfo.isCheckedCount}} 单</div>
-                <p class="text-nowrap">活动申请单</p>
+                <div class="h2 mt0">{{activityFormInfo.isCheckedCount}} 次</div>
+                <p class="text-nowrap">店铺查找</p>
             </div>
             <div nz-col nzSpan="12">
                 <mini-bar height="35" color="#fff" borderWidth="3" [padding]="[36, 30, 30, 30]" [data]="webSite"></mini-bar>
@@ -20,8 +20,8 @@
     <div nz-col nzXs="24" nzSm="12" nzMd="6" class="mb-md">
         <div nz-row nzType="flex" nzAlign="middle" class="bg-success rounded-md">
             <div nz-col nzSpan="12" class="p-md text-white">
-                <div class="h2 mt0">{{activityFormInfo.goodsCount}} 条</div>
-                <p class="text-nowrap">申请商品</p>
+                <div class="h2 mt0">{{activityFormInfo.goodsCount}} 次</div>
+                <p class="text-nowrap">商品搜索</p>
             </div>
             <div nz-col nzSpan="12">
                 <mini-bar height="35" color="#fff" borderWidth="3" [padding]="[36, 30, 30, 30]" [data]="webSite"></mini-bar>
@@ -31,8 +31,8 @@
     <div nz-col nzXs="24" nzSm="12" nzMd="6" class="mb-md">
         <div nz-row nzType="flex" nzAlign="middle" class="bg-orange rounded-md">
             <div nz-col nzSpan="12" class="p-md text-white">
-                <div class="h2 mt0">{{activityFormInfo.checkCount}} 单</div>
-                <p class="text-nowrap">待审批申请单</p>
+                <div class="h2 mt0">{{activityFormInfo.checkCount}} 积分</div>
+                <p class="text-nowrap">积分兑换</p>
             </div>
             <div nz-col nzSpan="12">
                 <mini-bar height="35" color="#fff" borderWidth="3" [padding]="[36, 30, 30, 30]" [data]="webSite"></mini-bar>
@@ -55,7 +55,7 @@
     <div nz-col nzXs="24" nzMd="12">
         <nz-card [nzBordered]="false">
             <ng-template #title>
-                近12个月申请单数 (模拟数据)
+                近12个月积分兑换 (模拟数据)
             </ng-template>
             <bar height="275" [data]="salesData"></bar>
         </nz-card>
@@ -63,9 +63,9 @@
     <div nz-col nzXs="24" nzMd="12">
         <nz-card [nzTitle]="nzTitle1" [nzBordered]="false">
             <ng-template #nzTitle1>
-                24小时网站访问量和活动申请单笔数 (模拟数据)
+                24小时网站访问量和积分兑换数 (模拟数据)
             </ng-template>
-            <timeline [data]="offlineChartData" [height]="239" [padding]="[0, 0, 0, 0]" [titleMap]="{ y1: '网站访问量', y2: '申请单笔数' }"></timeline>
+            <timeline [data]="offlineChartData" [height]="239" [padding]="[0, 0, 0, 0]" [titleMap]="{ y1: '网站访问量', y2: '积分兑换' }"></timeline>
         </nz-card>
     </div>
 </div>

@@ -18,6 +18,10 @@ using HC.WeChat.WeChatUsers;
 using System.Linq;
 using HC.WeChat.WechatEnums;
 using HC.WeChat.WeChatUsers.Dtos;
+using Senparc.Weixin.MP.AdvancedAPIs.TemplateMessage;
+using Senparc.Weixin.MP.AdvancedAPIs;
+using HC.WeChat.WechatAppConfigs.Dtos;
+using HC.WeChat.WechatAppConfigs;
 
 namespace HC.WeChat.IntegralDetails
 {
@@ -33,13 +37,11 @@ namespace HC.WeChat.IntegralDetails
         private readonly IRepository<IntegralDetail, Guid> _integraldetailRepository;
         private readonly IIntegralDetailManager _integraldetailManager;
         private readonly IRepository<WeChatUser, Guid> _wechatusersRepository;
-
         /// <summary>
         /// 构造函数
         /// </summary>
         public IntegralDetailAppService(IRepository<IntegralDetail, Guid> integraldetailRepository
-      , IIntegralDetailManager integraldetailManager, IRepository<WeChatUser, Guid> wechatusersRepository
-        )
+      , IIntegralDetailManager integraldetailManager, IRepository<WeChatUser, Guid> wechatusersRepository)
         {
             _integraldetailRepository = integraldetailRepository;
             _integraldetailManager = integraldetailManager;

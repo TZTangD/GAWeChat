@@ -22,5 +22,15 @@ namespace HC.WeChat.GoodSources.Dtos
         /// </summary>
         [StringLength(100)]
         public string goodCode { get; set; }
+        /// <summary>
+        /// 商品名称
+        /// </summary>
+        [StringLength(100)]
+        public  string goodName { get; set; }
+        /// <summary>                                                                    
+        /// 客户名称                                         
+        /// </summary>
+        [StringLength(50)]
+        public string cusName { get; set; }
     }
 }
