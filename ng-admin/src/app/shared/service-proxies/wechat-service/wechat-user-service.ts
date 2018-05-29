@@ -222,14 +222,14 @@ export class WechatUserServiceProxy {
      * @param input 
      */
     update(input: WechatUser): Observable<WechatUser> {
-        let url_ = this.baseUrl + "/api/services/app/WeChatUser/UpdateWeChatUserBindStatusAsync";
+        let url_ = this.baseUrl + "/api/services/app/WeChatUser/CheckWeChatUserBindStatusAsync";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(input);
 
         let options_ = {
             body: content_,
-            method: "put",
+            method: "post",
             headers: new Headers({
                 "Content-Type": "application/json",
                 "Accept": "application/json"
