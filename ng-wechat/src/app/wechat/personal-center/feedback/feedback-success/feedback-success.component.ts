@@ -9,7 +9,7 @@ import { Router, ActivatedRoute } from '@angular/router';
     styleUrls: ['feedback-success.component.scss']
 })
 export class FeedbackSuccessComponent extends AppComponentBase implements OnInit {
-    successType = '';
+    successType = 'feedback';
     constructor(injector: Injector, private router: Router, private route: ActivatedRoute) {
         super(injector);
         this.successType = this.route.snapshot.params['successType'];

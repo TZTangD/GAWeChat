@@ -1,7 +1,7 @@
 <!--component html goes here -->
 <weui-navbar>
 
-    <weui-tab heading="客户基础信息" active="{{isAccount}}">
+    <weui-tab heading="基础信息" active="{{isAccount}}">
         <!-- <article class="weui-article">
             <h1 style="color: white;">个人基础信息</h1>
         </article> -->
@@ -9,27 +9,9 @@
             <div class="weui-cell">
                 <div class="weui-cell__hd" style="position: relative;margin-right: 10px;">
                     <img src="{{headImg}}" style="width: 50px;display: block" />
-                    <!-- <span class="weui-badge" style="position: absolute;top: -.4em;right: -.4em;">8</span> -->
                 </div>
                 <div class="weui-cell__bd">
-                    <!-- <p style="margin-bottom: 0.5em;">
-                        <button style="border-radius: 15px;" weui-button [weui-mini]="'mini'">姓名</button>
-                        <span style="font-size: 14px;color: #888888;float: right;margin: 5px auto;">{{customer.name}}</span>
-                    </p>
-                    <p style="margin-bottom: 0.5em;">
-                        <button style="border-radius: 15px;" weui-button [weui-mini]="'mini'">地址</button>
-                        <span style="font-size: 14px;color: #888888;float: right;margin: 5px auto;">{{customer.businessAddress}}</span>
-                    </p>
-
-                    <p style="margin-bottom: 0.5em;">
-                        <button style="border-radius: 15px;" weui-button [weui-mini]="'mini'">编码</button>
-                        <span style="font-size: 14px;color: #888888;float: right;margin: 5px auto;">{{customer.code}}</span>
-                    </p>
-
-                    <p style="margin-bottom: 0.5em;">
-                        <button style="border-radius: 15px;" weui-button [weui-mini]="'mini'">档级</button>
-                        <span style="font-size: 14px;color: #888888;float: right;margin: 5px auto;">{{customer.archivalLevel}}</span>
-                    </p> -->
+                   
                     <p>
                         <span>{{level.name}}</span>
                     </p>
@@ -39,9 +21,6 @@
                     <p>
                         <span style="font-size: 13px;color: #888888;text-align: center;">{{level.businessAddress}}</span>
                     </p>
-                    <!-- <p>
-                        <span style="font-size: 13px;color: #888888;">{{customer.archivalLevel}}</span>
-                    </p> -->
                 </div>
 
             </div>
@@ -50,8 +29,8 @@
                 <div class="weui-cell__bd">
                     <span style="vertical-align: middle; font-size: 14px;">档级货源</span>
                 </div>
-                <div class="weui-cell__ft">
-                    {{level.level}}
+                <div class="weui-cell__ft" >
+                    {{level.level==null?1:level.level}}档
                 </div>
             </div>
             <div class="weui-cell__ft">
@@ -120,7 +99,7 @@
             <button weui-button (click)="goBack()">返回</button>
         </div>
     </weui-tab>
-    <weui-tab heading="客户订货台账" >
+    <weui-tab heading="订货台账">
         <div style="padding-left: 10px;padding-top: 0px;padding-bottom: 10px;">
             <button weui-button [weui-mini]="'mini'" [ngClass]="{clickbuttonCss: tableShow==1,defaultbuttonCss:tableShow!=1}" (click)="showTable(1)">月度</button>
             <button weui-button [weui-mini]="'mini'" [ngClass]="{clickbuttonCss: tableShow==3,defaultbuttonCss:tableShow!=3}" (click)="showTable(3)">季度</button>
@@ -146,7 +125,7 @@
                 <span class="weui-loadmore__tips">暂无数据</span>
             </div>
             <div class="weui-cells__title">上月</div>
-            <a class="weui-cell">
+            <a class="weui-cell" *ngIf="preAccount.length>0">
                 <div class="weui-cell__hd hdcss">日期</div>
                 <div class="weui-cell__bd" style="text-align:center;">名称</div>
                 <!-- <div class="weui-cell__bd" style="text-align:center;">上月购数量</div> -->
@@ -167,13 +146,13 @@
             <div class="weui-cells__title" *ngIf="qypreData">{{qypreData}}-{{nowDate}}</div>
             <a class="weui-cell accounttitle" *ngIf="accounts.length>0">
                 <!-- <div class="weui-cell__hd hdcss">日期</div> -->
-                <div class="weui-cell__bd" >名称</div>
+                <div class="weui-cell__bd">名称</div>
                 <!-- <div class="weui-cell__bd" style="text-align:center;">上月购数量</div> -->
                 <div class="weui-cell__ft qftcss">购买数量</div>
             </a>
             <a class="weui-cell " *ngFor="let q of accounts">
                 <!-- <div class="weui-cell__hd hdcss">{{q.bookDate}}</div> -->
-                <div class="weui-cell__bd" >{{q.itemName}}</div>
+                <div class="weui-cell__bd">{{q.itemName}}</div>
                 <div class="weui-cell__ft qftcss">{{q.monthQty}}</div>
             </a>
             <div *ngIf="accounts.length<=0 && tableShow===3" class="weui-loadmore weui-loadmore_line">
@@ -185,12 +164,12 @@
             <div class="weui-cells__title" *ngIf="qypreData">{{qypreData}}-{{nowDate}}</div>
             <a class="weui-cell  accounttitle" *ngIf="accounts.length>0">
                 <!-- <div class="weui-cell__hd hdcss">日期</div> -->
-                <div class="weui-cell__bd" >名称</div>
+                <div class="weui-cell__bd">名称</div>
                 <div class="weui-cell__ft qftcss">购买数量</div>
             </a>
             <a class="weui-cell" *ngFor="let y of accounts">
                 <!-- <div class="weui-cell__hd hdcs">{{y.bookDate}}</div> -->
-                <div class="weui-cell__bd" >{{y.itemName}}</div>
+                <div class="weui-cell__bd">{{y.itemName}}</div>
                 <div class="weui-cell__ft qftcss">{{y.monthQty}}</div>
             </a>
             <div *ngIf="accounts.length<=0 && tableShow===6" class="weui-loadmore weui-loadmore_line">

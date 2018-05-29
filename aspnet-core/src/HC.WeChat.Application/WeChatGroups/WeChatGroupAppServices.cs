@@ -158,6 +158,7 @@ namespace HC.WeChat.WeChatGroups
         /// 新增WeChatGroup
         /// </summary>
         //[AbpAuthorize(WeChatGroupAppPermissions.WeChatGroup_CreateWeChatGroup)]
+        [AbpAllowAnonymous]
         protected virtual async Task<WeChatGroupEditDto> CreateWeChatGroupAsync(WeChatGroupEditDto input)
         {
             //TODO:新增前的逻辑判断，是否允许新增
@@ -253,27 +254,10 @@ namespace HC.WeChat.WeChatGroups
         /// <param name="input"></param>
         /// <returns></returns>
         [AbpAllowAnonymous]
-        public async Task<WeChatGroupEditDto> CreateWeChatGroup(WeChatGroupListDto input)
+        public async Task CreateWeChatGroup(WeChatGroupListDto input)
         {
-            //var checkResult = CheckTagName(input.TagName).Result;
-            //if (checkResult.IsExist)
-            //{
-            //    input.TagId = checkResult.TagId;
-            //    await UpdateWeChatGroup(input);
-
-            //}
-            //else
-            //{
-            var result = new WeChatGroupEditDto();
-            var tags = await UserTagApi.GetAsync(AppConfig.AppId);
-            var group = await UserTagApi.CreateAsync(AppConfig.AppId, input.TagName);
-            if (group.errcode == 0)
-            {
-                input.TagId = group.tag.id;
-                result = await CreateWeChatGroupAsync(input.MapTo<WeChatGroupEditDto>());
-            }
-            //}
-            return result;
+          
+            await GetTagIdAsync(input.TypeCode);
         }
 
         /// <summary>
@@ -356,6 +340,78 @@ namespace HC.WeChat.WeChatGroups
             //return new APIResultDto() { Code = 0, Msg = "标记成功" };
         }
 
+        /// <summary>
+        /// 获取在微信中的分组（标签）
+        /// </summary>
+        /// <returns></returns>
+        public async Task GetWeChatGroupFromWeChat()
+        {
+            await UserTagApi.GetAsync(AppConfig.AppId);
+        }
+
+        /// <summary>
+        /// 获取用户上的标签
+        /// </summary>
+        /// <returns></returns>
+        public async Task GetUserForWeChatUser()
+        {
+            var openId = "";
+            await UserTagApi.UserTagListAsync(AppConfig.AppId, openId);
+        }
+
+        /// <summary>
+        /// 获取微信分组（标签）id
+        /// </summary>
+        /// <param name="tagName"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task<int> GetTagIdAsync(UserTypeEnum typeSCode)
+        {
+            int tagId = 0;
+            string tagName = "";
+            //var fans1 = await UserTagApi.UserTagListAsync(AppConfig.AppId, "oPM5Uv81jfyJqWbVxWAH-RUqsCAs");
+
+            var tags = await UserTagApi.GetAsync(AppConfig.AppId);
+            var groupSe = await _wechatgroupRepository.GetAll().Where(G => G.TypeName == typeSCode.ToString()).FirstOrDefaultAsync();
+            foreach (var item in tags.tags)
+            {
+                if (item.name == typeSCode.ToString())
+                {
+                    tagId = item.id;
+                    tagName = item.name;
+                }
+            }
+            if (string.IsNullOrEmpty(tagName))
+            {
+                var result = await UserTagApi.CreateAsync(AppConfig.AppId, typeSCode.ToString());
+                if (groupSe == null)
+                {
+                    WeChatGroupListDto group = new WeChatGroupListDto();
+                    if (result.errcode == 0)
+                    {
+                        group.TagId = result.tag.id;
+                        group.TagName = result.tag.name;
+                        group.TypeName = typeSCode.ToString();
+                        group.TypeCode = typeSCode;
+                        await CreateWeChatGroupAsync(group.MapTo<WeChatGroupEditDto>());
+                    }
+                }
+                return result.tag.id;
+            }
+            else
+            {
+                if (groupSe == null)
+                {
+                    WeChatGroupListDto group = new WeChatGroupListDto();
+                    group.TagId = tagId;
+                    group.TagName = tagName;
+                    group.TypeName = typeSCode.ToString();
+                    group.TypeCode = typeSCode;
+                    await CreateWeChatGroupAsync(group.MapTo<WeChatGroupEditDto>());
+                }
+                return tagId;
+            }
+        }
     }
 }
 

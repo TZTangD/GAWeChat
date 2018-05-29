@@ -5,6 +5,7 @@ using Abp.Application.Services.Dto;
 using HC.WeChat.WeChatGroups.Dtos;
 using HC.WeChat.WeChatGroups;
 using HC.WeChat.Dto;
+using HC.WeChat.WechatEnums;
 
 namespace HC.WeChat.WeChatGroups
 {
@@ -68,7 +69,7 @@ namespace HC.WeChat.WeChatGroups
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task<WeChatGroupEditDto> CreateWeChatGroup(WeChatGroupListDto input);
+        Task CreateWeChatGroup(WeChatGroupListDto input);
 
         /// <summary>
         /// 修改分组
@@ -97,5 +98,31 @@ namespace HC.WeChat.WeChatGroups
         /// </summary>
         /// <returns></returns>
         Task BatchMarkWeChatGroup();
+
+        /// <summary>
+        /// 获取在微信中的分组（标签）
+        /// </summary>
+        /// <returns></returns>
+        Task GetWeChatGroupFromWeChat();
+
+        /// <summary>
+        /// 获取用户上的标签
+        /// </summary>
+        /// <returns></returns>
+        Task GetUserForWeChatUser();
+
+        /// <summary>
+        /// 检查在微信端是否已存在此标签
+        /// </summary>
+        /// <param name="tagName"></param>
+        /// <returns></returns>
+        Task<CheckResult> CheckTagName(string tagName);
+
+        /// <summary>
+        /// 检查标签是否存在，不存在就创建
+        /// </summary>
+        /// <param name="typeCode"></param>
+        /// <returns></returns>
+        Task<int> GetTagIdAsync(UserTypeEnum typeCode);
     }
 }

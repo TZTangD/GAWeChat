@@ -59,7 +59,7 @@
             </div>
             <div class="weui-cell__ft" style="font-size: 13px;"></div>
         </div>
-        <div class="weui-cell weui-cell_access" (click)="goShopEmployee()">
+        <div class="weui-cell weui-cell_access" *ngIf="user && user.userType == 1" (click)="goShopEmployee()">
             <div class="weui-cell__bd">
                 <span style="vertical-align: middle">店员管理</span>
                 <span class="weui-badge" *ngIf="noCheckShopEmployeeCount>0" style="margin-left: 5px;">{{noCheckShopEmployeeCount}}</span>
