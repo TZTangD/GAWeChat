@@ -269,15 +269,16 @@ namespace HC.WeChat.Shops
         /// <returns></returns>
         public async Task<PagedResultDto<ShopListDto>> GetPagedShopsByRetailer(GetShopsInput input)
         {
-
+            var mid = UserManager.GetControlEmployeeId();
             var queryShop = _shopRepository.GetAll()
                 .WhereIf(!string.IsNullOrEmpty(input.Name), s => s.Name.Contains(input.Name))
                 .WhereIf(input.Status.HasValue, s => s.Status == input.Status)
                 .WhereIf(!string.IsNullOrEmpty(input.Tel), s => s.Tel.Contains(input.Tel));
-            var queryRetailer = _retailerRepository.GetAll();
+            var queryRetailer = _retailerRepository.GetAll().WhereIf(mid.HasValue, r => r.EmployeeId == mid);
             var query = from s in queryShop
-                        join r in queryRetailer on s.RetailerId equals r.Id into queryS
-                        from sr in queryS.DefaultIfEmpty()
+                        join r in queryRetailer on s.RetailerId equals r.Id 
+                        //into queryS
+                        //from sr in queryS.DefaultIfEmpty()
                         select new ShopListDto
                         {
                             Id = s.Id,
@@ -296,7 +297,7 @@ namespace HC.WeChat.Shops
                             CreationTime = s.CreationTime,
                             TenantId = s.TenantId,
                             Tel = s.Tel,
-                            RetailerName = sr != null ? sr.Name : "",
+                            RetailerName = r != null ? r.Name : "",
                         };
 
             //TODO:根据传入的参数添加过滤条件
