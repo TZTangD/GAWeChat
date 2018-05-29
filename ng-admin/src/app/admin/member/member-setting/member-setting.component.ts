@@ -1,4 +1,4 @@
-import { Component, OnInit, Injector } from '@angular/core';
+import { Component, OnInit, Injector, ViewChild } from '@angular/core';
 import { AppComponentBase } from '@shared/app-component-base';
 import { MemberConfigs } from '@shared/entity/member/memberconfig';
 import { Router } from '@angular/router';
@@ -6,6 +6,8 @@ import { MemberConfigsServiceProxy, PagedResultDtoOfMemberConfigs } from '@share
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd';
 import { ConfigCode } from '@shared/entity/member/configcode';
+import { MessageEmployeeModalComponent } from './message-employee-modal/message-employee-modal.component';
+import { WechatUser } from '@shared/entity/wechat';
 
 @Component({
     moduleId: module.id,
@@ -13,6 +15,11 @@ import { ConfigCode } from '@shared/entity/member/configcode';
     templateUrl: 'member-setting.component.html',
 })
 export class MemberSettingComponent extends AppComponentBase implements OnInit {
+    @ViewChild('selectsEmployeeModal') selectsEmployeeModal: MessageEmployeeModalComponent;
+    modalVisible = false;
+    isDisablec = false;
+    userNameIds: WechatUser[];
+
     loading = false;
     form: FormGroup;
     config: MemberConfigs[] = [];
@@ -31,8 +38,8 @@ export class MemberSettingComponent extends AppComponentBase implements OnInit {
         });
         this.getMemberConfigsByTenantId();
     }
-    getFormControl(name: string) {
-        return this.form.controls[name];
+    getFormControl(id: string) {
+        return this.form.controls[id];
     }
 
     /**
@@ -70,4 +77,22 @@ export class MemberSettingComponent extends AppComponentBase implements OnInit {
         }
         abp.multiTenancy.setTenantIdCookie();
     }
+
+    /**
+ * 显示员工列表模态框
+ */
+    employee(): void {
+        // this.modalVisible=true;
+        this.selectsEmployeeModal.show();
+    }
+    /**
+     * 模态框返回
+     */
+    getSelectData = (employee?: WechatUser[]) => {
+        var employeeIds = employee.map(v => {
+            return v;
+        }).join(',');
+        // this.userNameIds = this.userNameIds.concat(employeeIds:any);
+    }
+
 }

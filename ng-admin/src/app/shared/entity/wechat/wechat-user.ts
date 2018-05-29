@@ -19,6 +19,8 @@ export class WechatUser implements IWechatUser {
     isShopkeeper: boolean;
     status: number;
     statusName: string;
+    selected: boolean = false;
+
     constructor(data?: IWechatUser) {
         if (data) {
             for (var property in data) {
