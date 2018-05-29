@@ -184,6 +184,19 @@ namespace HC.WeChat.Shops
                     input.Shop.Evaluation = "0,0,0";
                     await CreateShopAsync(input.Shop);
                 }
+
+                //发送微信模板通知-后台配置内部员工
+                string appId = AppConfig.AppId;
+                string openId = "";
+                string templateId = "qvt7CNXBY4FzfzdX54TvMUaOi9jZ3-tdsb2NRhVp0yg";//模版id  
+                string url = "";
+                object data = new
+                {
+                    first = new TemplateDataItem("新的店铺资料已提交，请您尽快审核"),
+                    keyword1 = new TemplateDataItem("".ToString()),
+                    keyword2 = new TemplateDataItem(DateTime.Now.ToString())
+                };
+                await TemplateApi.SendTemplateMessageAsync(appId, openId, templateId, url, data);
             }
         }
 

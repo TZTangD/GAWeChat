@@ -8,6 +8,7 @@ import { MemberSettingComponent } from "./member-setting/member-setting.componen
 import { MemberRoutingModule } from "./member-routing.module";
 import { LayoutModule } from "../../layout/layout.module";
 import { IntegralSearchDetailComponent } from "./integral-search/integral-search-detail/integral-search-detail.component";
+import { MessageEmployeeModalComponent } from "./member-setting/message-employee-modal/message-employee-modal.component";
 
 @NgModule({
     imports: [
@@ -19,7 +20,8 @@ import { IntegralSearchDetailComponent } from "./integral-search/integral-search
         MemberManagementComponent,
         IntegralSearchComponent,
         MemberSettingComponent,
-        IntegralSearchDetailComponent
+        IntegralSearchDetailComponent,
+        MessageEmployeeModalComponent
     ],
     providers: [
         AppRouteGuard

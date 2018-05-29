@@ -304,6 +304,12 @@ namespace HC.WeChat.Web.Host.Controllers
 
             return Redirect(GAAuthorizationPageUrl.ShareUrl);
         }
+
+        public IActionResult Login(string openId)
+        {
+            UserOpenId = openId;
+            return Redirect(GAAuthorizationPageUrl.PersonalCenterUrl);
+        }
     }
 
     public enum GAAuthorizationPageEnum

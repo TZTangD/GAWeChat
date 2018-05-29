@@ -64,4 +64,44 @@
             </form>
         </nz-card>
     </nz-tab>
+    <nz-tab>
+        <ng-template #nzTabHeading>
+            微信用户配置
+        </ng-template>
+        <nz-card>
+            <form nz-form [formGroup]="form" id="frm_create_role" (ngSubmit)="save()">
+                <div nz-row>
+                    <div nz-col [nzSpan]="16">
+                        <div nz-form-item nz-row>
+                            <div nz-form-label nz-col [nzSm]="5">
+                                <label for="rcValue">用户选择</label>
+                            </div>
+                            <div nz-col [nzSm]="4">
+                                <button nz-button [nzType]="'primary'" [nzSize]="'large'" type="button" (click)="employee()">
+                                    选择员工
+                                </button>
+                            </div>
+                        </div>
+
+                        <div nz-form-item nz-row>
+                            <div nz-form-label nz-col [nzSm]="5">
+                                <label for="user">已选择用户</label>
+                            </div>
+                            <div nz-form-control nz-col [nzSm]="19">
+                                <h4 class="mb-md">{{userNameIds}}</h4>
+                            </div>
+                        </div>
+                        <div nz-form-item nz-row class="mb0">
+                            <div nz-form-label nz-col [nzSm]="5">
+                                <button nz-button [nzType]="'primary'" [nzSize]="'large'" type="submit">
+                                    {{l("保存")}}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </nz-card>
+    </nz-tab>
 </nz-tabset>
+<message-employee-modal #selectsEmployeeModal (modalSelect)="getSelectData($event)"></message-employee-modal>
