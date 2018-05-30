@@ -1,6 +1,6 @@
 <weui-loadmore type="line" *ngIf="!sDetailsOfShare"></weui-loadmore>
-<div [innerHTML]="assembleHTML(sDetailsOfShare.content)">
-</div>
+<div [innerHTML]="assembleHTML(sDetailsOfShare.content)"></div>
+<br/>
 <div class="weui-flex">
     <div class="weui-flex__item">
         <div class="placeholder read">阅读 {{sDetailsOfShare.readTotal}}</div>
@@ -12,8 +12,10 @@
         <img src="assets/images/activity/IsGood_Blue_True.png" style="width:16px;" alt="" (click)="addGood()"> {{sDetailsOfShare.goodTotal}}
     </div>
 </div>
+<br/>
 <div class="weui-flex">
-    <div class="weui-flex__item" style="text-align: center;"><span class="weui-flex_write" (click)="goShareWrite()">我也要分享</span>
+    <div class="weui-flex__item" style="text-align: center;">
+        <button weui-button [weui-mini]="'mini'" (click)="goShareWrite()" >我也要分享</button>
     </div>
 </div>
 <div class="weui-footer">
