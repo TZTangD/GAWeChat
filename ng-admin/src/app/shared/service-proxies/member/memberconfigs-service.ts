@@ -79,6 +79,108 @@ export class MemberConfigsServiceProxy {
         return Observable.of<PagedResultDtoOfMemberConfigs>(<any>null);
     }
 
+    getName(openId: string): Observable<PagedResultDtoOfMemberConfigs> {
+        let url_ = this.baseUrl + "/api/services/app/WeChatUser/GetUserNameByOpenIdAsync?";
+        url_ = url_.replace(/[?&]$/, "");
+        if (openId !== undefined)
+            url_ += "?openId=" + encodeURIComponent("" + openId);
+        let options_ = {
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_) => {
+            return this.processGetMemberConfigs(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processGetMemberConfigs(response_);
+                } catch (e) {
+                    return <Observable<PagedResultDtoOfMemberConfigs>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<PagedResultDtoOfMemberConfigs>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processGetName(response: Response): Observable<PagedResultDtoOfMemberConfigs> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? PagedResultDtoOfMemberConfigs.fromJS(resultData200) : new PagedResultDtoOfMemberConfigs();
+            return Observable.of(result200);
+        } else if (status === 401) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status === 403) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<PagedResultDtoOfMemberConfigs>(<any>null);
+    }
+
+    updateWXinfo(input: ConfigCode): Observable<ConfigCode> {
+        let url_ = this.baseUrl + "/api/services/app/MemberConfig/CreateOrUpdateWXMemberConfigDtoAsync";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ = {
+            body: content_,
+            method: "post",
+            headers: new Headers({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_) => {
+            return this.processUpdate(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processUpdate(response_);
+                } catch (e) {
+                    return <Observable<ConfigCode>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<ConfigCode>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processupdateWXinfo(response: Response): Observable<ConfigCode> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? ConfigCode.fromJS(resultData200) : new ConfigCode();
+            return Observable.of(result200);
+        } else if (status === 401) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status === 403) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<ConfigCode>(<any>null);
+    }
+
     update(input: ConfigCode): Observable<ConfigCode> {
         let url_ = this.baseUrl + "/api/services/app/MemberConfig/CreateOrUpdateMemberConfigDtoAsync";
         url_ = url_.replace(/[?&]$/, "");

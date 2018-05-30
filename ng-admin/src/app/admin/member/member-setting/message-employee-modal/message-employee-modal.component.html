@@ -1,5 +1,5 @@
-<nz-modal [nzVisible]="emodalVisible" [nzTitle]="'选择员工'" [nzConfirmLoading]="eloading" [nzContent]="employeeContent" [nzFooter]="employeeFooter" (nzOnCancel)="handleeCancel($event)" style="width: 520px;">
-    <ng-template #employeeContent>
+<nz-modal [nzVisible]="emodalVisible" [nzTitle]="'选择员工'" [nzConfirmLoading]="eloading" [nzContent]="modalContent" (nzOnCancel)="handleeCancel($event)" style="width: 520px;" [nzFooter]="modalFooter">
+    <ng-template #modalContent>
         <nz-card [nzBordered]="false" *ngIf="emodalVisible">
             <form nz-form (ngSubmit)="refreshData()" [nzLayout]="'inline'">
                 <div nz-row [nzGutter]="24">
@@ -24,7 +24,6 @@
                         <th nz-th>
                             <span>用户类型</span>
                         </th>
-
                     </tr>
                 </thead>
                 <tbody nz-tbody>
@@ -38,13 +37,13 @@
                 </tbody>
             </nz-table>
         </nz-card>
-        <button nz-button (click)="SelectEmployee(employee)" [nzType]="'primary'" [nzSize]="'large'" type="submit" [nzLoading]="isConfirmLoading">
+    </ng-template>
+    <ng-template #modalFooter>
+        <button nz-button [nzType]="'default'" [nzSize]="'large'" type="button" (click)="handleeCancel($event)">
+            取消
+        </button>
+        <button nz-button (click)="SelectEmployee()" [nzType]="'primary'" [nzSize]="'large'" type="button" [nzLoading]="eloading">
                 保存
             </button>
-    </ng-template>
-
-    <ng-template #modalFooter>
-
-
     </ng-template>
 </nz-modal>

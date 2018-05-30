@@ -88,12 +88,16 @@
                                 <label for="user">已选择用户</label>
                             </div>
                             <div nz-form-control nz-col [nzSm]="19">
-                                <h4 class="mb-md">{{userNameIds}}</h4>
+                                <h4 class="mb-md">{{employeeIds}}</h4>
                             </div>
+
                         </div>
                         <div nz-form-item nz-row class="mb0">
                             <div nz-form-label nz-col [nzSm]="5">
-                                <button nz-button [nzType]="'primary'" [nzSize]="'large'" type="submit">
+                                <button nz-button *ngIf="employeeIds.length!=0" [nzType]="'default'" [nzSize]="'large'" type="button" (click)="cancel()">
+                                            清空
+                                        </button>
+                                <button nz-button [nzType]="'primary'" [nzSize]="'large'" type="button" (click)="saveWXInfo()">
                                     {{l("保存")}}
                                 </button>
                             </div>

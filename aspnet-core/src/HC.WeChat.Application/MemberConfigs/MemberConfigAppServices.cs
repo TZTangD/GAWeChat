@@ -16,6 +16,7 @@ using System;
 using System.Linq;
 using HC.WeChat.WechatEnums;
 using HC.WeChat.Authorization;
+using HC.WeChat.WeChatUsers;
 
 namespace HC.WeChat.MemberConfigs
 {
@@ -30,16 +31,21 @@ namespace HC.WeChat.MemberConfigs
         ////ECC/ END CUSTOM CODE SECTION
         private readonly IRepository<MemberConfig, Guid> _memberconfigRepository;
         private readonly IMemberConfigManager _memberconfigManager;
+        private readonly IRepository<WeChatUser, Guid> _wechatuserRepository;
+
 
         /// <summary>
         /// 构造函数
         /// </summary>
         public MemberConfigAppService(IRepository<MemberConfig, Guid> memberconfigRepository
       , IMemberConfigManager memberconfigManager
+            , IRepository<WeChatUser, Guid> wechatuserRepository
         )
         {
             _memberconfigRepository = memberconfigRepository;
             _memberconfigManager = memberconfigManager;
+            _wechatuserRepository = wechatuserRepository;
+
         }
 
         /// <summary>
@@ -191,6 +197,7 @@ namespace HC.WeChat.MemberConfigs
         public async Task<List<MemberConfigListDto>> GetTenanMemberConfigAsync()
         {
             var entity = await _memberconfigRepository.GetAll().Where(u => u.TenantId == AbpSession.TenantId).ToListAsync();
+            //var x =await _wechatuserRepository.GetAll().Where(u=>u.TenantId == AbpSession.TenantId &&u.OpenId==entity)
             //return await Task.FromResult(entity.MapTo<List<MemberConfigListDto>>());
             return entity.MapTo<List<MemberConfigListDto>>();
 
@@ -204,7 +211,7 @@ namespace HC.WeChat.MemberConfigs
         public async Task CreateOrUpdateMemberConfigDtoAsync(MemberCodeEditDto input)
         {
             MemberConfigEditDto dto = new MemberConfigEditDto();
-            if (input.ECode == 2 && input.EId != Guid.Parse("00000000-0000-0000-0000-000000000000"))
+            if (input.ECode == 2 && input.EId.HasValue)
             {
                 dto.Code = DeployCodeEnum.商品评价;
                 dto.Value = input.EValue;
@@ -221,7 +228,7 @@ namespace HC.WeChat.MemberConfigs
                 dto.CreationTime = DateTime.Now;
                 await CreateMemberConfigAsync(dto);
             }
-            if (input.CCode == 1 && input.CId != Guid.Parse("00000000-0000-0000-0000-000000000000"))
+            if (input.CCode == 1 && input.CId.HasValue)
             {
                 dto.Code = DeployCodeEnum.商品购买;
                 dto.Value = input.CValue;
@@ -239,7 +246,7 @@ namespace HC.WeChat.MemberConfigs
                 await CreateMemberConfigAsync(dto);
                 
             }
-            if (input.RcCode == 3 && input.RcId != Guid.Parse("00000000-0000-0000-0000-000000000000"))
+            if (input.RcCode == 3 && input.RcId.HasValue)
             {
                 dto.Code = DeployCodeEnum.店铺扫码兑换;
                 dto.Value = input.RcValue;
@@ -256,6 +263,34 @@ namespace HC.WeChat.MemberConfigs
                 dto.CreationTime = DateTime.Now;
                 await CreateMemberConfigAsync(dto);
                 
+            }
+        }
+
+        /// <summary>
+        /// 新增or修改微信通知用户
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task CreateOrUpdateWXMemberConfigDtoAsync(MemberCodeEditDto input)
+        {
+            MemberConfigEditDto dto = new MemberConfigEditDto();
+            if (input.UserCode == 4 && input.UserId.HasValue)
+            {
+                dto.Code = DeployCodeEnum.通知配置;
+                dto.Value = input.UserValue;
+                dto.Type = DeployTypeEnum.通知配置;
+                dto.CreationTime = DateTime.Now;
+                dto.Id = input.UserId;
+                await UpdateMemberConfigAsync(dto);
+            }
+            else
+            {
+                dto.Code = DeployCodeEnum.通知配置;
+                dto.Value = input.UserValue;
+                dto.Type = DeployTypeEnum.通知配置;
+                dto.CreationTime = DateTime.Now;
+                dto.Id = Guid.NewGuid();
+                await CreateMemberConfigAsync(dto);
             }
         }
 
