@@ -1,5 +1,6 @@
 <weui-loadmore type="line" *ngIf="!activity"></weui-loadmore>
-<div [innerHTML]="assembleHTML(activity.content)"> </div>
+<div [innerHTML]="assembleHTML(activity.content)"></div>
+<br/>
 <div class="weui-flex">
     <div class="weui-flex__item">
         <div class="placeholder read">阅读 {{activity.readTotal}}</div>
@@ -11,6 +12,7 @@
         <img src="assets/images/activity/IsGood_Blue_True.png" style="width:16px;" alt="" (click)="addGood()"> {{activity.goodTotal}}
     </div>
 </div>
+<br/>
 <div class="weui-footer">
     <p class="weui-footer__text">广安烟草 | 渠江烟语</p>
 </div>

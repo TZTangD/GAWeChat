@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 <nz-modal [nzVisible]="emodalVisible" [nzTitle]="'选择员工'" [nzConfirmLoading]="eloading" [nzContent]="modalContent" (nzOnCancel)="handleeCancel($event)" style="width: 520px;" [nzFooter]="modalFooter">
     <ng-template #modalContent>
+=======
+<nz-modal [nzVisible]="emodalVisible" [nzTitle]="'选择员工'" [nzConfirmLoading]="eloading" [nzContent]="employeeContent" (nzOnCancel)="handleeCancel($event)" style="width: 520px;">
+    <ng-template #employeeContent>
+>>>>>>> dev
         <nz-card [nzBordered]="false" *ngIf="emodalVisible">
             <form nz-form (ngSubmit)="refreshData()" [nzLayout]="'inline'">
                 <div nz-row [nzGutter]="24">
