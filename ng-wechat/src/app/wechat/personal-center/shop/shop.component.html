@@ -1,11 +1,15 @@
-<Page [ngClass]="'icons'" [spacing]="false" [showTitle]="false" *ngIf="shop && shop.status == 1">
+<Page [ngClass]="'icons'" [spacing]="false" [showTitle]="false" *ngIf="shop && shop.status != 2">
     <div class="weui-cells">
         <div class="weui-cell">
             <div class="icon-box">
                 <i class="weui-icon-waiting weui-icon_msg"></i>
-                <div class="icon-box__ctn">
+                <div class="icon-box__ctn" *ngIf="shop.status == 1">
                     <h3 class="icon-box__title">等待审核</h3>
                     <p class="icon-box__desc">店铺等待营销中心审核</p>
+                </div>
+                <div class="icon-box__ctn"  *ngIf="shop.status == 0">
+                    <h3 class="icon-box__title">审核未通过</h3>
+                    <p class="icon-box__desc">请修改店铺重新提交</p>
                 </div>
             </div>
         </div>
