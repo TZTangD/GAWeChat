@@ -41,7 +41,7 @@ export class MessageEmployeeModalComponent implements OnInit {
         this.isManger = isManger
         this.employee = new Array<WechatUser>();
         this.emodalVisible = true;
-        this.refreshData();
+        // this.refreshData();
     }
 
     /**
@@ -51,7 +51,7 @@ export class MessageEmployeeModalComponent implements OnInit {
         this.eloading = true;
         this.wechatUserService.getAll(this.q.pi, this.q.ps, this.getParameter()).subscribe((result: PagedResultDtoOfWeChatUser) => {
             this.eloading = false;
-            let status = 5;
+            // let status = 5;
             this.employee = result.items;
             this.q.total = result.totalCount;
         });
