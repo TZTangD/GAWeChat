@@ -11,6 +11,7 @@ export class ConfigCode implements IConfigCode {
     userValue: string;
     userId: string;
     userCode: number;
+    desc: string;
     constructor(data?: IConfigCode) {
         if (data) {
             for (var property in data) {
@@ -34,6 +35,7 @@ export class ConfigCode implements IConfigCode {
             this.userCode = data["userCode"];
             this.userValue = data["userValue"];
             this.userId = data["userId"];
+            this.desc = data["desc"];
         }
     }
 
@@ -57,6 +59,7 @@ export class ConfigCode implements IConfigCode {
         data["userCode"] = this.userCode;
         data["userValue"] = this.userValue;
         data["userId"] = this.userId;
+        data["desc"] = this.desc;
         return data;
     }
 
@@ -80,4 +83,5 @@ export interface IConfigCode {
     userValue: string;
     userId: string;
     userCode: number;
+    desc: string;
 }

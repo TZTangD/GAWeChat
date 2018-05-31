@@ -25,6 +25,7 @@ using Senparc.Weixin.MP.AdvancedAPIs;
 using HC.WeChat.WeChatGroups.Dtos;
 using HC.WeChat.Retailers.Dtos;
 using HC.WeChat.Employees.Dtos;
+using Senparc.Weixin.MP.AdvancedAPIs.TemplateMessage;
 
 namespace HC.WeChat.WeChatUsers
 {
@@ -265,6 +266,21 @@ namespace HC.WeChat.WeChatUsers
                     {
                         entity.IsShopkeeper = false;
                         entity.Status = UserAuditStatus.未审核;
+
+                        //发送审核通知
+                        var retalilerOpenId = await _wechatuserRepository.GetAll().Where(r => r.UserId == entity.UserId).Select(v=>v.OpenId).FirstOrDefaultAsync();
+                        var currentName = await _wechatuserRepository.GetAll().Where(r => r.OpenId == input.OpenId).Select(v => v.NickName).FirstOrDefaultAsync();
+                        string appId = AppConfig.AppId;
+                        string openId = retalilerOpenId;
+                        string templateId = "qvt7CNXBY4FzfzdX54TvMUaOi9jZ3-tdsb2NRhVp0yg";//模版id  
+                        string url = input.host + "/GAWX/Authorization?page=302";
+                        object data = new
+                        {
+                            first = new TemplateDataItem("店员审核通知，请您尽快审核"),
+                            keyword1 = new TemplateDataItem(currentName.ToString()),
+                            keyword2 = new TemplateDataItem(DateTime.Now.ToString("yyyy-MM-dd HH:mm"))
+                        };
+                        await TemplateApi.SendTemplateMessageAsync(appId, openId, templateId, url, data);
                     }
                 }
                 else if (input.UserType == UserTypeEnum.内部员工)
@@ -469,6 +485,19 @@ namespace HC.WeChat.WeChatUsers
             var entity = await _wechatuserRepository.GetAsync(input.Id.Value);
             input.MapTo(entity);
             await _wechatuserRepository.UpdateAsync(entity);
+
+            //反馈通知
+            string appId = AppConfig.AppId;
+            string openId = input.OpenId;
+            string templateId = "n325dGQOYvNMZ46eFDIlFo5jWXSr-P3jNMDubXZ3Sbw";//模版id  
+            string url = "";
+            object data = new
+            {
+                keyword1 = new TemplateDataItem("审核未通过"),
+                keyword2 = new TemplateDataItem(DateTime.Now.ToString("yyyy-MM-dd HH:mm")),
+                keyword3 = new TemplateDataItem("您的申请未通过,请联系店铺管理员!"),
+            };
+            await TemplateApi.SendTemplateMessageAsync(appId, openId, templateId, url, data);
         }
 
         /// <summary>
@@ -501,6 +530,19 @@ namespace HC.WeChat.WeChatUsers
             var entity = await _wechatuserRepository.GetAsync(input.Id.Value);
             input.MapTo(entity);
             await _wechatuserRepository.UpdateAsync(entity);
+
+            //反馈通知
+            string appId = AppConfig.AppId;
+            string openId = input.OpenId;
+            string templateId = "7I2cswoMRn0P_DsAYz-DCigntaGKJn-XUx6lMowDYRY";//模版id  
+            string url = "";
+            object data = new
+            {
+                first = new TemplateDataItem("您所提交的资料已通过审核!"),
+                keyword1 = new TemplateDataItem("审核通过"),
+                keyword2 = new TemplateDataItem(DateTime.Now.ToString("yyyy-MM-dd HH:mm"))
+            };
+            await TemplateApi.SendTemplateMessageAsync(appId, openId, templateId, url, data);
             return new APIResultDto() { Code = 0, Msg = "提交成功，我们会尽快处理" };
         }
 

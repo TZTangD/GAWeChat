@@ -5,6 +5,7 @@ export class MemberConfigs implements IMemberConfigs {
     value: string;
     creationTime: Date;
     tenantId: number;
+    desc: string;
     constructor(data?: IMemberConfigs) {
         if (data) {
             for (var property in data) {
@@ -22,6 +23,7 @@ export class MemberConfigs implements IMemberConfigs {
             this.value = data["value"];
             this.creationTime = data["creationTime"];
             this.tenantId = data["tenantId"];
+            this.desc = data["desc"];
         }
     }
 
@@ -39,6 +41,7 @@ export class MemberConfigs implements IMemberConfigs {
         data["value"] = this.value;
         data["creationTime"] = this.creationTime;
         data["tenantId"] = this.tenantId;
+        data["desc"] = this.desc;
         return data;
     }
 
@@ -56,4 +59,5 @@ export interface IMemberConfigs {
     value: string;
     creationTime: Date;
     tenantId: number;
+    desc: string;
 }

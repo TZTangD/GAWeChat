@@ -19,6 +19,8 @@ namespace HC.WeChat.MemberConfigs.Dtos
         /// </summary>
         public int? TenantId { get; set; }
 
+        public string Desc { get; set; }
+
         /// <summary>
         /// 创建时间
         /// </summary>
@@ -43,5 +45,6 @@ namespace HC.WeChat.MemberConfigs.Dtos
         public string CValue { get; set; }
         public string EValue { get; set; }
         public string UserValue { get; set; }
+        public string Desc { get; set; }
     }
 }

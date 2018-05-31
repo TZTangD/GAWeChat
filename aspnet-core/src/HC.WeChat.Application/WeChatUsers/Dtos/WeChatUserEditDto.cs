@@ -91,6 +91,7 @@ namespace HC.WeChat.WeChatUsers.Dtos
     [AutoMapTo(typeof(WeChatUser))]
     public class UserBindDto
     {
+        public string host { get; set; }
         public string OpenId { get; set; }
 
         public UserTypeEnum UserType { get; set; }

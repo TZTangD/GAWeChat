@@ -197,7 +197,6 @@ namespace HC.WeChat.MemberConfigs
         public async Task<List<MemberConfigListDto>> GetTenanMemberConfigAsync()
         {
             var entity = await _memberconfigRepository.GetAll().Where(u => u.TenantId == AbpSession.TenantId).ToListAsync();
-            //var x =await _wechatuserRepository.GetAll().Where(u=>u.TenantId == AbpSession.TenantId &&u.OpenId==entity)
             //return await Task.FromResult(entity.MapTo<List<MemberConfigListDto>>());
             return entity.MapTo<List<MemberConfigListDto>>();
 
@@ -218,7 +217,8 @@ namespace HC.WeChat.MemberConfigs
                 dto.Type = DeployTypeEnum.积分配置;
                 dto.CreationTime = DateTime.Now;
                 dto.Id = input.EId;
-                await UpdateMemberConfigAsync(dto); 
+                dto.Desc = "店铺评价积分配置";
+                await UpdateMemberConfigAsync(dto);
             }
             else
             {
@@ -226,6 +226,7 @@ namespace HC.WeChat.MemberConfigs
                 dto.Value = input.EValue;
                 dto.Type = DeployTypeEnum.积分配置;
                 dto.CreationTime = DateTime.Now;
+                dto.Desc = "店铺评价积分配置";
                 await CreateMemberConfigAsync(dto);
             }
             if (input.CCode == 1 && input.CId.HasValue)
@@ -235,6 +236,7 @@ namespace HC.WeChat.MemberConfigs
                 dto.Type = DeployTypeEnum.积分配置;
                 dto.CreationTime = DateTime.Now;
                 dto.Id = input.CId;
+                dto.Desc = "商品购买积分配置";
                 await UpdateMemberConfigAsync(dto);
             }
             else
@@ -243,8 +245,9 @@ namespace HC.WeChat.MemberConfigs
                 dto.Value = input.CValue;
                 dto.Type = DeployTypeEnum.积分配置;
                 dto.CreationTime = DateTime.Now;
+                dto.Desc = "商品购买积分配置";
                 await CreateMemberConfigAsync(dto);
-                
+
             }
             if (input.RcCode == 3 && input.RcId.HasValue)
             {
@@ -253,6 +256,7 @@ namespace HC.WeChat.MemberConfigs
                 dto.Type = DeployTypeEnum.积分配置;
                 dto.CreationTime = DateTime.Now;
                 dto.Id = input.RcId;
+                dto.Desc = "店铺扫码积分配置";
                 await UpdateMemberConfigAsync(dto);
             }
             else
@@ -261,8 +265,9 @@ namespace HC.WeChat.MemberConfigs
                 dto.Value = input.RcValue;
                 dto.Type = DeployTypeEnum.积分配置;
                 dto.CreationTime = DateTime.Now;
+                dto.Desc = "店铺扫码积分配置";
                 await CreateMemberConfigAsync(dto);
-                
+
             }
         }
 
@@ -281,6 +286,14 @@ namespace HC.WeChat.MemberConfigs
                 dto.Type = DeployTypeEnum.通知配置;
                 dto.CreationTime = DateTime.Now;
                 dto.Id = input.UserId;
+                if (input.Desc.Length <= 0)
+                {
+                    dto.Desc = null;
+                }
+                else
+                {
+                    dto.Desc = input.Desc;
+                }
                 await UpdateMemberConfigAsync(dto);
             }
             else
@@ -290,6 +303,10 @@ namespace HC.WeChat.MemberConfigs
                 dto.Type = DeployTypeEnum.通知配置;
                 dto.CreationTime = DateTime.Now;
                 dto.Id = Guid.NewGuid();
+                if (input.Desc.Length > 0)
+                {
+                    dto.Desc = input.Desc;
+                }
                 await CreateMemberConfigAsync(dto);
             }
         }

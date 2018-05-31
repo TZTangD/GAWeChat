@@ -39,5 +39,6 @@ namespace HC.WeChat.PurchaseRecords.Dtos
         public string OperatorOpenId { get; set; }
         public string OperatorName { get; set; }
         public Guid? RetailerId { get; set; }
+        public string host { get; set; }
     }
 }

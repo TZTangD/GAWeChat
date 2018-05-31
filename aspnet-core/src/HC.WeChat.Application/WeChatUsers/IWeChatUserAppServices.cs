@@ -65,7 +65,6 @@ namespace HC.WeChat.WeChatUsers
 
         Task<APIResultDto> BindWeChatUserAsync(UserBindDto input);
 
-
         Task<WeChatUserListDto> GetWeChatUserAsync(string openId, int? tenantId);
 
         /// <summary>

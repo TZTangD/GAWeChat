@@ -17,7 +17,6 @@ export class PurchaserecordComponent extends AppComponentBase implements OnInit 
     pageModel: PageModel = new PageModel(); // 分页信息
     user: WechatUser;
     purchaseRecordList: PurchaseRecord[] = [];
-    openId: string = this.route.snapshot.params['openId'];
     pageType: string = this.route.snapshot.params['pageType'];
     hostUrl: string = AppConsts.remoteServiceBaseUrl;
     tittleType: boolean = false;
@@ -55,7 +54,7 @@ export class PurchaserecordComponent extends AppComponentBase implements OnInit 
         if (this.settingsService.tenantId) {
             params.tenantId = this.settingsService.tenantId;
         }
-        params.openId = this.openId;
+        params.openId = this.settingsService.openId;
         params.pageIndex = this.pageModel.pageIndex;
         params.pageSize = this.pageModel.pageSize;
         this.purchaserecordService.GetPurchaseRecordById(params).subscribe(result => {
@@ -71,7 +70,7 @@ export class PurchaserecordComponent extends AppComponentBase implements OnInit 
         if (this.settingsService.tenantId) {
             params.tenantId = this.settingsService.tenantId;
         }
-        params.openId = this.openId;
+        params.openId = this.settingsService.openId;
         this.purchaserecordService.GetWXNotEvaluationByIdAsync(params).subscribe(result => {
             this.purchaseRecordList = result;
         });

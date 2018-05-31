@@ -32,7 +32,13 @@ export class ShopEmployeeComponent extends AppComponentBase implements OnInit {
     }
 
     ngOnInit(): void {
-        this.getShopEmployees();
+        this.getUserId();
+    }
+    getUserId() {
+        this.settingsService.getUser().subscribe(data => {
+            this.userId = data.userId;
+            this.getShopEmployees();
+        });
     }
 
     getShopEmployees() {
