@@ -248,7 +248,7 @@ namespace HC.WeChat.Web.Host.Controllers
                 {
                     string fileExt = Path.GetExtension(formFile.FileName); //文件扩展名，不含“.”
                     string newName = location + fileExt; //新的文件名
-                    var fileDire = webRootPath + string.Format("/upload/activity/activity-content/");
+                    var fileDire = webRootPath + string.Format("/gawechat/imgs/");
                     if (!Directory.Exists(fileDire))
                     {
                         Directory.CreateDirectory(fileDire);

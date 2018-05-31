@@ -1,5 +1,5 @@
 <weui-loadmore type="line" *ngIf="!sDetailsOfShare"></weui-loadmore>
-<div [innerHTML]="assembleHTML(sDetailsOfShare.content)"></div>
+<div *ngIf="sDetailsOfShare" [innerHTML]="assembleHTML(sDetailsOfShare.content)"></div>
 <br/>
 <div class="weui-flex">
     <div class="weui-flex__item">
@@ -15,7 +15,7 @@
 <br/>
 <div class="weui-flex">
     <div class="weui-flex__item" style="text-align: center;">
-        <button weui-button [weui-mini]="'mini'" (click)="goShareWrite()" >我也要分享</button>
+        <button weui-button [weui-mini]="'mini'" (click)="goShareWrite()">我也要分享</button>
     </div>
 </div>
 <div class="weui-footer">
