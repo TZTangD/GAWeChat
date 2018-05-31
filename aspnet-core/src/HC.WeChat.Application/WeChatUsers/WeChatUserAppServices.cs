@@ -348,7 +348,7 @@ namespace HC.WeChat.WeChatUsers
             }
             catch (Exception e)
             {
-                Logger.Error("TagForWechatAsync:" + e.Message);
+                Logger.ErrorFormat("TagForWechatAsync-打标签失败:{0},Exception:{1}", e.Message, e);
             }
 
         }
@@ -563,7 +563,7 @@ namespace HC.WeChat.WeChatUsers
             }
             catch (Exception e)
             {
-                Logger.Error("取消标签失败", e);
+                Logger.ErrorFormat("取消标签失败,error:{0},Exception:{1}", e.Message, e);
             }
         }
 
