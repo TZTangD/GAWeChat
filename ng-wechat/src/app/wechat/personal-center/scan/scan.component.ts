@@ -39,6 +39,7 @@ export class ScanComponent extends AppComponentBase implements OnInit {
     shop: Shop;
     member: WechatUser;//会员
     goods = [];
+    host = AppConsts.remoteServiceBaseUrl;
 
     constructor(injector: Injector,
         private shopService: ShopService,
@@ -194,9 +195,9 @@ export class ScanComponent extends AppComponentBase implements OnInit {
     onRemoveProduct(id) {
         this.delconfirm.show().subscribe((res: any) => {
             //console.log('type', res);
-            if(res.value == '1'){
+            if (res.value == '1') {
                 let i: number = 0;
-                for(let g of this.goods){
+                for (let g of this.goods) {
                     if (g.id == id) {
                         this.goods.splice(i, 1);
                         return;
@@ -209,10 +210,10 @@ export class ScanComponent extends AppComponentBase implements OnInit {
     }
 
     onSave() {
-        if(!this.member){
+        if (!this.member) {
             this.srv['warn']('没有会员信息');
         }
-        if(!this.goods || this.goods.length == 0){
+        if (!this.goods || this.goods.length == 0) {
             this.srv['warn']('没有商品信息');
         }
         let param: any = {};
@@ -224,8 +225,9 @@ export class ScanComponent extends AppComponentBase implements OnInit {
         param.operatorOpenId = this.settingsService.openId;
         param.operatorName = this.user.nickName;
         param.retailerId = this.user.userId;
+        param.host = this.host;
         this.shopService.ExchangeIntegral(param).subscribe(res => {
-            if(res && res.code == 0){
+            if (res && res.code == 0) {
                 //this.srv['success']('扫码积分兑换成功');
                 this.router.navigate(['/scans/scan-success', res.data]);
             } else {

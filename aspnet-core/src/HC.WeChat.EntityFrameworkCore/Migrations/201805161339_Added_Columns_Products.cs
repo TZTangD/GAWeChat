@@ -47,6 +47,11 @@ namespace HC.WeChat.Migrations
             name: "DepartmentId",
             table: "Retailers",
             nullable: true);
+
+            migrationBuilder.AlterColumn<string>(
+            name: "Desc",
+            table: "MemberConfigs",
+            nullable: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -79,6 +84,10 @@ namespace HC.WeChat.Migrations
             migrationBuilder.AlterColumn<string>(
             name: "DepartmentId",
             table: "Retailers");
+
+            migrationBuilder.AlterColumn<string>(
+            name: "Desc",
+            table: "MemberConfigs");
         }
     }
 }

@@ -28,6 +28,8 @@ using HC.WeChat.WechatAppConfigs;
 using HC.WeChat.WechatAppConfigs.Dtos;
 using Senparc.Weixin.MP.AdvancedAPIs;
 using Senparc.Weixin.MP.AdvancedAPIs.TemplateMessage;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Hosting;
 
 namespace HC.WeChat.PurchaseRecords
 {
@@ -46,6 +48,7 @@ namespace HC.WeChat.PurchaseRecords
         private readonly IRepository<ShopEvaluation, Guid> _shopevaluationRepository;
         private readonly IRepository<Shop, Guid> _shopRepository;
         private readonly IPurchaseRecordManager _purchaserecordManager;
+        private readonly IConfigurationRoot _appConfiguration;
 
         IWechatAppConfigAppService _wechatAppConfigAppService;
         private int? TenantId { get; set; }
@@ -325,6 +328,7 @@ namespace HC.WeChat.PurchaseRecords
                     intDetail.Type = IntegralTypeEnum.购买商品兑换;
                     intDetail.Desc = "店铺购买商品兑换";
                     await _integralDetailRepository.InsertAsync(intDetail);
+                    //await CurrentUnitOfWork.SaveChangesAsync();
                     user.IntegralTotal = intDetail.FinalIntegral.Value;
                     await _weChatUserRepository.UpdateAsync(user);
 
@@ -332,13 +336,13 @@ namespace HC.WeChat.PurchaseRecords
                     string appId = AppConfig.AppId;
                     string openId = user.OpenId;
                     string templateId = "3Dgkz89yi8e0jXtwBUhdMSgHeZwPvHi2gz8WrD-CUA4";//模版id  
-                    string url = "";
+                    string url = input.host + "/GAWX/Authorization?page=301";
                     object data = new
                     {
                         keyword1 = new TemplateDataItem(user.MemberBarCode.ToString()),
                         keyword2 = new TemplateDataItem(intDetail.FinalIntegral.ToString()+"积分"),
                         keyword3 = new TemplateDataItem(intDetail.Integral.ToString() + "积分"),
-                        keyword4 = new TemplateDataItem(DateTime.Now.ToString())
+                        keyword4 = new TemplateDataItem(DateTime.Now.ToString("yyyy-MM-dd HH:mm"))
                     };
                     await TemplateApi.SendTemplateMessageAsync(appId, openId, templateId, url, data);
                 }
@@ -367,13 +371,13 @@ namespace HC.WeChat.PurchaseRecords
                         string appId = AppConfig.AppId;
                         string openId = shopKeeper.OpenId;
                         string templateId = "3Dgkz89yi8e0jXtwBUhdMSgHeZwPvHi2gz8WrD-CUA4";//模版id  
-                        string url = "";
+                        string url = input.host + "/GAWX/Authorization?page=301";
                         object data = new
                         {
                             keyword1 = new TemplateDataItem(shopKeeper.MemberBarCode.ToString()),
                             keyword2 = new TemplateDataItem(intDetail.FinalIntegral.ToString() + "积分"),
                             keyword3 = new TemplateDataItem(intDetail.Integral.ToString() + "积分"),
-                            keyword4 = new TemplateDataItem(DateTime.Now.ToString()),
+                            keyword4 = new TemplateDataItem(DateTime.Now.ToString("yyyy-MM-dd HH:mm"))
                         };
                         await TemplateApi.SendTemplateMessageAsync(appId, openId, templateId, url, data);
                     }

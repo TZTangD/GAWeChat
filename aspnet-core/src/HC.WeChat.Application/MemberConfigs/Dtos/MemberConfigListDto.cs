@@ -15,7 +15,7 @@ namespace HC.WeChat.MemberConfigs.Dtos
         public string Value { get; set; }
         public DateTime CreationTime { get; set; }
 
-        public string NameIds { get; set; }
+        public string Desc { get; set; }
         /// <summary>
         /// 租户ID
         /// </summary>
