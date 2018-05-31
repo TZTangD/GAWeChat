@@ -124,5 +124,20 @@ namespace HC.WeChat.WeChatGroups
         /// <param name="typeCode"></param>
         /// <returns></returns>
         Task<int> GetTagIdAsync(UserTypeEnum typeCode);
+
+        /// <summary>
+        /// 为用户取消标签
+        /// </summary>
+        /// <param name="tagId"></param>
+        /// <param name="openIds"></param>
+        /// <returns></returns>
+        Task CancelTagAsync(int tagId, List<string> openIds);
+
+        /// <summary>
+        /// 通过用户类型获取分组信息
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        Task<WeChatGroupListDto> GetWeChatGroupByUserType(UserTypeEnum code);
     }
 }

@@ -80,7 +80,7 @@ namespace HC.WeChat.WeChatUsers
         {
 
             var query = _wechatuserRepository.GetAll()
-                .WhereIf(!string.IsNullOrEmpty(input.UserName),u=> u.UserName.Contains(input.UserName))
+                .WhereIf(!string.IsNullOrEmpty(input.UserName), u => u.UserName.Contains(input.UserName))
                 .WhereIf(!string.IsNullOrEmpty(input.Name), u => u.NickName.Contains(input.Name) || u.UserName.Contains(input.Name))
                 .WhereIf(input.UserType.HasValue, u => u.UserType == input.UserType);
 
@@ -268,7 +268,7 @@ namespace HC.WeChat.WeChatUsers
                         entity.Status = UserAuditStatus.未审核;
 
                         //发送审核通知
-                        var retalilerOpenId = await _wechatuserRepository.GetAll().Where(r => r.UserId == entity.UserId).Select(v=>v.OpenId).FirstOrDefaultAsync();
+                        var retalilerOpenId = await _wechatuserRepository.GetAll().Where(r => r.UserId == entity.UserId).Select(v => v.OpenId).FirstOrDefaultAsync();
                         var currentName = await _wechatuserRepository.GetAll().Where(r => r.OpenId == input.OpenId).Select(v => v.NickName).FirstOrDefaultAsync();
                         string appId = AppConfig.AppId;
                         string openId = retalilerOpenId;
@@ -477,6 +477,7 @@ namespace HC.WeChat.WeChatUsers
         [AbpAllowAnonymous]
         public async Task CheckWeChatUserBindStatusAsync(WeChatUserEditDto input)
         {
+            await CancelTagAsync(input.UserType, input.OpenId);
             input.UserType = UserTypeEnum.消费者;
             input.BindStatus = BindStatusEnum.未绑定;
             input.UserId = null;
@@ -485,19 +486,31 @@ namespace HC.WeChat.WeChatUsers
             var entity = await _wechatuserRepository.GetAsync(input.Id.Value);
             input.MapTo(entity);
             await _wechatuserRepository.UpdateAsync(entity);
+        }
 
-            //反馈通知
-            string appId = AppConfig.AppId;
-            string openId = input.OpenId;
-            string templateId = "n325dGQOYvNMZ46eFDIlFo5jWXSr-P3jNMDubXZ3Sbw";//模版id  
-            string url = "";
-            object data = new
+        /// <summary>
+        /// 取消标签
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="openId"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task CancelTagAsync(UserTypeEnum code, string openId)
+        {
+            try
             {
-                keyword1 = new TemplateDataItem("审核未通过"),
-                keyword2 = new TemplateDataItem(DateTime.Now.ToString("yyyy-MM-dd HH:mm")),
-                keyword3 = new TemplateDataItem("您的申请未通过,请联系店铺管理员!"),
-            };
-            await TemplateApi.SendTemplateMessageAsync(appId, openId, templateId, url, data);
+                var wechatGroup = await _wechatGroupAppService.GetWeChatGroupByUserType(code);
+                if (wechatGroup != null)
+                {
+                    List<string> openIds = new List<string>();
+                    openIds.Add(openId);
+                    await _wechatGroupAppService.CancelTagAsync(wechatGroup.TagId, openIds);
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.Error("取消标签失败", e);
+            }
         }
 
         /// <summary>
@@ -570,8 +583,8 @@ namespace HC.WeChat.WeChatUsers
             string nameIds = null;
             foreach (var item in openIdIds)
             {
-                string result = await _wechatuserRepository.GetAll().Where(w => w.OpenId == item ).Select(v=>v.UserName).FirstOrDefaultAsync();
-                nameIds += result+',';
+                string result = await _wechatuserRepository.GetAll().Where(w => w.OpenId == item).Select(v => v.UserName).FirstOrDefaultAsync();
+                nameIds += result + ',';
             }
             return nameIds;
 
