@@ -215,12 +215,12 @@ namespace HC.WeChat.GoodSources
                 var goodSource = _goodsourceRepository.GetAll().Where(g => g.custCode == input.CustCode).OrderBy(g => g.goodCode).Skip(input.SkipCount).Take(input.MaxResultCount);
                 var puduct = _productRepository.GetAll();
                 var result = await (from g in goodSource
-                                    join p in puduct on g.goodCode equals p.ItemId
+                                    join p in puduct on g.goodCode equals p.ItemCode
                                     select new GoodSourceListForWeChatDto
                                     {
                                         Id = g.Id,
                                         CustCode = input.CustCode,
-                                        ItemId = g.custCode,
+                                        ItemCode = g.goodCode,
                                         ItemName = p.Specification,
                                         Amount = g.amount
                                     }).ToListAsync();
