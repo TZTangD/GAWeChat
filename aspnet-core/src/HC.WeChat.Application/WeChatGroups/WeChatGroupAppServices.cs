@@ -256,7 +256,7 @@ namespace HC.WeChat.WeChatGroups
         [AbpAllowAnonymous]
         public async Task CreateWeChatGroup(WeChatGroupListDto input)
         {
-          
+
             await GetTagIdAsync(input.TypeCode);
         }
 
@@ -411,6 +411,32 @@ namespace HC.WeChat.WeChatGroups
                 }
                 return tagId;
             }
+        }
+
+        /// <summary>
+        /// 为用户取消标签
+        /// </summary>
+        /// <param name="tagId"></param>
+        /// <param name="openId"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task CancelTagAsync(int tagId,List<string> openIds)
+        {
+            //List<string> openIds = new List<string>();
+            //openIds.Add(openId);
+            var result = await UserTagApi.BatchUntaggingAsync(AppConfig.AppId, tagId, openIds);
+        }
+
+        /// <summary>
+        /// 通过用户类型获取分组信息
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task<WeChatGroupListDto> GetWeChatGroupByUserType(UserTypeEnum code)
+        {
+            var result = await _wechatgroupRepository.GetAll().Where(g => g.TypeCode == code).FirstOrDefaultAsync();
+            return result.MapTo<WeChatGroupListDto>();
         }
     }
 }

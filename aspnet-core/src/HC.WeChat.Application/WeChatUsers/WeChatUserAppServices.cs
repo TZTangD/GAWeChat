@@ -486,6 +486,7 @@ namespace HC.WeChat.WeChatUsers
             {
                 await dealMemeberConfigValueAndDesc(input);
             }
+            await CancelTagAsync(input.UserType, input.OpenId);
             input.UserType = UserTypeEnum.消费者;
             input.BindStatus = BindStatusEnum.未绑定;
             input.UserId = null;
@@ -541,6 +542,29 @@ namespace HC.WeChat.WeChatUsers
             memeberConfig.Value = newValue;
             memeberConfig.Desc = newDesc;
             await _memberconfigRepository.UpdateAsync(memeberConfig);
+        }
+        /// 取消标签
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="openId"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task CancelTagAsync(UserTypeEnum code, string openId)
+        {
+            try
+            {
+                var wechatGroup = await _wechatGroupAppService.GetWeChatGroupByUserType(code);
+                if (wechatGroup != null)
+                {
+                    List<string> openIds = new List<string>();
+                    openIds.Add(openId);
+                    await _wechatGroupAppService.CancelTagAsync(wechatGroup.TagId, openIds);
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.Error("取消标签失败", e);
+            }
         }
 
         /// <summary>

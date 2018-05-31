@@ -30,7 +30,7 @@ namespace HC.WeChat.WeChatUsers.Dtos
 
 
         /// <summary>
-        /// 用户类型(枚举 零售用户、客户经理、营销人员)
+        /// 用户类型(枚举 零售用户、内部员工、消费者)
         /// </summary>
         [Required]
         public UserTypeEnum UserType { get; set; }
