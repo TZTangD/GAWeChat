@@ -33,9 +33,9 @@ namespace HC.WeChat.GoodSources.Dtos
         /// </summary>
         public decimal? Amount { get; set; }
         /// <summary>
-        /// 商品Id
+        /// 商品Code
         /// </summary>
-        public string ItemId { get; set; }
+        public string ItemCode{ get; set; }
         /// <summary>
         /// 商品名
         /// </summary>

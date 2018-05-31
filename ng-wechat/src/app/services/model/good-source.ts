@@ -1,7 +1,7 @@
 export class GoodSource implements IGoodSource {
     custCode: string;
     amount: number;
-    itemId: string;
+    itemCode: string;
     itemName: string;
     id: string;
     constructor(data?: IGoodSource) {
@@ -18,7 +18,7 @@ export class GoodSource implements IGoodSource {
             this.id = data["id"];
             this.custCode = data["custCode"];
             this.amount = data["amount"];
-            this.itemId = data["itemId"];
+            this.itemCode = data["itemCode"];
             this.itemName = data["itemName"];
         }
     }
@@ -34,7 +34,7 @@ export class GoodSource implements IGoodSource {
         data["id"] = this.id;
         data["custCode"] = this.custCode;
         data["amount"] = this.amount;
-        data["itemId"] = this.itemId;
+        data["itemCode"] = this.itemCode;
         data["itemName"] = this.itemName;
         return data;
     }
@@ -49,7 +49,7 @@ export class GoodSource implements IGoodSource {
 export interface IGoodSource {
     custCode: string;
     amount: number;
-    itemId: string;
+    itemCode: string;
     itemName: string;
     id: string;
 }
