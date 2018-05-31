@@ -1,4 +1,4 @@
-<Page [ngClass]="'input'"  [showTitle]="false"  [spacing]="false">
+<Page [ngClass]="'input'" [showTitle]="false" [spacing]="false">
     <form #f="ngForm" (ngSubmit)="onSave()">
         <div class="weui-cells__title">标题</div>
         <div class="weui-cells">
@@ -12,8 +12,7 @@
         <div class="weui-cells weui-cells_form">
             <div class="weui-cell">
                 <div class="weui-cell__bd">
-                    <textarea class="weui-textarea" placeholder="在这里分享您的经验" rows="3" [(ngModel)]="res.content" name="txta"
-                              weui-textarea weui-cn="2" maxlength="20"></textarea>
+                    <textarea class="weui-textarea" placeholder="在这里分享您的经验" rows="3" [(ngModel)]="res.content" name="txta" weui-textarea weui-cn="1" maxlength="500"></textarea>
                 </div>
             </div>
         </div>
@@ -34,9 +33,7 @@
             </div>
         </div>
         <div class="weui-btn-area">
-            <button class="weui-btn weui-btn_primary"
-                    [disabled]="!f.form.valid || !f.form.dirty"
-                    [ngClass]="{'weui-btn_disabled': !f.form.valid || !f.form.dirty}">提交</button>
+            <button class="weui-btn weui-btn_primary" [disabled]="!f.form.valid || !f.form.dirty" [ngClass]="{'weui-btn_disabled': !f.form.valid || !f.form.dirty}">提交</button>
         </div>
     </form>
 </Page>
