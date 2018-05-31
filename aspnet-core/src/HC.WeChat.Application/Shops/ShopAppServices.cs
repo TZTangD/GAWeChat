@@ -25,6 +25,7 @@ using Senparc.Weixin.MP.AdvancedAPIs.TemplateMessage;
 using HC.WeChat.WechatAppConfigs.Dtos;
 using HC.WeChat.WechatAppConfigs;
 using Senparc.Weixin.MP.AdvancedAPIs;
+using HC.WeChat.MemberConfigs;
 
 namespace HC.WeChat.Shops
 {
@@ -44,7 +45,7 @@ namespace HC.WeChat.Shops
         private readonly IRepository<ShopProduct, Guid> _shopProductRepository;
         private readonly IRepository<Product, Guid> _productRepository;
         IWechatAppConfigAppService _wechatAppConfigAppService;
-
+        private readonly IRepository<MemberConfig, Guid> _memberconfigRepository;
         private int? TenantId { get; set; }
         private WechatAppConfigInfo AppConfig { get; set; }
 
@@ -57,7 +58,7 @@ namespace HC.WeChat.Shops
         , IRepository<ShopProduct, Guid> shopProductRepository
         , IRepository<Product, Guid> productRepository
             , IWechatAppConfigAppService wechatAppConfigAppService
-        )
+         , IRepository<MemberConfig, Guid> memberconfigRepository)
         {
             _shopRepository = shopRepository;
             _shopManager = shopManager;
@@ -68,6 +69,7 @@ namespace HC.WeChat.Shops
             _wechatAppConfigAppService = wechatAppConfigAppService;
             TenantId = null;
             AppConfig = _wechatAppConfigAppService.GetWechatAppConfig(TenantId).Result;
+            _memberconfigRepository = memberconfigRepository;
         }
 
         /// <summary>
@@ -186,17 +188,23 @@ namespace HC.WeChat.Shops
                 }
 
                 //发送微信模板通知-后台配置内部员工
-                string appId = AppConfig.AppId;
-                string openId = "";
-                string templateId = "qvt7CNXBY4FzfzdX54TvMUaOi9jZ3-tdsb2NRhVp0yg";//模版id  
-                string url = "";
-                object data = new
+                string memberConfig = await _memberconfigRepository.GetAll().Where(v => v.Code == DeployCodeEnum.通知配置).Select(v => v.Value).FirstOrDefaultAsync();
+                var openIdIds = memberConfig.Split(',');
+                foreach (var item in openIdIds)
                 {
-                    first = new TemplateDataItem("新的店铺资料已提交，请您尽快审核"),
-                    keyword1 = new TemplateDataItem("".ToString()),
-                    keyword2 = new TemplateDataItem(DateTime.Now.ToString())
-                };
-                await TemplateApi.SendTemplateMessageAsync(appId, openId, templateId, url, data);
+                    string appId = AppConfig.AppId;
+                    string openId = item;
+                    string templateId = "qvt7CNXBY4FzfzdX54TvMUaOi9jZ3-tdsb2NRhVp0yg";//模版id  
+                    string url = "";
+                    object data = new
+                    {
+                        first = new TemplateDataItem("新的店铺资料已提交，请您尽快审核"),
+                        keyword1 = new TemplateDataItem(input.Shop.Name.ToString()),
+                        keyword2 = new TemplateDataItem(DateTime.Now.ToString())
+                    };
+                    await TemplateApi.SendTemplateMessageAsync(appId, openId, templateId, url, data);
+                }
+                
             }
         }
 

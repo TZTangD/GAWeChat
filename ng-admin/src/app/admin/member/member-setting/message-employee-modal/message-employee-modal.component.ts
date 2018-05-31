@@ -4,6 +4,7 @@ import { EmployeesServiceProxy } from '@shared/service-proxies/service-proxies';
 import { Parameter } from '@shared/service-proxies/entity';
 import { WechatUser } from '@shared/entity/wechat';
 import { WechatUserServiceProxy, PagedResultDtoOfWeChatUser } from '@shared/service-proxies/wechat-service';
+import { FormBuilder } from '@angular/forms';
 
 @Component({
     moduleId: module.id,
@@ -14,10 +15,10 @@ export class MessageEmployeeModalComponent implements OnInit {
     @Output() modalSelect: EventEmitter<any> = new EventEmitter<any>();
 
     q: any = {
-        pi: 1,
+        pi: 0,
         ps: 10,
         total: 0,
-        sorter: '',
+        sorter: 'OpenId',
         status: -1,
         statusList: [],
         no: ''
@@ -31,10 +32,9 @@ export class MessageEmployeeModalComponent implements OnInit {
     ];
     isManger = false;
     constructor(private wechatUserService: WechatUserServiceProxy) {
-
     }
-    ngOnInit(): void {
 
+    ngOnInit(): void {
     }
     //isManger用判断模态框是否只显示经理级的员工
     show(isManger = false) {
@@ -58,8 +58,9 @@ export class MessageEmployeeModalComponent implements OnInit {
     }
     getParameter(): Parameter[] {
         var arry = [];
-        arry.push(Parameter.fromJS({ key: 'Filter', value: this.q.no }));
-        arry.push(Parameter.fromJS({ key: 'IsManger', value: this.isManger }));
+        arry.push(Parameter.fromJS({ key: 'UserName', value: this.q.no }));
+        arry.push(Parameter.fromJS({ key: 'Sorting', value: this.q.sorter }));
+        arry.push(Parameter.fromJS({ key: 'UserType', value: 2 }));
         return arry;
     }
 
@@ -68,18 +69,18 @@ export class MessageEmployeeModalComponent implements OnInit {
      */
     handleeCancel = (e) => {
         this.emodalVisible = false;
-        this.modalSelect.emit(null);
+        this.eloading = false;
         this.q.no = '';
     }
     /**
      * 
      * @param employee 选择事件（对选择的数据进行回传）
      */
-    SelectEmployee(employee: WechatUser): void {
+    SelectEmployee() {
         this.q.no = '';
         var employeeId = this.employee.filter(v => v.selected);
         // var employeeIds = employeeId.map(v => {
-        //     return v;
+        //     return v.userName;
         // }).join(',');
         this.modalSelect.emit(employeeId);
         this.emodalVisible = false;

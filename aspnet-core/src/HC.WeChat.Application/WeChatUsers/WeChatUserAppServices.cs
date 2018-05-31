@@ -79,6 +79,7 @@ namespace HC.WeChat.WeChatUsers
         {
 
             var query = _wechatuserRepository.GetAll()
+                .WhereIf(!string.IsNullOrEmpty(input.UserName),u=> u.UserName.Contains(input.UserName))
                 .WhereIf(!string.IsNullOrEmpty(input.Name), u => u.NickName.Contains(input.Name) || u.UserName.Contains(input.Name))
                 .WhereIf(input.UserType.HasValue, u => u.UserType == input.UserType);
 
@@ -518,6 +519,19 @@ namespace HC.WeChat.WeChatUsers
                 var result = await _wechatuserRepository.GetAll().Where(w => w.UserId == userId && w.UserType == UserTypeEnum.零售客户 && w.BindStatus == BindStatusEnum.已绑定 && w.Status == UserAuditStatus.未审核).CountAsync();
                 return result;
             }
+
+        }
+
+        public async Task<string> GetUserNameByOpenIdAsync(int? tenantId, string openId)
+        {
+            var openIdIds = openId.Split('!');
+            string nameIds = null;
+            foreach (var item in openIdIds)
+            {
+                string result = await _wechatuserRepository.GetAll().Where(w => w.OpenId == item ).Select(v=>v.UserName).FirstOrDefaultAsync();
+                nameIds += result+',';
+            }
+            return nameIds;
 
         }
     }
