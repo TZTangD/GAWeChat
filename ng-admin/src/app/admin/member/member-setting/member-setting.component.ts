@@ -82,8 +82,6 @@ export class MemberSettingComponent extends AppComponentBase implements OnInit {
                         this.employeeIds = [];
                         this.employeeOpenId = [];
                     }
-                    console.log(this.employeeIds + '2');
-
                     this.infoConfig.userValue = i.value;
                     this.infoConfig.userId = i.id;
                 }
@@ -139,15 +137,15 @@ export class MemberSettingComponent extends AppComponentBase implements OnInit {
         // });
         // var refIds = employeeIds.map(v => v.openId)
         for (var i = 0; i < employee.length; i++) {
-            alert('这是已经存在的id' + this.employeeOpenId.toString());
+            // alert('这是已经存在的id' + this.employeeOpenId.toString());
             if (this.employeeOpenId.toString().indexOf(employee[i].openId.toString()) == -1) {
-                alert('相等吗?' + this.employeeOpenId.toString().indexOf(employee[i].openId.toString()));
+                // alert('相等吗?' + this.employeeOpenId.toString().indexOf(employee[i].openId.toString()));
                 // this.employeeOpenId = this.employeeOpenId.concat(employeeIds.map(v => v.openId));
                 // this.employeeIds = this.employeeIds.concat(employeeIds.map(v => v.userName));
                 this.employeeOpenId = this.employeeOpenId.concat(employee[i].openId);
                 this.employeeIds = this.employeeIds.concat(employee[i].userName);
             }
-            alert('这是for出来的id' + employee[i].openId);
+            // alert('这是for出来的id' + employee[i].openId);
         }
         this.configCode.userId = this.employeeOpenId.join();
         this.configCode.desc = this.employeeIds.join();

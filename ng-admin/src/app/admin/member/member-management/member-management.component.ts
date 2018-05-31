@@ -57,9 +57,9 @@ export class MemberManagementComponent extends AppComponentBase implements OnIni
             cancelText: '取消',
             okText: '确定',
             onOk: () => {
-                wechatUser.userType = 4;
-                wechatUser.bindStatus = 0;
-                wechatUser.userId=null;
+                // wechatUser.userType = 4;
+                // wechatUser.bindStatus = 0;
+                // wechatUser.userId=null;
                 // wechatUser.userName=null;
                 this.wechatUserService.update(wechatUser).subscribe(() => {
                     this.notify.info(this.l('解除绑定成功！'));
