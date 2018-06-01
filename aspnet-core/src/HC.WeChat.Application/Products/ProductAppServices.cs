@@ -174,7 +174,7 @@ namespace HC.WeChat.Products
         {
             //TODO:新增前的逻辑判断，是否允许新增
             var entity = ObjectMapper.Map<Product>(input);
-
+            entity.SearchCount = 0;
             entity = await _productRepository.InsertAsync(entity);
             return entity.MapTo<ProductEditDto>();
         }
