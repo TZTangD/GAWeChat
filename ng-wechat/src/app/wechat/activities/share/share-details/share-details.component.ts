@@ -44,7 +44,6 @@ export class ShareDetailComponent extends AppComponentBase implements OnInit {
             var e = res.content.indexOf(end);
             res.content = res.content.substring(s, e).replace(/gawechat\//g, '');
             this.sDetailsOfShare = res;
-            console.log(this.sDetailsOfShare.content);
         });
         this.GetIsGoodAsync();
     }

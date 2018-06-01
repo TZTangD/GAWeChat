@@ -40,7 +40,6 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
             var e = result.content.indexOf(end);
             result.content = result.content.substring(s, e).replace(/gawechat\//g, '');
             this.activity = result;
-            console.log(this.activity.content);
         });
         this.GetIsGoodAsync();
     }

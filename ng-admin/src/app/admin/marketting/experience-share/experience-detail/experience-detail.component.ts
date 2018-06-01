@@ -73,7 +73,7 @@ export class ExperienceDetailComponent extends AppComponentBase implements OnIni
         this.form = this.fb.group({
             title: [null, Validators.compose([Validators.required, Validators.maxLength(200)])],
             author: [null, Validators.compose([Validators.required, Validators.maxLength(50)])],
-            content: [null],
+            content: [null, Validators.compose([Validators.required])],
         });
         this.getSingleActivity();
     }
@@ -99,16 +99,16 @@ export class ExperienceDetailComponent extends AppComponentBase implements OnIni
     }
     saveActivity() {
         //获取body
-        var start = "<body>";
-        var end = "</body>";
-        var s = this.article.content.indexOf(start) + start.length;
-        var e = this.article.content.indexOf(end);
-        this.article.content = this.article.content.substring(s, e);
+        // var start = "<body>";
+        // var end = "</body>";
+        // var s = this.article.content.indexOf(start) + start.length;
+        // var e = this.article.content.indexOf(end);
+        // this.article.content = this.article.content.substring(s, e);
         this.activityService.update(this.article)
             .finally(() => { this.isConfirmLoading = false; })
             .subscribe((result: Article) => {
-                console.log('保存返回');
-                console.log(result);
+                // console.log('保存返回');
+                // console.log(result);
                 this.article = result;
                 this.isDelete = true;
                 this.isPush = result.pushStatus === 1 ? false : true;
