@@ -64,6 +64,14 @@ namespace HC.WeChat.Manuscripts
         /// <param name="input"></param>
         /// <returns></returns>
         Task<ManuscriptEditDto> CreateOrUpdateManuscriptDto(ManuscriptEditDto input);
+
         Task<APIResultDto> CreatWXManuscript(ManuscriptEditDto input);
+
+        /// <summary>
+        /// 标记投稿为已处理
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<ManuscriptEditDto> MarkManuscriptDto(ManuscriptEditDto input);
     }
 }
