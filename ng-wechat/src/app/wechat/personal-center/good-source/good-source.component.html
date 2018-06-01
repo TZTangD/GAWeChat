@@ -18,7 +18,7 @@
     </div>
     <div class="weui-cells">
         <weui-infiniteloader (loadmore)="onLoadMore($event)" #comp>
-            <a *ngFor="let i of goodSources" class="weui-cell weui-cell_access">
+            <a *ngFor="let i of goodSources"  class="weui-cell weui-cell_access">
                 <div class="weui-cell__hd">{{i.itemName}}</div>
                 <div class="weui-cell__bd" style="text-align:center;">{{i.amount}}</div>
                 <!-- <div class="weui-cell__ft">{{i.licenseKey}}</div> -->

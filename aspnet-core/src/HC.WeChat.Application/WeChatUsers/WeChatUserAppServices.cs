@@ -271,21 +271,10 @@ namespace HC.WeChat.WeChatUsers
                     {
                         entity.IsShopkeeper = false;
                         entity.Status = UserAuditStatus.未审核;
-
                         //发送审核通知
                         var retalilerOpenId = await _wechatuserRepository.GetAll().Where(r => r.UserId == entity.UserId).Select(v => v.OpenId).FirstOrDefaultAsync();
                         var currentName = await _wechatuserRepository.GetAll().Where(r => r.OpenId == input.OpenId).Select(v => v.NickName).FirstOrDefaultAsync();
-                        string appId = AppConfig.AppId;
-                        string openId = retalilerOpenId;
-                        string templateId = "qvt7CNXBY4FzfzdX54TvMUaOi9jZ3-tdsb2NRhVp0yg";//模版id  
-                        string url = input.host + "/GAWX/Authorization?page=302";
-                        object data = new
-                        {
-                            first = new TemplateDataItem("店员审核通知，请您尽快审核"),
-                            keyword1 = new TemplateDataItem(currentName.ToString()),
-                            keyword2 = new TemplateDataItem(DateTime.Now.ToString("yyyy-MM-dd HH:mm"))
-                        };
-                        await TemplateApi.SendTemplateMessageAsync(appId, openId, templateId, url, data);
+                        await SendCheckMesssage(retalilerOpenId, input.host, currentName);                     
                     }
                 }
                 else if (input.UserType == UserTypeEnum.内部员工)
@@ -327,6 +316,36 @@ namespace HC.WeChat.WeChatUsers
                     await TagForWechatAsync(entity);
                 }
                 return new APIResultDto() { Code = 0, Msg = "绑定成功", Data = entity.MapTo<WeChatUserListDto>() };
+            }
+        }
+
+        /// <summary>
+        /// 发送审核通知
+        /// </summary>
+        /// <param name="OpenId"></param>
+        /// <param name="host"></param>
+        /// <param name="currentName"></param>
+        /// <returns></returns>
+        public async Task SendCheckMesssage(string OpenId, string host,string currentName)
+        {
+            try
+            {             
+                string appId = AppConfig.AppId;
+                string openId = OpenId;
+                string templateId = "qvt7CNXBY4FzfzdX54TvMUaOi9jZ3-tdsb2NRhVp0yg";//模版id  
+                string url = host + "/GAWX/Authorization?page=302";
+                object data = new
+                {
+                    first = new TemplateDataItem("店员审核通知，请您尽快审核"),
+                    keyword1 = new TemplateDataItem(currentName.ToString()),
+                    keyword2 = new TemplateDataItem(DateTime.Now.ToString("yyyy-MM-dd HH:mm"))
+                };
+                await TemplateApi.SendTemplateMessageAsync(appId, openId, templateId, url, data);
+            }
+            catch (Exception ex)
+            {
+
+                Logger.ErrorFormat("审核通知发送失败 error：{0} Exception：{1}", ex.Message, ex);
             }
         }
 
@@ -504,44 +523,63 @@ namespace HC.WeChat.WeChatUsers
         /// <returns></returns>
         public async Task dealMemeberConfigValueAndDesc(WeChatUserEditDto input)
         {
-            MemberConfig memeberConfig = await _memberconfigRepository.GetAll().Where(r => r.Code == DeployCodeEnum.通知配置 && r.Type == DeployTypeEnum.通知配置).FirstOrDefaultAsync();
-            string newDesc = null;
-            string newValue = null;
-            if (memeberConfig.Desc != null || memeberConfig.Desc.Length != 0)
+            try
             {
-                string[] descIds = memeberConfig.Desc.Split(',');
-                for (int i = 0; i < descIds.Length; i++)
+                MemberConfig memeberConfig = await _memberconfigRepository.GetAll().Where(r => r.Code == DeployCodeEnum.通知配置 && r.Type == DeployTypeEnum.通知配置).FirstOrDefaultAsync();
+                if (memeberConfig.Desc!=null||memeberConfig.Value != null)
                 {
-                    if (descIds[i] != input.UserName)
+                    string newDesc = null;
+                    string newValue = null;
+                    if (memeberConfig.Desc != null || memeberConfig.Desc.Length != 0)
                     {
-                        newDesc += descIds[i] + ",";
+                        string[] descIds = memeberConfig.Desc.Split(',');
+                        for (int i = 0; i < descIds.Length; i++)
+                        {
+                            if (descIds[i] != input.UserName)
+                            {
+                                newDesc += descIds[i] + ",";
+                            }
+                            else
+                            {
+                                descIds[i] = null;
+                            }
+                        }
+                        if (newDesc != null)
+                        {
+                            newDesc = newDesc.TrimStart(',').TrimEnd(',');
+                        }
                     }
-                    else
+                    if (memeberConfig.Value != null || memeberConfig.Value.Length != 0)
                     {
-                        descIds[i] = null;
+                        string[] valueIds = memeberConfig.Value.Split(',');
+                        for (int i = 0; i < valueIds.Length; i++)
+                        {
+                            if (valueIds[i] != input.OpenId)
+                            {
+                                newValue += valueIds[i] + ",";
+                            }
+                            else
+                            {
+                                valueIds[i] = null;
+                            }
+                        }
+                        if (newValue != null)
+                        {
+                            newValue = newValue.TrimStart(',').TrimEnd(',');
+                        }
                     }
+                    memeberConfig.Value = newValue;
+                    memeberConfig.Desc = newDesc;
+                    await _memberconfigRepository.UpdateAsync(memeberConfig);
                 }
-                newDesc = newDesc.TrimStart(',').TrimEnd(',');
+                return;
+               
             }
-            if (memeberConfig.Value != null || memeberConfig.Value.Length != 0)
+            catch (Exception ex)
             {
-                string[] valueIds = memeberConfig.Value.Split(',');
-                for (int i = 0; i < valueIds.Length; i++)
-                {
-                    if (valueIds[i] != input.OpenId)
-                    {
-                        newValue += valueIds[i] + ",";
-                    }
-                    else
-                    {
-                        valueIds[i] = null;
-                    }
-                }
-                newValue = newValue.TrimStart(',').TrimEnd(',');
+
+                Logger.ErrorFormat("删除配置人员信息失败 error：{0} Exception：{1}", ex.Message, ex);
             }
-            memeberConfig.Value = newValue;
-            memeberConfig.Desc = newDesc;
-            await _memberconfigRepository.UpdateAsync(memeberConfig);
         }
         /// 取消标签
         /// </summary>
@@ -597,20 +635,37 @@ namespace HC.WeChat.WeChatUsers
             var entity = await _wechatuserRepository.GetAsync(input.Id.Value);
             input.MapTo(entity);
             await _wechatuserRepository.UpdateAsync(entity);
-
             //反馈通知
-            string appId = AppConfig.AppId;
-            string openId = input.OpenId;
-            string templateId = "7I2cswoMRn0P_DsAYz-DCigntaGKJn-XUx6lMowDYRY";//模版id  
-            string url = "";
-            object data = new
-            {
-                first = new TemplateDataItem("您所提交的资料已通过审核!"),
-                keyword1 = new TemplateDataItem("审核通过"),
-                keyword2 = new TemplateDataItem(DateTime.Now.ToString("yyyy-MM-dd HH:mm"))
-            };
-            await TemplateApi.SendTemplateMessageAsync(appId, openId, templateId, url, data);
+            await WXMessageToShopKeeper(input.OpenId);  
             return new APIResultDto() { Code = 0, Msg = "提交成功，我们会尽快处理" };
+        }
+
+        /// <summary>
+        /// 反馈通知
+        /// </summary>
+        /// <param name="OpenId"></param>
+        /// <returns></returns>
+        public async Task WXMessageToShopKeeper(string OpenId)
+        {
+            try
+            {
+                string appId = AppConfig.AppId;
+                string openId = OpenId;
+                string templateId = "7I2cswoMRn0P_DsAYz-DCigntaGKJn-XUx6lMowDYRY";//模版id  
+                string url = "";
+                object data = new
+                {
+                    first = new TemplateDataItem("您所提交的资料已通过审核!"),
+                    keyword1 = new TemplateDataItem("审核通过"),
+                    keyword2 = new TemplateDataItem(DateTime.Now.ToString("yyyy-MM-dd HH:mm"))
+                };
+                await TemplateApi.SendTemplateMessageAsync(appId, openId, templateId, url, data);
+            }
+            catch (Exception ex)
+            {
+
+                Logger.ErrorFormat("审核店员发送消息通知失败 error：{0} Exception：{1}", ex.Message, ex);
+            }
         }
 
 

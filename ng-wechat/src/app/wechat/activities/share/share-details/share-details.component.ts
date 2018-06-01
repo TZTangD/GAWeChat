@@ -38,6 +38,11 @@ export class ShareDetailComponent extends AppComponentBase implements OnInit {
             tenantId: this.settingsService.tenantId
         };
         this.shareService.GetWXExpByIdAsync(params).subscribe(res => {
+            var start = '<body>';
+            var end = '</body>';
+            var s = res.content.indexOf(start) + start.length;
+            var e = res.content.indexOf(end);
+            res.content = res.content.substring(s, e).replace(/gawechat\//g, '');
             this.sDetailsOfShare = res;
         });
         this.GetIsGoodAsync();

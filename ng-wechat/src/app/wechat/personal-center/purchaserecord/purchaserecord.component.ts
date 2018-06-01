@@ -38,30 +38,42 @@ export class PurchaserecordComponent extends AppComponentBase implements OnInit 
         }
     }
 
-    onLoadMore(comp: InfiniteLoaderComponent) {
-        this.pageModel.pageIndex++;
-        if (this.pageModel.isLast) {
-            comp.setFinished();
-            return;
-        }
-        this.GetPagedPurchaseRecord();
-        comp.resolveLoading();
+    // onLoadMore(comp: InfiniteLoaderComponent) {
+    //     this.pageModel.pageIndex++;
+    //     if (this.pageModel.isLast) {
+    //         comp.setFinished();
+    //         return;
+    //     }
+    //     this.GetPagedPurchaseRecord();
+    //     comp.resolveLoading();
+    // }
 
-    }
+    //购买记录分页处理
+    // GetPagedPurchaseRecord() {
+    //     let params: any = {};
+    //     if (this.settingsService.tenantId) {
+    //         params.tenantId = this.settingsService.tenantId;
+    //     }
+    //     params.openId = this.settingsService.openId;
+    //     params.pageIndex = this.pageModel.pageIndex;
+    //     params.pageSize = this.pageModel.pageSize;
+    //     this.purchaserecordService.GetPurchaseRecordById(params).subscribe(result => {
+    //         this.purchaseRecordList.push(...result);
+    //         if (result && result.length < this.pageModel.pageSize) {
+    //             this.pageModel.isLast = true;
+    //         }
+    //     });
+    // }
 
+    //暂不分页
     GetPagedPurchaseRecord() {
         let params: any = {};
         if (this.settingsService.tenantId) {
             params.tenantId = this.settingsService.tenantId;
         }
         params.openId = this.settingsService.openId;
-        params.pageIndex = this.pageModel.pageIndex;
-        params.pageSize = this.pageModel.pageSize;
         this.purchaserecordService.GetPurchaseRecordById(params).subscribe(result => {
-            this.purchaseRecordList.push(...result);
-            if (result && result.length < this.pageModel.pageSize) {
-                this.pageModel.isLast = true;
-            }
+            this.purchaseRecordList = result;
         });
     }
 

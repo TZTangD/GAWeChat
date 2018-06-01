@@ -331,20 +331,8 @@ namespace HC.WeChat.PurchaseRecords
                     //await CurrentUnitOfWork.SaveChangesAsync();
                     user.IntegralTotal = intDetail.FinalIntegral.Value;
                     await _weChatUserRepository.UpdateAsync(user);
-
                     //发送微信模板通知-消费者
-                    string appId = AppConfig.AppId;
-                    string openId = user.OpenId;
-                    string templateId = "3Dgkz89yi8e0jXtwBUhdMSgHeZwPvHi2gz8WrD-CUA4";//模版id  
-                    string url = input.host + "/GAWX/Authorization?page=301";
-                    object data = new
-                    {
-                        keyword1 = new TemplateDataItem(user.MemberBarCode.ToString()),
-                        keyword2 = new TemplateDataItem(intDetail.FinalIntegral.ToString()+"积分"),
-                        keyword3 = new TemplateDataItem(intDetail.Integral.ToString() + "积分"),
-                        keyword4 = new TemplateDataItem(DateTime.Now.ToString("yyyy-MM-dd HH:mm"))
-                    };
-                    await TemplateApi.SendTemplateMessageAsync(appId, openId, templateId, url, data);
+                    await PurchaseSendWXMesssageToCust(user.OpenId, input.host, user.MemberBarCode, intDetail.FinalIntegral, intDetail.Integral);
                 }
 
                 //更新店铺管理员总积分 和 积分明细
@@ -368,21 +356,10 @@ namespace HC.WeChat.PurchaseRecords
                         shopKeeper.IntegralTotal = intDetail.FinalIntegral.Value;
                         await _weChatUserRepository.UpdateAsync(shopKeeper);
                         //发送微信模板通知-店铺管理员
-                        string appId = AppConfig.AppId;
-                        string openId = shopKeeper.OpenId;
-                        string templateId = "3Dgkz89yi8e0jXtwBUhdMSgHeZwPvHi2gz8WrD-CUA4";//模版id  
-                        string url = input.host + "/GAWX/Authorization?page=301";
-                        object data = new
-                        {
-                            keyword1 = new TemplateDataItem(shopKeeper.MemberBarCode.ToString()),
-                            keyword2 = new TemplateDataItem(intDetail.FinalIntegral.ToString() + "积分"),
-                            keyword3 = new TemplateDataItem(intDetail.Integral.ToString() + "积分"),
-                            keyword4 = new TemplateDataItem(DateTime.Now.ToString("yyyy-MM-dd HH:mm"))
-                        };
-                        await TemplateApi.SendTemplateMessageAsync(appId, openId, templateId, url, data);
+                        await PurchaseSendWXMesssageToShopKeeper(shopKeeper.OpenId, input.host, shopKeeper.MemberBarCode, intDetail.FinalIntegral, intDetail.Integral);
                     }
                 }
-                
+
 
                 //更新店铺销量
                 var shop = await _shopRepository.GetAsync(input.ShopId.Value);
@@ -401,15 +378,72 @@ namespace HC.WeChat.PurchaseRecords
         }
 
         /// <summary>
-        /// 根据openId查询购买记录
+        /// 发送微信模板通知-消费者
+        /// </summary>
+        /// <param name="OpenId"></param>
+        /// <param name="host"></param>
+        /// <param name="memberBarCode"></param>
+        /// <param name="finalIntegral"></param>
+        /// <param name="integral"></param>
+        /// <returns></returns>
+        public async Task PurchaseSendWXMesssageToCust(string OpenId, string host, string memberBarCode, int? finalIntegral, int? integral)
+        {
+            try
+            {
+                //发送微信模板通知-消费者
+                string appId = AppConfig.AppId;
+                string openId = OpenId;
+                string templateId = "3Dgkz89yi8e0jXtwBUhdMSgHeZwPvHi2gz8WrD-CUA4";//模版id  
+                string url = host + "/GAWX/Authorization?page=301";
+                object data = new
+                {
+                    keyword1 = new TemplateDataItem(memberBarCode.ToString()),
+                    keyword2 = new TemplateDataItem(finalIntegral.ToString() + "积分"),
+                    keyword3 = new TemplateDataItem(integral.ToString() + "积分"),
+                    keyword4 = new TemplateDataItem(DateTime.Now.ToString("yyyy-MM-dd HH:mm"))
+                };
+                await TemplateApi.SendTemplateMessageAsync(appId, openId, templateId, url, data);
+            }
+            catch (Exception ex)
+            {
+
+                Logger.ErrorFormat("消费者发送消息通知失败 error：{0} Exception：{1}", ex.Message, ex);
+            }
+        }
+
+        public async Task PurchaseSendWXMesssageToShopKeeper(string OpenId, string host, string memberBarCode, int? finalIntegral, int? integral)
+        {
+            try
+            {
+                //发送微信模板通知-店铺管理员
+                string appId = AppConfig.AppId;
+                string openId = OpenId;
+                string templateId = "3Dgkz89yi8e0jXtwBUhdMSgHeZwPvHi2gz8WrD-CUA4";//模版id  
+                string url = host + "/GAWX/Authorization?page=301";
+                object data = new
+                {
+                    keyword1 = new TemplateDataItem(memberBarCode.ToString()),
+                    keyword2 = new TemplateDataItem(finalIntegral.ToString() + "积分"),
+                    keyword3 = new TemplateDataItem(integral.ToString() + "积分"),
+                    keyword4 = new TemplateDataItem(DateTime.Now.ToString("yyyy-MM-dd HH:mm"))
+                };
+                await TemplateApi.SendTemplateMessageAsync(appId, openId, templateId, url, data);
+            }
+            catch (Exception ex)
+            {
+
+                Logger.ErrorFormat("店铺管理员发送消息通知失败 error：{0} Exception：{1}", ex.Message, ex);
+            }
+        }
+
+        /// <summary>
+        /// 购买记录(暂不分页处理)
         /// </summary>
         /// <param name="tenantId"></param>
         /// <param name="openId"></param>
-        /// <param name="pageIndex"></param>
-        /// <param name="pageSize"></param>
         /// <returns></returns>
         [AbpAllowAnonymous]
-        public async Task<List<PurchaseRecordListDto>> GetWXPagedPurchaseRecordAsync(int? tenantId, string openId, int pageIndex, int pageSize)
+        public async Task<List<PurchaseRecordListDto>> GetWXPagedPurchaseRecordAsync(int? tenantId, string openId)
         {
             using (CurrentUnitOfWork.SetTenantId(tenantId))
             {
@@ -424,16 +458,16 @@ namespace HC.WeChat.PurchaseRecords
                                   Specification = pr.Specification,
                                   Quantity = pr.Quantity,
                                   ProductId = pr.ProductId,
-                                  IsEvaluation =pr.IsEvaluation
+                                  IsEvaluation = pr.IsEvaluation
                               };
-                var z = records.ToList();
+                //var z = records.ToList();
                 var products = from p in _productRepository.GetAll()
                                select new ProductListDto()
                                {
                                    Id = p.Id,
                                    PhotoUrl = p.PhotoUrl
                                };
-                var y = products.ToList();
+                //var y = products.ToList();
                 var entity = from pr in records
                              join p in products on pr.ProductId equals p.Id
                              select new PurchaseRecordListDto()
@@ -446,12 +480,65 @@ namespace HC.WeChat.PurchaseRecords
                                  Quantity = pr.Quantity,
                                  ProductId = pr.ProductId,
                                  PhotoUrl = p.PhotoUrl,
-                                 IsEvaluation =pr.IsEvaluation
+                                 IsEvaluation = pr.IsEvaluation
                              };
-                var x = entity.ToList();
-                return await entity.OrderByDescending(v => v.CreationTime).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+                //var x = entity.ToList();
+                return await entity.OrderByDescending(v => v.CreationTime).ToListAsync();
             }
         }
+
+        /// <summary>
+        /// 根据openId查询购买记录
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="openId"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
+        //[AbpAllowAnonymous]
+        //public async Task<List<PurchaseRecordListDto>> GetWXPagedPurchaseRecordAsync(int? tenantId, string openId, int pageIndex, int pageSize)
+        //{
+        //    using (CurrentUnitOfWork.SetTenantId(tenantId))
+        //    {
+        //        var query = _purchaserecordRepository.GetAll().Where(p => p.OpenId == openId);
+        //        var records = from pr in query
+        //                      select new PurchaseRecordListDto()
+        //                      {
+        //                          Id = pr.Id,
+        //                          CreationTime = pr.CreationTime,
+        //                          OpenId = pr.OpenId,
+        //                          ShopName = pr.ShopName,
+        //                          Specification = pr.Specification,
+        //                          Quantity = pr.Quantity,
+        //                          ProductId = pr.ProductId,
+        //                          IsEvaluation = pr.IsEvaluation
+        //                      };
+        //        //var z = records.ToList();
+        //        var products = from p in _productRepository.GetAll()
+        //                       select new ProductListDto()
+        //                       {
+        //                           Id = p.Id,
+        //                           PhotoUrl = p.PhotoUrl
+        //                       };
+        //        //var y = products.ToList();
+        //        var entity = from pr in records
+        //                     join p in products on pr.ProductId equals p.Id
+        //                     select new PurchaseRecordListDto()
+        //                     {
+        //                         Id = pr.Id,
+        //                         CreationTime = pr.CreationTime,
+        //                         OpenId = pr.OpenId,
+        //                         ShopName = pr.ShopName,
+        //                         Specification = pr.Specification,
+        //                         Quantity = pr.Quantity,
+        //                         ProductId = pr.ProductId,
+        //                         PhotoUrl = p.PhotoUrl,
+        //                         IsEvaluation = pr.IsEvaluation
+        //                     };
+        //        //var x = entity.ToList();
+        //        return await entity.OrderByDescending(v => v.CreationTime).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+        //    }
+        //}
     }
 }
 
