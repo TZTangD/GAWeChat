@@ -526,43 +526,54 @@ namespace HC.WeChat.WeChatUsers
             try
             {
                 MemberConfig memeberConfig = await _memberconfigRepository.GetAll().Where(r => r.Code == DeployCodeEnum.通知配置 && r.Type == DeployTypeEnum.通知配置).FirstOrDefaultAsync();
-                string newDesc = null;
-                string newValue = null;
-                if (memeberConfig.Desc != null || memeberConfig.Desc.Length != 0)
+                if (memeberConfig.Desc!=null||memeberConfig.Value != null)
                 {
-                    string[] descIds = memeberConfig.Desc.Split(',');
-                    for (int i = 0; i < descIds.Length; i++)
+                    string newDesc = null;
+                    string newValue = null;
+                    if (memeberConfig.Desc != null || memeberConfig.Desc.Length != 0)
                     {
-                        if (descIds[i] != input.UserName)
+                        string[] descIds = memeberConfig.Desc.Split(',');
+                        for (int i = 0; i < descIds.Length; i++)
                         {
-                            newDesc += descIds[i] + ",";
+                            if (descIds[i] != input.UserName)
+                            {
+                                newDesc += descIds[i] + ",";
+                            }
+                            else
+                            {
+                                descIds[i] = null;
+                            }
                         }
-                        else
+                        if (newDesc != null)
                         {
-                            descIds[i] = null;
+                            newDesc = newDesc.TrimStart(',').TrimEnd(',');
                         }
                     }
-                    newDesc = newDesc.TrimStart(',').TrimEnd(',');
-                }
-                if (memeberConfig.Value != null || memeberConfig.Value.Length != 0)
-                {
-                    string[] valueIds = memeberConfig.Value.Split(',');
-                    for (int i = 0; i < valueIds.Length; i++)
+                    if (memeberConfig.Value != null || memeberConfig.Value.Length != 0)
                     {
-                        if (valueIds[i] != input.OpenId)
+                        string[] valueIds = memeberConfig.Value.Split(',');
+                        for (int i = 0; i < valueIds.Length; i++)
                         {
-                            newValue += valueIds[i] + ",";
+                            if (valueIds[i] != input.OpenId)
+                            {
+                                newValue += valueIds[i] + ",";
+                            }
+                            else
+                            {
+                                valueIds[i] = null;
+                            }
                         }
-                        else
+                        if (newValue != null)
                         {
-                            valueIds[i] = null;
+                            newValue = newValue.TrimStart(',').TrimEnd(',');
                         }
                     }
-                    newValue = newValue.TrimStart(',').TrimEnd(',');
+                    memeberConfig.Value = newValue;
+                    memeberConfig.Desc = newDesc;
+                    await _memberconfigRepository.UpdateAsync(memeberConfig);
                 }
-                memeberConfig.Value = newValue;
-                memeberConfig.Desc = newDesc;
-                await _memberconfigRepository.UpdateAsync(memeberConfig);
+                return;
+               
             }
             catch (Exception ex)
             {
