@@ -26,7 +26,7 @@
             <div class="weui-form-preview__ft" *ngIf="!item.isShopkeeper">
                 <button type="button" class="weui-form-preview__btn weui-form-preview__btn_primary" *ngIf="item.status==0|| item.status==null"
                     (click)="onShowBySrv(item,true)">审核通过</button>
-                <button type="button" class="weui-form-preview__btn weui-form-preview__btn_primary" (click)="onShowBySrv(item,false)">解除绑定</button>
+                <button type="button" class="weui-form-preview__btn weui-form-preview__btn_primary" style="color: #e64340;"  (click)="onShowBySrv(item,false)">解除绑定</button>
             </div>
         </div>
     </div>

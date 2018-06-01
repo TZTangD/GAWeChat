@@ -464,29 +464,29 @@ namespace HC.WeChat.Products
             }
         }
 
-        public string GetDate(int span, bool isDay)
+        public string GetDate(int span, bool isDay, string sep = "")
         {
             var year = DateTime.Now.AddMonths(-span).Year.ToString();
             if (DateTime.Now.AddMonths(-span).Month < 10)
             {
                 if (isDay)
                 {
-                    return year + "0" + DateTime.Now.AddMonths(-span).Month.ToString() + "01";
+                    return year + "0" + sep + DateTime.Now.AddMonths(-span).Month.ToString() + sep + "01";
                 }
                 else
                 {
-                    return year + "0" + DateTime.Now.AddMonths(-span).Month.ToString();
+                    return year + "0" + sep + DateTime.Now.AddMonths(-span).Month.ToString();
                 }
             }
             else
             {
                 if (isDay)
                 {
-                    return year + DateTime.Now.AddMonths(-span).Month.ToString() + "01";
+                    return year + sep + DateTime.Now.AddMonths(-span).Month.ToString() + sep + "01";
                 }
                 else
                 {
-                    return year + DateTime.Now.AddMonths(-span).Month.ToString();
+                    return year + sep + DateTime.Now.AddMonths(-span).Month.ToString();
                 }
             }
         }
@@ -540,7 +540,7 @@ namespace HC.WeChat.Products
                         var MonthQty = MonthOd.Count == 0 ? 0 : MonthOd.Sum(t => t.QTY_ORD);
                         RetailAccountDe book = new RetailAccountDe
                         {
-                            BookDate = span == 1 ? preMonth : (span == 2 ? sumMonth : (span == 3 ? quarterlySpan : (span == 6 ? yearSpan : ""))),
+                            BookDate = span == 1 ? preMonth : (span == 2 ? sumMonth : (span == 3 ? GetDate(2, false, ".") : (span == 6 ? GetDate(5, false, ".") : ""))),
                             ItemCode = gd == null ? string.Empty : gd.ItemCode,
                             ItemName = gd == null ? string.Empty : gd.Specification,
                             LicenseCode = retail.LicenseKey,

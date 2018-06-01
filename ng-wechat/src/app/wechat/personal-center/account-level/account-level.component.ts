@@ -134,9 +134,10 @@ export class AccountLevelComponent extends AppComponentBase implements OnInit {
         }
         let d = new Date(date);
         let y = d.getFullYear().toString();
-        let m = (d.getMonth() + 1) > 10 ? (d.getMonth() + 1).toString() : '0' + (d.getMonth() + 1).toString();
-        let day = d.getDate().toString();
-        return y + m + day;
+        var cm = d.getMonth();
+        let m = ( cm + 1) > 10 ? (cm + 1).toString() : '0' + (cm + 1).toString();
+        //let day = d.getDate().toString();
+        return y +"."+ m;
         //let dateStr:string = this.datePipe.transform(d,'yyyy-MM-dd');
         //return dateStr;
     }
