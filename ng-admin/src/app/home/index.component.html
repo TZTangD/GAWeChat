@@ -9,8 +9,8 @@
     <div nz-col nzXs="24" nzSm="12" nzMd="6" class="mb-md">
         <div nz-row nzType="flex" nzAlign="middle" class="bg-primary rounded-md">
             <div nz-col nzSpan="12" class="p-md text-white">
-                <div class="h2 mt0">{{activityFormInfo.isCheckedCount}} 个</div>
-                <p class="text-nowrap">待审核店铺</p>
+                <div class="h2 mt0">{{homeInfo.shopCount}} 个</div>
+                <p class="text-nowrap">店铺入住</p>
             </div>
             <div nz-col nzSpan="12">
                 <mini-bar height="35" color="#fff" borderWidth="3" [padding]="[36, 30, 30, 30]" [data]="webSite"></mini-bar>
@@ -20,8 +20,8 @@
     <div nz-col nzXs="24" nzSm="12" nzMd="6" class="mb-md">
         <div nz-row nzType="flex" nzAlign="middle" class="bg-success rounded-md">
             <div nz-col nzSpan="12" class="p-md text-white">
-                <div class="h2 mt0">{{activityFormInfo.goodsCount}} 个</div>
-                <p class="text-nowrap">已审核店铺</p>
+                <div class="h2 mt0">{{homeInfo.goodsSearchCount}} 次</div>
+                <p class="text-nowrap">商品搜索</p>
             </div>
             <div nz-col nzSpan="12">
                 <mini-bar height="35" color="#fff" borderWidth="3" [padding]="[36, 30, 30, 30]" [data]="webSite"></mini-bar>
@@ -31,7 +31,7 @@
     <div nz-col nzXs="24" nzSm="12" nzMd="6" class="mb-md">
         <div nz-row nzType="flex" nzAlign="middle" class="bg-orange rounded-md">
             <div nz-col nzSpan="12" class="p-md text-white">
-                <div class="h2 mt0">{{activityFormInfo.checkCount}} 积分</div>
+                <div class="h2 mt0">{{homeInfo.integralTotal}} 积分</div>
                 <p class="text-nowrap">积分兑换</p>
             </div>
             <div nz-col nzSpan="12">
@@ -42,7 +42,7 @@
     <div nz-col nzXs="24" nzSm="12" nzMd="6" class="mb-md">
         <div nz-row nzType="flex" nzAlign="middle" class="bg-pink rounded-md">
             <div nz-col nzSpan="12" class="p-md text-white">
-                <div class="h2 mt0">{{activityFormInfo.weiChatAttention}} 人</div>
+                <div class="h2 mt0">{{homeInfo.wechatUserCount}} 人</div>
                 <p class="text-nowrap">微信关注</p>
             </div>
             <div nz-col nzSpan="12">
@@ -73,7 +73,7 @@
     <div nz-col nzXs="24" nzMd="6">
         <nz-card [nzBordered]="false" [nzTitle]="nzTitle2" class="ant-card__img">
             <ng-template #nzTitle2>
-               广安微信公众号
+               微信公众号 渠江烟语
             </ng-template>
             <img class="img" src="./assets/img/weixin.jpg">
         </nz-card>

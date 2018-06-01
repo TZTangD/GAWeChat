@@ -76,7 +76,7 @@ export class AppSessionService {
                 this._roles = result.roles;
                 //添加Alain框架设置user
                 if (this._user) {
-                    let user = { name: this._user.name, email: this._user.emailAddress };
+                    let user = { name: this._user.name, email: this._user.emailAddress, notifyCount: this._user.notifyCount };
                     this.settingService.setUser(user);//目前abp setting和 alain setting还未整合到一起，先兼容 保留两个一起使用
                 }
 

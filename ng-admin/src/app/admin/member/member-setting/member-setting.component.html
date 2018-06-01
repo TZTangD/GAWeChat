@@ -77,7 +77,7 @@
                                 <label for="rcValue">用户选择</label>
                             </div>
                             <div nz-col [nzSm]="4">
-                                <button nz-button [nzType]="'primary'" [nzSize]="'large'" type="button" (click)="employee()">
+                                <button nz-button style="width: 126px" [nzType]="'primary'" [nzSize]="'large'" type="button" (click)="employee()">
                                     选择员工
                                 </button>
                             </div>
@@ -92,8 +92,8 @@
                             </div>
 
                         </div>
-                        <div nz-form-item nz-row class="mb0">
-                            <div nz-form-label nz-col [nzSm]="5">
+                        <div nz-form-item nz-row>
+                            <div nz-form-label nz-col [nzSm]="9">
                                 <button nz-button *ngIf="employeeIds.length!=0" [nzType]="'default'" [nzSize]="'large'" type="button" (click)="cancel()">
                                             清空
                                         </button>

@@ -92,7 +92,7 @@
                         </div>
                     </div>
                     <div class="weui-cell" *ngIf="!isView">
-                        <button weui-button [weui-plain]="true" (click)="goEditShop()">修改店铺</button>
+                        <button weui-button (click)="goEditShop()">修改店铺</button>
                     </div>
                 </div>
             </div>
@@ -114,7 +114,7 @@
                 </div>
                 <div class="weui-cells" *ngIf="!isView">
                     <div class="weui-cell">
-                        <button weui-button [weui-plain]="true" type="button" (click)="onProductPopup()">新增商品</button>
+                        <button weui-button type="button" (click)="onProductPopup()">新增商品</button>
                     </div>
                 </div>
             </div>

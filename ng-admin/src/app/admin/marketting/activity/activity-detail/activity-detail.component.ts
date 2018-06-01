@@ -78,9 +78,10 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
         this.form = this.fb.group({
             title: [null, Validators.compose([Validators.required, Validators.maxLength(200)])],
             author: [null, Validators.compose([Validators.required, Validators.maxLength(50)])],
+            content: [null, Validators.compose([Validators.required])],
             // coverPhoto: [null, Validators.compose([Validators.required])], 图片能上传时
             coverPhoto: [null],
-            content: [null],
+            // content: [null],
         });
         this.getSingleActivity();
         this.host = AppConsts.remoteServiceBaseUrl;

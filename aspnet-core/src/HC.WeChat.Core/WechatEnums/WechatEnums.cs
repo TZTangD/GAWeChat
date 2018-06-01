@@ -231,8 +231,8 @@ namespace HC.WeChat.WechatEnums
     /// </summary>
     public enum ShopAuditStatus
     {
-        提交申请 = 1,
-        审核通过 = 2,
-        审核未通过 = 0,
+        待审核 = 1,
+        已审核 = 2,
+        已拒绝 = 0
     }
 }
