@@ -34,7 +34,13 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
             params.tenantId = this.settingsService.tenantId;
         }
         this.articleService.GetArticleById(params).subscribe(result => {
-            this.activity = result
+            var start = '<body>';
+            var end = '</body>';
+            var s = result.content.indexOf(start) + start.length;
+            var e = result.content.indexOf(end);
+            result.content = result.content.substring(s, e).replace(/gawechat\//g, '');
+            this.activity = result;
+            console.log(this.activity.content);
         });
         this.GetIsGoodAsync();
     }

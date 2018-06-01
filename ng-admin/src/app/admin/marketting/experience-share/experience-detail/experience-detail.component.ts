@@ -70,8 +70,6 @@ export class ExperienceDetailComponent extends AppComponentBase implements OnIni
         this.id = this.actRouter.snapshot.params['id'];
     }
     ngOnInit(): void {
-        alert(AppConsts.remoteServiceBaseUrl);
-
         this.form = this.fb.group({
             title: [null, Validators.compose([Validators.required, Validators.maxLength(200)])],
             author: [null, Validators.compose([Validators.required, Validators.maxLength(50)])],

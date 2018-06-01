@@ -113,11 +113,11 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
 
     saveActivity() {
         //获取body
-        var start = "<body>";
-        var end = "</body>";
-        var s = this.article.content.indexOf(start) + start.length;
-        var e = this.article.content.indexOf(end);
-        this.article.content = this.article.content.substring(s, e);
+        // var start = "<body>";
+        // var end = "</body>";
+        // var s = this.article.content.indexOf(start) + start.length;
+        // var e = this.article.content.indexOf(end);
+        // this.article.content = this.article.content.substring(s, e);
         this.activityService.update(this.article)
             .finally(() => { this.isConfirmLoading = false; })
             .subscribe((result: Article) => {
