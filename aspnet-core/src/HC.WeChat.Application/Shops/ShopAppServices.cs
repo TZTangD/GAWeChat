@@ -212,7 +212,7 @@ namespace HC.WeChat.Shops
                             string url = "";
                             object data = new
                             {
-                                first = new TemplateDataItem("新的店铺资料已提交，请您尽快审核"),
+                                first = new TemplateDataItem("有新的店铺资料提交，请您尽快审核"),
                                 keyword1 = new TemplateDataItem(input.Shop.Name.ToString()),
                                 keyword2 = new TemplateDataItem(DateTime.Now.ToString("yyyy-MM-dd HH:mm"))
                             };
@@ -449,7 +449,7 @@ namespace HC.WeChat.Shops
                     {
                         keyword1 = new TemplateDataItem("审核未通过"),
                         keyword2 = new TemplateDataItem(DateTime.Now.ToString("yyyy-MM-dd HH:mm")),
-                        keyword3 = new TemplateDataItem("您的店铺未通过审核,请联系营销中心!"),
+                        keyword3 = new TemplateDataItem("您的店铺未通过审核,请修改资料重新提交!"),
                     };
                     await TemplateApi.SendTemplateMessageAsync(appId, openId, templateId, url, data);
                 }
