@@ -5,7 +5,7 @@
         <!-- <article class="weui-article">
             <h1 style="color: white;">个人基础信息</h1>
         </article> -->
-        <div class="weui-cells">
+        <div class="weui-cells" *ngIf="level">
             <div class="weui-cell">
                 <div class="weui-cell__hd" style="position: relative;margin-right: 10px;">
                     <img src="{{headImg}}" style="width: 50px;display: block" />
@@ -38,7 +38,7 @@
             </div>
         </div>
         <div class="weui-cells__title">基础信息</div>
-        <div class="weui-cells">
+        <div class="weui-cells" *ngIf="level">
             <div class="weui-cell">
                 <div class="weui-cell__bd">
                     <p>本月订货金额</p>
@@ -115,7 +115,7 @@
                 <!-- <div class="weui-cell__bd" style="text-align:center;">上月购数量</div> -->
                 <div class="weui-cell__ft ftcss">购买数量</div>
             </a>
-            <a class="weui-cell" *ngFor="let m of mothAccounts">
+            <a class="weui-cell" *ngFor="let m of mothAccounts" >
                 <div class="weui-cell__hd hdcss">{{m.bookDate}}</div>
                 <div class="weui-cell__bd" style="text-align:center;">{{m.itemName}}</div>
                 <!-- <div class="weui-cell__bd" style="text-align:center;">200</div> -->
@@ -167,7 +167,7 @@
                 <div class="weui-cell__bd">名称</div>
                 <div class="weui-cell__ft qftcss">购买数量</div>
             </a>
-            <a class="weui-cell" *ngFor="let y of accounts">
+            <a class="weui-cell" *ngFor="let y of accounts" >
                 <!-- <div class="weui-cell__hd hdcs">{{y.bookDate}}</div> -->
                 <div class="weui-cell__bd">{{y.itemName}}</div>
                 <div class="weui-cell__ft qftcss">{{y.monthQty}}</div>
