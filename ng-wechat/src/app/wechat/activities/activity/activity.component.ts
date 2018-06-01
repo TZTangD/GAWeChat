@@ -49,9 +49,11 @@ export class ArticleComponent extends AppComponentBase implements OnInit {
         }
         params.pageIndex = this.pageModel.pageIndex;
         params.pageSize = this.pageModel.pageSize;
+        var lreg = new RegExp('&ldquo;', "g");
+        var rreg = new RegExp('&rdquo;', "g");
         this.articleService.GetPagedArticles(params).subscribe(result => {
             result.filter(v => {
-                v.content = v.content.replace(/<\/?[^>]*>/g, '');
+                v.content = v.content.replace(/<\/?[^>]*>/g, '').replace(lreg, '').replace(rreg, '');
             })
             this.activityList.push(...result);
             if (result && result.length < this.pageModel.pageSize) {

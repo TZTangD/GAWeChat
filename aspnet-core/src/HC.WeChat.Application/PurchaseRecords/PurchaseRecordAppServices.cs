@@ -437,15 +437,13 @@ namespace HC.WeChat.PurchaseRecords
         }
 
         /// <summary>
-        /// 根据openId查询购买记录
+        /// 购买记录(暂不分页处理)
         /// </summary>
         /// <param name="tenantId"></param>
         /// <param name="openId"></param>
-        /// <param name="pageIndex"></param>
-        /// <param name="pageSize"></param>
         /// <returns></returns>
         [AbpAllowAnonymous]
-        public async Task<List<PurchaseRecordListDto>> GetWXPagedPurchaseRecordAsync(int? tenantId, string openId, int pageIndex, int pageSize)
+        public async Task<List<PurchaseRecordListDto>> GetWXPagedPurchaseRecordAsync(int? tenantId, string openId)
         {
             using (CurrentUnitOfWork.SetTenantId(tenantId))
             {
@@ -462,14 +460,14 @@ namespace HC.WeChat.PurchaseRecords
                                   ProductId = pr.ProductId,
                                   IsEvaluation = pr.IsEvaluation
                               };
-                var z = records.ToList();
+                //var z = records.ToList();
                 var products = from p in _productRepository.GetAll()
                                select new ProductListDto()
                                {
                                    Id = p.Id,
                                    PhotoUrl = p.PhotoUrl
                                };
-                var y = products.ToList();
+                //var y = products.ToList();
                 var entity = from pr in records
                              join p in products on pr.ProductId equals p.Id
                              select new PurchaseRecordListDto()
@@ -484,10 +482,63 @@ namespace HC.WeChat.PurchaseRecords
                                  PhotoUrl = p.PhotoUrl,
                                  IsEvaluation = pr.IsEvaluation
                              };
-                var x = entity.ToList();
-                return await entity.OrderByDescending(v => v.CreationTime).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+                //var x = entity.ToList();
+                return await entity.OrderByDescending(v => v.CreationTime).ToListAsync();
             }
         }
+
+        /// <summary>
+        /// 根据openId查询购买记录
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="openId"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
+        //[AbpAllowAnonymous]
+        //public async Task<List<PurchaseRecordListDto>> GetWXPagedPurchaseRecordAsync(int? tenantId, string openId, int pageIndex, int pageSize)
+        //{
+        //    using (CurrentUnitOfWork.SetTenantId(tenantId))
+        //    {
+        //        var query = _purchaserecordRepository.GetAll().Where(p => p.OpenId == openId);
+        //        var records = from pr in query
+        //                      select new PurchaseRecordListDto()
+        //                      {
+        //                          Id = pr.Id,
+        //                          CreationTime = pr.CreationTime,
+        //                          OpenId = pr.OpenId,
+        //                          ShopName = pr.ShopName,
+        //                          Specification = pr.Specification,
+        //                          Quantity = pr.Quantity,
+        //                          ProductId = pr.ProductId,
+        //                          IsEvaluation = pr.IsEvaluation
+        //                      };
+        //        //var z = records.ToList();
+        //        var products = from p in _productRepository.GetAll()
+        //                       select new ProductListDto()
+        //                       {
+        //                           Id = p.Id,
+        //                           PhotoUrl = p.PhotoUrl
+        //                       };
+        //        //var y = products.ToList();
+        //        var entity = from pr in records
+        //                     join p in products on pr.ProductId equals p.Id
+        //                     select new PurchaseRecordListDto()
+        //                     {
+        //                         Id = pr.Id,
+        //                         CreationTime = pr.CreationTime,
+        //                         OpenId = pr.OpenId,
+        //                         ShopName = pr.ShopName,
+        //                         Specification = pr.Specification,
+        //                         Quantity = pr.Quantity,
+        //                         ProductId = pr.ProductId,
+        //                         PhotoUrl = p.PhotoUrl,
+        //                         IsEvaluation = pr.IsEvaluation
+        //                     };
+        //        //var x = entity.ToList();
+        //        return await entity.OrderByDescending(v => v.CreationTime).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+        //    }
+        //}
     }
 }
 

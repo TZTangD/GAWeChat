@@ -28,9 +28,9 @@ export class ShopServiceProxy {
         this.http = http;
         this.baseUrl = baseUrl ? baseUrl : "";
     }
-     /**
-     * 获取所有店铺信息
-     */
+    /**
+    * 获取所有店铺信息
+    */
     getAll(skipCount: number, maxResultCount: number, parameter: Parameter[]): Observable<PagedResultDtoOfShop> {
         let url_ = this.baseUrl + "/api/services/app/Shop/GetPagedShopsByRetailer?";
         if (skipCount !== undefined)
@@ -93,10 +93,10 @@ export class ShopServiceProxy {
         return Observable.of<PagedResultDtoOfShop>(<any>null);
     }
 
-     /**
-     * 通过店铺id获取店铺信息
-     * @param id 店铺id
-     */
+    /**
+    * 通过店铺id获取店铺信息
+    * @param id 店铺id
+    */
     get(id: number): Observable<Shop> {
         let url_ = this.baseUrl + "/api/services/app/Shop/GetShopByIdRetailerAsync?";
         if (id !== undefined)

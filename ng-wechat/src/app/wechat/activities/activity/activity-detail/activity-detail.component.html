@@ -1,5 +1,5 @@
 <weui-loadmore type="line" *ngIf="!activity"></weui-loadmore>
-<div [innerHTML]="assembleHTML(activity.content)"></div>
+<div *ngIf="activity.content" [innerHTML]="assembleHTML(activity.content)"></div>
 <br/>
 <div class="weui-flex">
     <div class="weui-flex__item">
