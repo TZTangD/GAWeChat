@@ -10,7 +10,7 @@ import { Observable } from 'rxjs/Observable';
 import { SwaggerException, API_BASE_URL } from '@shared/service-proxies/service-proxies';
 import { Http, Headers, ResponseContentType, Response } from '@angular/http';
 import { Inject, Optional, Injectable, InjectionToken } from '@angular/core';
-import { Parameter } from '@shared/service-proxies/entity';
+import { Parameter, HomeInfo } from '@shared/service-proxies/entity';
 import { Shop } from '@shared/entity/customer/shop';
 
 function throwException(message: string, status: number, response: string, headers: { [key: string]: any; }, result?: any): Observable<any> {
@@ -91,6 +91,106 @@ export class ShopServiceProxy {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Observable.of<PagedResultDtoOfShop>(<any>null);
+    }
+
+    getHomeInfo(): Observable<HomeInfo> {
+        let url_ = this.baseUrl + "/api/services/app/Shop/GetHomeInfo";
+
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = {
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_) => {
+            return this.processGetHomeInfo(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processGetHomeInfo(response_);
+                } catch (e) {
+                    return <Observable<HomeInfo>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<HomeInfo>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processGetHomeInfo(response: Response): Observable<HomeInfo> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? HomeInfo.fromJS(resultData200) : new HomeInfo();
+            return Observable.of(result200);
+        } else if (status === 401) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status === 403) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<HomeInfo>(<any>null);
+    }
+
+    getPendingShopList(): Observable<Shop[]> {
+        let url_ = this.baseUrl + "/api/services/app/Shop/GetPendingShopList";
+
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = {
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_) => {
+            return this.processGetPendingShopList(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processGetPendingShopList(response_);
+                } catch (e) {
+                    return <Observable<Shop[]>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<Shop[]>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processGetPendingShopList(response: Response): Observable<Shop[]> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? Shop.fromJSArray(resultData200) : Observable.of<Shop[]>(<any>null);
+            return Observable.of(result200);
+        } else if (status === 401) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status === 403) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<Shop[]>(<any>null);
     }
 
      /**

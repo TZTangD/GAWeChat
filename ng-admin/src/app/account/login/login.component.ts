@@ -8,7 +8,8 @@ import { AbpSessionService } from 'abp-ng2-module/src/session/abp-session.servic
 
 @Component({
   selector: 'app-pages-login',
-  templateUrl: './login.component.html'
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent extends AppComponentBase implements OnInit {
 

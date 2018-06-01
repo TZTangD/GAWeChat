@@ -58,4 +58,20 @@ namespace HC.WeChat.Shops.Dtos
         public string Tel { get; set; }
         public double Distance { get; set; }
     }
+    /// <summary>
+    /// 首页信息
+    /// </summary>
+    public class HomeInfo
+    {
+        public int ShopCount { get; set; }
+
+        public int PendingShopCount { get; set; }
+
+        public int GoodsSearchCount { get; set; }
+
+        public int IntegralTotal { get; set; }
+
+        public int WechatUserCount { get; set; }
+
+    }
 }

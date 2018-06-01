@@ -2,8 +2,8 @@
     <div #cardBody class="abs-center mt-lg width-lg">
         <nz-card [nzTitle]="nzTitle" [nzBordered]="false" class="ant-card__primary ant-card__title-img">
             <ng-template #nzTitle>
-                <div class="text-center" style="color:white; font-weight:bold;">
-                    <img src="./assets/img/logo.svg" style="height:20px;"> 广安烟草信微信平台</div>
+                <div class="text-center" style="color:white; font-weight:bold;" >
+                    <img src="./assets/img/weilog.png" ></div>
             </ng-template>
             <form nz-form [formGroup]="valForm" #loginForm="ngForm" method="post" id="LoginForm" (ngSubmit)="login()" role="form">
                 <div nz-form-item>
@@ -47,5 +47,8 @@
                 </div>
             </form>
         </nz-card>
+        <div class="p-lg text-center text-sm">
+            渠江烟语 | 广安烟草
+        </div>
     </div>
 </div>

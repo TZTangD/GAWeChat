@@ -2123,6 +2123,7 @@ export class UserLoginInfoDto implements IUserLoginInfoDto {
     userName: string;
     emailAddress: string;
     id: number;
+    notifyCount: number;
 
     constructor(data?: IUserLoginInfoDto) {
         if (data) {
@@ -2140,6 +2141,7 @@ export class UserLoginInfoDto implements IUserLoginInfoDto {
             this.userName = data["userName"];
             this.emailAddress = data["emailAddress"];
             this.id = data["id"];
+            this.notifyCount = data["notifyCount"];
         }
     }
 
@@ -2156,6 +2158,7 @@ export class UserLoginInfoDto implements IUserLoginInfoDto {
         data["userName"] = this.userName;
         data["emailAddress"] = this.emailAddress;
         data["id"] = this.id;
+        data["notifyCount"] = this.notifyCount;
         return data;
     }
 
@@ -2173,6 +2176,7 @@ export interface IUserLoginInfoDto {
     userName: string;
     emailAddress: string;
     id: number;
+    notifyCount: number;
 }
 
 export class TenantLoginInfoDto implements ITenantLoginInfoDto {
