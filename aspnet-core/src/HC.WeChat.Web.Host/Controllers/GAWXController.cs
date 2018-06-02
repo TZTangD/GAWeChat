@@ -22,7 +22,6 @@ namespace HC.WeChat.Web.Host.Controllers
     public class GAWXController : WeChatWebControllerBase
     {
         IWeChatOAuthAppService _weChatOAuthAppService;
-        IWeChatUserAppService _weChatUserAppService;
         private readonly IConfigurationRoot _appConfiguration;
         private WeChatTenantSetting _settings;
         private int? tenantId;
@@ -52,8 +51,6 @@ namespace HC.WeChat.Web.Host.Controllers
         public GAWXController(IWechatAppConfigAppService wechatAppConfigAppService,
           IOptions<WeChatTenantSetting> settings,
           IWeChatOAuthAppService weChatOAuthAppService,
-          IWeChatUserAppService weChatUserAppService,
-          IActivityAppService activityAppService,
           IHostingEnvironment env) : base(wechatAppConfigAppService)
         {
             _settings = settings.Value;
@@ -61,7 +58,6 @@ namespace HC.WeChat.Web.Host.Controllers
             InitAppConfigSetting();
 
             _weChatOAuthAppService = weChatOAuthAppService;
-            _weChatUserAppService = weChatUserAppService;
             _weChatOAuthAppService.WechatAppConfig = WechatAppConfig;//注入配置
             _appConfiguration = env.GetAppConfiguration();
         }
