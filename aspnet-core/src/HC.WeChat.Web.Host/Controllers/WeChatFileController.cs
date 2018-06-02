@@ -229,23 +229,43 @@ namespace HC.WeChat.Web.Host.Controllers
 
             return Ok(new { imageName });
         }
-        //
+
+        /// <summary>
+        /// HTML中图片上传
+        /// </summary>
+        /// <param name="image"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
         [RequestFormSizeLimit(valueCountLimit: 2147483647)]
         [HttpPost]
-        public async Task<IActionResult> MarketingHTMLPosts([FromBody]string input)
+        public async Task<IActionResult> MarketingHTMLContentPosts(IFormFile[] file)
         {
-            //var files = Request.Form.Files;
             string webRootPath = _hostingEnvironment.WebRootPath;
-            string contentRootPath = _hostingEnvironment.ContentRootPath;
-            string path = Path.Combine(webRootPath, "Introduce", input.ToString() + ".html");
-            using (StreamWriter sw = new StreamWriter(path)) // 把HTML内容写入文件
+            string location = Guid.NewGuid().ToString();
+            foreach (var formFile in file)
             {
-                var html = HttpUtility.UrlDecode(input); // url 解码
-                await sw.WriteAsync(html);
+                if (formFile.Length > 0)
+                {
+                    string fileExt = Path.GetExtension(formFile.FileName); //文件扩展名，不含“.”
+                    string newName = location + fileExt; //新的文件名
+                    var fileDire = webRootPath + string.Format("/gawechat/imgs/");
+                    if (!Directory.Exists(fileDire))
+                    {
+                        Directory.CreateDirectory(fileDire);
+                    }
+
+                    var filePath = fileDire + newName;
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await formFile.CopyToAsync(stream);
+                    }
+                    location = filePath.Substring(webRootPath.Length);
+                }
             }
-            return Ok(new { msg = "OK" });
+            return Ok(new { location });
         }
-        //
+
         [RequestFormSizeLimit(valueCountLimit: 2147483647)]
         [HttpPost]
         [AbpAllowAnonymous]
@@ -285,5 +305,43 @@ namespace HC.WeChat.Web.Host.Controllers
             }
             return Ok(saveUrl);
         }
+
+        /// <summary>
+        /// 后台导入数据
+        /// </summary>
+        /// <param name="files"></param>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        [RequestFormSizeLimit(valueCountLimit: 2147483647)]
+        [HttpPost]
+        public async Task<IActionResult> MarketingExcelInfoPosts(IFormFile[] files, string fileName)
+        {
+            //var files = Request.Form.Files;
+            string webRootPath = _hostingEnvironment.WebRootPath;
+            string contentRootPath = _hostingEnvironment.ContentRootPath;
+            foreach (var formFile in files)
+            {
+                if (formFile.Length > 0)
+                {
+                    string fileExt = Path.GetExtension(formFile.FileName); //文件扩展名，不含“.”
+                    long fileSize = formFile.Length; //获得文件大小，以字节为单位
+                    string newFileName = fileName + fileExt; //新的文件名
+                    var fileDire = webRootPath + "/upload/files/";
+                    if (!Directory.Exists(fileDire))
+                    {
+                        Directory.CreateDirectory(fileDire);
+                    }
+
+                    var filePath = fileDire + newFileName;
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await formFile.CopyToAsync(stream);
+                    }
+                }
+            }
+            return Ok();
+        }
+
     }
 }

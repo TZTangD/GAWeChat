@@ -37,6 +37,11 @@ namespace HC.WeChat.MemberConfigs
         public virtual int? TenantId { get; set; }
 
         /// <summary>
+        /// 描述信息
+        /// </summary>
+        public virtual string Desc { get; set; }
+
+        /// <summary>
         /// 创建时间
         /// </summary>
         [Required]

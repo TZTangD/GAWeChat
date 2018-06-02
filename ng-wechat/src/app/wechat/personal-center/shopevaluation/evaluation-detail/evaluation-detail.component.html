@@ -12,14 +12,14 @@
                 <div class="weui-media-box__bd">
                     <ul class="weui-media-box__info">
                         <li class="weui-media-box__info__meta sp">{{purchaseRecord.specification}}</li>
-                        <li class="weui-media-box__info__meta i">积分:+{{purchaseRecord.integral}}</li>
+                        <li class="weui-media-box__info__meta i">{{purchaseRecord.quantity}}包</li>
                     </ul>
 
                     <ul class="weui-media-box__info sn">
                         <li class="weui-media-box__info__meta s">{{purchaseRecord.shopName}}</li>
                     </ul>
                     <ul class="weui-media-box__info pc">
-                        <li class="weui-media-box__info__meta ">数量:{{purchaseRecord.quantity}}</li>
+                        <li class="weui-media-box__info__meta ">+{{purchaseRecord.integral}}积分</li>
                         <li class="weui-media-box__info__meta t">{{purchaseRecord.creationTime| date:'yyyy-MM-dd HH:mm'}}</li>
                     </ul>
                 </div>

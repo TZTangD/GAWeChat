@@ -7,7 +7,7 @@
             </div>
         </div>
         <div class="weui-panel__bd">
-            <weui-infiniteloader (loadmore)="onLoadMore($event)" #comp>
+            <weui-infiniteloader class="inf" (loadmore)="onLoadMore($event)" #comp>
 
                 <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg" *ngFor="let item of activityList" (click)="goDetailActivity(item.id)">
                     <!-- <div class="weui-media-box__hd"> -->
@@ -19,7 +19,7 @@
                         <p class="weui-media-box__desc">{{item.content}}</p>
                     </div>
                     <div class="weui-media-box__ft" style="font-size: 14px;">
-                        {{item.creationTime| date:'yyyy-MM-dd'}}
+                        {{item.pushTime| date:'yyyy-MM-dd'}}
                     </div>
                 </a>
             </weui-infiniteloader>

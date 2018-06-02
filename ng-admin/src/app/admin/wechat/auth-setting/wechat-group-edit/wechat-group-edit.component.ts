@@ -22,7 +22,7 @@ export class WechatGroupEditComponent extends AppComponentBase implements OnInit
     types = [
         { text: '零售客户', value: 1 },
         { text: '内部员工', value: 2 },
-        // { text: '消费者', value: 3 },
+        // { text: '消费者', value: 4 },
     ];
     showTypesE = [];
     id: number;
@@ -44,37 +44,20 @@ export class WechatGroupEditComponent extends AppComponentBase implements OnInit
      * @param id 需要修改分组id
      */
     show(wechatGroupes: WeChatGroup[], id) {
+        this.showTypesE = [
+            { text: '零售客户', value: 1 },
+            { text: '内部员工', value: 2 },
+            // { text: '消费者', value: 4 },
+        ]
         this.id = id;
         this.wechatGroupesE = wechatGroupes;
         this.reset();
         this.emodalVisible = true;
-        if (this.wechatGroupE.typeCode) {
-            this.types.map(i => {
-                if (i.value === this.wechatGroupE.typeCode) {
-                    this.wechatGroupE.tagName = i.text;
-                }
-            });
-        }
+
         this.getSingleWeChatGroup();
     }
 
-    /**
-    * 过滤已经存在的类型+自身的类型
-    */
-    filterType(result: WeChatGroup) {
-        if (this.wechatGroupesE.length>0) {
-            this.wechatGroupesE.map(i => {
-                this.showTypesE = this.types.filter((item, index, arry) => {
-                    return item.value != i.typeCode;
-                });
-            });
-            this.types.map(j => {
-                if (result.typeCode === j.value) {
-                    this.showTypesE.push(j);
-                }
-            });
-        }
-    }
+   
 
     /**
      * 获取单个分组信息
@@ -82,7 +65,7 @@ export class WechatGroupEditComponent extends AppComponentBase implements OnInit
     getSingleWeChatGroup() {
         this.wechatGroupService.get(this.id).subscribe((result: WeChatGroup) => {
             this.wechatGroupE = result;
-            this.filterType(result);
+            this.getFilterArry(result);
         });
     }
 
@@ -137,7 +120,27 @@ export class WechatGroupEditComponent extends AppComponentBase implements OnInit
                     this.notify.info(this.l('保存成功！'));
                     this.emodalVisible = false;
                     this.modalSave.emit(null);
-                })
+                });
         }
     }
+
+    getFilterArry(result: WeChatGroup) {
+        if(this.wechatGroupesE.length>0){
+            this.wechatGroupesE.forEach(item => {
+                for (let index = 0; index < this.showTypesE.length; index++) {
+                    if (item.typeCode === this.showTypesE[index].value) {
+                        this.showTypesE.splice(index, 1);
+                        return;
+                    }
+                }
+            });
+        }
+       
+        this.types.forEach(j => {
+            if (result.typeCode === j.value) {
+                this.showTypesE.push(j);
+            }
+        });
+    }
+
 }

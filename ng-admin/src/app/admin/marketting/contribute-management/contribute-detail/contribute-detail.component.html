@@ -9,6 +9,7 @@
                 <ng-template #dealWithContent>
                     <h2>是否标记稿件 {{manuscript.title}} 为已处理?</h2>
                 </ng-template>
+
                 <div nz-col [nzSpan]="16">
                     <div nz-form-item nz-row>
                         <div nz-form-label nz-col [nzSm]="4">
@@ -70,9 +71,13 @@
                         <div nz-form-label nz-col [nzSm]="4">
                             <label for="content">投稿内容</label>
                         </div>
-                        <div nz-form-control nz-col [nzSm]="20" nzHasFeedback [nzValidateStatus]="getFormControl('content')">
-                            <nz-input [nzDisabled]="true" nzType="textarea" nzRows="6" formControlName="content" [(ngModel)]="manuscript.content" [nzId]="'content'"></nz-input>
+                        <div nz-form-control nz-col [nzSm]="20" style="word-break:break-all;">
+                            {{manuscript.content}}
                         </div>
+
+                        <!-- <div nz-form-control nz-col [nzSm]="20" nzHasFeedback [nzValidateStatus]="getFormControl('content')">
+                            <nz-input [nzDisabled]="true" nzType="textarea" nzRows="6" formControlName="content" [(ngModel)]="manuscript.content" [nzId]="'content'"></nz-input>
+                        </div> -->
                     </div>
                 </div>
             </div>

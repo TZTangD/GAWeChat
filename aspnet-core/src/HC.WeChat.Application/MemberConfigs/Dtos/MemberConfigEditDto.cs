@@ -19,6 +19,8 @@ namespace HC.WeChat.MemberConfigs.Dtos
         /// </summary>
         public int? TenantId { get; set; }
 
+        public string Desc { get; set; }
+
         /// <summary>
         /// 创建时间
         /// </summary>
@@ -30,15 +32,19 @@ namespace HC.WeChat.MemberConfigs.Dtos
     }
     public class MemberCodeEditDto
     {
-        public Guid RcId { get; set; }
-        public Guid CId { get; set; }
-        public Guid EId { get; set; }
+        public Guid? RcId { get; set; }
+        public Guid? CId { get; set; }
+        public Guid? EId { get; set; }
+        public Guid? UserId { get; set; }
 
         public int RcCode { get; set; }
         public int CCode { get; set; }
         public int ECode { get; set; }
+        public int UserCode { get; set; }
         public string RcValue { get; set; }
         public string CValue { get; set; }
         public string EValue { get; set; }
+        public string UserValue { get; set; }
+        public string Desc { get; set; }
     }
 }

@@ -3,3 +3,4 @@ export * from './shop-service';
 export * from './shop-evaluation-service';
 export * from './products-service';
 export * from './shop-products-service';
+export * from './source-goods-service';

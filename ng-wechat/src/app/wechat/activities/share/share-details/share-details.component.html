@@ -1,37 +1,23 @@
-<Page [ngClass]="'article'" [title]="'Article'" [showTitle]="false" [spacing]="false">
-    <weui-loadmore type="line" *ngIf="!sDetailsOfShare"></weui-loadmore>
-    <article class="weui-article">
-        <h1>{{sDetailsOfShare.title}}</h1>
-        <section>
-            <section>
-                <p>
-                    <img src="{{sDetailsOfShare.coverPhoto|hostUrl}}" alt="">
-                </p>
-                <p>
-                    {{sDetailsOfShare.content}}
-                </p>
-                <p>
-                    {{sDetailsOfShare.pushTime| date:'yyyy-MM-dd'}}
-                </p>
-            </section>
-        </section>
-
-        <div class="weui-flex">
-            <div class="weui-flex__item">
-                <div class="placeholder read">阅读 {{sDetailsOfShare.readTotal}}</div>
-            </div>
-            <div class="placeholder good" *ngIf="!isGood">
-                <img src="assets/images/activity/good_false.png" style="width:16px;" alt="" (click)="addGood()">
-                {{sDetailsOfShare.goodTotal}}
-            </div>
-            <div class="placeholder good" *ngIf="isGood">
-                <img src="assets/images/activity/good_true.png" style="width:16px;" alt="" (click)="addGood()">
-                {{sDetailsOfShare.goodTotal}}
-            </div>
-        </div>
-        <div class="weui-flex">
-            <div class="weui-flex__item"><span class="weui-flex_write" (click)="goShareWrite()">写经验分享</span>
-            </div>
-        </div>
-    </article>
-</Page>
+<weui-loadmore type="line" *ngIf="!sDetailsOfShare"></weui-loadmore>
+<div *ngIf="sDetailsOfShare" [innerHTML]="assembleHTML(sDetailsOfShare.content)"></div>
+<br/>
+<div class="weui-flex">
+    <div class="weui-flex__item">
+        <div class="placeholder read">阅读 {{sDetailsOfShare.readTotal}}</div>
+    </div>
+    <div class="placeholder good" *ngIf="!isGood">
+        <img src="assets/images/activity/IsGood_Blue_False.png" style="width:16px;" alt="" (click)="addGood()"> {{sDetailsOfShare.goodTotal}}
+    </div>
+    <div class="placeholder good" *ngIf="isGood">
+        <img src="assets/images/activity/IsGood_Blue_True.png" style="width:16px;" alt="" (click)="addGood()"> {{sDetailsOfShare.goodTotal}}
+    </div>
+</div>
+<br/>
+<div class="weui-flex">
+    <div class="weui-flex__item" style="text-align: center;">
+        <button weui-button [weui-mini]="'mini'" (click)="goShareWrite()">我也要分享</button>
+    </div>
+</div>
+<div class="weui-footer">
+    <p class="weui-footer__text">广安烟草 | 渠江烟语</p>
+</div>

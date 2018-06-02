@@ -99,5 +99,9 @@ namespace HC.WeChat.Shops
         Task<List<NearbyShopDto>> GetNearbyShopByLocationAsync(double latitude, double longitude, int? tenantId, string openId);
 
         Task<List<ShopListDto>> GetShopListByGoodsIdAsync(int? tenantId, Guid goodsId);
+
+        Task<HomeInfo> GetHomeInfo();
+
+        Task<List<ShopListDto>> GetPendingShopList();
     }
 }

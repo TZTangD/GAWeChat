@@ -43,26 +43,6 @@
                             "text": "自动回复",
                             "link": "/admin/wechat/message",
                             "translate": "aut-res"
-                        },
-                        {
-                            "text": "自定义菜单",
-                            "link": "/admin/wechat/customize-menu",
-                            "translate": "customize-menu"
-                        },
-                        {
-                            "text": "微信群发",
-                            "link": "/admin/wechat/wechat-mass",
-                            "translate": "wechat-mass"
-                        },
-                        {
-                            "text": "素材管理",
-                            "link": "/admin/wechat/material-management",
-                            "translate": "material-management"
-                        },
-                        {
-                            "text": "图片库",
-                            "link": "/admin/wechat/photo-warehouse",
-                            "translate": "photo-warehouse"
                         }
                     ]
                 },
@@ -72,7 +52,7 @@
                     "icon": "anticon anticon-shop",
                     "children": [
                         {
-                            "text": "营销人员",
+                            "text": "公司员工",
                             "link": "/admin/marketting/employee",
                             "translate": "market-user"
                         },
@@ -120,28 +100,10 @@
                             "reuse": false
                         },
                         {
-                            "text": "档级货源",
+                            "text": "货源导入",
                             "link": "/admin/customer/source-goods-level",
                             "translate": "source-goods-level",
                             "reuse": false
-                        },
-                        {
-                            "text": "台账管理",
-                            "link": "/admin/customer/account-management",
-                            "translate": "account-management",
-                            "reuse": false
-                        }
-                    ]
-                },
-                {
-                    "text": "消费服务",
-                    "translate": "consume-serve",
-                    "icon": "fa fa-laptop",
-                    "children": [
-                        {
-                            "text": "商品查找",
-                            "link": "/admin/consumer/commodity-search",
-                            "translate": "commodity-search"
                         },
                         {
                             "text": "意见反馈",
@@ -158,7 +120,8 @@
                         {
                             "text": "会员管理",
                             "link": "/admin/member/member-management",
-                            "translate": "member-management"
+                            "translate": "member-management",
+                            "reuse": false
                         },
                         {
                             "text": "积分查询",
@@ -195,16 +158,6 @@
                             "text": "角色",
                             "link": "/admin/system/roles",
                             "translate": "roles"
-                        },
-                        {
-                            "text": "系统配置",
-                            "link": "/admin/system/sys-config",
-                            "translate": "sys-config" 
-                        },
-                        {
-                            "text": "数据字典",
-                            "link": "/admin/system/data-dictionary",
-                            "translate": "data-dictionary" 
                         }
                     ]
                 }

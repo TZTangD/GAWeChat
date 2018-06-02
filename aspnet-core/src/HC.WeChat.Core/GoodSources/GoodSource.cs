@@ -24,5 +24,16 @@ namespace HC.WeChat.GoodSources
         /// </summary>
         [StringLength(100)]
         public virtual string goodCode { get; set; }
+
+        /// <summary>
+        /// 商品名称
+        /// </summary>
+        [StringLength(100)]
+        public virtual string goodName { get; set; }
+        /// <summary>                                                                    
+        /// 客户名称                                         
+        /// </summary>
+        [StringLength(50)]
+        public virtual string cusName { get; set; }
     }
 }

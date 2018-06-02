@@ -2,8 +2,9 @@ import { NzMessageService } from 'ng-zorro-antd';
 import { Component, OnInit } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
 import { AppSessionService } from '@shared/session/app-session.service';
-import { ActivityFormServiceProxy } from '@shared/service-proxies/marketing-service';
-import { ActivityFormInfo } from '@shared/service-proxies/entity';
+import { ShopServiceProxy } from '@shared/service-proxies/customer-service';
+import { HomeInfo } from '@shared/service-proxies/entity';
+import { SettingsService } from '@delon/theme';
 
 import { UploadFile } from 'ng-zorro-antd';
 
@@ -13,9 +14,9 @@ import { UploadFile } from 'ng-zorro-antd';
 })
 export class IndexComponent implements OnInit {
 
-    activityFormInfo: ActivityFormInfo = new ActivityFormInfo();
+    homeInfo: HomeInfo = new HomeInfo();
     constructor(private http: _HttpClient, public msg: NzMessageService, private _appSessionService: AppSessionService,
-        private activityFormHomeService: ActivityFormServiceProxy) { }
+        private shopServiceProxy: ShopServiceProxy, private settings: SettingsService) { }
 
     todoData: any[] = [
         { completed: true, avatar: '1', name: '苏者名', content: `订货流程是什么样的？` },
@@ -79,8 +80,8 @@ export class IndexComponent implements OnInit {
     }
 
     getFormInfo() {
-        this.activityFormHomeService.getFormHomeInfo().subscribe((result: ActivityFormInfo) => {
-            this.activityFormInfo = result;
+        this.shopServiceProxy.getHomeInfo().subscribe((result) => {
+            this.homeInfo = result;
         })
     }
 

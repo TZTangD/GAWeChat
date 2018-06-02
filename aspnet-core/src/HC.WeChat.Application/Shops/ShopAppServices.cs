@@ -21,6 +21,12 @@ using HC.WeChat.WechatEnums;
 using HC.WeChat.ShopProducts;
 using HC.WeChat.Products;
 using HC.WeChat.Helpers;
+using Senparc.Weixin.MP.AdvancedAPIs.TemplateMessage;
+using HC.WeChat.WechatAppConfigs.Dtos;
+using HC.WeChat.WechatAppConfigs;
+using Senparc.Weixin.MP.AdvancedAPIs;
+using HC.WeChat.MemberConfigs;
+using HC.WeChat.WeChatUsers;
 
 namespace HC.WeChat.Shops
 {
@@ -39,6 +45,11 @@ namespace HC.WeChat.Shops
         private readonly IWeChatUserManager _wechatuserManager;
         private readonly IRepository<ShopProduct, Guid> _shopProductRepository;
         private readonly IRepository<Product, Guid> _productRepository;
+        IWechatAppConfigAppService _wechatAppConfigAppService;
+        private readonly IRepository<MemberConfig, Guid> _memberconfigRepository;
+        private int? TenantId { get; set; }
+        private WechatAppConfigInfo AppConfig { get; set; }
+        private readonly IRepository<WeChatUser, Guid> _wechatuserRepository;
 
         /// <summary>
         /// 构造函数
@@ -48,7 +59,9 @@ namespace HC.WeChat.Shops
         , IWeChatUserManager wechatuserManager
         , IRepository<ShopProduct, Guid> shopProductRepository
         , IRepository<Product, Guid> productRepository
-        )
+            , IWechatAppConfigAppService wechatAppConfigAppService
+         , IRepository<MemberConfig, Guid> memberconfigRepository
+            , IRepository<WeChatUser, Guid> wechatuserRepository)
         {
             _shopRepository = shopRepository;
             _shopManager = shopManager;
@@ -56,6 +69,11 @@ namespace HC.WeChat.Shops
             _wechatuserManager = wechatuserManager;
             _shopProductRepository = shopProductRepository;
             _productRepository = productRepository;
+            _wechatAppConfigAppService = wechatAppConfigAppService;
+            TenantId = null;
+            AppConfig = _wechatAppConfigAppService.GetWechatAppConfig(TenantId).Result;
+            _memberconfigRepository = memberconfigRepository;
+            _wechatuserRepository = wechatuserRepository;
         }
 
         /// <summary>
@@ -158,7 +176,7 @@ namespace HC.WeChat.Shops
             {
                 if (input.Shop.Id.HasValue)
                 {
-                    input.Shop.Status = WechatEnums.ShopAuditStatus.提交申请;
+                    input.Shop.Status = WechatEnums.ShopAuditStatus.待审核;
                     await UpdateShopAsync(input.Shop);
                 }
                 else
@@ -166,14 +184,49 @@ namespace HC.WeChat.Shops
                     var user = await _wechatuserManager.GetWeChatUserAsync(input.OpenId, input.TenantId);
                     input.Shop.TenantId = input.TenantId;
                     input.Shop.RetailerId = user.UserId;
-                    input.Shop.Status = WechatEnums.ShopAuditStatus.提交申请;
+                    input.Shop.Status = WechatEnums.ShopAuditStatus.待审核;
                     input.Shop.ReadTotal = 0;
                     input.Shop.SaleTotal = 0;
                     input.Shop.Evaluation = "0,0,0";
                     await CreateShopAsync(input.Shop);
                 }
+                await ShopWXInfo(input);
             }
         }
+        public async Task ShopWXInfo(CreateOrUpdateShopInput input)
+        {
+            try
+            {
+                //发送微信模板通知-后台配置内部员工
+                string memberConfig = await _memberconfigRepository.GetAll().Where(v => v.Code == DeployCodeEnum.通知配置).Select(v => v.Value).FirstOrDefaultAsync();
+                if (memberConfig.Length!=0||memberConfig!=null)
+                {
+                    var openIdIds = memberConfig.Split(',');
+                    if (openIdIds.Length != 0)
+                    {
+                        foreach (var item in openIdIds)
+                        {
+                            string appId = AppConfig.AppId;
+                            string openId = item;
+                            string templateId = "qvt7CNXBY4FzfzdX54TvMUaOi9jZ3-tdsb2NRhVp0yg";//模版id  
+                            string url = "";
+                            object data = new
+                            {
+                                first = new TemplateDataItem("有新的店铺资料提交，请您尽快审核"),
+                                keyword1 = new TemplateDataItem(input.Shop.Name.ToString()),
+                                keyword2 = new TemplateDataItem(DateTime.Now.ToString("yyyy-MM-dd HH:mm"))
+                            };
+                            await TemplateApi.SendTemplateMessageAsync(appId, openId, templateId, url, data);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.ErrorFormat("店铺审核通知失败 error：{0} Exception：{1}", ex.Message, ex);
+            }
+        }
+
 
         /// <summary>
         /// 新增Shop
@@ -214,7 +267,6 @@ namespace HC.WeChat.Shops
         //[AbpAuthorize(ShopAppPermissions.Shop_DeleteShop)]
         public async Task DeleteShop(EntityDto<Guid> input)
         {
-
             //TODO:删除前的逻辑判断，是否允许删除
             await _shopRepository.DeleteAsync(input.Id);
         }
@@ -257,15 +309,16 @@ namespace HC.WeChat.Shops
         /// <returns></returns>
         public async Task<PagedResultDto<ShopListDto>> GetPagedShopsByRetailer(GetShopsInput input)
         {
-
+            var mid = UserManager.GetControlEmployeeId();
             var queryShop = _shopRepository.GetAll()
                 .WhereIf(!string.IsNullOrEmpty(input.Name), s => s.Name.Contains(input.Name))
                 .WhereIf(input.Status.HasValue, s => s.Status == input.Status)
                 .WhereIf(!string.IsNullOrEmpty(input.Tel), s => s.Tel.Contains(input.Tel));
-            var queryRetailer = _retailerRepository.GetAll();
+            var queryRetailer = _retailerRepository.GetAll().WhereIf(mid.HasValue, r => r.EmployeeId == mid);
             var query = from s in queryShop
-                        join r in queryRetailer on s.RetailerId equals r.Id into queryS
-                        from sr in queryS.DefaultIfEmpty()
+                        join r in queryRetailer on s.RetailerId equals r.Id
+                        //into queryS
+                        //from sr in queryS.DefaultIfEmpty()
                         select new ShopListDto
                         {
                             Id = s.Id,
@@ -284,7 +337,8 @@ namespace HC.WeChat.Shops
                             CreationTime = s.CreationTime,
                             TenantId = s.TenantId,
                             Tel = s.Tel,
-                            RetailerName = sr != null ? sr.Name : "",
+                            //RetailerName = r != null ? r.Name : "",
+                            RetailerName = r.Name
                         };
 
             //TODO:根据传入的参数添加过滤条件
@@ -365,8 +419,47 @@ namespace HC.WeChat.Shops
         {
             var entity = await _shopRepository.GetAsync(input.Id);
             entity.Status = input.Status;
-            entity.AuditTime = input.AuditTime;
+            entity.AuditTime = DateTime.Now;
             var result = _shopRepository.UpdateAsync(entity);
+            //审核通知
+            var ShopOpenId = await _wechatuserRepository.GetAll().Where(r => r.UserId == entity.RetailerId).Select(v => v.OpenId).FirstOrDefaultAsync();
+            try
+            {
+                if (input.Status == ShopAuditStatus.已审核)
+                {
+                    string appId = AppConfig.AppId;
+                    string openId = ShopOpenId;
+                    string templateId = "7I2cswoMRn0P_DsAYz-DCigntaGKJn-XUx6lMowDYRY";//模版id  
+                    string url = "";
+                    object data = new
+                    {
+                        first = new TemplateDataItem("您的店铺已通过审核!"),
+                        keyword1 = new TemplateDataItem("审核通过"),
+                        keyword2 = new TemplateDataItem(DateTime.Now.ToString("yyyy-MM-dd HH:mm"))
+                    };
+                    await TemplateApi.SendTemplateMessageAsync(appId, openId, templateId, url, data);
+                }
+                else
+                {
+                    string appId = AppConfig.AppId;
+                    string openId = ShopOpenId;
+                    string templateId = "n325dGQOYvNMZ46eFDIlFo5jWXSr-P3jNMDubXZ3Sbw";//模版id  
+                    string url = "";
+                    object data = new
+                    {
+                        keyword1 = new TemplateDataItem("审核未通过"),
+                        keyword2 = new TemplateDataItem(DateTime.Now.ToString("yyyy-MM-dd HH:mm")),
+                        keyword3 = new TemplateDataItem("您的店铺未通过审核,请修改资料重新提交!"),
+                    };
+                    await TemplateApi.SendTemplateMessageAsync(appId, openId, templateId, url, data);
+                }
+            }
+            catch (Exception ex)
+            {
+
+                Logger.ErrorFormat("审核通知发送失败 error：{0} Exception：{1}", ex.Message, ex);
+            }
+
             //return result.MapTo<ShopEditDto>();
         }
 
@@ -380,24 +473,38 @@ namespace HC.WeChat.Shops
             var mbr = new MapMBR(latitude, longitude, 3.1);//确定搜索范围3.1公里 搜索范围扩大0.1公里
             using (CurrentUnitOfWork.SetTenantId(tenantId))
             {
+                //演示注释 后面需要放开
                 //根据经纬度范围过滤数据
-                var dataList = await _shopRepository.GetAll()
-                    .Where(s => s.Status == ShopAuditStatus.审核通过
-                    && s.Latitude > mbr.MinLatitude 
-                    && s.Latitude < mbr.MaxLatitude
-                    && s.Longitude > mbr.MinLongitude
-                    && s.Longitude < mbr.MaxLongitude).ToListAsync();
+                //var dataList = await _shopRepository.GetAll()
+                //    .Where(s => s.Status == ShopAuditStatus.审核通过
+                //    && s.Latitude > mbr.MinLatitude 
+                //    && s.Latitude < mbr.MaxLatitude
+                //    && s.Longitude > mbr.MinLongitude
+                //    && s.Longitude < mbr.MaxLongitude).ToListAsync();
 
-                var resultList = dataList.MapTo<List<NearbyShopDto>>();
+                //var resultList = dataList.MapTo<List<NearbyShopDto>>();
+                //foreach (var item in resultList)
+                //{
+                //    if (item.Latitude.HasValue && item.Longitude.HasValue)
+                //    {
+                //        item.Distance = Math.Round(AbpMapByGoogle.GetDistance(latitude, longitude, item.Latitude.Value, item.Longitude.Value), 0);//不保留小数
+                //    }
+                //    else
+                //    {
+                //        item.Distance = 4000;//后面会被过滤
+                //    }
+                //}
+
+                var resultList = (await _shopRepository.GetAll().Where(s => s.Status == ShopAuditStatus.已审核).ToListAsync()).MapTo<List<NearbyShopDto>>();
+                int[] rd = { 92, 108, 201, 255, 374, 488, 509 };
+                int i = 0;
                 foreach (var item in resultList)
                 {
-                    if (item.Latitude.HasValue && item.Longitude.HasValue)
+                    item.Distance = 100 + rd[i];
+                    i++;
+                    if (i == rd.Length)
                     {
-                        item.Distance = Math.Round(AbpMapByGoogle.GetDistance(latitude, longitude, item.Latitude.Value, item.Longitude.Value), 0);//不保留小数
-                    }
-                    else
-                    {
-                        item.Distance = 4000;//后面会被过滤
+                        i = 0;
                     }
                 }
 
@@ -431,6 +538,36 @@ namespace HC.WeChat.Shops
                 return shops.MapTo<List<ShopListDto>>();
             }
         }
+
+        public async Task<HomeInfo> GetHomeInfo()
+        {
+            HomeInfo homeInfo = new HomeInfo();
+
+            homeInfo.ShopCount = await _shopRepository.GetAll().Where(s => s.Status == ShopAuditStatus.已审核).CountAsync();
+            //homeInfo.PendingShopCount = await _shopRepository.GetAll().Where(s => s.Status == ShopAuditStatus.待审核).CountAsync();
+            var goodsCount = await _productRepository.GetAll().SumAsync(s => s.SearchCount);
+            homeInfo.GoodsSearchCount = goodsCount.HasValue ? goodsCount.Value : 0;
+            homeInfo.IntegralTotal = await _wechatuserRepository.GetAll().SumAsync(u => u.IntegralTotal);
+            homeInfo.WechatUserCount = await _wechatuserRepository.GetAll().Where(u => u.UserType != UserTypeEnum.取消关注).CountAsync();
+
+            return homeInfo;
+        }
+
+        public async Task<List<ShopListDto>> GetPendingShopList()
+        {
+            var shopList = await _shopRepository.GetAll().Where(s => s.Status == ShopAuditStatus.待审核).OrderByDescending(s => s.CreationTime).Take(5).ToListAsync();
+            return shopList.MapTo<List<ShopListDto>>();
+        }
+
+        //[AbpAllowAnonymous]
+        //public async Task<ShopListDto> CreateWeChatGroup(ShopEditDto input)
+        //{
+        //   // var result = new ShopEditDto();
+        //   //var data = await TemplateApi.
+        //   // ;
+
+        //   // return result;
+        //}
     }
 }
 

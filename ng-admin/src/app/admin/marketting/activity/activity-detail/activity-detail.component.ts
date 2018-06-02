@@ -7,6 +7,7 @@ import { Article } from '@shared/entity/marketting';
 import { ResourceLoader } from '@angular/compiler';
 import { NzModalService, UploadFile } from 'ng-zorro-antd';
 import { AppConsts } from '@shared/AppConsts';
+// import { ConsoleReporter } from 'jasmine';
 
 @Component({
     moduleId: module.id,
@@ -15,6 +16,7 @@ import { AppConsts } from '@shared/AppConsts';
     styleUrls: ['activity-detail.component.scss']
 })
 export class ActivityDetailComponent extends AppComponentBase implements OnInit {
+    test: any;
     form: FormGroup;
     id: number;
     article: Article = new Article();
@@ -24,49 +26,46 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
     isDelete = false;
     successMsg = '';
     cardTitle = '';
-    host = '';
-    actionUrl = '';
-
-    config: any = {
-        selector: "textarea",  // change this value according to your HTML
-        toolbar: "image",
-        plugins: "image imagetools",
-        imagetools_proxy: 'proxy.php',
-        images_upload_url: 'postAcceptor.php',
-        images_upload_base_path: '/some/basepath',
-        images_upload_credentials: true
-    };
-
+    host = AppConsts.remoteServiceBaseUrl;
+    actionUrl = this.host + '/WeChatFile/MarketingInfoPosts?fileName=activity';
     config_classic: any = {
         height: 550,
-
         plugins: [
             'advlist autolink autosave link image lists charmap print preview hr anchor pagebreak',
-            'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
-            'table contextmenu directionality emoticons template textcolor paste fullpage textcolor colorpicker textpattern'
+            'table searchreplace wordcount visualblocks visualchars fullscreen insertdatetime media nonbreaking code',
+            'contextmenu directionality emoticons template textcolor paste fullpage textcolor colorpicker textpattern'
         ],
         toolbar1: 'bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | styleselect formatselect fontselect fontsizeselect',
-        // toolbar1: 'newdocument fullpage | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | styleselect formatselect fontselect fontsizeselect',
-        toolbar2: 'bullist numlist | outdent indent blockquote | undo redo | image code| insertdatetime preview | forecolor backcolor',
-        // toolbar2: 'cut copy paste | searchreplace | bullist numlist | outdent indent blockquote | undo redo | link unlink anchor image media code | insertdatetime preview | forecolor backcolor',
-        // toolbar3: 'table | hr removeformat | subscript superscript | charmap emoticons | print fullscreen | ltr rtl | visualchars visualblocks nonbreaking template pagebreak restoredraft',
-        toolbar3: 'table | hr removeformat | charmap | ltr rtl | visualchars visualblocks template pagebreak restoredraft',
-        // content_css: [
-        //     '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
-        //     '//www.tinymce.com/css/codepen.min.css'],
+        toolbar2: 'bullist numlist | outdent indent blockquote | undo redo | image | insertdatetime preview | forecolor backcolor',
+        toolbar3: 'code | table hr removeformat | charmap | ltr rtl | visualchars visualblocks template pagebreak restoredraft',
         language: 'zh_CN',
         menubar: false,
         toolbar_items_size: 'small',
         init_instance_callback: function () {
         },
-        images_upload_url: 'postAcceptor.php',
-        images_upload_base_path: '/some/basepath',
-        images_upload_credentials: true,
         images_upload_handler: function (blobInfo, success, failure) {
-            setTimeout(function() {
-              // no matter what you upload, we will turn it into TinyMCE logo :)
-              success('http://moxiecode.cachefly.net/tinymce/v9/images/logo.png');
-            }, 2000);
+            var xhr, formData;
+            xhr = new XMLHttpRequest();
+            xhr.withCredentials = false;
+            var uploadImageUrl = AppConsts.remoteServiceBaseUrl + '/WeChatFile/MarketingHTMLContentPosts';
+            xhr.open('POST', uploadImageUrl);
+            xhr.onload = function () {
+                var json;
+                if (xhr.status != 200) {
+                    failure('HTTP Error: ' + xhr.status);
+                    return;
+                }
+                json = JSON.parse(xhr.responseText);
+
+                if (!json || typeof json.result.location != 'string') {
+                    failure('Invalid JSON: ' + xhr.responseText);
+                    return;
+                }
+                success(AppConsts.remoteServiceBaseUrl + json.result.location);
+            };
+            formData = new FormData();
+            formData.append('file', blobInfo.blob(), blobInfo.filename());
+            xhr.send(formData);
         }
     };
     constructor(injector: Injector, private fb: FormBuilder, private actRouter: ActivatedRoute,
@@ -75,18 +74,14 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
         this.id = this.actRouter.snapshot.params['id'];
     }
 
-    // set(key: string, value: any) {
-    //     const obj: any = {};
-    //     obj[key] = value;
-    //     this.config = Object.assign({}, this.config, obj);
-    // }
     ngOnInit(): void {
         this.form = this.fb.group({
             title: [null, Validators.compose([Validators.required, Validators.maxLength(200)])],
             author: [null, Validators.compose([Validators.required, Validators.maxLength(50)])],
+            content: [null, Validators.compose([Validators.required])],
             // coverPhoto: [null, Validators.compose([Validators.required])], 图片能上传时
             coverPhoto: [null],
-            content: [null],
+            // content: [null],
         });
         this.getSingleActivity();
         this.host = AppConsts.remoteServiceBaseUrl;
@@ -116,10 +111,18 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
     getFormControl(name: string) {
         return this.form.controls[name];
     }
+
     saveActivity() {
+        //获取body
+        // var start = "<body>";
+        // var end = "</body>";
+        // var s = this.article.content.indexOf(start) + start.length;
+        // var e = this.article.content.indexOf(end);
+        // this.article.content = this.article.content.substring(s, e);
         this.activityService.update(this.article)
             .finally(() => { this.isConfirmLoading = false; })
             .subscribe((result: Article) => {
+
                 this.article = result;
                 if (result.coverPhoto) {
                     this.article.showCoverPhoto = this.host + this.article.coverPhoto;

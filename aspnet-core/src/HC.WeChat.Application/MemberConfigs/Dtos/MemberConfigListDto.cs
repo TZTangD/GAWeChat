@@ -14,6 +14,8 @@ namespace HC.WeChat.MemberConfigs.Dtos
         public DeployCodeEnum? Code { get; set; }
         public string Value { get; set; }
         public DateTime CreationTime { get; set; }
+
+        public string Desc { get; set; }
         /// <summary>
         /// 租户ID
         /// </summary>

@@ -63,8 +63,9 @@
                             <div nz-form-explain *ngIf="getFormControl('content').dirty&&getFormControl('content').hasError('required')">内容不能为空</div>
                         </div> -->
                         <div nz-form-control nz-col [nzSm]="20" nzHasFeedback [nzValidateStatus]="getFormControl('content')">
-                            <tinymce [config]="config_classic" loading="loading……" [ngModelOptions]="{standalone: true}" [(ngModel)]="article.content">
+                            <tinymce formControlName="content" [config]="config_classic" loading="loading……" [(ngModel)]="article.content">
                             </tinymce>
+                            <div nz-form-explain *ngIf="getFormControl('content').dirty&&getFormControl('content').hasError('required')">内容不能为空</div>
                         </div>
                     </div>
                 </div>

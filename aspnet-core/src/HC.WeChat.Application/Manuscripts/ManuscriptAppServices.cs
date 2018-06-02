@@ -229,6 +229,18 @@ namespace HC.WeChat.Manuscripts
                 return new APIResultDto() { Code = 0, Msg = "投稿成功，请等待后台审核" };
             }
         }
+
+        /// <summary>
+        /// 标记投稿为已处理
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task<ManuscriptEditDto>MarkManuscriptDto(ManuscriptEditDto input)
+        {
+            input.Status = ProcessTypeEnum.已处理;
+            input.DealWithTime = DateTime.Now;
+            return await UpdateManuscriptAsync(input);
+        }
     }
 }
 

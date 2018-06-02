@@ -8,6 +8,7 @@ import { AppConsts, ArticleService } from '../../../../services';
 import { JWeiXinService } from 'ngx-weui/jweixin';
 import { Article, StatisticalDetail } from '../../../../services/model';
 import { ActivatedRoute } from '@angular/router';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
     selector: 'activity-detail',
@@ -22,7 +23,9 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
     isGood: boolean = false; // 是否点赞
     constructor(injector: Injector, private router: Router,
         private articleService: ArticleService, private srv: ToptipsService,
-        private route: ActivatedRoute) {
+        private route: ActivatedRoute,
+        private sanitizer: DomSanitizer
+    ) {
         super(injector);
     }
     ngOnInit() {
@@ -31,9 +34,18 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
             params.tenantId = this.settingsService.tenantId;
         }
         this.articleService.GetArticleById(params).subscribe(result => {
+            var start = '<body>';
+            var end = '</body>';
+            var s = result.content.indexOf(start) + start.length;
+            var e = result.content.indexOf(end);
+            result.content = result.content.substring(s, e).replace(/gawechat\//g, '');
             this.activity = result;
         });
         this.GetIsGoodAsync();
+    }
+
+    assembleHTML(strHTML: any) {
+        return this.sanitizer.bypassSecurityTrustHtml(strHTML);
     }
 
     GetIsGoodAsync() {
@@ -45,6 +57,9 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
         params.articleId = this.id;
         this.articleService.GetIsGoodAsync(params).subscribe(data => {
             this.isGood = data;
+            if (this.isGood == null) {
+                this.isGood == false;
+            }
         });
     }
 
@@ -52,8 +67,8 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
         this.statisticalDetail.articleId = this.id;
         this.statisticalDetail.type = 2;
         this.statisticalDetail.openId = this.settingsService.openId;
-        this.isGood = true;
         if (!this.isGood) {
+            this.isGood = true;
             this.activity.goodTotal++;
         }
         this.articleService.AddGoodAsync(this.statisticalDetail).subscribe(data => {

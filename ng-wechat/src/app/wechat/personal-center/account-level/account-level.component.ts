@@ -18,7 +18,7 @@ export class AccountLevelComponent extends AppComponentBase implements OnInit {
     preAccount: Accounts[] = [];
     accounts: Accounts[] = [];
     levelClass = '';
-    defaultHed = '/assets/img/default-head.png';
+    defaultHed = './assets/images/timg-4.jpeg';
     headImg = '';
     id = '';
     licenseKey = '';
@@ -66,6 +66,7 @@ export class AccountLevelComponent extends AppComponentBase implements OnInit {
     getCurrentUser() {
         this.settingsService.getUser().subscribe(data => {
             this.user = data;
+            this.headImg = this.user.headImgUrl;
             this.id = data.userId;
             this.getLevel();
             this.getAccount(1);
@@ -82,8 +83,10 @@ export class AccountLevelComponent extends AppComponentBase implements OnInit {
     // }
     getLevel() {
         this.levelAccountAccpintService.getLevel({ tenantId: this.settingsService.tenantId, userId: this.id }).subscribe(data => {
-            this.level = data
-            this.headImg = (data.headImgUrl == null || data.headImgUrl == '') ? this.defaultHed : data.headImgUrl;
+            this.level = data;
+            if (this.id !== this.user.userId) {
+                this.headImg = (data.headImgUrl === '' || data.headImgUrl === null) ? this.defaultHed:data.headImgUrl;
+            }
             if (this.user.userType === UserType.Staff || data.isShopkeeper) {
                 this.showCode = true;
             } else {
@@ -93,10 +96,14 @@ export class AccountLevelComponent extends AppComponentBase implements OnInit {
     }
 
     showVerCode() {
-        this.verCode = this.level.verificationCode;
+        if(this.verCode==this.level.verificationCode){
+            this.verCode='***';
+        }else{
+            this.verCode = this.level.verificationCode;
+        }
     }
     goSourceOfGoods() {
-        this.router.navigate(['']);
+        this.router.navigate(['/good-sources/good-source', { code: this.level.code }]);
     }
     goBack() {
         this.router.navigate(['/personals/personal']);
@@ -114,7 +121,7 @@ export class AccountLevelComponent extends AppComponentBase implements OnInit {
             this.mothAccounts = data.monthAccountBooks;
             this.preAccount = data.preMonthAccountBooks;
             this.accounts = data.accountBooks;
-            if (this.accounts.length>0) {
+            if (this.accounts.length > 0) {
                 this.qypreData = this.accounts[0].bookDate;
             }
         });
@@ -127,9 +134,10 @@ export class AccountLevelComponent extends AppComponentBase implements OnInit {
         }
         let d = new Date(date);
         let y = d.getFullYear().toString();
-        let m = (d.getMonth() + 1) > 10 ? (d.getMonth() + 1).toString() : '0' + (d.getMonth() + 1).toString();
-        let day = d.getDate().toString();
-        return y + m + day;
+        var cm = d.getMonth();
+        let m = ( cm + 1) > 10 ? (cm + 1).toString() : '0' + (cm + 1).toString();
+        //let day = d.getDate().toString();
+        return y +"."+ m;
         //let dateStr:string = this.datePipe.transform(d,'yyyy-MM-dd');
         //return dateStr;
     }

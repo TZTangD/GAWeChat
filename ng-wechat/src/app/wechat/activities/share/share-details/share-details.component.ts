@@ -1,11 +1,12 @@
 ///<reference path="../../../../../../node_modules/@angular/core/src/metadata/directives.d.ts"/>
-import {Component, Injector, OnInit, ViewEncapsulation} from '@angular/core';
-import {AppComponentBase} from '../../../components/app-component-base';
-import {JWeiXinService} from 'ngx-weui/jweixin';
-import {ActivatedRoute, Router} from '@angular/router';
-import {Article, StatisticalDetail} from '../../../../services/model';
-import {ArticleService} from '../../../../services';
-import {ToptipsService} from 'ngx-weui';
+import { Component, Injector, OnInit, ViewEncapsulation } from '@angular/core';
+import { AppComponentBase } from '../../../components/app-component-base';
+import { JWeiXinService } from 'ngx-weui/jweixin';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Article, StatisticalDetail } from '../../../../services/model';
+import { ArticleService } from '../../../../services';
+import { ToptipsService } from 'ngx-weui';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
     selector: 'share-details',
@@ -23,7 +24,9 @@ export class ShareDetailComponent extends AppComponentBase implements OnInit {
         , private shareService: ArticleService
         , private wxService: JWeiXinService
         , private route: ActivatedRoute
-        , private srv: ToptipsService) {
+        , private srv: ToptipsService
+        , private sanitizer: DomSanitizer
+    ) {
         super(injector);
     }
 
@@ -35,13 +38,18 @@ export class ShareDetailComponent extends AppComponentBase implements OnInit {
             tenantId: this.settingsService.tenantId
         };
         this.shareService.GetWXExpByIdAsync(params).subscribe(res => {
+            var start = '<body>';
+            var end = '</body>';
+            var s = res.content.indexOf(start) + start.length;
+            var e = res.content.indexOf(end);
+            res.content = res.content.substring(s, e).replace(/gawechat\//g, '');
             this.sDetailsOfShare = res;
         });
         this.GetIsGoodAsync();
     }
 
     GetIsGoodAsync() {
-        let params: any = {id: this.id};
+        let params: any = { id: this.id };
         if (this.settingsService.tenantId) {
             params.tenantId = this.settingsService.tenantId;
         }
@@ -56,12 +64,16 @@ export class ShareDetailComponent extends AppComponentBase implements OnInit {
         this.router.navigate(['shares/share-write']);
     }
 
+    assembleHTML(strHTML: any) {
+        return this.sanitizer.bypassSecurityTrustHtml(strHTML);
+    }
+
     addGood() {
         this.statisticalDetail.articleId = this.mShareId;
         this.statisticalDetail.type = 2;
         this.statisticalDetail.openId = this.settingsService.openId;
-        this.isGood = true;
         if (!this.isGood) {
+            this.isGood = true;
             this.sDetailsOfShare.goodTotal++;
         }
         this.shareService.AddGoodAsync(this.statisticalDetail).subscribe(data => {

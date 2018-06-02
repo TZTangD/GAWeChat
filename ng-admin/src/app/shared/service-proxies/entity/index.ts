@@ -12,3 +12,4 @@ export * from './activity-view';
 export * from './upload';
 export * from './activity-form-info';
 export * from './post-info';
+export * from './home';

@@ -14,5 +14,7 @@ namespace HC.WeChat.Sessions.Dto
         public string UserName { get; set; }
 
         public string EmailAddress { get; set; }
+
+        public int NotifyCount { get; set; }
     }
 }

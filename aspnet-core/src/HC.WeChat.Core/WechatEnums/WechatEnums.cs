@@ -195,7 +195,8 @@ namespace HC.WeChat.WechatEnums
     /// </summary>
     public enum DeployTypeEnum
     {
-        积分配置 = 1
+        积分配置 = 1,
+        通知配置 =2
     }
     /// <summary>
     /// 配置代码
@@ -204,7 +205,8 @@ namespace HC.WeChat.WechatEnums
     {
         商品购买 = 1,
         商品评价 = 2,
-        店铺扫码兑换 = 3
+        店铺扫码兑换 = 3,
+        通知配置 = 4
     }
     /// <summary>
     /// 文章发布状态
@@ -229,8 +231,8 @@ namespace HC.WeChat.WechatEnums
     /// </summary>
     public enum ShopAuditStatus
     {
-        提交申请 = 1,
-        审核通过 = 2,
-        审核未通过 = 0,
+        待审核 = 1,
+        已审核 = 2,
+        已拒绝 = 0
     }
 }

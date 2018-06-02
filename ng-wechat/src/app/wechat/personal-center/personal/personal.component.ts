@@ -2,7 +2,7 @@ import { Component, ViewEncapsulation, OnInit, Injector } from '@angular/core';
 import { AppComponentBase } from '../../components/app-component-base';
 import { WechatUser, UserType } from '../../../services/model';
 import { Router } from '@angular/router';
-import { PurchaserecordService } from '../../../services';
+import { PurchaserecordService, WechatUserService } from '../../../services';
 
 @Component({
     selector: 'wechat-personal',
@@ -16,20 +16,23 @@ export class PersonalComponent extends AppComponentBase implements OnInit {
     isShowRetailer: boolean = false;
     accountTitle: string = '我的台账';
     countNotEvaluation: number;
-    constructor(injector: Injector, private router: Router, private purchaserecordService: PurchaserecordService) {
+    noCheckShopEmployeeCount:number;
+    constructor(injector: Injector, private router: Router, private purchaserecordService: PurchaserecordService,
+    private wechatUserService:WechatUserService) {
         super(injector);
     }
 
     ngOnInit() {
         this.settingsService.getUser().subscribe(result => {
             this.user = result;
-            if (this.user.userType == UserType.Retailer) {//零售客户
+            if (this.user.userType == UserType.Retailer && this.user.status == 1) {//零售客户
                 this.isShowRetailer = true;
                 this.accountTitle = '我的台账';
             } else if (this.user.userType == UserType.Staff) {//内部员工
                 this.isShowRetailer = true;
                 this.accountTitle = '台账查询';
             }
+            this.getNoCheckShopEmployeeCount();
         });
         // 以.then()方式处理，待确认
         this.GetCountNotEvaluationById();
@@ -67,7 +70,7 @@ export class PersonalComponent extends AppComponentBase implements OnInit {
     goPurchaseRecord(openId: string) {
         this.router.navigate(['/purchaserecords/purchaserecord', { openId: openId }]);
     }
-    goShopEvaluation(openId: string, pageType: string) {
+    goShopEvaluation(openId: string) {
         this.router.navigate(['/purchaserecords/purchaserecord', { openId: openId, pageType: 'shopEvaluation' }]);
     }
     goArchivalLevel() {
@@ -81,4 +84,20 @@ export class PersonalComponent extends AppComponentBase implements OnInit {
         //     this.router.navigate(['/customer-searchs/customer-search']);
         // }
     }
+    goShopEmployee() {
+        //当是店主的时候进入店员管理
+        if (this.user.isShopkeeper) {
+            this.router.navigate(['/shop-employees/shop-employee', { userId: this.user.userId }]);
+        }
+    }
+
+    /**
+     * 获取未审核店员数
+     */
+    getNoCheckShopEmployeeCount(){
+        this.wechatUserService.getNoCheckShopEmployeeCount({tenantId:this.settingsService.tenantId,userId:this.user.userId}).subscribe(data=>{
+            this.noCheckShopEmployeeCount=data;
+        });
+    }
+    
 } 

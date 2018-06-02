@@ -16,7 +16,7 @@ export class Employee implements IEmployee {
     creationTime: Date;
     creatorUserId: number;
     verificationCode: string;
-    employeeVerificationCode:string;
+    employeeVerificationCode: string;
     id: string;
     activeType: string;
     activeText: string;
@@ -106,8 +106,8 @@ export interface IEmployee {
     creatorUserId: number;
     id: string;
     verificationCode: string;
-    employeeVerificationCode:string;
-    
+    employeeVerificationCode: string;
+
 }
 
 export class CreateEmployee implements ICreateImployee {

@@ -1,0 +1,32 @@
+<!--component html goes here -->
+<Page [ngClass]="'infiniteloader'" [showTitle]="false"  [spacing]="false" >
+    <div class="weui-cells" style="margin-top: 0px;margin-bottom: 0px;">
+        <div class="weui-cell" style=" padding-bottom: 0px; padding-top: 0px; padding-left: 0px; padding-right: 0px;margin-bottom: 0px;">
+            <div style="text-align: center; width: 100%;">
+                <img src="./assets/images/levelsource/levelsource.jpg" style="width:100%;">
+            </div>
+        </div>
+    </div>
+    <!-- <weui-searchbar (search)="getCustomer(true,$event)" (cancel)="onCancel()" placeholder="请输入姓名、专卖号或电话" (clear)="onClear()"
+        [debounceTime]="500"></weui-searchbar> -->
+    <div class="weui-cells__title" style="margin-top: 0px;">
+        <a class="weui-cell">
+            <div class="weui-cell__hd">商品名</div>
+            <div class="weui-cell__bd" style="text-align:center;">可供量</div>
+            <!-- <div class="weui-cell__ft">编码</div> -->
+        </a>
+    </div>
+    <div class="weui-cells">
+        <weui-infiniteloader (loadmore)="onLoadMore($event)" #comp>
+            <a *ngFor="let i of goodSources"  class="weui-cell weui-cell_access">
+                <div class="weui-cell__hd">{{i.itemName}}</div>
+                <div class="weui-cell__bd" style="text-align:center;">{{i.amount}}</div>
+                <!-- <div class="weui-cell__ft">{{i.licenseKey}}</div> -->
+            </a>
+            <div *ngIf="goodSources.length<=0" class="weui-loadmore weui-loadmore_line">
+                <span class="weui-loadmore__tips">暂无数据</span>
+            </div>
+        </weui-infiniteloader>
+       
+    </div>
+</Page>

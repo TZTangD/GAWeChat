@@ -25,6 +25,8 @@ using Senparc.Weixin.MP.AdvancedAPIs;
 using HC.WeChat.WeChatGroups.Dtos;
 using HC.WeChat.Retailers.Dtos;
 using HC.WeChat.Employees.Dtos;
+using Senparc.Weixin.MP.AdvancedAPIs.TemplateMessage;
+using HC.WeChat.MemberConfigs;
 
 namespace HC.WeChat.WeChatUsers
 {
@@ -40,6 +42,8 @@ namespace HC.WeChat.WeChatUsers
         private readonly IRepository<Retailer, Guid> _retailerRepository;
         private readonly IRepository<Employee, Guid> _employeeRepository;
         private readonly IRepository<WeChatGroup, int> _wechatgroupRepository;
+        private readonly IRepository<MemberConfig, Guid> _memberconfigRepository;
+
         public int? TenantId { get; set; }
         public WechatAppConfigInfo AppConfig { get; set; }
 
@@ -54,10 +58,12 @@ namespace HC.WeChat.WeChatUsers
        IRepository<Employee, Guid> employeeRepository,
        IRepository<WeChatGroup, int> wechatgroupRepository,
        IWechatAppConfigAppService wechatAppConfigAppService,
-        IWeChatGroupAppService wechatGroupAppService
+        IWeChatGroupAppService wechatGroupAppService,
+        IRepository<MemberConfig, Guid> memberconfigRepository
 
         )
         {
+            _memberconfigRepository = memberconfigRepository;
             _wechatuserRepository = wechatuserRepository;
             _wechatuserManager = wechatuserManager;
             _retailerRepository = retailerRepository;
@@ -79,6 +85,7 @@ namespace HC.WeChat.WeChatUsers
         {
 
             var query = _wechatuserRepository.GetAll()
+                .WhereIf(!string.IsNullOrEmpty(input.UserName), u => u.UserName.Contains(input.UserName))
                 .WhereIf(!string.IsNullOrEmpty(input.Name), u => u.NickName.Contains(input.Name) || u.UserName.Contains(input.Name))
                 .WhereIf(input.UserType.HasValue, u => u.UserType == input.UserType);
 
@@ -264,6 +271,10 @@ namespace HC.WeChat.WeChatUsers
                     {
                         entity.IsShopkeeper = false;
                         entity.Status = UserAuditStatus.未审核;
+                        //发送审核通知
+                        var retalilerOpenId = await _wechatuserRepository.GetAll().Where(r => r.UserId == entity.UserId).Select(v => v.OpenId).FirstOrDefaultAsync();
+                        var currentName = await _wechatuserRepository.GetAll().Where(r => r.OpenId == input.OpenId).Select(v => v.NickName).FirstOrDefaultAsync();
+                        await SendCheckMesssage(retalilerOpenId, input.host, currentName);                     
                     }
                 }
                 else if (input.UserType == UserTypeEnum.内部员工)
@@ -298,28 +309,67 @@ namespace HC.WeChat.WeChatUsers
                 entity.OpenId = input.OpenId;
                 entity.TenantId = input.TenantId;
                 var result = await _wechatuserManager.BindWeChatUserAsync(entity);
+
                 //绑定成功后打标签
                 if (result.BindStatus == BindStatusEnum.已绑定)
                 {
-                    var weChatGroup = _wechatgroupRepository.GetAll().Where(g => g.TypeCode == entity.UserType).FirstOrDefaultAsync();
-                    List<string> openId_list = new List<string>();
-                    openId_list.Add(entity.OpenId);
-                    if (weChatGroup.Result != null)
-                    {
-                        await UserTagApi.BatchTaggingAsync(AppConfig.AppId, weChatGroup.Result.TagId, openId_list);
-                    }
-                    else
-                    {
-                        WeChatGroupListDto group = new WeChatGroupListDto();
-                        group.TypeCode = entity.UserType;
-                        group.TypeName = entity.UserType.ToString();
-                        group.TagName = entity.UserType.ToString();
-                        var resultGroup = await _wechatGroupAppService.CreateWeChatGroup(group);
-                        await UserTagApi.BatchTaggingAsync(AppConfig.AppId, resultGroup.TagId, openId_list);
-                    }
+                    await TagForWechatAsync(entity);
                 }
                 return new APIResultDto() { Code = 0, Msg = "绑定成功", Data = entity.MapTo<WeChatUserListDto>() };
             }
+        }
+
+        /// <summary>
+        /// 发送审核通知
+        /// </summary>
+        /// <param name="OpenId"></param>
+        /// <param name="host"></param>
+        /// <param name="currentName"></param>
+        /// <returns></returns>
+        public async Task SendCheckMesssage(string OpenId, string host,string currentName)
+        {
+            try
+            {             
+                string appId = AppConfig.AppId;
+                string openId = OpenId;
+                string templateId = "qvt7CNXBY4FzfzdX54TvMUaOi9jZ3-tdsb2NRhVp0yg";//模版id  
+                string url = host + "/GAWX/Authorization?page=302";
+                object data = new
+                {
+                    first = new TemplateDataItem("店员审核通知，请您尽快审核"),
+                    keyword1 = new TemplateDataItem(currentName.ToString()),
+                    keyword2 = new TemplateDataItem(DateTime.Now.ToString("yyyy-MM-dd HH:mm"))
+                };
+                await TemplateApi.SendTemplateMessageAsync(appId, openId, templateId, url, data);
+            }
+            catch (Exception ex)
+            {
+
+                Logger.ErrorFormat("审核通知发送失败 error：{0} Exception：{1}", ex.Message, ex);
+            }
+        }
+
+        /// <summary>
+        /// 微信用户绑定成功后打标签
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task TagForWechatAsync(WeChatUser entity)
+        {
+            try
+            {
+                //var weChatGroup = _wechatgroupRepository.GetAll().Where(g => g.TypeCode == entity.UserType).FirstOrDefaultAsync();
+                List<string> openId_list = new List<string>();
+                openId_list.Add(entity.OpenId);
+                var tagId = await _wechatGroupAppService.GetTagIdAsync(entity.UserType);
+                await UserTagApi.BatchTaggingAsync(AppConfig.AppId, tagId, openId_list);
+            }
+            catch (Exception e)
+            {
+                Logger.ErrorFormat("TagForWechatAsync-打标签失败:{0},Exception:{1}", e.Message, e);
+            }
+
         }
 
         [AbpAllowAnonymous]
@@ -441,6 +491,204 @@ namespace HC.WeChat.WeChatUsers
                 var entity = await _wechatuserRepository.GetAll().Where(w => w.UserId == userId).SingleOrDefaultAsync();
                 return entity.MapTo<WeChatUserListDto>();
             }
+        }
+
+        /// <summary>
+        /// 解除绑定
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task CheckWeChatUserBindStatusAsync(WeChatUserEditDto input)
+        {
+            if (input.UserType == UserTypeEnum.内部员工)
+            {
+                await dealMemeberConfigValueAndDesc(input);
+            }
+            await CancelTagAsync(input.UserType, input.OpenId);
+            //input.UserType = UserTypeEnum.消费者;
+            //input.BindStatus = BindStatusEnum.未绑定;
+            //input.UserId = null;
+            //input.UnBindTime = DateTime.Now;
+            //input.Status = null;
+            var entity = await _wechatuserRepository.GetAsync(input.Id.Value);
+            entity.UserType = UserTypeEnum.消费者;
+            entity.BindStatus = BindStatusEnum.未绑定;
+            entity.UserId = null;
+            entity.UnBindTime = DateTime.Now;
+            entity.Status = null;
+            //input.MapTo(entity);
+            await _wechatuserRepository.UpdateAsync(entity);
+        }
+
+        /// <summary>
+        /// 解绑移除会员配置员工信息
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task dealMemeberConfigValueAndDesc(WeChatUserEditDto input)
+        {
+            try
+            {
+                MemberConfig memeberConfig = await _memberconfigRepository.GetAll().Where(r => r.Code == DeployCodeEnum.通知配置 && r.Type == DeployTypeEnum.通知配置).FirstOrDefaultAsync();
+                if (memeberConfig.Desc!=null||memeberConfig.Value != null)
+                {
+                    string newDesc = null;
+                    string newValue = null;
+                    if (memeberConfig.Desc != null || memeberConfig.Desc.Length != 0)
+                    {
+                        string[] descIds = memeberConfig.Desc.Split(',');
+                        for (int i = 0; i < descIds.Length; i++)
+                        {
+                            if (descIds[i] != input.UserName)
+                            {
+                                newDesc += descIds[i] + ",";
+                            }
+                            else
+                            {
+                                descIds[i] = null;
+                            }
+                        }
+                        if (newDesc != null)
+                        {
+                            newDesc = newDesc.TrimStart(',').TrimEnd(',');
+                        }
+                    }
+                    if (memeberConfig.Value != null || memeberConfig.Value.Length != 0)
+                    {
+                        string[] valueIds = memeberConfig.Value.Split(',');
+                        for (int i = 0; i < valueIds.Length; i++)
+                        {
+                            if (valueIds[i] != input.OpenId)
+                            {
+                                newValue += valueIds[i] + ",";
+                            }
+                            else
+                            {
+                                valueIds[i] = null;
+                            }
+                        }
+                        if (newValue != null)
+                        {
+                            newValue = newValue.TrimStart(',').TrimEnd(',');
+                        }
+                    }
+                    memeberConfig.Value = newValue;
+                    memeberConfig.Desc = newDesc;
+                    await _memberconfigRepository.UpdateAsync(memeberConfig);
+                }
+                return;
+               
+            }
+            catch (Exception ex)
+            {
+
+                Logger.ErrorFormat("删除配置人员信息失败 error：{0} Exception：{1}", ex.Message, ex);
+            }
+        }
+        /// 取消标签
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="openId"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task CancelTagAsync(UserTypeEnum code, string openId)
+        {
+            try
+            {
+                var wechatGroup = await _wechatGroupAppService.GetWeChatGroupByUserType(code);
+                if (wechatGroup != null)
+                {
+                    List<string> openIds = new List<string>();
+                    openIds.Add(openId);
+                    await _wechatGroupAppService.CancelTagAsync(wechatGroup.TagId, openIds);
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.ErrorFormat("取消标签失败,error:{0},Exception:{1}", e.Message, e);
+            }
+        }
+
+        /// <summary>
+        /// 获取店员信息
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task<List<WeChatUserListDto>> GetShopEmployeesAsync(int? tenantId, Guid userId)
+        {
+            using (CurrentUnitOfWork.SetTenantId(tenantId))
+            {
+                var result = await _wechatuserRepository.GetAll().Where(w => w.UserId == userId && w.UserType == UserTypeEnum.零售客户 && w.BindStatus == BindStatusEnum.已绑定).OrderByDescending(w => w.IsShopkeeper).ToListAsync();
+                return result.MapTo<List<WeChatUserListDto>>();
+            }
+
+        }
+
+        /// <summary>
+        /// 审核店员
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task<APIResultDto> CheckShopEmployeeAsync(WeChatUserEditDto input)
+        {
+            input.BindTime = DateTime.Now;
+            input.Status = UserAuditStatus.已审核;
+            var entity = await _wechatuserRepository.GetAsync(input.Id.Value);
+            input.MapTo(entity);
+            await _wechatuserRepository.UpdateAsync(entity);
+            //反馈通知
+            await WXMessageToShopKeeper(input.OpenId);  
+            return new APIResultDto() { Code = 0, Msg = "提交成功，我们会尽快处理" };
+        }
+
+        /// <summary>
+        /// 反馈通知
+        /// </summary>
+        /// <param name="OpenId"></param>
+        /// <returns></returns>
+        public async Task WXMessageToShopKeeper(string OpenId)
+        {
+            try
+            {
+                string appId = AppConfig.AppId;
+                string openId = OpenId;
+                string templateId = "7I2cswoMRn0P_DsAYz-DCigntaGKJn-XUx6lMowDYRY";//模版id  
+                string url = "";
+                object data = new
+                {
+                    first = new TemplateDataItem("您所提交的店铺资料已通过审核!"),
+                    keyword1 = new TemplateDataItem("审核通过"),
+                    keyword2 = new TemplateDataItem(DateTime.Now.ToString("yyyy-MM-dd HH:mm"))
+                };
+                await TemplateApi.SendTemplateMessageAsync(appId, openId, templateId, url, data);
+            }
+            catch (Exception ex)
+            {
+
+                Logger.ErrorFormat("审核店员发送消息通知失败 error：{0} Exception：{1}", ex.Message, ex);
+            }
+        }
+
+
+        /// <summary>
+        /// 获取未审核店员人数
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task<int> GetShopEmployeesNoCheckCountAsync(int? tenantId, Guid userId)
+        {
+            using (CurrentUnitOfWork.SetTenantId(tenantId))
+            {
+                var result = await _wechatuserRepository.GetAll().Where(w => w.UserId == userId && w.UserType == UserTypeEnum.零售客户 && w.BindStatus == BindStatusEnum.已绑定 && w.Status == UserAuditStatus.未审核).CountAsync();
+                return result;
+            }
+
         }
     }
 }

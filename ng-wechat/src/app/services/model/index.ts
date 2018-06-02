@@ -17,3 +17,4 @@ export * from './account';
 export * from './level';
 export * from './account-level';
 export * from './statisticaldetail';
+export * from './good-source';

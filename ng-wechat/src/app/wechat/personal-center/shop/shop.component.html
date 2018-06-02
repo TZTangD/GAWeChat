@@ -1,11 +1,15 @@
-<Page [ngClass]="'icons'" [spacing]="false" [showTitle]="false" *ngIf="shop && shop.status == 1">
+<Page [ngClass]="'icons'" [spacing]="false" [showTitle]="false" *ngIf="shop && shop.status != 2">
     <div class="weui-cells">
         <div class="weui-cell">
             <div class="icon-box">
                 <i class="weui-icon-waiting weui-icon_msg"></i>
-                <div class="icon-box__ctn">
+                <div class="icon-box__ctn" *ngIf="shop.status == 1">
                     <h3 class="icon-box__title">等待审核</h3>
                     <p class="icon-box__desc">店铺等待营销中心审核</p>
+                </div>
+                <div class="icon-box__ctn"  *ngIf="shop.status == 0">
+                    <h3 class="icon-box__title">审核未通过</h3>
+                    <p class="icon-box__desc">请修改店铺重新提交</p>
                 </div>
             </div>
         </div>
@@ -30,7 +34,7 @@
     <div class="weui-cells weui-cells_img" [ngStyle]="{'background-image':'url('+ hostUrl + shop.coverPhoto +')'}">
         <div class="weui-cell" style="height: 120px;">
         </div>
-        <div class="weui-cell weui-cell_img" *ngIf="shop" >
+        <div class="weui-cell weui-shop-cell_img" *ngIf="shop" >
             <div class="weui-cell__hd">
                 <img src="./assets/images/shop/network-o-4.png" alt="" style="width:24px;margin-right:5px;display:block">
             </div>
@@ -40,7 +44,7 @@
             <div class="weui-cell__ft">
                 <p>
                     <img class="weui-icon-h18" src="./assets/images/shop/wave.png" alt="人气"><span style="color:rgb(221, 41, 77);">人气：{{shop.readTotal}}</span>
-                    <img class="weui-icon-h18" alt="销量" src="./assets/images/shop/trend-chart-2.png"><span style="color:rgb(48, 156, 48);">销量：{{shop.saleTotal}}</span></p>
+                    <img class="weui-icon-h18" alt="销量" src="./assets/images/shop/trend-chart-2.png"><span style="color:rgb(95, 231, 95);">销量：{{shop.saleTotal}}</span></p>
             </div>
         </div>
     </div>
@@ -88,7 +92,7 @@
                         </div>
                     </div>
                     <div class="weui-cell" *ngIf="!isView">
-                        <button weui-button [weui-plain]="true" (click)="goEditShop()">修改店铺</button>
+                        <button weui-button (click)="goEditShop()">修改店铺</button>
                     </div>
                 </div>
             </div>
@@ -110,7 +114,7 @@
                 </div>
                 <div class="weui-cells" *ngIf="!isView">
                     <div class="weui-cell">
-                        <button weui-button [weui-plain]="true" type="button" (click)="onProductPopup()">新增商品</button>
+                        <button weui-button type="button" (click)="onProductPopup()">新增商品</button>
                     </div>
                 </div>
             </div>

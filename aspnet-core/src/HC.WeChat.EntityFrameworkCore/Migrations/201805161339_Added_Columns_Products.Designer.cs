@@ -1695,7 +1695,7 @@ namespace HC.WeChat.Migrations
                 b.Property<int?>("Code");
                 b.Property<string>("Value");
                 b.Property<DateTime>("CreationTime").IsRequired();
-
+                b.Property<string>("Desc");
                 b.HasKey("Id");
 
                 //b.HasIndex("TargetTenantId", "TargetUserId", "ReadState");
