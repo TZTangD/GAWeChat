@@ -6,13 +6,14 @@ import { NzModalService } from 'ng-zorro-antd';
 import { EditEmployeeComponent } from './edit-employee/edit-employee.component';
 import { CreateEmployeeComponent } from './create-employee/create-employee.component';
 import { Employee } from '@shared/entity/marketting';
+import { AppConsts } from '@shared/AppConsts';
 
 @Component({
     moduleId: module.id,
     selector: 'employees',
     templateUrl: 'employees.component.html',
 })
-export class EmployeesComponent extends AppComponentBase implements OnInit{
+export class EmployeesComponent extends AppComponentBase implements OnInit {
     @ViewChild('editEmployeeModal') editEmployeeModal: EditEmployeeComponent;
     @ViewChild('createEmployeeModal') createEmployeeModal: CreateEmployeeComponent;
 
@@ -22,6 +23,7 @@ export class EmployeesComponent extends AppComponentBase implements OnInit{
         { text: '禁用', value: false, type: 'default' },
     ];
     positions = [
+        { text: '全部', value: 5 },
         { text: '营销人员', value: 1 },
         { text: '客户经理', value: 2 },
         { text: '营销中心', value: 3 },
@@ -29,8 +31,10 @@ export class EmployeesComponent extends AppComponentBase implements OnInit{
     ];
     employees: Employee[] = [];
     //用于删除框的员工名称显示
-    employeeName: string = ''
-    search: any = { position: null, name: '' }
+    employeeName: string = '';
+    search: any = { position: null, name: '' };
+    //导出Excel加载效果
+    exportLoading = false;
     constructor(injector: Injector, private employeeService: EmployeesServiceProxy, private modal: NzModalService) {
         super(injector);
     }
@@ -109,7 +113,24 @@ export class EmployeesComponent extends AppComponentBase implements OnInit{
     getParameter(): Parameter[] {
         var arry = [];
         arry.push(Parameter.fromJS({ key: 'Filter', value: this.search.name }));
-        arry.push(Parameter.fromJS({ key: 'Position', value: this.search.position }));
+        arry.push(Parameter.fromJS({ key: 'Position', value: this.search.position===5?null: this.search.position}));
         return arry;
+    }
+
+    /**
+     * 导出Excel
+     */
+    exportExcel() {
+        this.exportLoading=true;
+        this.employeeService.ExportExcel({filter:this.search.name,position:this.search.position}).subscribe(data => {
+            if (data.code == 0) {
+                var url = AppConsts.remoteServiceBaseUrl + data.data;
+                document.getElementById('aEmployeeExcelUrl').setAttribute('href', url);
+                document.getElementById('btnEmployeeHref').click();
+            } else {
+                this.notify.error(data.msg);
+            }
+            this.exportLoading = false;
+        });
     }
 }
