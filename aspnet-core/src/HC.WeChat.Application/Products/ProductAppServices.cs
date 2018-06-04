@@ -471,11 +471,11 @@ namespace HC.WeChat.Products
             {
                 if (isDay)
                 {
-                    return year + "0" + sep + DateTime.Now.AddMonths(-span).Month.ToString() + sep + "01";
+                    return year + sep + "0"  + DateTime.Now.AddMonths(-span).Month.ToString() + sep + "01";
                 }
                 else
                 {
-                    return year + "0" + sep + DateTime.Now.AddMonths(-span).Month.ToString();
+                    return year + sep + "0" + DateTime.Now.AddMonths(-span).Month.ToString();
                 }
             }
             else

@@ -76,4 +76,8 @@ export class HeaderTaskComponent implements OnInit {
         this.router.navigate(['admin/customer/store-management']);
     }
 
+    changeCount(){
+        
+    }
+
 }
