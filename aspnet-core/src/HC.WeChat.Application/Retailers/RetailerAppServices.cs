@@ -397,7 +397,7 @@ namespace HC.WeChat.Retailers
                         if (row.GetCell(0) != null &&row.GetCell(5)!=null)
                         {
                             retailerLevel.Code = row.GetCell(0).ToString();
-                            retailerLevel.ArchivalLevel = row.GetCell(5).ToString();
+                            retailerLevel.ArchivalLevel = row.GetCell(2).ToString();
                             resultList.Add(retailerLevel);
                         }
                     }
