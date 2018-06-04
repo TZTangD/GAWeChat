@@ -506,13 +506,18 @@ namespace HC.WeChat.WeChatUsers
                 await dealMemeberConfigValueAndDesc(input);
             }
             await CancelTagAsync(input.UserType, input.OpenId);
-            input.UserType = UserTypeEnum.消费者;
-            input.BindStatus = BindStatusEnum.未绑定;
-            input.UserId = null;
-            input.UnBindTime = DateTime.Now;
-            input.Status = null;
+            //input.UserType = UserTypeEnum.消费者;
+            //input.BindStatus = BindStatusEnum.未绑定;
+            //input.UserId = null;
+            //input.UnBindTime = DateTime.Now;
+            //input.Status = null;
             var entity = await _wechatuserRepository.GetAsync(input.Id.Value);
-            input.MapTo(entity);
+            entity.UserType = UserTypeEnum.消费者;
+            entity.BindStatus = BindStatusEnum.未绑定;
+            entity.UserId = null;
+            entity.UnBindTime = DateTime.Now;
+            entity.Status = null;
+            //input.MapTo(entity);
             await _wechatuserRepository.UpdateAsync(entity);
         }
 
@@ -655,7 +660,7 @@ namespace HC.WeChat.WeChatUsers
                 string url = "";
                 object data = new
                 {
-                    first = new TemplateDataItem("您所提交的资料已通过审核!"),
+                    first = new TemplateDataItem("您所提交的店铺资料已通过审核!"),
                     keyword1 = new TemplateDataItem("审核通过"),
                     keyword2 = new TemplateDataItem(DateTime.Now.ToString("yyyy-MM-dd HH:mm"))
                 };

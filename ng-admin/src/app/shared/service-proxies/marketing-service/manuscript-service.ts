@@ -144,7 +144,7 @@ export class ManuscriptServiceProxy {
     }
 
     update(input: Manuscript): Observable<Manuscript> {
-        let url_ = this.baseUrl + "/api/services/app/Manuscript/CreateOrUpdateManuscriptDto";
+        let url_ = this.baseUrl + "/api/services/app/Manuscript/MarkManuscriptDto";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(input);

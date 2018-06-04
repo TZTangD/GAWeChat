@@ -8,7 +8,7 @@
         </ng-template> -->
     <ng-template #action>
         <!-- <button nz-button [nzType]="'danger'" (click)="check(3)" *ngIf="shop.status == 1" [nzSize]="'large'">关闭店铺</button> -->
-        <button nz-button [nzType]="'danger'" (click)="check(0,checkContent)" *ngIf="shop.status == 1" [nzSize]="'large'">审核不通过</button>
+        <button nz-button [nzType]="'danger'" (click)="check(0,checkContent)" *ngIf="shop.status == 1" [nzSize]="'large'">拒绝</button>
         <button nz-button [nzType]="'primary'" (click)="check(2,checkContent)" *ngIf="shop.status == 1" [nzSize]="'large'">审核通过</button>
     </ng-template>
     <ng-template #content>
@@ -23,7 +23,7 @@
             </div>
             <div nz-col nzXs="24" nzSm="18">
                 <!-- <nz-card  [nzBordered]="false" nzNoPadding> -->
-                    <desc-list size="small" col="3">
+                    <desc-list size="small" col="3" class="mb-md">
                         <desc-list-item term="店铺名称">{{shop.name}}</desc-list-item>
                         <desc-list-item term="店铺地址">{{shop.address}}</desc-list-item>
                         <desc-list-item term="零售客户">{{shop.retailerName}}</desc-list-item>
@@ -34,8 +34,10 @@
                         <desc-list-item term="纬度">{{shop.latitude}}</desc-list-item>
                         <desc-list-item term="审核时间">{{shop.auditTime|_date}}</desc-list-item>
                         <!-- <desc-list-item term="评价描述">{{evaluationShow}}</desc-list-item> -->
-                        <desc-list-item term="店铺描述">{{shop.desc}}</desc-list-item>
-                        
+                        <!-- <desc-list-item term="店铺描述" > <p>{{shop.desc}}</p></desc-list-item> -->
+                    </desc-list>
+                    <desc-list size="small" col="1" class="mb-md">
+                        <desc-list-item term="店铺描述" col="24" > <p>{{shop.desc}}</p></desc-list-item>
                     </desc-list>
                 <!-- </nz-card> -->
             </div>

@@ -1,6 +1,6 @@
 <div class="logo">
     <a [routerLink]="['/']">
-        <img class="expanded" src="./assets/img/logo-full.svg" alt="{{settings.app.name}}" style="max-height:40px;" />
+        <img class="expanded" src="./assets/img/weilog.png" alt="{{settings.app.name}}" style="max-height:40px;" />
         <img class="collapsed" src="./assets/img/logo.svg" alt="{{settings.app.name}}" style="max-height:30px;" />
     </a>
 </div>
@@ -28,13 +28,13 @@
     <!-- <header-search class="header-search" [toggleChange]="searchToggleStatus"></header-search> -->
     <ul class="top-nav">
         <!-- Notify -->
-        <!--<li>
+        <!-- <li>
             <header-notify></header-notify>
-        </li>-->
-        <!-- Task -->
-        <!-- <li class="hidden-xs">
-            <header-task></header-task>
         </li> -->
+        <!-- Task -->
+        <li>
+            <header-task></header-task>
+        </li>
         <!-- App Icons -->
         <!-- <li class="hidden-xs">
             <header-icon></header-icon>

@@ -14,16 +14,16 @@ export class StoreManagementComponent extends AppComponentBase implements OnInit
     shops: Shop[] = [];
     search: any = { status: 4 };
     statusList = [
-        { text: '审核不通过', value: 0, type: 'error' },
-        { text: '提交申请', value: 1, type: 'processing' },
-        { text: '审核通过', value: 2, type: 'success' },
+        { text: '已拒绝', value: 0, type: 'error' },
+        { text: '待审核', value: 1, type: 'processing' },
+        { text: '已审核', value: 2, type: 'success' },
         // { text: '已关闭店铺', value: 3, type: 'error' },
     ];
     statues = [
         { text: '全部', value: 4 },
-        { text: '审核不通过', value: 0 },
-        { text: '提交申请', value: 1 },
-        { text: '审核通过', value: 2 },
+        { text: '已拒绝', value: 0 },
+        { text: '待审核', value: 1 },
+        { text: '已审核', value: 2 },
         // { text: '已关闭店铺', value: 3 },
     ];
     loading = false;
@@ -62,6 +62,6 @@ export class StoreManagementComponent extends AppComponentBase implements OnInit
         return arry;
     }
     editShop(shop: Shop) {
-        this.router.navigate(['admin/customer/store-detail', shop.id])
+        this.router.navigate(['admin/customer/store-detail', shop.id]);
     }
 }
