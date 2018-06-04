@@ -44,6 +44,9 @@
                     <span>用户名</span>
                 </th>
                 <th nz-th>
+                    <span>审核状态</span>
+                </th>
+                <th nz-th>
                     <span>绑定状态</span>
                 </th>
                 <th nz-th>
@@ -63,6 +66,7 @@
                 <td nz-td>{{wechatUser.openId}}</td>
                 <td nz-td>{{wechatUser.userTypeName}}</td>
                 <td nz-td>{{wechatUser.userName}}</td>
+                <td nz-td>{{wechatUser.statusName}}</td>
                 <td nz-td>{{wechatUser.bindStatusName}}</td>
                 <td nz-td>{{wechatUser.bindTime | _date}}</td>
                 <td nz-td>{{wechatUser.unBindTime | _date}}</td>
