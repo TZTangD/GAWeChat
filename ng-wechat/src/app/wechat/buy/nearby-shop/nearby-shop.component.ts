@@ -94,9 +94,10 @@ export class NearbyShopComponent extends AppComponentBase implements OnInit {
             this.wxService.getLocation().then((res) => {
                 this.gpslat = res.latitude;
                 this.gpslong = res.longitude;
-                this.wxService.translate(res.latitude, res.longitude).then((result) => {
-                    resolve(result);
-                })
+                //this.wxService.translate(res.latitude, res.longitude).then((result) => {
+                //    resolve(result);
+                //})
+                resolve(res);
             });
         }));
     }
@@ -105,9 +106,10 @@ export class NearbyShopComponent extends AppComponentBase implements OnInit {
     wxGetLocation() {
         this.myaddress = '定位中....';
         this.getWXLocation().then((res) => {
-            if (res && res.length > 0) {
-                this.latitude = res[0].lat;
-                this.longitude = res[0].lng;
+            //if (res && res.length > 0) {
+            if (res) {
+                this.latitude = res.latitude; //res[0].lat;
+                this.longitude = res.longitude; //res[0].lng;
                 //获取地址信息
                 this.getlocation();
                 this.getShops();
