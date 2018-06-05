@@ -24,6 +24,12 @@ using HC.WeChat.EPCoLines;
 using HC.WeChat.GACustPoints;
 using HC.WeChat.GAGrades;
 using HC.WeChat.Retailers.Dtos;
+using HC.WeChat.Helpers;
+using System.IO;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
+using HC.WeChat.Dto;
+using Abp.Domain.Uow;
 //using System.Linq;
 
 namespace HC.WeChat.Products
@@ -237,14 +243,14 @@ namespace HC.WeChat.Products
         public async Task CreateOrUpdateProductDto(ProductEditDto input)
         {
             string webRootPath = _hostingEnvironment.WebRootPath;
-          
+
             if (input.Id.HasValue)
             {
                 var entity = _productRepository.GetAsync(input.Id.MapTo<Guid>()).Result;
                 var url = entity.PhotoUrl;
                 var result = await UpdateProductAsync(input);
                 //删除原来的单个图片
-                if (url != result.PhotoUrl && url!= "/assets/img/default.png")
+                if (url != result.PhotoUrl && url != "/assets/img/default.png")
                 {
                     if (System.IO.File.Exists(webRootPath + url))
                     {
@@ -471,7 +477,7 @@ namespace HC.WeChat.Products
             {
                 if (isDay)
                 {
-                    return year + sep + "0"  + DateTime.Now.AddMonths(-span).Month.ToString() + sep + "01";
+                    return year + sep + "0" + DateTime.Now.AddMonths(-span).Month.ToString() + sep + "01";
                 }
                 else
                 {
@@ -652,6 +658,101 @@ namespace HC.WeChat.Products
                 return retailInfo;
             }
         }
+
+        #region 导出商品信息
+        /// <summary>
+        /// 获取Excel数据
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        private async Task<List<ProductListDto>> GeProductsNoPage(GetProductsInput input)
+        {
+            var query = _productRepository.GetAll()
+               .WhereIf(!string.IsNullOrEmpty(input.Name), p => p.Specification.Contains(input.Name))
+               .WhereIf(input.Type.HasValue, p => p.Type == input.Type)
+               .WhereIf(input.IsRare.HasValue, p => p.IsRare == input.IsRare);
+            //TODO:根据传入的参数添加过滤条件
+            var productCount = await query.CountAsync();
+
+            var products = await query .ToListAsync();
+
+            //var productListDtos = ObjectMapper.Map<List <ProductListDto>>(products);
+            var productListDtos = products.MapTo<List<ProductListDto>>();
+
+            return productListDtos;
+        }
+
+        /// <summary>
+        /// 创建Excel
+        /// </summary>
+        /// <param name="fileName">表名</param>
+        /// <param name="data">表数据</param>
+        /// <returns></returns>
+        private string SaveProductsExcel(string fileName, List<ProductListDto> data)
+        {
+            var fullPath = ExcelHelper.GetSavePath(_hostingEnvironment.WebRootPath) + fileName;
+            using (var fs = new FileStream(fullPath, FileMode.Create, FileAccess.Write))
+            {
+                IWorkbook workbook = new XSSFWorkbook();
+                ISheet sheet = workbook.CreateSheet("Employees");
+                var rowIndex = 0;
+                IRow titleRow = sheet.CreateRow(rowIndex);
+                string[] titles = { "商品规格", "商品类型", "指导零售价", "是否是特色商品", "包码", "条码","搜索次数","商品id","商品code","所属公司", "是否启用" };
+                var fontTitle = workbook.CreateFont();
+                fontTitle.IsBold = true;
+                for (int i = 0; i < titles.Length; i++)
+                {
+                    var cell = titleRow.CreateCell(i);
+                    cell.CellStyle.SetFont(fontTitle);
+                    cell.SetCellValue(titles[i]);
+                    //ExcelHelper.SetCell(titleRow.CreateCell(i), fontTitle, titles[i]);
+                }
+                var font = workbook.CreateFont();
+                foreach (var item in data)
+                {
+
+                    rowIndex++;
+                    IRow row = sheet.CreateRow(rowIndex);
+                    ExcelHelper.SetCell(row.CreateCell(0), font, item.Specification);
+                    ExcelHelper.SetCell(row.CreateCell(1), font, item.TypeName);
+                    ExcelHelper.SetCell(row.CreateCell(2), font, item.Price.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(3), font, item.IsRare.ToString()=="true" ? "是" : "否");
+                    ExcelHelper.SetCell(row.CreateCell(4), font, item.PackageCode);
+                    ExcelHelper.SetCell(row.CreateCell(5), font, item.BarCode);
+                    ExcelHelper.SetCell(row.CreateCell(6), font, item.SearchCount.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(7), font, item.ItemId);
+                    ExcelHelper.SetCell(row.CreateCell(8), font, item.ItemCode);
+                    ExcelHelper.SetCell(row.CreateCell(9), font, item.Company);
+                    ExcelHelper.SetCell(row.CreateCell(10), font, item.IsRare.ToString()=="true"?"是":"否");
+                }
+                workbook.Write(fs);
+            }
+            return "/files/downloadtemp/" + fileName;
+        }
+
+        /// <summary>
+        /// 导出商品Excel
+        /// </summary>
+        /// <param name="input">查询条件</param>
+        /// <returns></returns>
+        [UnitOfWork(isTransactional: false)]
+        public async Task<APIResultDto> ExportProductsExcel(GetProductsInput input)
+        {
+            try
+            {
+                var exportData = await GeProductsNoPage(input);
+                var result = new APIResultDto();
+                result.Code = 0;
+                result.Data = SaveProductsExcel("商品信息.xlsx", exportData);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Logger.ErrorFormat("ExportProductsExcel errormsg{0} Exception{1}", ex.Message, ex);
+                return new APIResultDto() { Code = 901, Msg = "网络忙...请待会儿再试！" };
+            }
+        }
+        #endregion
     }
 }
 

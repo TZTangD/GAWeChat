@@ -16,7 +16,10 @@ namespace HC.WeChat.Articles.Dtos
         public string Name { get; set; }
         public string Author { get; set; }
         public ArticlePushStatusEnum? Status { get; set; }
-
+        /// <summary>
+        /// 文章类型
+        /// </summary>
+        public ArticleTypeEnum? Type { get; set; }
         /// <summary>
         /// 正常化排序使用
         /// </summary>

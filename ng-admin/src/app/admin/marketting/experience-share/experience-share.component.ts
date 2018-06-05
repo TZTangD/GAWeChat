@@ -4,6 +4,7 @@ import { ArticleServiceProxy, PagedResultDtoOfArticle } from '@shared/service-pr
 import { Article } from '@shared/entity/marketting';
 import { Parameter } from '@shared/service-proxies/entity';
 import { Router } from '@angular/router';
+import { AppConsts } from '@shared/AppConsts';
 
 @Component({
     moduleId: module.id,
@@ -19,6 +20,7 @@ export class ExperienceShareComponent extends AppComponentBase implements OnInit
     ];
     articles: Article[] = [];
     loading = false;
+    exportLoading = false;
     constructor(injector: Injector, private articityService: ArticleServiceProxy,
     private router:Router,) {
         super(injector);
@@ -62,5 +64,22 @@ export class ExperienceShareComponent extends AppComponentBase implements OnInit
      */
     createArticle() {
         this.router.navigate(['admin/marketting/experience-detail'])
+    }
+
+    /**
+     * 导出经验分享
+     */
+    exportExcel(){
+        this.exportLoading=true;
+        this.articityService.ExportExcel({name:this.search.name,author:this.search.author,status:this.search.status === 2 ? null : this.search.status,type:2}).subscribe(data => {
+            if (data.code == 0) {
+                var url = AppConsts.remoteServiceBaseUrl + data.data;
+                document.getElementById('aArticleExcelUrl').setAttribute('href', url);
+                document.getElementById('btnArticleHref').click();
+            } else {
+                this.notify.error(data.msg);
+            }
+            this.exportLoading = false;
+        });
     }
 }

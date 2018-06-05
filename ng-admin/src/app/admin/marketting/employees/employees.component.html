@@ -38,17 +38,17 @@
                 </button>
             </div>
         </div>
-         <div nz-row [nzGutter]="24">
-                <div nz-col [nzSpan]="8" class="mb-md">
-                    <a style="display: none;" id="aEmployeeExcelUrl" href="#">
-                        <button type="button" id="btnEmployeeHref">隐藏下载</button>
-                    </a>
-                    <button nz-button type="button" (click)="exportExcel()" [nzLoading]="exportLoading" class="mr-sm">
-                        <i class="anticon anticon-download"></i>
-                        <span>下载公司员工</span>
-                    </button>
-                </div>
+        <div nz-row [nzGutter]="24">
+            <div nz-col [nzSpan]="4" [nzOffset]="20"  class="mb-md" >
+                <a style="display: none;" id="aEmployeeExcelUrl" href="#">
+                    <button type="button" id="btnEmployeeHref">隐藏下载</button>
+                </a>
+                <button nz-button type="button" (click)="exportExcel()"  [nzSize]="'large'"  [nzLoading]="exportLoading" class="mr-sm">
+                    <!-- <i class="anticon anticon-download"></i> -->
+                    <span>导出公司员工</span>
+                </button>
             </div>
+        </div>
     </form>
     <nz-table #nzTable [nzAjaxData]="employees" [nzTotal]="query.total" [(nzPageIndex)]="query.pageIndex" [(nzPageSize)]="query.pageSize"
         [nzLoading]="loading" [nzShowTotal]="'true'" [nzShowSizeChanger]="true" (nzPageIndexChange)="refreshData()" (nzPageSizeChange)="refreshData()">

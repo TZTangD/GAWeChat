@@ -17,6 +17,13 @@ using System;
 using HC.WeChat.WechatEnums;
 using HC.WeChat.Authorization;
 using HC.WeChat.StatisticalDetails;
+using Microsoft.AspNetCore.Hosting;
+using HC.WeChat.Helpers;
+using System.IO;
+using NPOI.XSSF.UserModel;
+using NPOI.SS.UserModel;
+using Abp.Domain.Uow;
+using HC.WeChat.Dto;
 
 namespace HC.WeChat.Articles
 {
@@ -32,6 +39,7 @@ namespace HC.WeChat.Articles
         private readonly IRepository<Article, Guid> _articleRepository;
         private readonly IArticleManager _articleManager;
         private readonly IRepository<StatisticalDetail, Guid> _statisticaldetailRepository;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
 
         /// <summary>
@@ -40,11 +48,13 @@ namespace HC.WeChat.Articles
         public ArticleAppService(IRepository<Article, Guid> articleRepository
       , IArticleManager articleManager
             , IRepository<StatisticalDetail, Guid> statisticaldetailRepository
+            , IHostingEnvironment hostingEnvironment
         )
         {
             _statisticaldetailRepository = statisticaldetailRepository;
             _articleRepository = articleRepository;
             _articleManager = articleManager;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         /// <summary>
@@ -169,7 +179,7 @@ namespace HC.WeChat.Articles
         {
             //TODO:更新前的逻辑判断，是否允许更新
             var entity = await _articleRepository.GetAsync(input.Id.Value);
-            input.MapTo(entity);        
+            input.MapTo(entity);
             // ObjectMapper.Map(input, entity);
             var result = await _articleRepository.UpdateAsync(entity);
             return result.MapTo<ArticleEditDto>();
@@ -267,7 +277,7 @@ namespace HC.WeChat.Articles
                                  Content = a.Content,
                                  CoverPhoto = a.CoverPhoto
                              };
-               
+
                 return await entity.OrderByDescending(q => q.PushTime).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
             }
         }
@@ -329,6 +339,96 @@ namespace HC.WeChat.Articles
                 return result.MapTo<ArticleListDto>();
             }
         }
+
+        #region 活动经验分享导出
+
+        /// <summary>
+        /// 获取Excel数据
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        private async Task<List<ArticleListDto>> GeArticleNoPage(GetArticlesInput input)
+        {
+            var query = _articleRepository.GetAll()
+                .Where(a => a.Type == input.Type)
+                .WhereIf(!string.IsNullOrEmpty(input.Name), a => a.Title.Contains(input.Name))
+                .WhereIf(!string.IsNullOrEmpty(input.Author), a => a.Author.Contains(input.Author))
+                .WhereIf(input.Status.HasValue, a => a.PushStatus == input.Status);
+            //TODO:根据传入的参数添加过滤条件
+            var articles = await query .ToListAsync();
+
+            var articleListDtos = articles.MapTo<List<ArticleListDto>>();
+
+            return articleListDtos;
+        }
+
+        /// <summary>
+        /// 创建Excel
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        private string SaveArticleExcel(string fileName, List<ArticleListDto> data)
+        {
+            var fullPath = ExcelHelper.GetSavePath(_hostingEnvironment.WebRootPath) + fileName;
+            using (var fs = new FileStream(fullPath, FileMode.Create, FileAccess.Write))
+            {
+                IWorkbook workbook = new XSSFWorkbook();
+                ISheet sheet = workbook.CreateSheet("Employees");
+                var rowIndex = 0;
+                IRow titleRow = sheet.CreateRow(rowIndex);
+                string[] titles = { "活动名称", "活动策划者", "阅读量", "点赞数", "发布状态", "发布时间" };
+                var fontTitle = workbook.CreateFont();
+                fontTitle.IsBold = true;
+                for (int i = 0; i < titles.Length; i++)
+                {
+                    var cell = titleRow.CreateCell(i);
+                    cell.CellStyle.SetFont(fontTitle);
+                    cell.SetCellValue(titles[i]);
+                    //ExcelHelper.SetCell(titleRow.CreateCell(i), fontTitle, titles[i]);
+                }
+                var font = workbook.CreateFont();
+                foreach (var item in data)
+                {
+
+                    rowIndex++;
+                    IRow row = sheet.CreateRow(rowIndex);
+                    ExcelHelper.SetCell(row.CreateCell(0), font, item.Title);
+                    ExcelHelper.SetCell(row.CreateCell(1), font, item.Author);
+                    ExcelHelper.SetCell(row.CreateCell(2), font, item.ReadTotal.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(3), font, item.GoodTotal.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(4), font, item.PushStatusName);
+                    ExcelHelper.SetCell(row.CreateCell(5), font, item.PushTime == null ? "" : item.PushTime.ToString());
+
+                }
+                workbook.Write(fs);
+            }
+            return "/files/downloadtemp/" + fileName;
+        }
+
+        /// <summary>
+        /// 导出活动、经验分享Excel
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [UnitOfWork(isTransactional: false)]
+        public async Task<APIResultDto> ExportArticlesExcel(GetArticlesInput input)
+        {
+            try
+            {
+                var exportData = await GeArticleNoPage(input);
+                var result = new APIResultDto();
+                result.Code = 0;
+                result.Data = SaveArticleExcel((input.Type == ArticleTypeEnum.经验分享?"经验分享.xlsx":"营销活动.xlsx"), exportData);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Logger.ErrorFormat("ExportArticlesExcel errormsg{0} Exception{1}", ex.Message, ex);
+                return new APIResultDto() { Code = 901, Msg = "网络忙...请待会儿再试！" };
+            }
+        }
+        #endregion
     }
 }
 
