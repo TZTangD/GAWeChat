@@ -10,7 +10,7 @@ import { Observable } from 'rxjs/Observable';
 import { SwaggerException, API_BASE_URL } from '@shared/service-proxies/service-proxies';
 import { Http, Headers, ResponseContentType, Response } from '@angular/http';
 import { Inject, Optional, Injectable, InjectionToken } from '@angular/core';
-import { Parameter } from '@shared/service-proxies/entity';
+import { Parameter, ApiResult } from '@shared/service-proxies/entity';
 import { Products } from '@shared/entity/customer';
 
 function throwException(message: string, status: number, response: string, headers: { [key: string]: any; }, result?: any): Observable<any> {
@@ -308,6 +308,56 @@ export class ProductsServiceProxy {
         return Observable.of<number>(<any>null);
     }
 
+    ExportExcel(input:any):Observable<ApiResult> {
+        let url_ = this.baseUrl + "/api/services/app/Product/ExportProductsExcel";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(input);
+
+        let options_ = {
+            body: content_,
+            method: "post",
+            headers: new Headers({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_) => {
+            return this.processExportExcel(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processExportExcel(response_);
+                } catch (e) {
+                    return <Observable<ApiResult>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<ApiResult>><any>Observable.throw(response_);
+        });
+    }
+    protected processExportExcel(response: Response): Observable<ApiResult> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? ApiResult.fromJS(resultData200) : new ApiResult();
+            return Observable.of(result200);
+        } else if (status === 401) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status === 403) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<ApiResult>(<any>null);
+    }
 }
 export class PagedResultDtoOfProducts implements IPagedResultDtoOfProducts {
     totalCount: number;
