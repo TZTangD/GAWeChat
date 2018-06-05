@@ -4,6 +4,7 @@ import { ShopServiceProxy, PagedResultDtoOfShop } from '@shared/service-proxies/
 import { Parameter } from '@shared/service-proxies/entity';
 import { Shop } from '@shared/entity/customer';
 import { Router } from '@angular/router';
+import { AppConsts } from '@shared/AppConsts';
 
 @Component({
     moduleId: module.id,
@@ -27,6 +28,7 @@ export class StoreManagementComponent extends AppComponentBase implements OnInit
         // { text: '已关闭店铺', value: 3 },
     ];
     loading = false;
+    exportLoading = false;
     constructor(injector: Injector, private shopServie: ShopServiceProxy,
         private router: Router) {
         super(injector);
@@ -63,5 +65,22 @@ export class StoreManagementComponent extends AppComponentBase implements OnInit
     }
     editShop(shop: Shop) {
         this.router.navigate(['admin/customer/store-detail', shop.id]);
+    }
+
+    /**
+     * 导出店铺信息
+     */
+    exportExcel(){
+        this.exportLoading=true;
+        this.shopServie.ExportExcel({name:this.search.name,tel:this.search.tel,status:this.search.status === 4 ? null : this.search.status}).subscribe(data => {
+            if (data.code == 0) {
+                var url = AppConsts.remoteServiceBaseUrl + data.data;
+                document.getElementById('aShopExcelUrl').setAttribute('href', url);
+                document.getElementById('btnShopHref').click();
+            } else {
+                this.notify.error(data.msg);
+            }
+            this.exportLoading = false;
+        });
     }
 }

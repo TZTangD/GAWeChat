@@ -716,14 +716,16 @@ namespace HC.WeChat.Products
                     ExcelHelper.SetCell(row.CreateCell(0), font, item.Specification);
                     ExcelHelper.SetCell(row.CreateCell(1), font, item.TypeName);
                     ExcelHelper.SetCell(row.CreateCell(2), font, item.Price.ToString());
-                    ExcelHelper.SetCell(row.CreateCell(3), font, item.IsRare.ToString()=="true" ? "是" : "否");
+                    var isRareStr = item.IsRare.ToString();
+                    ExcelHelper.SetCell(row.CreateCell(3), font,(isRareStr == "true"|| isRareStr == "True") ? "是" : "否");
                     ExcelHelper.SetCell(row.CreateCell(4), font, item.PackageCode);
                     ExcelHelper.SetCell(row.CreateCell(5), font, item.BarCode);
                     ExcelHelper.SetCell(row.CreateCell(6), font, item.SearchCount.ToString());
                     ExcelHelper.SetCell(row.CreateCell(7), font, item.ItemId);
                     ExcelHelper.SetCell(row.CreateCell(8), font, item.ItemCode);
                     ExcelHelper.SetCell(row.CreateCell(9), font, item.Company);
-                    ExcelHelper.SetCell(row.CreateCell(10), font, item.IsRare.ToString()=="true"?"是":"否");
+                    var isActionStr = item.IsAction.ToString();
+                    ExcelHelper.SetCell(row.CreateCell(10), font,( isActionStr == "true"|| isActionStr=="True") ?"是":"否");
                 }
                 workbook.Write(fs);
             }

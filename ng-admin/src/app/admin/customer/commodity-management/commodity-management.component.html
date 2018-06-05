@@ -50,6 +50,16 @@
                 </button>
             </div>
         </div>
+        <div nz-row [nzGutter]="24">
+            <div nz-col [nzSpan]="2" [nzOffset]="22" class="mb-md" >
+                <a style="display: none;" id="aProductsExcelUrl" href="#">
+                    <button type="button" id="btnProductsHref">隐藏下载</button>
+                </a>
+                <button nz-button type="button" (click)="exportExcel()"  [nzSize]="'large'"  [nzLoading]="exportLoading" class="mr-sm">
+                    <span>导出商品信息</span>
+                </button>
+            </div>
+        </div>
     </form>
     <nz-table #nzTable [nzAjaxData]="products" [nzTotal]="query.total" [(nzPageIndex)]="query.pageIndex" [(nzPageSize)]="query.pageSize"
         [nzLoading]="loading" [nzShowTotal]="'true'" [nzShowSizeChanger]="true" (nzPageIndexChange)="refreshData()" (nzPageSizeChange)="refreshData()">
