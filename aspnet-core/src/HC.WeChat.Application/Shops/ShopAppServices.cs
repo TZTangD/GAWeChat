@@ -9,10 +9,8 @@ using System.Linq;
 
 using System.Linq.Dynamic.Core;
 using Microsoft.EntityFrameworkCore;
-using HC.WeChat.Shops.Authorization;
 using HC.WeChat.Shops.Dtos;
 using HC.WeChat.Shops.DomainServices;
-using HC.WeChat.Shops;
 using System;
 using HC.WeChat.Authorization;
 using HC.WeChat.Retailers;
@@ -415,6 +413,7 @@ namespace HC.WeChat.Shops
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
+        [AbpAllowAnonymous]
         public async Task CheckShop(CheckShopDto input)
         {
             var entity = await _shopRepository.GetAsync(input.Id);
