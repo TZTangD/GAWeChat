@@ -8,33 +8,28 @@
         "avatar": "./assets/img/zorro.svg",
         "email": "cipchk@qq.com"
     },
-    "menu": [
-        {
+    "menu": [{
             "text": "主导航",
             "translate": "main_navigation",
             "group": true,
-            "children": [
-                {
-                    "text": "工作台",
-                    "translate": "home",
-                    "link": "/home/index",
-                    "icon": "fa fa-home",
-                    "reuse": false
-                }
-            ]
+            "children": [{
+                "text": "工作台",
+                "translate": "home",
+                "link": "/home/index",
+                "icon": "fa fa-home",
+                "reuse": false
+            }]
         },
         {
             "text": "微信平台",
             "translate": "wechat",
             "group": true,
-            "children": [
-                {
+            "children": [{
                     "text": "微信管理",
                     "translate": "weichat-manager",
                     "icon": "fa fa-wechat",
                     "acl": "MarketingCenter",
-                    "children": [
-                        {
+                    "children": [{
                             "text": "授权配置",
                             "link": "/admin/wechat/authsetting",
                             "translate": "weichat-setting"
@@ -50,8 +45,7 @@
                     "text": "营销服务",
                     "translate": "market-serve",
                     "icon": "anticon anticon-shop",
-                    "children": [
-                        {
+                    "children": [{
                             "text": "公司员工",
                             "link": "/admin/marketting/employee",
                             "translate": "market-user"
@@ -80,8 +74,7 @@
                     "text": "客户服务",
                     "translate": "client-serve",
                     "icon": "anticon anticon-customer-service",
-                    "children": [
-                        {
+                    "children": [{
                             "text": "零售客户",
                             "link": "/admin/customer/retail-customer",
                             "translate": "retail-client",
@@ -116,8 +109,7 @@
                     "text": "会员管理",
                     "translate": "member-management",
                     "icon": "anticon anticon-user",
-                    "children":[
-                        {
+                    "children": [{
                             "text": "会员管理",
                             "link": "/admin/member/member-management",
                             "translate": "member-management",
@@ -126,12 +118,14 @@
                         {
                             "text": "积分查询",
                             "link": "/admin/member/integral-search",
-                            "translate": "integral-search"
+                            "translate": "integral-search",
+                            "reuse": false
                         },
                         {
                             "text": "会员设置",
                             "link": "/admin/member/member-setting",
-                            "translate": "member-setting"
+                            "translate": "member-setting",
+                            "reuse": false
                         }
                     ]
                 }
@@ -142,26 +136,23 @@
             "translate": "system",
             "group": true,
             "acl": "Admin",
-            "children": [
-                {
-                    "text": "系统管理",
-                    "translate": "admin",
-                    "link": "/admin",
-                    "icon": "fa fa-users",
-                    "children": [
-                        {
-                            "text": "用户",
-                            "link": "/admin/system/users",
-                            "translate": "users"
-                        },
-                        {
-                            "text": "角色",
-                            "link": "/admin/system/roles",
-                            "translate": "roles"
-                        }
-                    ]
-                }
-            ]
+            "children": [{
+                "text": "系统管理",
+                "translate": "admin",
+                "link": "/admin",
+                "icon": "fa fa-users",
+                "children": [{
+                        "text": "用户",
+                        "link": "/admin/system/users",
+                        "translate": "users"
+                    },
+                    {
+                        "text": "角色",
+                        "link": "/admin/system/roles",
+                        "translate": "roles"
+                    }
+                ]
+            }]
         }
     ]
 }

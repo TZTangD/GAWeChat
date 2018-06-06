@@ -68,8 +68,20 @@
                     </button>
                 </nz-upload>
             </div>
-            <div nz-col [nzSpan]="18" class="mb-md">
+            <div nz-col [nzSpan]="14" class="mb-md">
                 注：导入档级请先下载档级模板，导入Excel客户编码和档级必填，其它项可不填
+            </div>
+            <!-- <button style="float: right;" nz-button type="button" (click)="exportExcel()" [nzLoading]="exportLoading" class="mx-sm">
+                <i class="anticon anticon-download"></i>
+                <span>导出</span>
+            </button> -->
+            <div nz-col style="float:right; padding-left:0px" [nzSpan]="4" class="mb-md">
+                <a style="display: none;" id="aRetailAllExcelUrl" href="#">
+                    <button type="button" id="btnRetailAllHref">隐藏下载</button>
+                </a>
+                <button nz-button style="float: right;" type="button" (click)="exportExcelAll(true)" [nzLoading]="exportLoading" [nzSize]="'large'">
+                        <i class="anticon anticon-download"></i>
+                        <span>导出</span></button>
             </div>
         </div>
     </form>

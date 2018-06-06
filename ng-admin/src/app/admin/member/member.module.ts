@@ -14,14 +14,14 @@ import { MessageEmployeeModalComponent } from "./member-setting/message-employee
     imports: [
         SharedModule,
         LayoutModule,
-        MemberRoutingModule
+        MemberRoutingModule,
     ],
     declarations: [
         MemberManagementComponent,
         IntegralSearchComponent,
         MemberSettingComponent,
         IntegralSearchDetailComponent,
-        MessageEmployeeModalComponent
+        MessageEmployeeModalComponent,
     ],
     providers: [
         AppRouteGuard

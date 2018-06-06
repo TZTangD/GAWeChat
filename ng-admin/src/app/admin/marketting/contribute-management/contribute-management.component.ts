@@ -4,6 +4,7 @@ import { Manuscript } from '@shared/entity/marketting';
 import { ManuscriptServiceProxy, PagedResultDtoOfManuscript } from '@shared/service-proxies/marketing-service';
 import { Parameter } from '@shared/service-proxies/entity';
 import { Router } from '@angular/router';
+import { AppConsts } from '@shared/AppConsts';
 
 @Component({
     moduleId: module.id,
@@ -18,7 +19,7 @@ export class ContributeManagementComponent extends AppComponentBase implements O
         { text: '已处理', value: 1 },
     ];
     manuscripts: Manuscript[] = [];
-
+    exportLoading = false;
     loading = false;
     constructor(injector: Injector, private manuscriptService: ManuscriptServiceProxy,
         private router: Router) {
@@ -58,5 +59,19 @@ export class ContributeManagementComponent extends AppComponentBase implements O
     */
     editManuscript(manuscript: Manuscript) {
         this.router.navigate(['admin/marketting/contribute-detail', manuscript.id])
+    }
+
+    exportExcelAll() {
+        this.exportLoading = true;
+        this.manuscriptService.exportExcel({}).subscribe(result => {
+            if (result.code == 0) {
+                var url = AppConsts.remoteServiceBaseUrl + result.data;
+                document.getElementById('aManuscriptExcelUrl').setAttribute('href', url);
+                document.getElementById('btnManuscriptHref').click();
+            } else {
+                this.notify.error(result.msg);
+            }
+            this.exportLoading = false;
+        });
     }
 }

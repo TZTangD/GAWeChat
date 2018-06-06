@@ -47,6 +47,8 @@ namespace HC.WeChat.Shops
         private readonly IRepository<Product, Guid> _productRepository;
         IWechatAppConfigAppService _wechatAppConfigAppService;
         private readonly IRepository<MemberConfig, Guid> _memberconfigRepository;
+        private readonly IRepository<WechatAppConfig, int> _wechatappconfigRepository;
+
         private int? TenantId { get; set; }
         private WechatAppConfigInfo AppConfig { get; set; }
         private readonly IRepository<WeChatUser, Guid> _wechatuserRepository;
@@ -61,7 +63,8 @@ namespace HC.WeChat.Shops
         , IRepository<Product, Guid> productRepository
             , IWechatAppConfigAppService wechatAppConfigAppService
          , IRepository<MemberConfig, Guid> memberconfigRepository
-            , IRepository<WeChatUser, Guid> wechatuserRepository)
+            , IRepository<WeChatUser, Guid> wechatuserRepository
+            , IRepository<WechatAppConfig, int> wechatappconfigRepository)
         {
             _shopRepository = shopRepository;
             _shopManager = shopManager;
@@ -74,6 +77,7 @@ namespace HC.WeChat.Shops
             AppConfig = _wechatAppConfigAppService.GetWechatAppConfig(TenantId).Result;
             _memberconfigRepository = memberconfigRepository;
             _wechatuserRepository = wechatuserRepository;
+            _wechatappconfigRepository = wechatappconfigRepository;
         }
 
         /// <summary>
@@ -197,26 +201,31 @@ namespace HC.WeChat.Shops
         {
             try
             {
-                //发送微信模板通知-后台配置内部员工
-                string memberConfig = await _memberconfigRepository.GetAll().Where(v => v.Code == DeployCodeEnum.通知配置).Select(v => v.Value).FirstOrDefaultAsync();
-                if (memberConfig.Length!=0||memberConfig!=null)
+                string templateId = await _wechatappconfigRepository.GetAll().Select(v => v.TemplateIds).FirstOrDefaultAsync();
+                if (templateId != null || templateId.Length != 0)
                 {
-                    var openIdIds = memberConfig.Split(',');
-                    if (openIdIds.Length != 0)
+                    string[] ids = templateId.Split(',');
+                    //发送微信模板通知-后台配置内部员工
+                    string memberConfig = await _memberconfigRepository.GetAll().Where(v => v.Code == DeployCodeEnum.通知配置).Select(v => v.Value).FirstOrDefaultAsync();
+                    if (memberConfig.Length != 0 || memberConfig != null)
                     {
-                        foreach (var item in openIdIds)
+                        var openIdIds = memberConfig.Split(',');
+                        if (openIdIds.Length != 0)
                         {
-                            string appId = AppConfig.AppId;
-                            string openId = item;
-                            string templateId = "qvt7CNXBY4FzfzdX54TvMUaOi9jZ3-tdsb2NRhVp0yg";//模版id  
-                            string url = "";
-                            object data = new
+                            foreach (var item in openIdIds)
                             {
-                                first = new TemplateDataItem("有新的店铺资料提交，请您尽快审核"),
-                                keyword1 = new TemplateDataItem(input.Shop.Name.ToString()),
-                                keyword2 = new TemplateDataItem(DateTime.Now.ToString("yyyy-MM-dd HH:mm"))
-                            };
-                            await TemplateApi.SendTemplateMessageAsync(appId, openId, templateId, url, data);
+                                string appId = AppConfig.AppId;
+                                string openId = item;
+                                //string templateId = "qvt7CNXBY4FzfzdX54TvMUaOi9jZ3-tdsb2NRhVp0yg";//模版id  
+                                string url = "";
+                                object data = new
+                                {
+                                    first = new TemplateDataItem("有新的店铺资料提交，请您尽快审核"),
+                                    keyword1 = new TemplateDataItem(input.Shop.Name.ToString()),
+                                    keyword2 = new TemplateDataItem(DateTime.Now.ToString("yyyy-MM-dd HH:mm"))
+                                };
+                                await TemplateApi.SendTemplateMessageAsync(appId, openId, ids[2], url, data);
+                            }
                         }
                     }
                 }
@@ -425,33 +434,38 @@ namespace HC.WeChat.Shops
             var ShopOpenId = await _wechatuserRepository.GetAll().Where(r => r.UserId == entity.RetailerId).Select(v => v.OpenId).FirstOrDefaultAsync();
             try
             {
-                if (input.Status == ShopAuditStatus.已审核)
+                string templateId = await _wechatappconfigRepository.GetAll().Select(v => v.TemplateIds).FirstOrDefaultAsync();
+                if (templateId != null || templateId.Length != 0)
                 {
-                    string appId = AppConfig.AppId;
-                    string openId = ShopOpenId;
-                    string templateId = "7I2cswoMRn0P_DsAYz-DCigntaGKJn-XUx6lMowDYRY";//模版id  
-                    string url = "";
-                    object data = new
+                    string[] ids = templateId.Split(',');
+                    if (input.Status == ShopAuditStatus.已审核)
                     {
-                        first = new TemplateDataItem("您的店铺已通过审核!"),
-                        keyword1 = new TemplateDataItem("审核通过"),
-                        keyword2 = new TemplateDataItem(DateTime.Now.ToString("yyyy-MM-dd HH:mm"))
-                    };
-                    await TemplateApi.SendTemplateMessageAsync(appId, openId, templateId, url, data);
-                }
-                else
-                {
-                    string appId = AppConfig.AppId;
-                    string openId = ShopOpenId;
-                    string templateId = "n325dGQOYvNMZ46eFDIlFo5jWXSr-P3jNMDubXZ3Sbw";//模版id  
-                    string url = "";
-                    object data = new
+                        string appId = AppConfig.AppId;
+                        string openId = ShopOpenId;
+                        //string templateId = "7I2cswoMRn0P_DsAYz-DCigntaGKJn-XUx6lMowDYRY";//模版id  
+                        string url = "";
+                        object data = new
+                        {
+                            first = new TemplateDataItem("您的店铺已通过审核"),
+                            keyword1 = new TemplateDataItem("通过审核"),
+                            keyword2 = new TemplateDataItem(DateTime.Now.ToString("yyyy-MM-dd HH:mm"))
+                        };
+                        await TemplateApi.SendTemplateMessageAsync(appId, openId, ids[1], url, data);
+                    }
+                    else
                     {
-                        keyword1 = new TemplateDataItem("审核未通过"),
-                        keyword2 = new TemplateDataItem(DateTime.Now.ToString("yyyy-MM-dd HH:mm")),
-                        keyword3 = new TemplateDataItem("您的店铺未通过审核,请修改资料重新提交!"),
-                    };
-                    await TemplateApi.SendTemplateMessageAsync(appId, openId, templateId, url, data);
+                        string appId = AppConfig.AppId;
+                        string openId = ShopOpenId;
+                        //string templateId = "n325dGQOYvNMZ46eFDIlFo5jWXSr-P3jNMDubXZ3Sbw";//模版id  
+                        string url = "";
+                        object data = new
+                        {
+                            keyword1 = new TemplateDataItem("审核未通过"),
+                            keyword2 = new TemplateDataItem(DateTime.Now.ToString("yyyy-MM-dd HH:mm")),
+                            keyword3 = new TemplateDataItem("您的店铺未通过审核,请修改资料重新提交"),
+                        };
+                        await TemplateApi.SendTemplateMessageAsync(appId, openId, ids[3], url, data);
+                    }
                 }
             }
             catch (Exception ex)

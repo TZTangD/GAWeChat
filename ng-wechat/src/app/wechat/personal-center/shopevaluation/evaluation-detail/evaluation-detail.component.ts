@@ -33,7 +33,7 @@ export class EvaluationDetailComponent extends AppComponentBase implements OnIni
         super(injector);
     }
     ngOnInit() {
-        this.res.radioType = this.radioType[2];
+        this.res.radioType = this.radioType[0];
         this.res.radio = this.radio[0];
         this.GetWXProductsDetailsByIdAsync();
         if (this.pageType == 'detail') {

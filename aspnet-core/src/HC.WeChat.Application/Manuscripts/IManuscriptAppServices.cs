@@ -73,5 +73,7 @@ namespace HC.WeChat.Manuscripts
         /// <param name="id"></param>
         /// <returns></returns>
         Task<ManuscriptEditDto> MarkManuscriptDto(ManuscriptEditDto input);
+        Task<APIResultDto> ExportManuscriptsExcel(GetManuscriptsInput input);
+
     }
 }

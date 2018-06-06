@@ -3,27 +3,23 @@ import { Component, OnInit } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
 import { AppSessionService } from '@shared/session/app-session.service';
 import { ShopServiceProxy } from '@shared/service-proxies/customer-service';
-import { HomeInfo } from '@shared/service-proxies/entity';
+import { HomeInfo, Parameter } from '@shared/service-proxies/entity';
 import { SettingsService } from '@delon/theme';
 
 import { UploadFile } from 'ng-zorro-antd';
+import { AdviseService, PagedResultDtoOfAdvise } from '@shared/service-proxies/consumer-service/advise-service';
+import { Advise } from '@shared/entity/consumer';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-home-index',
     templateUrl: './index.component.html'
 })
 export class IndexComponent implements OnInit {
-
+    adviseList: Advise[] = [];
     homeInfo: HomeInfo = new HomeInfo();
-    constructor(private http: _HttpClient, public msg: NzMessageService, private _appSessionService: AppSessionService,
-        private shopServiceProxy: ShopServiceProxy, private settings: SettingsService) { }
-
-    todoData: any[] = [
-        { completed: true, avatar: '1', name: '苏者名', content: `订货流程是什么样的？` },
-        { completed: false, avatar: '2', name: '杨太', content: `我想咨询如何订货` },
-        { completed: false, avatar: '3', name: '李红', content: `我想咨询如何参加本次活动` },
-        { completed: false, avatar: '4', name: '曾开', content: `你们的营销电话是多少` }
-    ];
+    constructor(private _adviseService: AdviseService, private http: _HttpClient, public msg: NzMessageService, private _appSessionService: AppSessionService,
+        private shopServiceProxy: ShopServiceProxy, private settings: SettingsService, private _router: Router) { }
 
     quickMenu = false;
 
@@ -77,6 +73,7 @@ export class IndexComponent implements OnInit {
             this.roleName += ' 客户经理';
         }
         this.getFormInfo();
+        this.getAdvise();
     }
 
     getFormInfo() {
@@ -88,5 +85,27 @@ export class IndexComponent implements OnInit {
     handlePreview = (file: UploadFile) => {
         this.previewImage = file.url || file.thumbUrl;
         this.previewVisible = true;
+    }
+
+    /**
+     * 获取最新五条意见反馈
+     */
+    getAdvise() {
+        this._adviseService.getAll(0, 5, this.getParameter()).subscribe((result: PagedResultDtoOfAdvise) => {
+            this.adviseList = result.items;
+        })
+    }
+    getParameter(): Parameter[] {
+        let parray = [];
+        parray.push(Parameter.fromJS({}));
+        return parray;
+    }
+
+    /**
+     * 反馈详情
+     * @param advise 
+     */
+    adviseDetail(advise: Advise) {
+        this._router.navigate(['admin/consumer/advise-detail', advise.id]);
     }
 }
