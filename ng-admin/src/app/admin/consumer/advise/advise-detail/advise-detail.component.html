@@ -40,8 +40,11 @@
                         <div nz-form-label nz-col [nzSm]="4">
                             <label for="content">举报内容</label>
                         </div>
-                        <div nz-form-control nz-col [nzSm]="20">
+                        <!-- <div nz-form-control nz-col [nzSm]="20">
                             <nz-input [nzDisabled]="true" nzType="textarea" nzRows="6" name='content' [(ngModel)]="advise.content" [nzId]="'content'"></nz-input>
+                        </div> -->
+                        <div nz-form-control nz-col [nzSm]="20" style="word-break:break-all;">
+                            {{advise.content}}
                         </div>
                     </div>
 
@@ -49,12 +52,12 @@
                         <div nz-form-label nz-col [nzSm]="4">
                             <label for="photoUrl">图片</label>
                         </div>
-                        <div nz-form-control nz-col [nzSm]="10">
+                        <div nz-form-control nz-col [nzSm]="20">
                             <h4 *ngIf="advise.photoUrl" class="mb-md">点击图片可查看原图</h4>
                             <nz-list class="imgList" [nzDataSource]="photoUrls" [nzGrid]="{gutter: 24, lg: 6, md: 8, sm: 12, xs: 24 }">
                                 <ng-template #item let-item>
                                     <nz-list-item>
-                                        <img alt="" src="{{host+item}}" (click)="handlePreview(host+item)" style="width: 98%; height: 250px;">
+                                        <img alt="" src="{{host+item}}" (click)="handlePreview(host+item)" style="width: 100%;height: 230px;">
                                     </nz-list-item>
                                 </ng-template>
                             </nz-list>

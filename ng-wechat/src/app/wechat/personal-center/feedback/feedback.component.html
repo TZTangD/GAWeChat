@@ -46,6 +46,33 @@
                     <input class="weui-input" type="tel" [(ngModel)]="feedback.phone" name="phone" weui-input="mobile">
                 </div>
             </div>
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <div class="weui-uploader">
+                        <div class="weui-uploader__hd">
+                            <p class="weui-uploader__title">图片上传</p>
+                            <div class="weui-uploader__info">最多上传4张{{uploader?.uploadedCount}}/4</div>
+                        </div>
+                        <div class="weui-uploader__bd">
+                            <ul class="weui-uploader__files">
+                                <li class="weui-uploader__file" *ngFor="let item of uploader.queue" [weui-thumb]="item._file" (click)="onGallery(item)" [ngClass]="{'weui-uploader__file_status': item.isError}">
+                                    <div class="weui-uploader__file-content" *ngIf="item.isUploading">{{item.progress}}%</div>
+                                    <div class="weui-uploader__file-content" *ngIf="item.isError">
+                                        <i class="weui-icon-warn"></i>
+                                    </div>
+                                </li>
+                            </ul>
+                            <div class="weui-uploader__input-box" *ngIf="uploader?.queue?.length < 4">
+                                <input class="weui-uploader__input" type="file" accept="image/*" multiple [weui-uploader-file]="uploader">
+                            </div>
+                        </div>
+                    </div>
+                    <weui-gallery [imgs]="img" [(show)]="imgShow" (delete)="onDel($event)"></weui-gallery>
+                </div>
+            </div>
+            <!-- <div class="weui-btn-area">
+                <button weui-button (click)="uploader.uploadAll()" [disabled]="uploader.isUploading">上传</button>
+            </div> -->
         </div>
         <div class="weui-btn-area">
             <button weui-button [weui-loading]="loading" [disabled]="!f.form.valid" [ngClass]="{'weui-btn_disabled': !f.form.valid}">提交</button>
