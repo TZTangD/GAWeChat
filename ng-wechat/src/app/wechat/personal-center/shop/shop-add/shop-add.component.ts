@@ -63,8 +63,10 @@ export class ShopAddComponent extends AppComponentBase implements OnInit {
         url: AppConsts.remoteServiceBaseUrl + '/WeChatFile/FilesPosts?folder=shop',
         auto: true,
         limit: 1,
-        size: 153600,
+        //size: 153600,
         onUploadStart: ((file: FileItem) => {
+            console.table(file._file);
+            console.table(file.file);              
             if (file.file.size > 153600) {
                 this.srv['warn']('文件必须小于等于150KB');
                 file.cancel();
