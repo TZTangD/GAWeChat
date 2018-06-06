@@ -14,12 +14,13 @@ import { TranslateModule } from '@ngx-translate/core';
 import { CountdownModule } from 'ngx-countdown';
 
 import { HostUrlPipe } from '@shared/pipe/host-url.pipe';
+import { LengthLimitPipe } from '@shared/pipe/length-limit.pipe';
 
 const THIRDMODULES = [ CountdownModule ];
 // endregion
 
 // region: your componets & directives
-const COMPONENTS = [HostUrlPipe];
+const COMPONENTS = [HostUrlPipe,LengthLimitPipe];
 const DIRECTIVES = [];
 // endregion
 

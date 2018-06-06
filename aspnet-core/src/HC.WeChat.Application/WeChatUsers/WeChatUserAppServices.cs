@@ -22,7 +22,6 @@ using HC.WeChat.WeChatGroups;
 using HC.WeChat.WechatAppConfigs.Dtos;
 using HC.WeChat.WechatAppConfigs;
 using Senparc.Weixin.MP.AdvancedAPIs;
-using HC.WeChat.WeChatGroups.Dtos;
 using HC.WeChat.Retailers.Dtos;
 using HC.WeChat.Employees.Dtos;
 using Senparc.Weixin.MP.AdvancedAPIs.TemplateMessage;
@@ -273,8 +272,14 @@ namespace HC.WeChat.WeChatUsers
                     }
                     else
                     {
-                        return new APIResultDto() { Code = 901, Msg = "零售户验证未通过" };
+                        return new APIResultDto() { Code = 902, Msg = "零售户验证未通过" };
                     }
+
+                    //验证微信用户是否绑定过其他零售客户 前端规避重复绑定 暂时注释
+                    //if (_wechatuserRepository.GetAll().Any(w => w.OpenId == input.OpenId && w.UserType == UserTypeEnum.零售客户))
+                    //{
+                    //    return new APIResultDto() { Code = 903, Msg = "该用户已经绑定过零售客户" };
+                    //}
 
                     entity.UserId = retaliler.Id;
                     entity.UserName = retaliler.Name;
@@ -304,12 +309,18 @@ namespace HC.WeChat.WeChatUsers
                     {
                         if (employeeDto.EmployeeVerificationCode != input.VerificationCode)
                         {
-                            return new APIResultDto() { Code = 902, Msg = "内部员工验证未通过" };
+                            return new APIResultDto() { Code = 903, Msg = "内部员工验证未通过" };
                         }
                     }
                     else
                     {
-                        return new APIResultDto() { Code = 902, Msg = "内部员工验证未通过" };
+                        return new APIResultDto() { Code = 904, Msg = "内部员工验证未通过" };
+                    }
+
+                    //验证该内部员工是否被绑定过 2018-6-4
+                    if (await _wechatuserRepository.GetAll().AnyAsync(w => w.UserId == employeeDto.Id && w.UserType == UserTypeEnum.内部员工))
+                    {
+                        return new APIResultDto() { Code = 905, Msg = "该员工账号已被绑定" };
                     }
 
                     entity.UserId = employee.Id;
@@ -582,7 +593,7 @@ namespace HC.WeChat.WeChatUsers
         {
             if (input.UserType == UserTypeEnum.内部员工)
             {
-                await dealMemeberConfigValueAndDesc(input);
+                await DealMemeberConfigValueAndDesc(input);
             }
             await CancelTagAsync(input.UserType, input.OpenId);
             //input.UserType = UserTypeEnum.消费者;
@@ -605,7 +616,7 @@ namespace HC.WeChat.WeChatUsers
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task dealMemeberConfigValueAndDesc(WeChatUserEditDto input)
+        private async Task DealMemeberConfigValueAndDesc(WeChatUserEditDto input)
         {
             try
             {

@@ -18,6 +18,13 @@ using HC.WeChat.Authorization;
 using HC.WeChat.WechatEnums;
 using HC.WeChat.Authorization.Roles;
 using HC.WeChat.Authorization.Users;
+using HC.WeChat.Helpers;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
+using HC.WeChat.Dto;
+using Abp.Domain.Uow;
 
 namespace HC.WeChat.Employees
 {
@@ -32,16 +39,18 @@ namespace HC.WeChat.Employees
         ////ECC/ END CUSTOM CODE SECTION
         private readonly IRepository<Employee, Guid> _employeeRepository;
         private readonly IEmployeeManager _employeeManager;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
         /// <summary>
         /// 构造函数
         /// </summary>
         public EmployeeAppService(IRepository<Employee, Guid> employeeRepository
-            , IEmployeeManager employeeManager
+            , IEmployeeManager employeeManager, IHostingEnvironment hostingEnvironment
         )
         {
             _employeeRepository = employeeRepository;
             _employeeManager = employeeManager;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         /// <summary>
@@ -263,6 +272,100 @@ namespace HC.WeChat.Employees
                 return count <= 0;
             }
         }
+
+
+        #region 导出员工Excel
+
+        /// <summary>
+        /// 获取Excel数据
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        private async Task<List<EmployeeListDto>> GeEmployeesNoPage(GetEmployeesInput input)
+        {
+            var mid = UserManager.GetControlEmployeeId();
+            var query = _employeeRepository.GetAll()
+                  .WhereIf(!string.IsNullOrEmpty(input.Filter) && input.Filter != "null", e => e.Name.Contains(input.Filter) || e.Code.Contains(input.Filter))
+                  .WhereIf(input.Position.HasValue, e => e.Position == input.Position)
+                  .WhereIf(mid.HasValue, e => e.Id == mid);
+            //TODO:根据传入的参数添加过滤条件
+
+            var employees = await query.ToListAsync();
+
+            var employeeListDtos = employees.MapTo<List<EmployeeListDto>>();
+
+            return employeeListDtos;
+        }
+
+        /// <summary>
+        /// 创建Excel
+        /// </summary>
+        /// <param name="fileName">表名</param>
+        /// <param name="data">表数据</param>
+        /// <returns></returns>
+        private string SaveEmployeeExcel(string fileName, List<EmployeeListDto> data)
+        {
+            var fullPath = ExcelHelper.GetSavePath(_hostingEnvironment.WebRootPath) + fileName;
+            using (var fs = new FileStream(fullPath, FileMode.Create, FileAccess.Write))
+            {
+                IWorkbook workbook = new XSSFWorkbook();
+                ISheet sheet = workbook.CreateSheet("Employees");
+                var rowIndex = 0;
+                IRow titleRow = sheet.CreateRow(rowIndex);
+                string[] titles = { "员工编码", "姓名", "职位", "电话", "所属公司", "所属市场部门", "是否启用" };
+                var fontTitle = workbook.CreateFont();
+                fontTitle.IsBold = true;
+                for (int i = 0; i < titles.Length; i++)
+                {
+                    var cell = titleRow.CreateCell(i);
+                    cell.CellStyle.SetFont(fontTitle);
+                    cell.SetCellValue(titles[i]);
+                    //ExcelHelper.SetCell(titleRow.CreateCell(i), fontTitle, titles[i]);
+                }
+                var font = workbook.CreateFont();
+                foreach (var item in data)
+                {
+
+                    rowIndex++;
+                    IRow row = sheet.CreateRow(rowIndex);
+                    ExcelHelper.SetCell(row.CreateCell(0), font, item.Code);
+                    ExcelHelper.SetCell(row.CreateCell(1), font, item.Name);
+                    ExcelHelper.SetCell(row.CreateCell(2), font, item.PositionName);
+                    ExcelHelper.SetCell(row.CreateCell(3), font, item.Phone);
+                    ExcelHelper.SetCell(row.CreateCell(4), font, item.Company);
+                    ExcelHelper.SetCell(row.CreateCell(5), font, item.Department);
+                    ExcelHelper.SetCell(row.CreateCell(6), font, item.IsAction ? "启用" : "禁用");
+
+                }
+                workbook.Write(fs);
+            }
+            return "/files/downloadtemp/" + fileName;
+        }
+
+        /// <summary>
+        /// 导出员工Excel
+        /// </summary>
+        /// <param name="input">查询条件</param>
+        /// <returns></returns>
+        [UnitOfWork(isTransactional: false)]
+        public async Task<APIResultDto> ExportEmployeesExcel(GetEmployeesInput input)
+        {
+            try
+            {
+                var exportData = await GeEmployeesNoPage(input);
+                var result = new APIResultDto();
+                result.Code = 0;
+                result.Data = SaveEmployeeExcel("公司员工.xlsx", exportData);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Logger.ErrorFormat("ExportEmployeesExcel errormsg{0} Exception{1}", ex.Message, ex);
+                return new APIResultDto() { Code = 901, Msg = "网络忙...请待会儿再试！" };
+            }
+        }
+
+        #endregion
     }
 }
 

@@ -5,6 +5,7 @@ import { Parameter } from '@shared/service-proxies/entity';
 import { Article } from '@shared/entity/marketting';
 import { Router } from '@angular/router';
 import { NzModalService } from 'ng-zorro-antd';
+import { AppConsts } from '@shared/AppConsts';
 
 @Component({
     moduleId: module.id,
@@ -22,6 +23,7 @@ export class ActivityComponent extends AppComponentBase implements OnInit {
     //用于删除显示
     articleTitle = ''
     loading = false;
+    exportLoading = false;
     constructor(injector: Injector, private activityService: ArticleServiceProxy,
         private router: Router, private modal: NzModalService) {
         super(injector);
@@ -79,5 +81,19 @@ export class ActivityComponent extends AppComponentBase implements OnInit {
                 });
             }
         })
+    }
+
+    exportExcel(){
+        this.exportLoading=true;
+        this.activityService.ExportExcel({name:this.search.name,author:this.search.author,status:this.search.status === 2 ? null : this.search.status,type:1}).subscribe(data => {
+            if (data.code == 0) {
+                var url = AppConsts.remoteServiceBaseUrl + data.data;
+                document.getElementById('aActivityExcelUrl').setAttribute('href', url);
+                document.getElementById('btnActivityHref').click();
+            } else {
+                this.notify.error(data.msg);
+            }
+            this.exportLoading = false;
+        });
     }
 }

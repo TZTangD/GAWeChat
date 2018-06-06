@@ -39,8 +39,6 @@ export class ContributeManagementComponent extends AppComponentBase implements O
         this.loading = true;
         this.manuscriptService.getAll(this.query.skipCount(), this.query.pageSize, this.getParameter()).subscribe((result: PagedResultDtoOfManuscript) => {
             this.loading = false;
-            console.log('result');
-            console.log(result);
             this.manuscripts = result.items;
             this.query.total = result.totalCount;
         });

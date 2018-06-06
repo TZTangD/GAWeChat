@@ -25,6 +25,7 @@
             </a> -->
         </weui-infiniteloader>
     </div>
+    <weui-loadmore type="line" *ngIf="!customers||customers.length==0" [lineText]="'搜索并选择零售户'"></weui-loadmore>
 
     <div class="weui-panel" style="margin-top: 0px;" *ngIf="!isMore">
         <a *ngFor="let i of customers" class="weui-cell weui-cell_access" (click)="goCustomerLeavel(i)">

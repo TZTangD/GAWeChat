@@ -28,6 +28,7 @@ export class ShopComponent extends AppComponentBase implements OnInit {
     specialProducts: ShopProduct[];//特产类
     isView: boolean = false;
     hostUrl: string = AppConsts.remoteServiceBaseUrl;
+    isAudit: boolean = false;
 
     constructor(injector: Injector,
         private router: Router,
@@ -37,6 +38,8 @@ export class ShopComponent extends AppComponentBase implements OnInit {
         super(injector);
         this.activatedRoute.params.subscribe((params: Params) => {
             this.shopId = params['shopId'];
+            this.isAudit = params['isAudit'];
+            //alert(this.isAudit)
         });
     }
 
@@ -157,12 +160,23 @@ export class ShopComponent extends AppComponentBase implements OnInit {
             return;
         }
         wx.openLocation({
-            latitude: this.shop.latitude, // 纬度，浮点数，范围为90 ~ -90
-            longitude: this.shop.longitude, // 经度，浮点数，范围为180 ~ -180。
+            latitude: this.shop.qqLatitude, // 纬度，浮点数，范围为90 ~ -90
+            longitude: this.shop.qqLongitude, // 经度，浮点数，范围为180 ~ -180。
             name: this.shop.name, // 位置名
             address: this.shop.address, // 地址详情说明
-            scale: 12, // 地图缩放级别,整形值,范围从1~28。默认为最大
+            scale: 15, // 地图缩放级别,整形值,范围从1~28。默认为最大 之前12
             infoUrl: AppConsts.remoteServiceBaseUrl + '/gawechat/index.html#/shops/shop' // 在查看位置界面底部显示的超链接,可点击跳转
+        });
+    }
+    //审核
+    audit(status: any) {
+        this.shopService.CheckShop({ id: this.shop.id, status: status}).subscribe((res) =>{
+            if(res){
+                this.shop.status = status;
+                this.srv['success']('操作成功');
+            } else {
+                this.srv['warn']('操作异常');
+            }
         });
     }
 }

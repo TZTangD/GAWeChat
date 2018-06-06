@@ -206,11 +206,12 @@ export class ShopAddComponent extends AppComponentBase implements OnInit {
     getWXLocation(): Promise<any> {
         return (new Promise<any>((resolve, reject) => {
             this.wxService.getLocation().then((res) => {
-                this.latitude = res.latitude;
-                this.longitude = res.longitude;
-                this.wxService.translate(res.latitude, res.longitude).then((result) => {
-                    resolve(result);
-                })
+                //this.latitude = res.latitude;
+                //this.longitude = res.longitude;
+                //this.wxService.translate(res.latitude, res.longitude).then((result) => {
+                //    resolve(result);
+                //})
+                resolve(res);
             });
         }));
     }
@@ -220,8 +221,10 @@ export class ShopAddComponent extends AppComponentBase implements OnInit {
         this.isReset = true;
         this.locationInfo = '定位中....';
         this.getWXLocation().then((res) => {
-            this.qqLatitude = res[0].lat;
-            this.qqLongitude = res[0].lng;
+            this.latitude = res.latitude;
+            this.longitude = res.longitude;
+            this.qqLatitude = res.latitude; //res[0].lat;
+            this.qqLongitude = res.longitude; //res[0].lng;
             this.getlocation();
         });
     }
@@ -236,7 +239,7 @@ export class ShopAddComponent extends AppComponentBase implements OnInit {
             longitude: (this.qqLongitude ? this.qqLongitude : this.longitude), // 经度，浮点数，范围为180 ~ -180。
             name: this.res.name, // 位置名
             address: this.res.address, // 地址详情说明
-            scale: 12, // 地图缩放级别,整形值,范围从1~28。默认为最大
+            scale: 15, // 地图缩放级别,整形值,范围从1~28。默认为最大
             infoUrl: this.hostUrl + '/gawechat/index.html#/shops/shop' // 在查看位置界面底部显示的超链接,可点击跳转
         });
     }

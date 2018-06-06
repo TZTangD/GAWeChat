@@ -85,7 +85,7 @@ export class AccountLevelComponent extends AppComponentBase implements OnInit {
         this.levelAccountAccpintService.getLevel({ tenantId: this.settingsService.tenantId, userId: this.id }).subscribe(data => {
             this.level = data;
             if (this.id !== this.user.userId) {
-                this.headImg = (data.headImgUrl === '' || data.headImgUrl === null) ? this.defaultHed:data.headImgUrl;
+                this.headImg = (data.headImgUrl === '' || data.headImgUrl === null) ? this.defaultHed : data.headImgUrl;
             }
             if (this.user.userType === UserType.Staff || data.isShopkeeper) {
                 this.showCode = true;
@@ -96,9 +96,9 @@ export class AccountLevelComponent extends AppComponentBase implements OnInit {
     }
 
     showVerCode() {
-        if(this.verCode==this.level.verificationCode){
-            this.verCode='***';
-        }else{
+        if (this.verCode == this.level.verificationCode) {
+            this.verCode = '****';
+        } else {
             this.verCode = this.level.verificationCode;
         }
     }
@@ -135,9 +135,9 @@ export class AccountLevelComponent extends AppComponentBase implements OnInit {
         let d = new Date(date);
         let y = d.getFullYear().toString();
         var cm = d.getMonth();
-        let m = ( cm + 1) > 10 ? (cm + 1).toString() : '0' + (cm + 1).toString();
+        let m = (cm + 1) > 10 ? (cm + 1).toString() : '0' + (cm + 1).toString();
         //let day = d.getDate().toString();
-        return y +"."+ m;
+        return y + "." + m;
         //let dateStr:string = this.datePipe.transform(d,'yyyy-MM-dd');
         //return dateStr;
     }

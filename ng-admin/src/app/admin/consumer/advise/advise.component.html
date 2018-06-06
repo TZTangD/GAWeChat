@@ -52,7 +52,7 @@
                 <td nz-td>{{item.title}}</td>
                 <td nz-td>{{item.userTypeName}}</td>
                 <td nz-td>{{item.phone}}</td>
-                <td nz-td>{{item.content}}</td>
+                <td nz-td>{{item.content | lengthLimit:40}}</td> 
                 <td nz-td>{{item.creationTime | _date}}</td>
                 <td nz-td>
                     <a (click)="adviseDetail(item)">详情</a>

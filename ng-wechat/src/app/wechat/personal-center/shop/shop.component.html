@@ -1,4 +1,4 @@
-<Page [ngClass]="'icons'" [spacing]="false" [showTitle]="false" *ngIf="shop && shop.status != 2">
+<Page [ngClass]="'icons'" [spacing]="false" [showTitle]="false" *ngIf="shop && shop.status != 2 && !isAudit">
     <div class="weui-cells">
         <div class="weui-cell">
             <div class="icon-box">
@@ -30,7 +30,7 @@
         </div>
     </div>
 </Page>
-<Page [ngClass]="'list'" [subTitle]="'表单输入'" [showTitle]="false" [spacing]="false" *ngIf="shop && shop.status == 2">
+<Page [ngClass]="'list'" [subTitle]="'表单输入'" [showTitle]="false" [spacing]="false" *ngIf="shop && (shop.status == 2 || isAudit)">
     <div class="weui-cells weui-cells_img" [ngStyle]="{'background-image':'url('+ hostUrl + shop.coverPhoto +')'}">
         <div class="weui-cell" style="height: 120px;">
         </div>
@@ -91,8 +91,14 @@
                             <img class="weui-icon-h18" src="./assets/images/shop/service-o-3.png" alt="">差（{{shop.evaluationArry[2]}}）
                         </div>
                     </div>
-                    <div class="weui-cell" *ngIf="!isView">
+                    <div class="weui-cell" *ngIf="!isView && !isAudit">
                         <button weui-button (click)="goEditShop()">修改店铺</button>
+                    </div>
+                    <div class="weui-cell" *ngIf="isAudit && shop.status == 1">
+                        <button weui-button type="button" (click)="audit(2)" >审核通过</button>
+                    </div>
+                    <div class="weui-cell" *ngIf="isAudit && shop.status == 1">
+                        <button weui-button [weui-type]="'warn'" type="button" (click)="audit(0)" >拒绝</button>
                     </div>
                 </div>
             </div>
@@ -112,7 +118,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="weui-cells" *ngIf="!isView">
+                <div class="weui-cells" *ngIf="!isView && !isAudit">
                     <div class="weui-cell">
                         <button weui-button type="button" (click)="onProductPopup()">新增商品</button>
                     </div>

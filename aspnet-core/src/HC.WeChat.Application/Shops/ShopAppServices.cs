@@ -9,10 +9,8 @@ using System.Linq;
 
 using System.Linq.Dynamic.Core;
 using Microsoft.EntityFrameworkCore;
-using HC.WeChat.Shops.Authorization;
 using HC.WeChat.Shops.Dtos;
 using HC.WeChat.Shops.DomainServices;
-using HC.WeChat.Shops;
 using System;
 using HC.WeChat.Authorization;
 using HC.WeChat.Retailers;
@@ -27,6 +25,12 @@ using HC.WeChat.WechatAppConfigs;
 using Senparc.Weixin.MP.AdvancedAPIs;
 using HC.WeChat.MemberConfigs;
 using HC.WeChat.WeChatUsers;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
+using Abp.Domain.Uow;
+using HC.WeChat.Dto;
 
 namespace HC.WeChat.Shops
 {
@@ -52,6 +56,7 @@ namespace HC.WeChat.Shops
         private int? TenantId { get; set; }
         private WechatAppConfigInfo AppConfig { get; set; }
         private readonly IRepository<WeChatUser, Guid> _wechatuserRepository;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
         /// <summary>
         /// 构造函数
@@ -64,7 +69,8 @@ namespace HC.WeChat.Shops
             , IWechatAppConfigAppService wechatAppConfigAppService
          , IRepository<MemberConfig, Guid> memberconfigRepository
             , IRepository<WeChatUser, Guid> wechatuserRepository
-            , IRepository<WechatAppConfig, int> wechatappconfigRepository)
+            , IRepository<WechatAppConfig, int> wechatappconfigRepository
+            , IHostingEnvironment hostingEnvironment)
         {
             _shopRepository = shopRepository;
             _shopManager = shopManager;
@@ -78,6 +84,7 @@ namespace HC.WeChat.Shops
             _memberconfigRepository = memberconfigRepository;
             _wechatuserRepository = wechatuserRepository;
             _wechatappconfigRepository = wechatappconfigRepository;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         /// <summary>
@@ -424,6 +431,7 @@ namespace HC.WeChat.Shops
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
+        [AbpAllowAnonymous]
         public async Task CheckShop(CheckShopDto input)
         {
             var entity = await _shopRepository.GetAsync(input.Id);
@@ -582,6 +590,136 @@ namespace HC.WeChat.Shops
 
         //   // return result;
         //}
+
+        #region 店铺导出
+
+        /// <summary>
+        /// 获取Excel数据
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        private async Task<List<ShopListDto>> GeShopNoPage(GetShopsInput input)
+        {
+            var mid = UserManager.GetControlEmployeeId();
+            var queryShop = _shopRepository.GetAll()
+                .WhereIf(!string.IsNullOrEmpty(input.Name), s => s.Name.Contains(input.Name))
+                .WhereIf(input.Status.HasValue, s => s.Status == input.Status)
+                .WhereIf(!string.IsNullOrEmpty(input.Tel), s => s.Tel.Contains(input.Tel));
+            var queryRetailer = _retailerRepository.GetAll().WhereIf(mid.HasValue, r => r.EmployeeId == mid);
+            var query = from s in queryShop
+                        join r in queryRetailer on s.RetailerId equals r.Id
+                        //into queryS
+                        //from sr in queryS.DefaultIfEmpty()
+                        select new ShopListDto
+                        {
+                            Id = s.Id,
+                            Name = s.Name,
+                            Address = s.Address,
+                            Desc = s.Desc,
+                            RetailerId = s.RetailerId,
+                            CoverPhoto = s.CoverPhoto,
+                            SaleTotal = s.SaleTotal,
+                            ReadTotal = s.ReadTotal,
+                            Evaluation = s.Evaluation,
+                            Longitude = s.Longitude,
+                            Latitude = s.Latitude,
+                            Status = s.Status,
+                            AuditTime = s.AuditTime,
+                            CreationTime = s.CreationTime,
+                            TenantId = s.TenantId,
+                            Tel = s.Tel,
+                            //RetailerName = r != null ? r.Name : "",
+                            RetailerName = r.Name
+                        };
+
+            //TODO:根据传入的参数添加过滤条件
+            var shopCount = await query.CountAsync();
+
+            var shops = await query.ToListAsync();
+
+            var shopListDtos = shops.MapTo<List<ShopListDto>>();
+            return shopListDtos;
+        }
+
+        /// <summary>
+        /// 创建Excel
+        /// </summary>
+        /// <param name="fileName">表名</param>
+        /// <param name="data">表数据</param>
+        /// <returns></returns>
+        private string SaveShopExcel(string fileName, List<ShopListDto> data)
+        {
+            var fullPath = ExcelHelper.GetSavePath(_hostingEnvironment.WebRootPath) + fileName;
+            using (var fs = new FileStream(fullPath, FileMode.Create, FileAccess.Write))
+            {
+                IWorkbook workbook = new XSSFWorkbook();
+                ISheet sheet = workbook.CreateSheet("Employees");
+                var rowIndex = 0;
+                IRow titleRow = sheet.CreateRow(rowIndex);
+                string[] titles = { "店铺名称", "店铺地址", "店铺描述", "零售客户", "店铺销量", "店铺浏览量", "店铺电话", "审核状态", "审核时间", "店铺评价", "经度", "纬度" };
+                var fontTitle = workbook.CreateFont();
+                fontTitle.IsBold = true;
+                for (int i = 0; i < titles.Length; i++)
+                {
+                    var cell = titleRow.CreateCell(i);
+                    cell.CellStyle.SetFont(fontTitle);
+                    cell.SetCellValue(titles[i]);
+                    //ExcelHelper.SetCell(titleRow.CreateCell(i), fontTitle, titles[i]);
+                }
+                var font = workbook.CreateFont();
+                foreach (var item in data)
+                {
+
+                    rowIndex++;
+                    var evaluationStr = "";
+                    if (string.IsNullOrEmpty(item.Evaluation))
+                    {
+                        var assess = item.Evaluation.Split(",");
+                        evaluationStr = "好评:" + assess[0] + "中评:" + assess[1] + "差评:" + assess[2];
+                    }
+                    IRow row = sheet.CreateRow(rowIndex);
+                    ExcelHelper.SetCell(row.CreateCell(0), font, item.Name);
+                    ExcelHelper.SetCell(row.CreateCell(1), font, item.Address);
+                    ExcelHelper.SetCell(row.CreateCell(2), font, item.Desc);
+                    ExcelHelper.SetCell(row.CreateCell(3), font, item.RetailerName);
+                    ExcelHelper.SetCell(row.CreateCell(4), font, item.SaleTotal.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(5), font, item.ReadTotal.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(6), font, item.Tel);
+                    ExcelHelper.SetCell(row.CreateCell(7), font, item.StatusName);
+                    ExcelHelper.SetCell(row.CreateCell(8), font, item.AuditTime.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(9), font, evaluationStr);
+                    ExcelHelper.SetCell(row.CreateCell(10), font, item.Longitude.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(11), font, item.Latitude.ToString());
+
+                }
+                workbook.Write(fs);
+            }
+            return "/files/downloadtemp/" + fileName;
+        }
+
+        /// <summary>
+        /// 导出员工Excel
+        /// </summary>
+        /// <param name="input">查询条件</param>
+        /// <returns></returns>
+        [UnitOfWork(isTransactional: false)]
+        public async Task<APIResultDto> ExportShopExcel(GetShopsInput input)
+        {
+            try
+            {
+                var exportData = await GeShopNoPage(input);
+                var result = new APIResultDto();
+                result.Code = 0;
+                result.Data = SaveShopExcel("店铺.xlsx", exportData);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Logger.ErrorFormat("ExportShopExcel errormsg{0} Exception{1}", ex.Message, ex);
+                return new APIResultDto() { Code = 901, Msg = "网络忙...请待会儿再试！" };
+            }
+        }
+        #endregion
     }
 }
 

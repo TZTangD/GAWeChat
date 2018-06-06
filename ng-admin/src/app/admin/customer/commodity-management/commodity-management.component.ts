@@ -41,6 +41,7 @@ export class CommodityManagementComponent extends AppComponentBase implements On
     productName = '';
 
     host = '';
+    exportLoading = false;
     constructor(injector: Injector, private productsService: ProductsServiceProxy, private modal: NzModalService,
         private router: Router) {
         super(injector);
@@ -126,6 +127,23 @@ export class CommodityManagementComponent extends AppComponentBase implements On
     createProduct() {
         this.router.navigate(['admin/customer/commodity-detail'])
 
+    }
+
+    /**
+     * 导出商品信息
+     */
+    exportExcel(){
+        this.exportLoading=true;
+        this.productsService.ExportExcel({name:this.search.name,type:this.search.type === 0 ? null : this.search.type,isRare:this.search.isRare === 0 ? null : this.search.isRare}).subscribe(data => {
+            if (data.code == 0) {
+                var url = AppConsts.remoteServiceBaseUrl + data.data;
+                document.getElementById('aProductsExcelUrl').setAttribute('href', url);
+                document.getElementById('btnProductsHref').click();
+            } else {
+                this.notify.error(data.msg);
+            }
+            this.exportLoading = false;
+        });
     }
 
 }
