@@ -49,6 +49,7 @@ namespace HC.WeChat.PurchaseRecords
         private readonly IRepository<Shop, Guid> _shopRepository;
         private readonly IPurchaseRecordManager _purchaserecordManager;
         private readonly IConfigurationRoot _appConfiguration;
+        private readonly IRepository<WechatAppConfig, int> _wechatappconfigRepository;
 
         IWechatAppConfigAppService _wechatAppConfigAppService;
         private int? TenantId { get; set; }
@@ -65,6 +66,7 @@ namespace HC.WeChat.PurchaseRecords
         , IPurchaseRecordManager purchaserecordManager
             , IRepository<ShopEvaluation, Guid> shopevaluationRepository
                     , IWechatAppConfigAppService wechatAppConfigAppService
+            , IRepository<WechatAppConfig, int> wechatappconfigRepository
         )
         {
             _purchaserecordRepository = purchaserecordRepository;
@@ -78,6 +80,7 @@ namespace HC.WeChat.PurchaseRecords
             _wechatAppConfigAppService = wechatAppConfigAppService;
             TenantId = null;
             AppConfig = _wechatAppConfigAppService.GetWechatAppConfig(TenantId).Result;
+            _wechatappconfigRepository = wechatappconfigRepository;
         }
 
         /// <summary>
@@ -390,19 +393,24 @@ namespace HC.WeChat.PurchaseRecords
         {
             try
             {
-                //发送微信模板通知-消费者
-                string appId = AppConfig.AppId;
-                string openId = OpenId;
-                string templateId = "3Dgkz89yi8e0jXtwBUhdMSgHeZwPvHi2gz8WrD-CUA4";//模版id  
-                string url = host + "/GAWX/Authorization?page=301";
-                object data = new
+                string templateId = await _wechatappconfigRepository.GetAll().Select(v => v.TemplateIds).FirstOrDefaultAsync();
+                if (templateId != null || templateId.Length != 0)
                 {
-                    keyword1 = new TemplateDataItem(memberBarCode.ToString()),
-                    keyword2 = new TemplateDataItem(finalIntegral.ToString() + "积分"),
-                    keyword3 = new TemplateDataItem(integral.ToString() + "积分"),
-                    keyword4 = new TemplateDataItem(DateTime.Now.ToString("yyyy-MM-dd HH:mm"))
-                };
-                await TemplateApi.SendTemplateMessageAsync(appId, openId, templateId, url, data);
+                    string[] ids = templateId.Split(',');
+                    //发送微信模板通知-消费者
+                    string appId = AppConfig.AppId;
+                    string openId = OpenId;
+                    //string templateId = "3Dgkz89yi8e0jXtwBUhdMSgHeZwPvHi2gz8WrD-CUA4";//模版id  
+                    string url = host + "/GAWX/Authorization?page=301";
+                    object data = new
+                    {
+                        keyword1 = new TemplateDataItem(memberBarCode.ToString()),
+                        keyword2 = new TemplateDataItem(finalIntegral.ToString() + "积分"),
+                        keyword3 = new TemplateDataItem(integral.ToString() + "积分"),
+                        keyword4 = new TemplateDataItem(DateTime.Now.ToString("yyyy-MM-dd HH:mm"))
+                    };
+                    await TemplateApi.SendTemplateMessageAsync(appId, openId, ids[0], url, data);
+                }
             }
             catch (Exception ex)
             {
@@ -415,19 +423,24 @@ namespace HC.WeChat.PurchaseRecords
         {
             try
             {
-                //发送微信模板通知-店铺管理员
-                string appId = AppConfig.AppId;
-                string openId = OpenId;
-                string templateId = "3Dgkz89yi8e0jXtwBUhdMSgHeZwPvHi2gz8WrD-CUA4";//模版id  
-                string url = host + "/GAWX/Authorization?page=301";
-                object data = new
+                string templateId = await _wechatappconfigRepository.GetAll().Select(v => v.TemplateIds).FirstOrDefaultAsync();
+                if (templateId != null || templateId.Length != 0)
                 {
-                    keyword1 = new TemplateDataItem(memberBarCode.ToString()),
-                    keyword2 = new TemplateDataItem(finalIntegral.ToString() + "积分"),
-                    keyword3 = new TemplateDataItem(integral.ToString() + "积分"),
-                    keyword4 = new TemplateDataItem(DateTime.Now.ToString("yyyy-MM-dd HH:mm"))
-                };
-                await TemplateApi.SendTemplateMessageAsync(appId, openId, templateId, url, data);
+                    string[] ids = templateId.Split(',');
+                    //发送微信模板通知-店铺管理员
+                    string appId = AppConfig.AppId;
+                    string openId = OpenId;
+                    //string templateId = "3Dgkz89yi8e0jXtwBUhdMSgHeZwPvHi2gz8WrD-CUA4";//模版id  
+                    string url = host + "/GAWX/Authorization?page=301";
+                    object data = new
+                    {
+                        keyword1 = new TemplateDataItem(memberBarCode.ToString()),
+                        keyword2 = new TemplateDataItem(finalIntegral.ToString() + "积分"),
+                        keyword3 = new TemplateDataItem(integral.ToString() + "积分"),
+                        keyword4 = new TemplateDataItem(DateTime.Now.ToString("yyyy-MM-dd HH:mm"))
+                    };
+                    await TemplateApi.SendTemplateMessageAsync(appId, openId, ids[0], url, data);
+                }
             }
             catch (Exception ex)
             {

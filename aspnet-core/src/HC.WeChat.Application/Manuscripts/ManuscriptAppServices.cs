@@ -17,6 +17,12 @@ using System;
 using HC.WeChat.Authorization;
 using HC.WeChat.WechatEnums;
 using HC.WeChat.Dto;
+using Microsoft.AspNetCore.Hosting;
+using Abp.Domain.Uow;
+using HC.WeChat.Helpers;
+using System.IO;
+using NPOI.XSSF.UserModel;
+using NPOI.SS.UserModel;
 
 namespace HC.WeChat.Manuscripts
 {
@@ -31,14 +37,17 @@ namespace HC.WeChat.Manuscripts
         ////ECC/ END CUSTOM CODE SECTION
         private readonly IRepository<Manuscript, Guid> _manuscriptRepository;
         private readonly IManuscriptManager _manuscriptManager;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
         /// <summary>
         /// 构造函数
         /// </summary>
         public ManuscriptAppService(IRepository<Manuscript, Guid> manuscriptRepository
       , IManuscriptManager manuscriptManager
+                        , IHostingEnvironment hostingEnvironment
         )
         {
+            _hostingEnvironment = hostingEnvironment;
             _manuscriptRepository = manuscriptRepository;
             _manuscriptManager = manuscriptManager;
         }
@@ -240,6 +249,75 @@ namespace HC.WeChat.Manuscripts
             input.Status = ProcessTypeEnum.已处理;
             input.DealWithTime = DateTime.Now;
             return await UpdateManuscriptAsync(input);
+        }
+
+        /// <summary>
+        /// 投稿Excel导出
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [UnitOfWork(isTransactional: false)]
+        public async Task<APIResultDto> ExportManuscriptsExcel(GetManuscriptsInput input)
+        {
+            try
+            {
+                var exportData = await GetManuscriptsAsync(input);
+                var result = new APIResultDto();
+                result.Code = 0;
+                result.Data = SaveManuscriptsExcel("投稿管理.xlsx", exportData);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Logger.ErrorFormat("ExportPostInfoExcel errormsg:{0} Exception:{1}", ex.Message, ex);
+                return new APIResultDto() { Code = 901, Msg = "网络忙... 请待会重试！" };
+            }
+        }
+        private async Task<List<ManuscriptListDto>> GetManuscriptsAsync(GetManuscriptsInput input)
+        {
+            var mid = UserManager.GetControlEmployeeId();
+            var query = _manuscriptRepository.GetAll();
+            var manuscripts = await query.ToListAsync();
+            var manuscriptDtos = query.MapTo<List<ManuscriptListDto>>();
+            return manuscriptDtos;
+        }
+        private string SaveManuscriptsExcel(string fileName, List<ManuscriptListDto> data)
+        {
+            var fullPath = ExcelHelper.GetSavePath(_hostingEnvironment.WebRootPath) + fileName;
+            using (var fs = new FileStream(fullPath, FileMode.Create, FileAccess.Write))
+            {
+                IWorkbook workbook = new XSSFWorkbook();
+                ISheet sheet = workbook.CreateSheet("Manuscript");
+                var rowIndex = 0;
+                IRow titleRow = sheet.CreateRow(rowIndex);
+                string[] titles = { "投稿主题", "投稿类型", "用户姓名", "联系电话", "处理状态", "投稿时间","处理时间","投稿内容","微信OpenId" };
+                var fontTitle = workbook.CreateFont();
+                fontTitle.IsBold = true;
+                for (int i = 0; i < titles.Length; i++)
+                {
+                    var cell = titleRow.CreateCell(i);
+                    cell.CellStyle.SetFont(fontTitle);
+                    cell.SetCellValue(titles[i]);
+                }
+
+                var font = workbook.CreateFont();
+                foreach (var item in data)
+                {
+                    rowIndex++;
+                    IRow row = sheet.CreateRow(rowIndex);
+                    ExcelHelper.SetCell(row.CreateCell(0), font, item.Title);
+                    ExcelHelper.SetCell(row.CreateCell(1), font, item.Type.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(2), font, item.UserName);
+                    ExcelHelper.SetCell(row.CreateCell(3), font, item.Phone);
+                    ExcelHelper.SetCell(row.CreateCell(4), font, item.StatusName);
+                    ExcelHelper.SetCell(row.CreateCell(5), font, item.CreationTime.ToString("yyyy-MM-dd HH:mm"));
+                    ExcelHelper.SetCell(row.CreateCell(6), font, item.DealWithTime.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(7), font, item.Content);
+                    ExcelHelper.SetCell(row.CreateCell(8), font, item.OpenId);
+                }
+                workbook.Write(fs);
+            }
+            return "/files/downloadtemp/" + fileName;
         }
     }
 }

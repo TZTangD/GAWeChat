@@ -1241,6 +1241,7 @@ namespace HC.WeChat.Migrations
                 b.Property<long?>("CreatorUserId");
                 b.Property<DateTime?>("LastModificationTime");
                 b.Property<long>("LastModifierUserId"); b.HasKey("Id");
+                b.Property<string>("TemplateIds");
 
                 //b.HasIndex("TargetTenantId", "TargetUserId", "ReadState");
 

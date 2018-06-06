@@ -155,7 +155,8 @@ namespace HC.WeChat.WechatEnums
         购买商品兑换 = 1,
         评价店铺赠送 = 2,
         抽奖消费 = 3,
-        扫码积分赠送 = 4
+        扫码积分赠送 = 4,
+        首次注册赠送 = 5
     }
     /// <summary>
     /// 产品类型
@@ -206,7 +207,8 @@ namespace HC.WeChat.WechatEnums
         商品购买 = 1,
         商品评价 = 2,
         店铺扫码兑换 = 3,
-        通知配置 = 4
+        通知配置 = 4,
+        首次注册 = 5
     }
     /// <summary>
     /// 文章发布状态

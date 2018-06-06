@@ -93,6 +93,10 @@ namespace HC.WeChat.WechatAppConfigs
         [Required]
         public int? TenantId { get; set; }
 
+        /// <summary>
+        /// 模板Id 按照积分变化通知，审核通过提醒，审核提醒，审核未通过通知顺序插入。逗号分隔
+        /// </summary>
+        public string TemplateIds { get; set; }
 
         /// <summary>
         /// CreatorUserId
