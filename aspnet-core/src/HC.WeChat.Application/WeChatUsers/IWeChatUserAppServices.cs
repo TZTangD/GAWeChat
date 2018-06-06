@@ -119,5 +119,7 @@ namespace HC.WeChat.WeChatUsers
         /// <param name="userId"></param>
         /// <returns></returns>
         Task<int> GetShopEmployeesNoCheckCountAsync(int? tenantId, Guid userId);
+        Task<APIResultDto> ExportWeChatUsersExcel(GetWeChatUsersInput input);
+
     }
 }

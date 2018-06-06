@@ -4,6 +4,7 @@ import { WechatUser } from '@shared/entity/wechat';
 import { WechatUserServiceProxy, PagedResultDtoOfWeChatUser } from '@shared/service-proxies/wechat-service';
 import { NzModalService } from 'ng-zorro-antd';
 import { Parameter } from '@shared/service-proxies/entity';
+import { AppConsts } from '@shared/AppConsts';
 
 @Component({
     moduleId: module.id,
@@ -13,6 +14,7 @@ import { Parameter } from '@shared/service-proxies/entity';
 export class MemberManagementComponent extends AppComponentBase implements OnInit {
     search: any = { name: '', UserType: null };
     loading = false;
+    exportLoading = false;
     weChatUsers: WechatUser[] = [];
     positions = [
         { text: '零售客户', value: 1 },
@@ -67,6 +69,18 @@ export class MemberManagementComponent extends AppComponentBase implements OnIni
                 });
             }
         })
-
+    }
+    exportExcelAll() {
+        this.exportLoading = true;
+        this.wechatUserService.exportExcel({}).subscribe(result => {
+            if (result.code == 0) {
+                var url = AppConsts.remoteServiceBaseUrl + result.data;
+                document.getElementById('aMemberExcelUrl').setAttribute('href', url);
+                document.getElementById('btnMemberHref').click();
+            } else {
+                this.notify.error(result.msg);
+            }
+            this.exportLoading = false;
+        });
     }
 }

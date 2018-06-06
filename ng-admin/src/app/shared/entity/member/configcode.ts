@@ -8,6 +8,9 @@ export class ConfigCode implements IConfigCode {
     eCode: number;
     eValue: string;
     eId: string;
+    fCode: number;
+    fValue: string;
+    fId: string;
     userValue: string;
     userId: string;
     userCode: number;
@@ -36,6 +39,9 @@ export class ConfigCode implements IConfigCode {
             this.userValue = data["userValue"];
             this.userId = data["userId"];
             this.desc = data["desc"];
+            this.fCode = data["fCode"];
+            this.fValue = data["fValue"];
+            this.fId = data["fId"];
         }
     }
 
@@ -60,6 +66,9 @@ export class ConfigCode implements IConfigCode {
         data["userValue"] = this.userValue;
         data["userId"] = this.userId;
         data["desc"] = this.desc;
+        data["fCode"] = this.fCode;
+        data["fValue"] = this.fValue;
+        data["fId"] = this.fId;
         return data;
     }
 
@@ -84,4 +93,7 @@ export interface IConfigCode {
     userId: string;
     userCode: number;
     desc: string;
+    fCode: number;
+    fValue: string;
+    fId: string;
 }

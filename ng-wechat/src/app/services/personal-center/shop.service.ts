@@ -122,4 +122,10 @@ export class ShopService {
     });
   }
 
+  CheckShop(params: any): Observable<boolean> {
+    return this.http.post('/api/services/app/Shop/CheckShop', params).map(data => {
+      return <boolean>data.success;
+    });
+  }
+
 }

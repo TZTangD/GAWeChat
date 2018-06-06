@@ -52,6 +52,10 @@ namespace HC.WeChat.Migrations
             name: "Desc",
             table: "MemberConfigs",
             nullable: true);
+            migrationBuilder.AlterColumn<string>(
+            name: "TemplateIds",
+            table: "WechatAppConfigs",
+            nullable: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -88,6 +92,10 @@ namespace HC.WeChat.Migrations
             migrationBuilder.AlterColumn<string>(
             name: "Desc",
             table: "MemberConfigs");
+
+            migrationBuilder.AlterColumn<string>(
+            name: "TemplateIds",
+            table: "WechatAppConfigs");
         }
     }
 }

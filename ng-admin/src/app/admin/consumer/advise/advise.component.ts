@@ -5,6 +5,7 @@ import { NzMessageService } from 'ng-zorro-antd';
 import { AdviseService, PagedResultDtoOfAdvise } from '@shared/service-proxies/consumer-service';
 import { Router } from '@angular/router';
 import { Advise } from '@shared/entity/consumer';
+import { AppConsts } from '@shared/AppConsts';
 
 @Component({
     moduleId: module.id,
@@ -15,6 +16,7 @@ export class AdviseComponent extends AppComponentBase implements OnInit {
     data: Advise[] = [];
     loading = false;
     parameters: any = { beginDate: null, endDate: null };
+    exportLoading = false;
 
     constructor(injector: Injector, public msg: NzMessageService, private _adviseService: AdviseService, private _router: Router) {
         super(injector);
@@ -46,5 +48,19 @@ export class AdviseComponent extends AppComponentBase implements OnInit {
 
     adviseDetail(advise: Advise) {
         this._router.navigate(['admin/consumer/advise-detail', advise.id]);
+    }
+
+    exportExcelAll() {
+        this.exportLoading = true;
+        this._adviseService.exportExcel({}).subscribe(result => {
+            if (result.code == 0) {
+                var url = AppConsts.remoteServiceBaseUrl + result.data;
+                document.getElementById('aAdviseExcelUrl').setAttribute('href', url);
+                document.getElementById('btnAdviseHref').click();
+            } else {
+                this.notify.error(result.msg);
+            }
+            this.exportLoading = false;
+        });
     }
 }
