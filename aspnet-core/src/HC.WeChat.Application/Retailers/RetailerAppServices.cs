@@ -261,7 +261,7 @@ namespace HC.WeChat.Retailers
         }
         #region 导出档级模板
 
-        public async Task<List<RetailerListDto>> GetRetailerLevelListAsync(GetRetailersInput input)
+        public async Task<List<RetailerListDto>> GetRetailerAllListAsync(GetRetailersInput input)
         {
             var mid = UserManager.GetControlEmployeeId();
             var query = _retailerRepository.GetAll()
@@ -271,19 +271,75 @@ namespace HC.WeChat.Retailers
                   .WhereIf(mid.HasValue, r => r.EmployeeId == mid);
             var retailers = await query.ToListAsync();
             var retailerListDtos =  query.MapTo<List<RetailerListDto>>();
-
-            //.Select(r => new RetailerListDto()
-            //{
-            //    Code =r.Code,
-            //    Name =r.Name,
-            //    ArchivalLevel =r.ArchivalLevel,
-            //    StoreType=r.StoreType,
-            //    VerificationCode=r.VerificationCode,
-            //    Telephone=r.Telephone,
-            //    Department=r.Department,
-            //    Manager=r.Manager,
-            //});
             return  retailerListDtos;
+        }
+
+        public async Task<List<RetailerListDto>> GetRetailerLevelListAsync(GetRetailersInput input)
+        {
+            var mid = UserManager.GetControlEmployeeId();
+            var query = _retailerRepository.GetAll()
+                  .WhereIf(!string.IsNullOrEmpty(input.Name), r => r.Name.Contains(input.Name) || r.Code.Contains(input.Name))
+                  .WhereIf(input.Scale.HasValue, r => r.Scale == input.Scale)
+                  .WhereIf(input.Markets.HasValue, r => r.MarketType == input.Markets)
+                  .WhereIf(mid.HasValue, r => r.EmployeeId == mid);
+            var retailers = await query.ToListAsync();
+            var retailerListDtos = query.MapTo<List<RetailerListDto>>();
+            return retailerListDtos;
+        }
+
+        /// <summary>
+        /// 导出零售客户详单
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        private string SaveRetailerAllExcel(string fileName, List<RetailerListDto> data)
+        {
+            var fullPath = ExcelHelper.GetSavePath(_hostingEnvironment.WebRootPath) + fileName;
+            using (var fs = new FileStream(fullPath, FileMode.Create, FileAccess.Write))
+            {
+                IWorkbook workbook = new XSSFWorkbook();
+                ISheet sheet = workbook.CreateSheet("RetailDetails");
+                var rowIndex = 0;
+                IRow titleRow = sheet.CreateRow(rowIndex);
+                string[] titles = {"客户ID", "客户编码", "客户姓名", "客户分档","经营地址","订货周期", "订货电话", "订货方式","业态","分公司", "客户经理","终端类型","商圈类型","经营规模","市场类型","市场部门ID","市场部门名","送货线路", "专卖证号" };
+                var fontTitle = workbook.CreateFont();
+                fontTitle.IsBold = true;
+                for (int i = 0; i < titles.Length; i++)
+                {
+                    var cell = titleRow.CreateCell(i);
+                    cell.CellStyle.SetFont(fontTitle);
+                    cell.SetCellValue(titles[i]);
+                }
+
+                var font = workbook.CreateFont();
+                foreach (var item in data)
+                {
+                    rowIndex++;
+                    IRow row = sheet.CreateRow(rowIndex);
+                    ExcelHelper.SetCell(row.CreateCell(0), font, item.CustId);
+                    ExcelHelper.SetCell(row.CreateCell(1), font, item.Code);
+                    ExcelHelper.SetCell(row.CreateCell(2), font, item.Name);
+                    ExcelHelper.SetCell(row.CreateCell(3), font, item.ArchivalLevel);
+                    ExcelHelper.SetCell(row.CreateCell(4), font, item.BusinessAddress);
+                    ExcelHelper.SetCell(row.CreateCell(5), font, item.OrderCycle);
+                    ExcelHelper.SetCell(row.CreateCell(6), font, item.Telephone);
+                    ExcelHelper.SetCell(row.CreateCell(7), font, item.OrderMode.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(8), font, item.StoreType);
+                    ExcelHelper.SetCell(row.CreateCell(9), font, item.BranchCompany);
+                    ExcelHelper.SetCell(row.CreateCell(10), font, item.Manager);
+                    ExcelHelper.SetCell(row.CreateCell(11), font, item.TerminalType.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(12), font, item.BusinessType);
+                    ExcelHelper.SetCell(row.CreateCell(13), font, item.Scale.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(14), font, item.MarketType.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(15), font, item.DepartmentId);
+                    ExcelHelper.SetCell(row.CreateCell(16), font, item.Department);
+                    ExcelHelper.SetCell(row.CreateCell(17), font, item.DeliveryLine);
+                    ExcelHelper.SetCell(row.CreateCell(18), font, item.LicenseKey);
+                }
+                workbook.Write(fs);
+            }
+            return "/files/downloadtemp/" + fileName;
         }
 
         private string SaveRetailerLevelExcel(string fileName, List<RetailerListDto> data)
@@ -295,7 +351,7 @@ namespace HC.WeChat.Retailers
                 ISheet sheet = workbook.CreateSheet("RetailLevel");
                 var rowIndex = 0;
                 IRow titleRow = sheet.CreateRow(rowIndex);
-                string[] titles = { "客户编码", "姓名", "客户分档", "业态", "订货电话", "市场部", "客户经理", "经营规模", "市场类型", "专卖证号", "状态" };
+                string[] titles = { "客户编码", "姓名", "客户分档", "订货电话", "市场部", "客户经理", "专卖证号" };
                 var fontTitle = workbook.CreateFont();
                 fontTitle.IsBold = true;
                 for (int i = 0; i < titles.Length; i++)
@@ -313,14 +369,10 @@ namespace HC.WeChat.Retailers
                     ExcelHelper.SetCell(row.CreateCell(0), font, item.Code);
                     ExcelHelper.SetCell(row.CreateCell(1), font, item.Name);
                     ExcelHelper.SetCell(row.CreateCell(2), font, item.ArchivalLevel);
-                    ExcelHelper.SetCell(row.CreateCell(3), font, item.StoreType);
-                    ExcelHelper.SetCell(row.CreateCell(4), font, item.Telephone);
-                    ExcelHelper.SetCell(row.CreateCell(5), font, item.Department);
-                    ExcelHelper.SetCell(row.CreateCell(6), font, item.Manager);
-                    ExcelHelper.SetCell(row.CreateCell(7), font, item.Scale.ToString());
-                    ExcelHelper.SetCell(row.CreateCell(8), font, item.MarketType.ToString());
-                    ExcelHelper.SetCell(row.CreateCell(9), font, item.LicenseKey);
-                    ExcelHelper.SetCell(row.CreateCell(10), font, item.IsAction.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(3), font, item.Telephone);
+                    ExcelHelper.SetCell(row.CreateCell(4), font, item.Department);
+                    ExcelHelper.SetCell(row.CreateCell(5), font, item.Manager);
+                    ExcelHelper.SetCell(row.CreateCell(6), font, item.LicenseKey);
                 }
 
                 workbook.Write(fs);
@@ -337,6 +389,24 @@ namespace HC.WeChat.Retailers
                 var result = new APIResultDto();
                 result.Code = 0;
                 result.Data = SaveRetailerLevelExcel("零售客户.xlsx", exportData);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Logger.ErrorFormat("ExportPostInfoExcel errormsg:{0} Exception:{1}", ex.Message, ex);
+                return new APIResultDto() { Code = 901, Msg = "网络忙... 请待会重试！" };
+            }
+        }
+
+        [UnitOfWork(isTransactional: false)]
+        public async Task<APIResultDto> ExportRetailerAllExcel(GetRetailersInput input)
+        {
+            try
+            {
+                var exportData = await GetRetailerAllListAsync(input);
+                var result = new APIResultDto();
+                result.Code = 0;
+                result.Data = SaveRetailerAllExcel("零售客户详单.xlsx", exportData);
                 return result;
             }
             catch (Exception ex)
@@ -394,7 +464,7 @@ namespace HC.WeChat.Retailers
                         if (row == null) continue; //没有数据的行默认是null　　　　　　　
 
                         var retailerLevel = new RetailerListDto();
-                        if (row.GetCell(0) != null &&row.GetCell(5)!=null)
+                        if (row.GetCell(0) != null &&row.GetCell(2)!=null)
                         {
                             retailerLevel.Code = row.GetCell(0).ToString();
                             retailerLevel.ArchivalLevel = row.GetCell(2).ToString();

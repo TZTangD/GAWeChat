@@ -21,7 +21,6 @@ export class ShopAddComponent extends AppComponentBase implements OnInit {
 
     res: any = {};
     coverPhoto: string;
-
     img: any;
     imgShow: boolean = false;
     title: string = '新增店铺';
@@ -194,7 +193,8 @@ export class ShopAddComponent extends AppComponentBase implements OnInit {
         this.shopService.WechatCreateOrUpdateShop({
             shop: this.res,
             tenantId: this.settingsService.tenantId,
-            openId: this.settingsService.openId
+            openId: this.settingsService.openId,
+            host: this.hostUrl
         }).subscribe(data => {
             if (data) {
                 this.srv['success']('保存成功');

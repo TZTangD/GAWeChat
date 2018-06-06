@@ -27,18 +27,19 @@ export class MemberSettingComponent extends AppComponentBase implements OnInit {
     config: MemberConfigs[] = [];
     configCode: ConfigCode = new ConfigCode();
     infoConfig: ConfigCode = new ConfigCode();
+    user: WechatUser[] = [];
     constructor(injector: Injector, private fb: FormBuilder,
         private modal: NzModalService, private memberconfigsService: MemberConfigsServiceProxy) {
         super(injector);
     }
     ngOnInit(): void {
-        this.configCode.init({ rcCode: 3, cCode: 1, eCode: 2 });
+        this.configCode.init({ rcCode: 3, cCode: 1, eCode: 2, fCode: 5 });
         this.infoConfig.init({ userCode: 4 });
         this.form = this.fb.group({
             cValue: [null, [Validators.compose([Validators.required, Validators.pattern(/^([1-9]\d*|0)(\.\d*[1-9])?$/)])]],
             rcValue: [null, [Validators.compose([Validators.required, Validators.pattern(/^[+]{0,1}(\d+)$|^[+]{0,1}(\d+\.\d+)$/)])]],
-            eValue: [null, [Validators.compose([Validators.required, Validators.pattern(/^[+]{0,1}(\d+)$|^[+]{0,1}(\d+\.\d+)$/), Validators.min(0)])]]
-
+            eValue: [null, [Validators.compose([Validators.required, Validators.pattern(/^[+]{0,1}(\d+)$|^[+]{0,1}(\d+\.\d+)$/), Validators.min(0)])]],
+            fValue: [null, [Validators.compose([Validators.required, Validators.pattern(/^[+]{0,1}(\d+)$|^[+]{0,1}(\d+\.\d+)$/), Validators.min(0)])]]
         });
         this.getMemberConfigsByTenantId();
         this.getWXInfoConfigsByTenantId();
@@ -54,6 +55,10 @@ export class MemberSettingComponent extends AppComponentBase implements OnInit {
         this.memberconfigsService.getMemberConfigs().subscribe((result: PagedResultDtoOfMemberConfigs) => {
             this.config = result.items;
             this.config.map(i => {
+                if (i.code == 5) {
+                    this.configCode.fValue = i.value;
+                    this.configCode.fId = i.id;
+                }
                 if (i.code == 3) {
                     this.configCode.rcValue = i.value;
                     this.configCode.rcId = i.id;
@@ -83,7 +88,10 @@ export class MemberSettingComponent extends AppComponentBase implements OnInit {
                         this.employeeOpenId = [];
                     }
                     this.infoConfig.userValue = i.value;
-                    this.infoConfig.userId = i.id;
+                    // this.infoConfig.userId = i.id;
+                    this.infoConfig.desc = i.desc;
+                    // var list = {id:this.infoConfig.userValue,desc:this.infoConfig.desc}
+                    // console.log(list)
                 }
             })
         });
@@ -156,4 +164,83 @@ export class MemberSettingComponent extends AppComponentBase implements OnInit {
         // }
     }
 
+    // getSelectData = (employee?: WechatUser[]) => {
+    //     for (var i = 0; i < employee.length; i++) {
+    //         alert('这是已经存在的id' + this.employeeOpenId.toString());
+    //         if (this.employeeOpenId.toString().indexOf(employee[i].openId.toString()) == -1) {
+    //             alert('相等吗?' + this.employeeOpenId.toString().indexOf(employee[i].openId.toString()));
+    //             // this.employeeOpenId = this.employeeOpenId.concat(employeeIds.map(v => v.openId));
+    //             // this.employeeIds = this.employeeIds.concat(employeeIds.map(v => v.userName));
+    //             // this.employeeOpenId = this.employeeOpenId.concat(employee[i].openId);
+    //             this.employeeOpenId.push(employee[i].openId);
+    //             this.employeeIds.push(employee[i].userName)
+    //             // this.employeeIds = this.employeeIds.concat(employee[i].userName);
+    //         }
+    //         alert('这是for出来的id' + employee[i].openId);
+    //     }
+    //     this.configCode.userId = this.employeeOpenId.join();
+    //     this.configCode.desc = this.employeeIds.join();
+    //     // alert('相等吗?' + this.employeeOpenId.toString().indexOf(refIds.toString()));
+    //     // if (this.employeeOpenId.toString().indexOf(refIds.toString()) == -1) {
+    //     //     this.employeeOpenId = this.employeeOpenId.concat(employeeIds.map(v => v.openId));
+    //     //     this.employeeIds = this.employeeIds.concat(employeeIds.map(v => v.userName));
+    //     // }
+    // }
+    // getSelectData = (employee?: WechatUser[]) => {
+    //     // var employeeIds = employee.map(v => {
+    //     //     if (v)
+    //     //         return v;
+    //     //     else
+    //     //         return null;
+    //     // });
+    //     // var refIds = employeeIds.map(v => v.openId)
+    //     var cur = this.user.map(v => {
+    //         if (v)
+    //             return v.openId;
+    //     });
+    //     var com1 = employee.forEach(v => { return v.openId });
+    //     var com = employee.map(v => {
+    //         if (v)
+    //             return v.openId;
+    //     });
+    //     console.log(this.user);
+    //     for (var i = 0; i < this.user.length; i++) {
+    //         alert('这是已经存在的id' + this.employeeOpenId.toString());
+    //         if (cur.toString().indexOf(employee[i].openId.toString()) == -1) {
+    //             alert('相等吗?' + this.employeeOpenId.toString().indexOf(employee[i].openId.toString()));
+    //             // this.employeeOpenId = this.employeeOpenId.concat(employeeIds.map(v => v.openId));
+    //             // this.employeeIds = this.employeeIds.concat(employeeIds.map(v => v.userName));
+    //             this.user.push(...employee);
+    //             this.employeeOpenId = this.employeeOpenId.concat(employee[i].openId);
+    //             this.employeeIds = this.employeeIds.concat(employee[i].userName);
+    //         }
+    //         alert('这是for出来的id' + employee[i].openId);
+    //     }
+    //     // this.configCode.userId = this.employeeOpenId.join();
+    //     // this.configCode.desc = this.employeeIds.join();
+    //     // alert('相等吗?' + this.employeeOpenId.toString().indexOf(refIds.toString()));
+    //     // if (this.employeeOpenId.toString().indexOf(refIds.toString()) == -1) {
+    //     //     this.employeeOpenId = this.employeeOpenId.concat(employeeIds.map(v => v.openId));
+    //     //     this.employeeIds = this.employeeIds.concat(employeeIds.map(v => v.userName));
+    //     // }
+    // }
+
+    // onClose(e: MouseEvent, item: any): void {
+    //     console.log(item);
+    //     console.log(this.infoConfig.userValue);
+    //     if (this.employeeIds != null) {
+    //         var descIds = this.infoConfig.userValue.split(',');
+    //         for (var i = 0; i < descIds.length; i++) {
+    //             if (descIds[i] != item) {
+    //                 this.infoConfig.userValue += descIds[i] + ",";
+    //             }
+    //             else {
+    //                 descIds[i] = null;
+    //             }
+    //         }
+    //         if (this.infoConfig.userValue != null) {
+    //             // this.configCode.desc = this.configCode.desc.trim(',');
+    //         }
+    //     }
+    // }
 }

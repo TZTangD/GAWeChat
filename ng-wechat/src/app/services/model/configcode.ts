@@ -8,6 +8,9 @@ export class ConfigCode implements IConfigCode {
     eCode: number;
     eValue: string;
     eId: string;
+    fCode: number;
+    fValue: string;
+    fId: string;
     constructor(data?: IConfigCode) {
         if (data) {
             for (var property in data) {
@@ -28,6 +31,9 @@ export class ConfigCode implements IConfigCode {
             this.eCode = data["eCode"];
             this.eValue = data["eValue"];
             this.eId = data["eId"];
+            this.fCode = data["fCode"];
+            this.fValue = data["fValue"];
+            this.fId = data["fId"];
         }
     }
 
@@ -48,7 +54,9 @@ export class ConfigCode implements IConfigCode {
         data["eCode"] = this.eCode;
         data["eValue"] = this.eValue;
         data["eId"] = this.eId;
-
+        data["fCode"] = this.fCode;
+        data["fValue"] = this.fValue;
+        data["fId"] = this.fId;
         return data;
     }
 
@@ -69,4 +77,7 @@ export interface IConfigCode {
     eCode: number;
     eValue: string;
     eId: string;
+    fCode: number;
+    fValue: string;
+    fId: string;
 }

@@ -112,7 +112,23 @@ export class RetailCustomerComponent extends AppComponentBase implements OnInit 
             this.exportLoading = false;
         });
     }
-
+    /**
+     * 导出详情
+     * @memberof RetailCustomerComponent
+     */
+    exportExcelAll() {
+        this.exportLoading = true;
+        this.retailService.exportRetailerAllExcel({ name: this.search.name, scale: this.search.scale, markets: this.search.market }).subscribe(result => {
+            if (result.code == 0) {
+                var url = AppConsts.remoteServiceBaseUrl + result.data;
+                document.getElementById('aRetailAllExcelUrl').setAttribute('href', url);
+                document.getElementById('btnRetailAllHref').click();
+            } else {
+                this.notify.error(result.msg);
+            }
+            this.exportLoading = false;
+        });
+    }
     beforeExcelUpload = (file: UploadFile): boolean => {
         if (this.uploadLoading) {
             this.notify.info('上次数据导入还未完成');

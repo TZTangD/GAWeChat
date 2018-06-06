@@ -12,7 +12,6 @@ export class LengthLimitPipe implements PipeTransform {
             }
         } else {
             return value
-
         }
     }
 }

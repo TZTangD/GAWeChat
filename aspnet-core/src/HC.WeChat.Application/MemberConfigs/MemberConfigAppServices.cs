@@ -226,6 +226,7 @@ namespace HC.WeChat.MemberConfigs
                 dto.Value = input.EValue;
                 dto.Type = DeployTypeEnum.积分配置;
                 dto.CreationTime = DateTime.Now;
+                dto.Id = Guid.NewGuid();
                 dto.Desc = "店铺评价积分配置";
                 await CreateMemberConfigAsync(dto);
             }
@@ -245,6 +246,7 @@ namespace HC.WeChat.MemberConfigs
                 dto.Value = input.CValue;
                 dto.Type = DeployTypeEnum.积分配置;
                 dto.CreationTime = DateTime.Now;
+                dto.Id = Guid.NewGuid();
                 dto.Desc = "商品购买积分配置";
                 await CreateMemberConfigAsync(dto);
 
@@ -265,7 +267,29 @@ namespace HC.WeChat.MemberConfigs
                 dto.Value = input.RcValue;
                 dto.Type = DeployTypeEnum.积分配置;
                 dto.CreationTime = DateTime.Now;
+                dto.Id = Guid.NewGuid();
                 dto.Desc = "店铺扫码积分配置";
+                await CreateMemberConfigAsync(dto);
+
+            }
+            if (input.FCode == 5 && input.FId.HasValue)
+            {
+                dto.Code = DeployCodeEnum.首次注册;
+                dto.Value = input.FValue;
+                dto.Type = DeployTypeEnum.积分配置;
+                dto.CreationTime = DateTime.Now;
+                dto.Id = input.FId;
+                dto.Desc = "首次注册积分配置";
+                await UpdateMemberConfigAsync(dto);
+            }
+            else
+            {
+                dto.Code = DeployCodeEnum.首次注册;
+                dto.Value = input.FValue;
+                dto.Type = DeployTypeEnum.积分配置;
+                dto.Id = Guid.NewGuid();
+                dto.CreationTime = DateTime.Now;
+                dto.Desc = "首次注册积分配置";
                 await CreateMemberConfigAsync(dto);
 
             }

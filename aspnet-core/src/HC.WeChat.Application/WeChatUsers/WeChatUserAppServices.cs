@@ -26,6 +26,12 @@ using HC.WeChat.Retailers.Dtos;
 using HC.WeChat.Employees.Dtos;
 using Senparc.Weixin.MP.AdvancedAPIs.TemplateMessage;
 using HC.WeChat.MemberConfigs;
+using HC.WeChat.Helpers;
+using System.IO;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
+using Microsoft.AspNetCore.Hosting;
+using HC.WeChat.IntegralDetails;
 
 namespace HC.WeChat.WeChatUsers
 {
@@ -42,12 +48,18 @@ namespace HC.WeChat.WeChatUsers
         private readonly IRepository<Employee, Guid> _employeeRepository;
         private readonly IRepository<WeChatGroup, int> _wechatgroupRepository;
         private readonly IRepository<MemberConfig, Guid> _memberconfigRepository;
+        private readonly IRepository<WechatAppConfig, int> _wechatappconfigRepository;
+        private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IRepository<IntegralDetail, Guid> _integraldetailRepository;
+        private readonly IRepository<MemberConfig, Guid> _memberConfigRepository;
+
 
         public int? TenantId { get; set; }
         public WechatAppConfigInfo AppConfig { get; set; }
 
         IWechatAppConfigAppService _wechatAppConfigAppService;
         IWeChatGroupAppService _wechatGroupAppService;
+
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -58,10 +70,14 @@ namespace HC.WeChat.WeChatUsers
        IRepository<WeChatGroup, int> wechatgroupRepository,
        IWechatAppConfigAppService wechatAppConfigAppService,
         IWeChatGroupAppService wechatGroupAppService,
-        IRepository<MemberConfig, Guid> memberconfigRepository
-
+        IRepository<MemberConfig, Guid> memberconfigRepository,
+            IRepository<WechatAppConfig, int> wechatappconfigRepository
+              , IHostingEnvironment hostingEnvironment
+                        , IRepository<IntegralDetail, Guid> integraldetailRepository
+                        , IRepository<MemberConfig, Guid> memberConfigRepository
         )
         {
+            _hostingEnvironment = hostingEnvironment;
             _memberconfigRepository = memberconfigRepository;
             _wechatuserRepository = wechatuserRepository;
             _wechatuserManager = wechatuserManager;
@@ -72,7 +88,9 @@ namespace HC.WeChat.WeChatUsers
             TenantId = null;
             AppConfig = _wechatAppConfigAppService.GetWechatAppConfig(TenantId).Result;
             _wechatGroupAppService = wechatGroupAppService;
-
+            _wechatappconfigRepository = wechatappconfigRepository;
+            _integraldetailRepository = integraldetailRepository;
+            _memberConfigRepository = memberConfigRepository;
         }
 
         /// <summary>
@@ -279,7 +297,7 @@ namespace HC.WeChat.WeChatUsers
                         //发送审核通知
                         var retalilerOpenId = await _wechatuserRepository.GetAll().Where(r => r.UserId == entity.UserId).Select(v => v.OpenId).FirstOrDefaultAsync();
                         var currentName = await _wechatuserRepository.GetAll().Where(r => r.OpenId == input.OpenId).Select(v => v.NickName).FirstOrDefaultAsync();
-                        await SendCheckMesssage(retalilerOpenId, input.host, currentName);                     
+                        await SendCheckMesssage(retalilerOpenId, input.host, currentName);
                     }
                 }
                 else if (input.UserType == UserTypeEnum.内部员工)
@@ -337,21 +355,26 @@ namespace HC.WeChat.WeChatUsers
         /// <param name="host"></param>
         /// <param name="currentName"></param>
         /// <returns></returns>
-        public async Task SendCheckMesssage(string OpenId, string host,string currentName)
+        public async Task SendCheckMesssage(string OpenId, string host, string currentName)
         {
             try
-            {             
-                string appId = AppConfig.AppId;
-                string openId = OpenId;
-                string templateId = "qvt7CNXBY4FzfzdX54TvMUaOi9jZ3-tdsb2NRhVp0yg";//模版id  
-                string url = host + "/GAWX/Authorization?page=302";
-                object data = new
+            {
+                string templateId = await _wechatappconfigRepository.GetAll().Select(v => v.TemplateIds).FirstOrDefaultAsync();
+                if (templateId != null || templateId.Length != 0)
                 {
-                    first = new TemplateDataItem("店员审核通知，请您尽快审核"),
-                    keyword1 = new TemplateDataItem(currentName.ToString()),
-                    keyword2 = new TemplateDataItem(DateTime.Now.ToString("yyyy-MM-dd HH:mm"))
-                };
-                await TemplateApi.SendTemplateMessageAsync(appId, openId, templateId, url, data);
+                    string[] ids = templateId.Split(',');
+                    string appId = AppConfig.AppId;
+                    string openId = OpenId;
+                    //string templateId = "qvt7CNXBY4FzfzdX54TvMUaOi9jZ3-tdsb2NRhVp0yg";//模版id  
+                    string url = host + "/GAWX/Authorization?page=302";
+                    object data = new
+                    {
+                        first = new TemplateDataItem("店员审核通知，请您尽快审核"),
+                        keyword1 = new TemplateDataItem(currentName.ToString()),
+                        keyword2 = new TemplateDataItem(DateTime.Now.ToString("yyyy-MM-dd HH:mm"))
+                    };
+                    await TemplateApi.SendTemplateMessageAsync(appId, openId, ids[2], url, data);
+                }
             }
             catch (Exception ex)
             {
@@ -424,7 +447,6 @@ namespace HC.WeChat.WeChatUsers
                 {
                     return new APIResultDto() { Code = 902, Msg = "用户不存在" };
                 }
-
                 entity.Phone = input.Phone;
                 entity.MemberBarCode = entity.MemberBarCode ?? GenerateMemberBarCode();
                 if (entity.UserType == UserTypeEnum.消费者)
@@ -433,7 +455,64 @@ namespace HC.WeChat.WeChatUsers
                     entity.BindTime = DateTime.Now;
                 }
                 await _wechatuserRepository.UpdateAsync(entity);
+                //首次绑定手机号获赠积分
+                await GivenIntegral(input.OpenId,input.TenantId);
                 return new APIResultDto() { Code = 0, Msg = "绑定成功", Data = entity.MapTo<WeChatUserListDto>() };
+            }
+        }
+
+        /// <summary>
+        /// 首次绑定手机号获赠积分
+        /// </summary>
+        /// <param name="openId"></param>
+        /// <returns></returns>
+        private async Task GivenIntegral(string openId, int? tenantId)
+        {
+            try
+            {
+                string phone = await _wechatuserRepository.GetAll().Where(v => v.OpenId == openId).Select(v => v.Phone).FirstOrDefaultAsync();
+                if (phone == null || phone.Length == 0)
+                {
+                    //新增积分详情
+                    var config = await GetIntegralConfig(tenantId);
+                    var user = await _wechatuserRepository.GetAll().Where(u => u.OpenId == openId).FirstOrDefaultAsync();
+                    var intDetail = new IntegralDetail();
+                    intDetail.InitialIntegral = user.IntegralTotal;
+                    intDetail.Integral = int.Parse(config);
+                    intDetail.FinalIntegral = user.IntegralTotal + intDetail.Integral;
+                    intDetail.OpenId = user.OpenId;
+                    intDetail.RefId = user.OpenId;//自身赠送
+                    intDetail.TenantId = tenantId;
+                    intDetail.Type = IntegralTypeEnum.首次注册赠送;
+                    intDetail.Desc = "首次注册赠送";
+                    await _integraldetailRepository.InsertAsync(intDetail);
+                    //更新用户总积分
+                    user.IntegralTotal = intDetail.FinalIntegral.Value;
+                    await _wechatuserRepository.UpdateAsync(user);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.ErrorFormat("注册赠送积分失败 error：{0} Exception：{1}", ex.Message, ex);
+            }
+        }
+
+        /// <summary>
+        /// 获取积分配置
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <returns></returns>
+        private async Task<string> GetIntegralConfig(int? tenantId)
+        {
+            using (CurrentUnitOfWork.SetTenantId(tenantId))
+            {
+                //获取积分配置
+                var configValue = await _memberConfigRepository.GetAll().Where(c => c.Type == DeployTypeEnum.积分配置 && c.Code == DeployCodeEnum.首次注册).Select(c => c.Value).FirstOrDefaultAsync();
+                if (configValue == null)
+                {
+                    configValue = "10";
+                }
+                return configValue;
             }
         }
 
@@ -542,7 +621,7 @@ namespace HC.WeChat.WeChatUsers
             try
             {
                 MemberConfig memeberConfig = await _memberconfigRepository.GetAll().Where(r => r.Code == DeployCodeEnum.通知配置 && r.Type == DeployTypeEnum.通知配置).FirstOrDefaultAsync();
-                if (memeberConfig.Desc!=null||memeberConfig.Value != null)
+                if (memeberConfig.Desc != null || memeberConfig.Value != null)
                 {
                     string newDesc = null;
                     string newValue = null;
@@ -589,7 +668,7 @@ namespace HC.WeChat.WeChatUsers
                     await _memberconfigRepository.UpdateAsync(memeberConfig);
                 }
                 return;
-               
+
             }
             catch (Exception ex)
             {
@@ -652,7 +731,7 @@ namespace HC.WeChat.WeChatUsers
             input.MapTo(entity);
             await _wechatuserRepository.UpdateAsync(entity);
             //反馈通知
-            await WXMessageToShopKeeper(input.OpenId);  
+            await WXMessageToShopKeeper(input.OpenId);
             return new APIResultDto() { Code = 0, Msg = "提交成功，我们会尽快处理" };
         }
 
@@ -665,17 +744,22 @@ namespace HC.WeChat.WeChatUsers
         {
             try
             {
-                string appId = AppConfig.AppId;
-                string openId = OpenId;
-                string templateId = "7I2cswoMRn0P_DsAYz-DCigntaGKJn-XUx6lMowDYRY";//模版id  
-                string url = "";
-                object data = new
+                string templateId = await _wechatappconfigRepository.GetAll().Select(v => v.TemplateIds).FirstOrDefaultAsync();
+                if (templateId != null || templateId.Length != 0)
                 {
-                    first = new TemplateDataItem("您所提交的店铺资料已通过审核!"),
-                    keyword1 = new TemplateDataItem("审核通过"),
-                    keyword2 = new TemplateDataItem(DateTime.Now.ToString("yyyy-MM-dd HH:mm"))
-                };
-                await TemplateApi.SendTemplateMessageAsync(appId, openId, templateId, url, data);
+                    string[] ids = templateId.Split(',');
+                    string appId = AppConfig.AppId;
+                    string openId = OpenId;
+                    //string templateId = "7I2cswoMRn0P_DsAYz-DCigntaGKJn-XUx6lMowDYRY";//模版id  
+                    string url = "";
+                    object data = new
+                    {
+                        first = new TemplateDataItem("您所提交的店铺资料已通过审核"),
+                        keyword1 = new TemplateDataItem("通过审核"),
+                        keyword2 = new TemplateDataItem(DateTime.Now.ToString("yyyy-MM-dd HH:mm"))
+                    };
+                    await TemplateApi.SendTemplateMessageAsync(appId, openId, ids[1], url, data);
+                }
             }
             catch (Exception ex)
             {
@@ -700,6 +784,78 @@ namespace HC.WeChat.WeChatUsers
                 return result;
             }
 
+        }
+
+        /// <summary>
+        /// 会员信息Excel导出
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [UnitOfWork(isTransactional: false)]
+        public async Task<APIResultDto> ExportWeChatUsersExcel(GetWeChatUsersInput input)
+        {
+            try
+            {
+                var exportData = await GetWeChatUsersAsync(input);
+                var result = new APIResultDto();
+                result.Code = 0;
+                result.Data = SaveWeChatUsersExcel("会员信息.xlsx", exportData);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Logger.ErrorFormat("ExportPostInfoExcel errormsg:{0} Exception:{1}", ex.Message, ex);
+                return new APIResultDto() { Code = 901, Msg = "网络忙... 请待会重试！" };
+            }
+        }
+        private async Task<List<WeChatUserListDto>> GetWeChatUsersAsync(GetWeChatUsersInput input)
+        {
+            var mid = UserManager.GetControlEmployeeId();
+            var query = _wechatuserRepository.GetAll();
+            var manuscripts = await query.ToListAsync();
+            var manuscriptDtos = query.MapTo<List<WeChatUserListDto>>();
+            return manuscriptDtos;
+        }
+        private string SaveWeChatUsersExcel(string fileName, List<WeChatUserListDto> data)
+        {
+            var fullPath = ExcelHelper.GetSavePath(_hostingEnvironment.WebRootPath) + fileName;
+            using (var fs = new FileStream(fullPath, FileMode.Create, FileAccess.Write))
+            {
+                IWorkbook workbook = new XSSFWorkbook();
+                ISheet sheet = workbook.CreateSheet("WeChatUser");
+                var rowIndex = 0;
+                IRow titleRow = sheet.CreateRow(rowIndex);
+                string[] titles = { "微信OpenId", "微信昵称", "用户类型", "用户名", "绑定状态", "绑定时间", "解绑时间", "绑定电话", "会员卡条形码", "用户总积分", "是否是店主", "审核状态" };
+                var fontTitle = workbook.CreateFont();
+                fontTitle.IsBold = true;
+                for (int i = 0; i < titles.Length; i++)
+                {
+                    var cell = titleRow.CreateCell(i);
+                    cell.CellStyle.SetFont(fontTitle);
+                    cell.SetCellValue(titles[i]);
+                }
+
+                var font = workbook.CreateFont();
+                foreach (var item in data)
+                {
+                    rowIndex++;
+                    IRow row = sheet.CreateRow(rowIndex);
+                    ExcelHelper.SetCell(row.CreateCell(0), font, item.OpenId);
+                    ExcelHelper.SetCell(row.CreateCell(1), font, item.NickName);
+                    ExcelHelper.SetCell(row.CreateCell(2), font, item.UserTypeName);
+                    ExcelHelper.SetCell(row.CreateCell(3), font, item.UserName);
+                    ExcelHelper.SetCell(row.CreateCell(4), font, item.BindStatusName);
+                    ExcelHelper.SetCell(row.CreateCell(5), font, item.BindTime.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(6), font, item.UnBindTime.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(7), font, item.Phone);
+                    ExcelHelper.SetCell(row.CreateCell(8), font, item.MemberBarCode);
+                    ExcelHelper.SetCell(row.CreateCell(9), font, item.IntegralTotal);
+                    ExcelHelper.SetCell(row.CreateCell(10), font, item.IsShopkeeper.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(11), font, item.StatusName);
+                }
+                workbook.Write(fs);
+            }
+            return "/files/downloadtemp/" + fileName;
         }
     }
 }

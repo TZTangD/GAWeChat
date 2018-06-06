@@ -16,6 +16,12 @@ using System;
 using HC.WeChat.Dto;
 using HC.WeChat.Authorization;
 using System.Linq;
+using Abp.Domain.Uow;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
+using HC.WeChat.Helpers;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace HC.WeChat.Advises
 {
@@ -30,14 +36,16 @@ namespace HC.WeChat.Advises
         ////ECC/ END CUSTOM CODE SECTION
         private readonly IRepository<Advise, Guid> _adviseRepository;
         private readonly IAdviseManager _adviseManager;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
         /// <summary>
         /// 构造函数
         /// </summary>
         public AdviseAppService(IRepository<Advise, Guid> adviseRepository
-      , IAdviseManager adviseManager
+      , IAdviseManager adviseManager, IHostingEnvironment hostingEnvironment
         )
         {
+            _hostingEnvironment = hostingEnvironment;
             _adviseRepository = adviseRepository;
             _adviseManager = adviseManager;
         }
@@ -194,6 +202,73 @@ namespace HC.WeChat.Advises
             await _adviseRepository.InsertAsync(advise);
             return new APIResultDto() { Code = 0, Msg = "提交成功，我们会尽快处理" };
         }
+
+        /// <summary>
+        /// 意见反馈Excel导出
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [UnitOfWork(isTransactional: false)]
+        public async Task<APIResultDto> ExportAdviseExcel(GetAdvisesInput input)
+        {
+            try
+            {
+                var exportData = await GetAdviseListAsync(input);
+                var result = new APIResultDto();
+                result.Code = 0;
+                result.Data = SaveAdviseExcel("意见反馈.xlsx", exportData);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Logger.ErrorFormat("ExportPostInfoExcel errormsg:{0} Exception:{1}", ex.Message, ex);
+                return new APIResultDto() { Code = 901, Msg = "网络忙... 请待会重试！" };
+            }
+        }
+        private async Task<List<AdviseListDto>> GetAdviseListAsync(GetAdvisesInput input)
+        {
+            var mid = UserManager.GetControlEmployeeId();
+            var query = _adviseRepository.GetAll();         
+            var advises = await query.ToListAsync();
+            var advisesDtos = query.MapTo<List<AdviseListDto>>();
+            return advisesDtos;
+        }
+        private string SaveAdviseExcel(string fileName, List<AdviseListDto> data)
+        {
+            var fullPath = ExcelHelper.GetSavePath(_hostingEnvironment.WebRootPath) + fileName;
+            using (var fs = new FileStream(fullPath, FileMode.Create, FileAccess.Write))
+            {
+                IWorkbook workbook = new XSSFWorkbook();
+                ISheet sheet = workbook.CreateSheet("Advise");
+                var rowIndex = 0;
+                IRow titleRow = sheet.CreateRow(rowIndex);
+                string[] titles = { "标题", "用户类型", "联系电话", "举报内容", "微信OpenId", "创建时间" };
+                var fontTitle = workbook.CreateFont();
+                fontTitle.IsBold = true;
+                for (int i = 0; i < titles.Length; i++)
+                {
+                    var cell = titleRow.CreateCell(i);
+                    cell.CellStyle.SetFont(fontTitle);
+                    cell.SetCellValue(titles[i]);
+                }
+
+                var font = workbook.CreateFont();
+                foreach (var item in data)
+                {
+                    rowIndex++;
+                    IRow row = sheet.CreateRow(rowIndex);
+                    ExcelHelper.SetCell(row.CreateCell(0), font, item.Title);
+                    ExcelHelper.SetCell(row.CreateCell(1), font, item.UserTypeName);
+                    ExcelHelper.SetCell(row.CreateCell(2), font, item.Phone);
+                    ExcelHelper.SetCell(row.CreateCell(3), font, item.Content);
+                    ExcelHelper.SetCell(row.CreateCell(4), font, item.OpenId);
+                    ExcelHelper.SetCell(row.CreateCell(5), font, item.CreationTime.ToString("yyyy-MM-dd HH:mm"));
+                }
+                workbook.Write(fs);
+            }
+            return "/files/downloadtemp/" + fileName;
+        }
+
     }
 }
 

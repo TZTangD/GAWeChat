@@ -62,5 +62,8 @@ namespace HC.WeChat.Advises
         /// 已经反馈
         /// </summary>
         Task<APIResultDto> SubmitAdviseAsync(AdviseDto input);
+        Task<APIResultDto> ExportAdviseExcel(GetAdvisesInput input);
+        //Task<List<AdviseListDto>> GetAdviseListAsync(GetAdvisesInput input);
+
     }
 }

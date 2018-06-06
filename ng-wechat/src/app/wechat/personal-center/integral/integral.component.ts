@@ -52,6 +52,10 @@ export class IntegralComponent extends AppComponentBase implements OnInit {
         this.integralDetailService.GetMemberConfigsByTenantId(params).subscribe(result => {
             this.config = result;
             this.config.map(i => {
+                if (i.code == 5) {
+                    this.configCode.fValue = i.value;
+                    this.configCode.fId = i.id;
+                }
                 if (i.code == 3) {
                     this.configCode.rcValue = i.value;
                     this.configCode.rcId = i.id;

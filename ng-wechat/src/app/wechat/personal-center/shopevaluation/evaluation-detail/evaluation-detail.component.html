@@ -40,8 +40,8 @@
     </div>
 
     <form #f="ngForm" (ngSubmit)="save()" *ngIf="!purchaseRecord.isEvaluation">
-        <div class="weui-cells__title">购买数量是否一致</div>
-        <div class="weui-cells weui-cells_radio">
+        <!-- <div class="weui-cells__title">购买数量是否一致</div> -->
+        <!-- <div class="weui-cells weui-cells_radio">
             <label class="weui-cell weui-check__label" for="radio-{{i.id}}" *ngFor="let i of radio">
             <div class="weui-cell__bd">
                 <p>{{i.name}}</p>
@@ -51,6 +51,15 @@
                 <span class="weui-icon-checked"></span>
             </div>
         </label>
+        </div> -->
+        <div class="weui-cells__title">购买数量</div>
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell weui-cell_switch">
+                <div class="weui-cell__bd">是否一致</div>
+                <div class="weui-cell__ft">
+                    <input class="weui-switch" type="checkbox" [(ngModel)]="res.cho" name="cho" weui-required>
+                </div>
+            </div>
         </div>
         <div class="weui-cells__title">店铺评价</div>
         <div class="weui-cells weui-cells_radio">

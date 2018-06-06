@@ -73,7 +73,7 @@
     <div nz-col nzXs="24" nzMd="6">
         <nz-card [nzBordered]="false" [nzTitle]="nzTitle2" class="ant-card__img">
             <ng-template #nzTitle2>
-               微信公众号 渠江烟语
+                微信公众号 渠江烟语
             </ng-template>
             <img class="img" src="./assets/img/weixin.jpg">
         </nz-card>
@@ -81,15 +81,15 @@
     <div nz-col nzXs="24" nzMd="18">
         <nz-card [nzTitle]="nzTitle3" [nzBordered]="false" nzNoPadding>
             <ng-template #nzTitle3>
-                最新用户建议反馈 (模拟数据)
+                最新用户建议反馈
             </ng-template>
-            <div nz-row [nzType]="'flex'" [nzJustify]="'center'" [nzAlign]="'middle'" class="py-sm bg-grey-lighter-h point" *ngFor="let item of todoData">
-                <div nz-col [nzSpan]="4" class="text-center">
-                    <nz-avatar [nzSrc]="'./assets/img/' + item.avatar + '.png'" [nzSize]="'large'"></nz-avatar>
+            <div nz-row [nzType]="'flex'" [nzJustify]="'center'" [nzAlign]="'middle'" class="py-sm bg-grey-lighter-h point" *ngFor="let item of adviseList" (click)="adviseDetail(item)">
+                <div nz-col [nzSpan]="20" style="padding-left: 24px;">
+                    <strong>{{item.userTypeName}}</strong>
+                    <p>{{item.content | lengthLimit:50}}</p>
                 </div>
-                <div nz-col [nzSpan]="20">
-                    <strong>{{item.name}}</strong>
-                    <p>{{item.content}}</p>
+                <div nz-col [nzSpan]="4" class="text-center">
+                    <strong>{{item.creationTime| _date}}</strong>
                 </div>
             </div>
         </nz-card>
