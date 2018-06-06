@@ -1,8 +1,8 @@
 import { Component, ViewEncapsulation, ViewChild } from '@angular/core';
-import {ImageCropperComponent, CropperSettings, Bounds, CropPosition } from 'ngx-img-cropper';
+import { ImageCropperComponent, CropperSettings, Bounds, CropPosition } from 'ngx-img-cropper';
 
 import { UploaderOptions, FileItem, Uploader, UploaderHeaders } from 'ngx-weui';
-import { AppConsts } from '../../../services';
+import { AppConsts, ShopService } from '../../../services';
 
 @Component({
     selector: 'wechat-img-cropper',
@@ -13,19 +13,21 @@ import { AppConsts } from '../../../services';
 export class ImgCropperComponent {
 
     @ViewChild('cropper4', undefined)
-    public cropper4:ImageCropperComponent;
+    public cropper4: ImageCropperComponent;
 
-    public onChange:Function;
-    public updateCropPosition:Function;
-    public resetCroppers:Function;
+    public onChange: Function;
+    public updateCropPosition: Function;
+    public resetCroppers: Function;
 
 
     //Cropper 4 data
-    public cropperSettings4:CropperSettings;
+    public cropperSettings4: CropperSettings;
 
     public data4: any;
-    public getImage:any;
+    public getImage: any;
 
+    fileName: string;
+    /*
     uploader: Uploader = new Uploader(<UploaderOptions>{
         url: AppConsts.remoteServiceBaseUrl + '/WeChatFile/FilesPosts?folder=shop',
         //auto: true,
@@ -52,9 +54,9 @@ export class ImgCropperComponent {
         onUploadComplete: function (file: FileItem, response: string) {
             console.log('onUploadComplete-' + response, arguments);
         }
-    });
+    });*/
 
-    constructor() {
+    constructor(private shopService: ShopService) {
         //Cropper settings 4
         this.cropperSettings4 = new CropperSettings();
         this.cropperSettings4.width = 200;
@@ -83,30 +85,34 @@ export class ImgCropperComponent {
 
         this.getImage = () => {
             //alert(111)
-          this.data4.image = this.cropper4.cropper.getCroppedImage(true).src;
-          //console.log(this.data4.image);
-          //alert(this.data4.image)
-          
-          let data = this.data4.image;
-          //console.log(data.split(',')[0]);
-          
-          data=data.split(',')[1];
-          data=window.atob(data);
-          var ia = new Uint8Array(data.length);
-          for (var i = 0; i < data.length; i++) {
-              ia[i] = data.charCodeAt(i);
-          };
-  
-          //var b = new Blob([data], {type:"image/jpeg"});
-          var b = new Blob([ia], {type:"image/jpeg"});
-          var bs = [];
-          bs.push(b);
-          let newFile = new FileItem(this.uploader, new File(bs,'files'), this.uploader.options);
-          let files = [];
-          files.push(newFile);
-          this.uploader.addToQueue(files);
-          this.uploader.uploadAll();
-          //alert(222)
+            this.data4.image = this.cropper4.cropper.getCroppedImage(true).src;
+            console.log(this.fileName);
+            this.shopService.FilesPostsBase64({fileName: this.fileName, imageBase64: this.data4.image}).subscribe((res) => {
+                console.table(res);
+            });
+            //console.log(this.data4.image);
+            //alert(this.data4.image)
+
+            //let data = this.data4.image;
+            //console.log(data.split(',')[0]);
+
+            //data=data.split(',')[1];
+            //data=window.atob(data);
+            //var ia = new Uint8Array(data.length);
+            //for (var i = 0; i < data.length; i++) {
+            //    ia[i] = data.charCodeAt(i);
+            //};
+
+            //var b = new Blob([data], {type:"image/jpeg"});
+            //var b = new Blob([ia], {type:"image/jpeg"});
+            //var bs = [];
+            //bs.push(b);
+            //let newFile = new FileItem(this.uploader, new File(bs,'files'), this.uploader.options);
+            //let files = [];
+            //files.push(newFile);
+            //this.uploader.addToQueue(files);
+            //this.uploader.uploadAll();
+            //alert(222)
         }
 
         this.resetCroppers = () => {
@@ -117,6 +123,7 @@ export class ImgCropperComponent {
     fileChange($event) {
         const image: any = new Image();
         const file: File = $event.target.files[0];
+        this.fileName = file.name;
         const myReader: FileReader = new FileReader();
         myReader.onloadend = (loadEvent: any) => {
             image.src = loadEvent.target.result;

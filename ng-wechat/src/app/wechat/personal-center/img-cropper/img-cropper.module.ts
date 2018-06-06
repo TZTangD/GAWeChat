@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { SharedModule } from '../../../shared/shared.module';
 import { ImageCropperModule } from 'ngx-img-cropper';
 import { ImgCropperComponent } from './img-cropper.component';
-
+import { ShopService } from '../../../services';
 
 // region: components
 
@@ -23,7 +23,7 @@ const routes: Routes = [
     declarations: [
         ...COMPONENTS
     ],
-    providers: []
+    providers: [ ShopService ]
 })
 export class ImgCropperModule {
 

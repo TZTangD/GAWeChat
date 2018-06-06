@@ -75,44 +75,6 @@ namespace HC.WeChat.Web.Host.Controllers
             return Ok(result);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> BanquetPhotoSaveBase64([FromBody]JObject data)
-        {
-            WeChatFileInput file = data.ToObject<WeChatFileInput>();
-            var imageBase64 = file.thumbUrl;
-
-            if (!string.IsNullOrWhiteSpace(imageBase64))
-            {
-                var reg = new Regex("data:image/(.*);base64,");
-                imageBase64 = reg.Replace(imageBase64, "");
-                byte[] imageByte = Convert.FromBase64String(imageBase64);
-                var memorystream = new MemoryStream(imageByte);
-
-                WeChatFile result = new WeChatFile();
-                string webRootPath = _hostingEnvironment.WebRootPath;
-                string contentRootPath = _hostingEnvironment.ContentRootPath;
-                string fileExt = Path.GetExtension(file.name); //文件扩展名，不含“.”
-                string newFileName = file.uid + "." + fileExt; //随机生成新的文件名
-                var fileDire = webRootPath + "/upload/BanquetPhotos/";
-                if (!Directory.Exists(fileDire))
-                {
-                    Directory.CreateDirectory(fileDire);
-                }
-
-                var filePath = fileDire + newFileName;
-
-                result.Url = filePath;
-                result.Name = newFileName;
-
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await memorystream.CopyToAsync(stream);
-                }
-
-                return Json(new APIResultDto() { Code = 701, Msg = "上传数据成功", Data = result });
-            }
-            return Json(new APIResultDto() { Code = 701, Msg = "上传数据不能为空" });
-        }
         [AbpAllowAnonymous]
         [RequestFormSizeLimit(valueCountLimit: 2147483647)]
         [HttpPost]
@@ -304,6 +266,39 @@ namespace HC.WeChat.Web.Host.Controllers
                 }
             }
             return Ok(saveUrl);
+        }
+
+        [HttpPost]
+        [AbpAllowAnonymous]
+        public async Task<IActionResult> FilesPostsBase64([FromBody]WechatImgBase64 input)
+        {
+            if (!string.IsNullOrWhiteSpace(input.imageBase64))
+            {
+                var reg = new Regex("data:image/(.*);base64,");
+                input.imageBase64 = reg.Replace(input.imageBase64, "");
+                byte[] imageByte = Convert.FromBase64String(input.imageBase64);
+                var memorystream = new MemoryStream(imageByte);
+
+                string webRootPath = _hostingEnvironment.WebRootPath;
+                string contentRootPath = _hostingEnvironment.ContentRootPath;
+                string fileExt = Path.GetExtension(input.fileName); //文件扩展名，不含“.”
+                string newFileName = Guid.NewGuid().ToString() + fileExt; //随机生成新的文件名
+                var fileDire = webRootPath + "/upload/shop/";
+                if (!Directory.Exists(fileDire))
+                {
+                    Directory.CreateDirectory(fileDire);
+                }
+
+                var filePath = fileDire + newFileName;
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await memorystream.CopyToAsync(stream);
+                }
+                var saveUrl = filePath.Substring(webRootPath.Length);
+                return Json(new APIResultDto() { Code = 0, Msg = "上传数据成功", Data = saveUrl });
+            }
+            return Json(new APIResultDto() { Code = 901, Msg = "上传数据不能为空" });
         }
 
         /// <summary>
