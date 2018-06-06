@@ -86,7 +86,7 @@
             <div nz-row [nzType]="'flex'" [nzJustify]="'center'" [nzAlign]="'middle'" class="py-sm bg-grey-lighter-h point" *ngFor="let item of adviseList" (click)="adviseDetail(item)">
                 <div nz-col [nzSpan]="20" style="padding-left: 24px;">
                     <strong>{{item.userTypeName}}</strong>
-                    <p>{{item.content}}</p>
+                    <p>{{item.content | lengthLimit:50}}</p>
                 </div>
                 <div nz-col [nzSpan]="4" class="text-center">
                     <strong>{{item.creationTime| _date}}</strong>

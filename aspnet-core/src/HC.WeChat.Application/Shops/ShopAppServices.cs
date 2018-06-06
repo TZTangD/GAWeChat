@@ -204,7 +204,7 @@ namespace HC.WeChat.Shops
                 await ShopWXInfo(input);
             }
         }
-        public async Task ShopWXInfo(CreateOrUpdateShopInput input)
+        private async Task ShopWXInfo(CreateOrUpdateShopInput input)
         {
             try
             {
@@ -224,7 +224,7 @@ namespace HC.WeChat.Shops
                                 string appId = AppConfig.AppId;
                                 string openId = item;
                                 //string templateId = "qvt7CNXBY4FzfzdX54TvMUaOi9jZ3-tdsb2NRhVp0yg";//模版id  
-                                string url = "";
+                                string url = input.Host + "/GAWX/Authorization?page=303&param=" + input.Shop.Id.ToString();
                                 object data = new
                                 {
                                     first = new TemplateDataItem("有新的店铺资料提交，请您尽快审核"),

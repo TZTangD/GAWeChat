@@ -27,6 +27,7 @@ export class EvaluationDetailComponent extends AppComponentBase implements OnIni
     purchaseRecord: PurchaseRecord = new PurchaseRecord();
     radio: any[] = [{ id: 1, name: '是', value: true }, { id: 2, name: '否', value: false }];
     radioType: any[] = [{ id: 1, name: '好评', value: 5 }, { id: 2, name: '中评', value: 3 }, { id: 3, name: '差评', value: 1 }];
+    cho: boolean;
     shopEvaluation: ShopEvaluation = new ShopEvaluation();
 
     constructor(injector: Injector, private srv: ToptipsService, private shopEvaluationService: ShopEvaluationService, private purchaserecordService: PurchaserecordService, private route: ActivatedRoute, private router: Router) {
@@ -34,7 +35,8 @@ export class EvaluationDetailComponent extends AppComponentBase implements OnIni
     }
     ngOnInit() {
         this.res.radioType = this.radioType[0];
-        this.res.radio = this.radio[0];
+        // this.res.radio = this.radio[0];
+        this.res.cho = true;
         this.GetWXProductsDetailsByIdAsync();
         if (this.pageType == 'detail') {
             this.GetWXEvaluationByIdAsync();
@@ -80,7 +82,9 @@ export class EvaluationDetailComponent extends AppComponentBase implements OnIni
     save() {
         this.loading = true;
         this.shopEvaluation.evaluation = this.res.radioType.value;
-        this.shopEvaluation.isCorrectQuantity = this.res.radio.value;
+        // this.shopEvaluation.isCorrectQuantity = this.res.radio.value;
+        this.shopEvaluation.isCorrectQuantity = this.res.cho;
+        alert(this.shopEvaluation.isCorrectQuantity);
         this.shopEvaluation.purchaseRecordId = this.id;
         this.shopEvaluation.openId = this.settingsService.openId;
         this.shopEvaluation.shopId = this.purchaseRecord.shopId;

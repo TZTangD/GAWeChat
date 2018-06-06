@@ -101,12 +101,13 @@
                             </div>
                             <div nz-form-control nz-col [nzSm]="19">
                                 <h4 class="mb-md">{{employeeIds}}</h4>
-                                <nz-tag nzClosable (nzClose)="onClose($event)">{{employeeIds}}</nz-tag>
+                                <!-- <nz-tag nzClosable (nzClose)="onClose($event)">{{employeeIds}}</nz-tag> -->
                             </div>
                             <!-- <div nz-form-control nz-col [nzSm]="19">
                                 <nz-tag *ngFor="let item of user" nzClosable (nzClose)="onClose($event,config)">{{item.userName}}</nz-tag>
                             </div> -->
                         </div>
+                        <!-- {{employeeIds}} <br>{{employeeOpenId}} -->
                         <div nz-form-item nz-row>
                             <div nz-form-label nz-col [nzSm]="9">
                                 <button nz-button *ngIf="employeeIds.length!=0" [nzType]="'default'" [nzSize]="'large'" type="button" (click)="cancel()">
