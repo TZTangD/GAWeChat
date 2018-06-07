@@ -186,8 +186,18 @@ namespace Abp.WeChat.Senparc.MessageHandlers
             {
                 return new SuccessResponseMessage();
             }
-            var responseMessage = ResponseMessageBase.CreateFromRequestMessage<ResponseMessageText>(requestMessage);
-            responseMessage.Content = MessageInfo.SubscribeMsg;
+            //var responseMessage = ResponseMessageBase.CreateFromRequestMessage<ResponseMessageText>(requestMessage);
+            //responseMessage.Content = MessageInfo.SubscribeMsg;
+            //修改成图文消息
+            var responseMessage = ResponseMessageBase.CreateFromRequestMessage<ResponseMessageNews>(requestMessage);
+            responseMessage.ArticleCount = 1;
+            responseMessage.Articles.Add(new Article()
+            {
+                Title = "渠江烟语微信平台升级版 使用指南",
+                Description = "点击查看详细",
+                PicUrl = "http://ga.intcov.com/files/imgs/syzl.jpg",
+                Url = "https://mp.weixin.qq.com/s/q0e8EUmaCwiDhEyAXi6zGw"
+            });
             //关注消息
             Subscribe(requestMessage);
             return responseMessage;
