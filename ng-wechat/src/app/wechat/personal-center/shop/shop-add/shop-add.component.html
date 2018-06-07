@@ -158,20 +158,11 @@
     </form>
 </Page>
 <weui-popup #imgCropperPopup [config]="{is_full: true}">
-    <div class="weui-media-box weui-media-box_small-appmsg">
-        <div class="weui-cells">
-            <div class="weui-cell">
-                <div class="weui-cell__bd weui-cell_primary">
-                    <p>图片裁剪</p>
-                </div>               
-            </div>
-        </div>
-    </div>
     <div>
         <img-cropper #shopCropper [image]="imgData" [settings]="cropperSettings"></img-cropper>
     </div>
-    <div>
-        <button class="weui-btn weui-btn_primary" (click)="goUploadImg()">确定使用</button>
-        <button weui-button [weui-type]="'default'" (click)="cancelUploadImg()">取消</button>
+    <div class="weui-btn-area">
+        <button weui-button (click)="goUploadImg()">确定使用</button>
+        <button weui-button [weui-type]="'default'" (click)="cancelUploadImg()">取消</button>  
     </div>
 </weui-popup>
