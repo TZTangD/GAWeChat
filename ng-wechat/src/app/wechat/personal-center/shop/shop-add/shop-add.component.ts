@@ -62,8 +62,10 @@ export class ShopAddComponent extends AppComponentBase implements OnInit {
         url: AppConsts.remoteServiceBaseUrl + '/WeChatFile/FilesPosts?folder=shop',
         auto: true,
         limit: 1,
-        size: 153600,
+        //size: 153600,
         onUploadStart: ((file: FileItem) => {
+            console.table(file._file);
+            console.table(file.file);              
             if (file.file.size > 153600) {
                 this.srv['warn']('文件必须小于等于150KB');
                 file.cancel();
@@ -239,7 +241,7 @@ export class ShopAddComponent extends AppComponentBase implements OnInit {
             longitude: (this.qqLongitude ? this.qqLongitude : this.longitude), // 经度，浮点数，范围为180 ~ -180。
             name: this.res.name, // 位置名
             address: this.res.address, // 地址详情说明
-            scale: 15, // 地图缩放级别,整形值,范围从1~28。默认为最大
+            scale: 16, // 地图缩放级别,整形值,范围从1~28。默认为最大
             infoUrl: this.hostUrl + '/gawechat/index.html#/shops/shop' // 在查看位置界面底部显示的超链接,可点击跳转
         });
     }
