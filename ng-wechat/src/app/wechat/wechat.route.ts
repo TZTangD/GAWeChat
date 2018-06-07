@@ -20,7 +20,7 @@ export const routes = [
     { path: 'shopevaluations', loadChildren: './personal-center/shopevaluation/shopevaluation.module#ShopEvaluationModule' },
     { path: 'good-sources', loadChildren: './personal-center/good-source/good-source.module#GoodSourceModule' },
     { path: 'shop-employees', loadChildren: './personal-center/shop-employee/shop-employee.module#ShopEmployeeModule' },
-    { path: 'imgs', loadChildren: './personal-center/img-cropper/img-cropper.module#ImgCropperModule' },
+    //{ path: 'imgs', loadChildren: './personal-center/img-cropper/img-cropper.module#ImgCropperModule' },
     // Not found
     { path: '**', redirectTo: '' }
 ];

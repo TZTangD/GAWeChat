@@ -69,7 +69,7 @@ export class ShopAddComponent extends AppComponentBase implements OnInit {
         })
     }
 
-    uploader: Uploader = new Uploader(<UploaderOptions>{
+    /*uploader: Uploader = new Uploader(<UploaderOptions>{
         url: AppConsts.remoteServiceBaseUrl + '/WeChatFile/FilesPosts?folder=shop',
         auto: true,
         limit: 1,
@@ -95,7 +95,7 @@ export class ShopAddComponent extends AppComponentBase implements OnInit {
         onUploadComplete: function (file: FileItem, response: string) {
             //console.log('onUploadComplete-' + response, arguments);
         }
-    });
+    });*/
 
     constructor(injector: Injector, private router: Router,
         private shopService: ShopService,
@@ -207,9 +207,9 @@ export class ShopAddComponent extends AppComponentBase implements OnInit {
 
     onDel(item: any) {
         //console.log(item);
-        if (item) {
+        /*if (item) {
             this.uploader.removeFromQueue(item.item);
-        }
+        }*/
         this.coverPhoto = null;
     }
 
