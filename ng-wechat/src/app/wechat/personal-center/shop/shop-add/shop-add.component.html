@@ -74,7 +74,8 @@
         <div class="weui-cells weui-cells_form">
             <div class="weui-cell">
                 <div class="weui-cell__bd">
-                    <textarea class="weui-textarea" placeholder="请输入店铺详细地址" rows="2" [(ngModel)]="res.address" name="address" weui-textarea weui-cn="2" maxlength="500"></textarea>
+                    <textarea class="weui-textarea" placeholder="请输入店铺详细地址" rows="2" [(ngModel)]="res.address" name="address" weui-textarea weui-cn="2"
+                        maxlength="500"></textarea>
                 </div>
             </div>
         </div>
@@ -83,7 +84,8 @@
         <div class="weui-cells weui-cells_form">
             <div class="weui-cell">
                 <div class="weui-cell__bd">
-                    <textarea class="weui-textarea" placeholder="请输入店铺描述信息" rows="3" [(ngModel)]="res.desc" name="desc" weui-textarea weui-cn="2" maxlength="500"></textarea>
+                    <textarea class="weui-textarea" placeholder="请输入店铺描述信息" rows="3" [(ngModel)]="res.desc" name="desc" weui-textarea weui-cn="2"
+                        maxlength="500"></textarea>
                 </div>
             </div>
         </div>
@@ -105,7 +107,7 @@
                     <weui-gallery [imgs]="img" [(show)]="imgShow" (delete)="onDel()"></weui-gallery>
                 </div>
             </div>
-            <div class="weui-cell" *ngIf="!coverPhoto">
+            <!--<div class="weui-cell" *ngIf="!coverPhoto">
                 <div class="weui-cell__bd">
                     <div class="weui-uploader">
                         <div class="weui-uploader__hd">
@@ -128,9 +130,23 @@
                     </div>
                     <weui-gallery [imgs]="img" [(show)]="imgShow" (delete)="onDel($event)"></weui-gallery>
                 </div>
+            </div>-->
+            <div class="weui-cell" *ngIf="!coverPhoto">
+                <div class="weui-cell__bd">
+                    <div class="weui-uploader">
+                        <div class="weui-uploader__hd">
+                            <p class="weui-uploader__title">上传图片</p>
+                            <div class="weui-uploader__info"></div>
+                        </div>
+                        <div class="weui-uploader__bd">
+                            <div class="weui-uploader__input-box">
+                                <input class="weui-uploader__input" type="file" accept="image/*" (change)="fileChange($event)" name="files" weui-required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-
         <label for="weuiAgree" class="weui-agree">
             <span class="weui-agree__text">
                 店铺信息提交后需等待营销中心审核，审核通过后可维护商品信息，消费者可以在附近店铺和特色商品进行查找
@@ -141,3 +157,21 @@
         </div>
     </form>
 </Page>
+<weui-popup #imgCropperPopup [config]="{is_full: true}">
+    <div class="weui-media-box weui-media-box_small-appmsg">
+        <div class="weui-cells">
+            <div class="weui-cell">
+                <div class="weui-cell__bd weui-cell_primary">
+                    <p>图片裁剪</p>
+                </div>               
+            </div>
+        </div>
+    </div>
+    <div>
+        <img-cropper #shopCropper [image]="imgData" [settings]="cropperSettings"></img-cropper>
+    </div>
+    <div>
+        <button class="weui-btn weui-btn_primary" (click)="goUploadImg()">确定使用</button>
+        <button weui-button [weui-type]="'default'" (click)="cancelUploadImg()">取消</button>
+    </div>
+</weui-popup>

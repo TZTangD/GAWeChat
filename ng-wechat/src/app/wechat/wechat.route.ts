@@ -8,6 +8,7 @@ export const routes = [
     { path: 'members', loadChildren: './personal-center/member-card/member-card.module#MemberCardModule' },
     { path: 'personals', loadChildren: './personal-center/personal/personal.module#PersonalModule' },
     { path: 'shops', loadChildren: './personal-center/shop/shop.module#ShopModule' },
+    { path: 'shopadds', loadChildren: './personal-center/shop/shop-add/shop-add.module#ShopAddModule' },
     { path: 'scans', loadChildren: './personal-center/scan/scan.module#ScanModule' },
     { path: 'nearbies', loadChildren: './buy/nearby-shop/nearby-shop.module#NearbyShopModule' },
     { path: 'feedbacks', loadChildren: './personal-center/feedback/feedback.module#FeedbackModule' },
