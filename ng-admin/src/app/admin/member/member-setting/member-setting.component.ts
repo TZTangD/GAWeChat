@@ -136,33 +136,33 @@ export class MemberSettingComponent extends AppComponentBase implements OnInit {
     /**
      * 模态框返回
      */
-    getSelectData = (employee?: WechatUser[]) => {
-        // var employeeIds = employee.map(v => {
-        //     if (v)
-        //         return v;
-        //     else
-        //         return null;
-        // });
-        // var refIds = employeeIds.map(v => v.openId)
-        for (var i = 0; i < employee.length; i++) {
-            // alert('这是已经存在的id' + this.employeeOpenId.toString());
-            if (this.employeeOpenId.toString().indexOf(employee[i].openId.toString()) == -1) {
-                // alert('相等吗?' + this.employeeOpenId.toString().indexOf(employee[i].openId.toString()));
-                // this.employeeOpenId = this.employeeOpenId.concat(employeeIds.map(v => v.openId));
-                // this.employeeIds = this.employeeIds.concat(employeeIds.map(v => v.userName));
-                this.employeeOpenId = this.employeeOpenId.concat(employee[i].openId);
-                this.employeeIds = this.employeeIds.concat(employee[i].userName);
-            }
-            // alert('这是for出来的id' + employee[i].openId);
-        }
-        this.configCode.userId = this.employeeOpenId.join();
-        this.configCode.desc = this.employeeIds.join();
-        // alert('相等吗?' + this.employeeOpenId.toString().indexOf(refIds.toString()));
-        // if (this.employeeOpenId.toString().indexOf(refIds.toString()) == -1) {
-        //     this.employeeOpenId = this.employeeOpenId.concat(employeeIds.map(v => v.openId));
-        //     this.employeeIds = this.employeeIds.concat(employeeIds.map(v => v.userName));
-        // }
-    }
+    // getSelectData = (employee?: WechatUser[]) => {
+    //     // var employeeIds = employee.map(v => {
+    //     //     if (v)
+    //     //         return v;
+    //     //     else
+    //     //         return null;
+    //     // });
+    //     // var refIds = employeeIds.map(v => v.openId)
+    //     for (var i = 0; i < employee.length; i++) {
+    //         // alert('这是已经存在的id' + this.employeeOpenId.toString());
+    //         if (this.employeeOpenId.toString().indexOf(employee[i].openId.toString()) == -1) {
+    //             // alert('相等吗?' + this.employeeOpenId.toString().indexOf(employee[i].openId.toString()));
+    //             // this.employeeOpenId = this.employeeOpenId.concat(employeeIds.map(v => v.openId));
+    //             // this.employeeIds = this.employeeIds.concat(employeeIds.map(v => v.userName));
+    //             this.employeeOpenId = this.employeeOpenId.concat(employee[i].openId);
+    //             this.employeeIds = this.employeeIds.concat(employee[i].userName);
+    //         }
+    //         // alert('这是for出来的id' + employee[i].openId);
+    //     }
+    //     this.configCode.userId = this.employeeOpenId.join();
+    //     this.configCode.desc = this.employeeIds.join();
+    //     // alert('相等吗?' + this.employeeOpenId.toString().indexOf(refIds.toString()));
+    //     // if (this.employeeOpenId.toString().indexOf(refIds.toString()) == -1) {
+    //     //     this.employeeOpenId = this.employeeOpenId.concat(employeeIds.map(v => v.openId));
+    //     //     this.employeeIds = this.employeeIds.concat(employeeIds.map(v => v.userName));
+    //     // }
+    // }
 
     // getSelectData = (employee?: WechatUser[]) => {
     //     for (var i = 0; i < employee.length; i++) {
@@ -186,44 +186,24 @@ export class MemberSettingComponent extends AppComponentBase implements OnInit {
     //     //     this.employeeIds = this.employeeIds.concat(employeeIds.map(v => v.userName));
     //     // }
     // }
-    // getSelectData = (employee?: WechatUser[]) => {
-    //     // var employeeIds = employee.map(v => {
-    //     //     if (v)
-    //     //         return v;
-    //     //     else
-    //     //         return null;
-    //     // });
-    //     // var refIds = employeeIds.map(v => v.openId)
-    //     var cur = this.user.map(v => {
-    //         if (v)
-    //             return v.openId;
-    //     });
-    //     var com1 = employee.forEach(v => { return v.openId });
-    //     var com = employee.map(v => {
-    //         if (v)
-    //             return v.openId;
-    //     });
-    //     console.log(this.user);
-    //     for (var i = 0; i < this.user.length; i++) {
-    //         alert('这是已经存在的id' + this.employeeOpenId.toString());
-    //         if (cur.toString().indexOf(employee[i].openId.toString()) == -1) {
-    //             alert('相等吗?' + this.employeeOpenId.toString().indexOf(employee[i].openId.toString()));
-    //             // this.employeeOpenId = this.employeeOpenId.concat(employeeIds.map(v => v.openId));
-    //             // this.employeeIds = this.employeeIds.concat(employeeIds.map(v => v.userName));
-    //             this.user.push(...employee);
-    //             this.employeeOpenId = this.employeeOpenId.concat(employee[i].openId);
-    //             this.employeeIds = this.employeeIds.concat(employee[i].userName);
-    //         }
-    //         alert('这是for出来的id' + employee[i].openId);
-    //     }
-    //     // this.configCode.userId = this.employeeOpenId.join();
-    //     // this.configCode.desc = this.employeeIds.join();
-    //     // alert('相等吗?' + this.employeeOpenId.toString().indexOf(refIds.toString()));
-    //     // if (this.employeeOpenId.toString().indexOf(refIds.toString()) == -1) {
-    //     //     this.employeeOpenId = this.employeeOpenId.concat(employeeIds.map(v => v.openId));
-    //     //     this.employeeIds = this.employeeIds.concat(employeeIds.map(v => v.userName));
-    //     // }
-    // }
+    getSelectData = (employee?: WechatUser) => {
+        if (this.user.length != 0) {
+            // for (var i = 0; i < employee.length; i++) {
+            // for (var j = 0; j < this.user.length; j++) {
+            this.user.forEach(v => {
+                if (v.openId.toString() != employee.openId.toString()) {
+                    this.user.push(employee);
+                }
+            });
+            // }
+            // alert('这是已经存在的id' + this.user[j].openId.toString());
+            // alert('这是传入的id' + employee[0].openId.toString());
+            // alert(!this.user[j].openId.toString().includes(employee[i].openId.toString()));
+            // }
+        } else {
+            this.user.push(employee);
+        }
+    }
 
     // onClose(e: MouseEvent, item: any): void {
     //     console.log(item);
