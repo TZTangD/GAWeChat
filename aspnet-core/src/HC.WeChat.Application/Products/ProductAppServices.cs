@@ -318,8 +318,16 @@ namespace HC.WeChat.Products
         public async Task<int> GetCheckCode(CheckInput input)
         {
             var result = 0;
-            var countP = await _productRepository.GetAll().Where(p => p.PackageCode == input.PCode || p.BarCode == input.PCode).WhereIf(input.ProductId != Guid.Empty, p => p.Id != input.ProductId).CountAsync();
-            var countB = await _productRepository.GetAll().Where(p => p.BarCode == input.BCode || p.PackageCode == input.BCode).WhereIf(input.ProductId != Guid.Empty, p => p.Id != input.ProductId).CountAsync();
+            var countP = 0;
+            var countB = 0;
+            if (!string.IsNullOrEmpty(input.PCode))
+            {
+                countP = await _productRepository.GetAll().Where(p => p.PackageCode == input.PCode || p.BarCode == input.PCode).WhereIf(input.ProductId != Guid.Empty, p => p.Id != input.ProductId).CountAsync();
+            }
+            if (!string.IsNullOrEmpty(input.BCode))
+            {
+                countB = await _productRepository.GetAll().Where(p => p.BarCode == input.BCode || p.PackageCode == input.BCode).WhereIf(input.ProductId != Guid.Empty, p => p.Id != input.ProductId).CountAsync();
+            }
             //var entity = _productRepository.GetAll().Where(e => e.Id == input.ProductId).FirstOrDefault();
 
             if (countB > 0 && countP > 0)
@@ -674,7 +682,7 @@ namespace HC.WeChat.Products
             //TODO:根据传入的参数添加过滤条件
             var productCount = await query.CountAsync();
 
-            var products = await query .ToListAsync();
+            var products = await query.ToListAsync();
 
             //var productListDtos = ObjectMapper.Map<List <ProductListDto>>(products);
             var productListDtos = products.MapTo<List<ProductListDto>>();
@@ -697,7 +705,7 @@ namespace HC.WeChat.Products
                 ISheet sheet = workbook.CreateSheet("Employees");
                 var rowIndex = 0;
                 IRow titleRow = sheet.CreateRow(rowIndex);
-                string[] titles = { "商品规格", "商品类型", "指导零售价", "是否是特色商品", "包码", "条码","搜索次数","商品id","商品code","所属公司", "是否启用" };
+                string[] titles = { "商品规格", "商品类型", "指导零售价", "是否是特色商品", "包码", "条码", "搜索次数", "商品id", "商品code", "所属公司", "是否启用" };
                 var fontTitle = workbook.CreateFont();
                 fontTitle.IsBold = true;
                 for (int i = 0; i < titles.Length; i++)
@@ -717,7 +725,7 @@ namespace HC.WeChat.Products
                     ExcelHelper.SetCell(row.CreateCell(1), font, item.TypeName);
                     ExcelHelper.SetCell(row.CreateCell(2), font, item.Price.ToString());
                     var isRareStr = item.IsRare.ToString();
-                    ExcelHelper.SetCell(row.CreateCell(3), font,(isRareStr == "true"|| isRareStr == "True") ? "是" : "否");
+                    ExcelHelper.SetCell(row.CreateCell(3), font, (isRareStr == "true" || isRareStr == "True") ? "是" : "否");
                     ExcelHelper.SetCell(row.CreateCell(4), font, item.PackageCode);
                     ExcelHelper.SetCell(row.CreateCell(5), font, item.BarCode);
                     ExcelHelper.SetCell(row.CreateCell(6), font, item.SearchCount.ToString());
@@ -725,7 +733,7 @@ namespace HC.WeChat.Products
                     ExcelHelper.SetCell(row.CreateCell(8), font, item.ItemCode);
                     ExcelHelper.SetCell(row.CreateCell(9), font, item.Company);
                     var isActionStr = item.IsAction.ToString();
-                    ExcelHelper.SetCell(row.CreateCell(10), font,( isActionStr == "true"|| isActionStr=="True") ?"是":"否");
+                    ExcelHelper.SetCell(row.CreateCell(10), font, (isActionStr == "true" || isActionStr == "True") ? "是" : "否");
                 }
                 workbook.Write(fs);
             }
