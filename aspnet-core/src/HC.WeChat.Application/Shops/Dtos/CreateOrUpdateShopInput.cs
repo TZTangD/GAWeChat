@@ -13,5 +13,6 @@ namespace HC.WeChat.Shops.Dtos
 
         public string OpenId { get; set; }
 
+        public string Host { get; set; }
     }
 }

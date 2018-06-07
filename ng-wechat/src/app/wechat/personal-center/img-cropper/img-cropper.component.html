@@ -1,0 +1,19 @@
+<div>
+    <div>
+        <input id="file1" accept type="file" (change)="fileChange($event)" />
+        <!--<input class="weui-uploader__input" type="file" accept="image/*" (change)="fileChange($event)" [weui-uploader-file]="uploader" name="files" weui-required>-->
+        <span>选择图片</span>
+    </div>
+    <div>
+        <h3>原图</h3>
+        <img-cropper #cropper4 [image]="data4" [settings]="cropperSettings4"></img-cropper>
+        <br/>
+        <button class="btn btn-primary" (click)="getImage()">确定</button>
+    </div>
+    <h3>裁剪</h3>
+    <div>
+        <span *ngIf="data4.image">
+            <img [src]="data4.image" [width]="200">
+        </span>
+    </div>
+</div>

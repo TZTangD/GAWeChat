@@ -164,7 +164,7 @@ export class ShopComponent extends AppComponentBase implements OnInit {
             longitude: this.shop.qqLongitude, // 经度，浮点数，范围为180 ~ -180。
             name: this.shop.name, // 位置名
             address: this.shop.address, // 地址详情说明
-            scale: 15, // 地图缩放级别,整形值,范围从1~28。默认为最大 之前12
+            scale: 16, // 地图缩放级别,整形值,范围从1~28。默认为最大 之前12
             infoUrl: AppConsts.remoteServiceBaseUrl + '/gawechat/index.html#/shops/shop' // 在查看位置界面底部显示的超链接,可点击跳转
         });
     }

@@ -1,13 +1,9 @@
-import { AppLayoutComponent } from '../layout/default/default.component';
-
 import { HomeComponent } from './home/home.component';
 
 export const routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
     { path: 'home', component: HomeComponent },
     { path: 'activities', loadChildren: './activities/activities.module#ActivitiesModule' },
-    // { path: 'buy', loadChildren: './buy/buy.module#BuyModule' },
-    // { path: 'center', loadChildren: './personal-center/personal-center.module#PersonalCenterModule' },
     { path: 'shares', loadChildren: './activities/share/share.module#ShareModule' },
     { path: 'members', loadChildren: './personal-center/member-card/member-card.module#MemberCardModule' },
     { path: 'personals', loadChildren: './personal-center/personal/personal.module#PersonalModule' },
@@ -23,7 +19,7 @@ export const routes = [
     { path: 'shopevaluations', loadChildren: './personal-center/shopevaluation/shopevaluation.module#ShopEvaluationModule' },
     { path: 'good-sources', loadChildren: './personal-center/good-source/good-source.module#GoodSourceModule' },
     { path: 'shop-employees', loadChildren: './personal-center/shop-employee/shop-employee.module#ShopEmployeeModule' },
-
+    { path: 'imgs', loadChildren: './personal-center/img-cropper/img-cropper.module#ImgCropperModule' },
     // Not found
     { path: '**', redirectTo: '' }
 ];

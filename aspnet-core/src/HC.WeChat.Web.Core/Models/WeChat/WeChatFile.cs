@@ -43,4 +43,11 @@ namespace HC.WeChat.Models.WeChat
         public object linkProps { get; set; }
         public string type { get; set; }
     }
+
+    public class WechatImgBase64
+    {
+        public string fileName { get; set; }
+
+        public string imageBase64 { get; set; }
+    }
 }

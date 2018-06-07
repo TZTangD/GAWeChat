@@ -1290,15 +1290,15 @@ codecov@^3.0.0:
     request "2.81.0"
     urlgrey "0.4.4"
 
-codelyzer@~3.2.0:
-  version "3.2.2"
-  resolved "https://registry.yarnpkg.com/codelyzer/-/codelyzer-3.2.2.tgz#abbd4e5956c435677740846e5858c915f89679c3"
+codelyzer@^4.0.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/codelyzer/-/codelyzer-4.3.0.tgz#6bf3ba68efd9d655a451ecaa14a2852001a43dfb"
   dependencies:
     app-root-path "^2.0.1"
     css-selector-tokenizer "^0.7.0"
     cssauron "^1.4.0"
     semver-dsl "^1.0.1"
-    source-map "^0.5.6"
+    source-map "^0.5.7"
     sprintf-js "^1.0.3"
 
 collapse-white-space@^1.0.0:
@@ -4571,6 +4571,10 @@ ngx-gesture-password@^1.0.1:
 ngx-highlight-js@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/ngx-highlight-js/-/ngx-highlight-js-1.0.3.tgz#b46ef9069d443baae7a43e5e4217d64fb8049003"
+
+ngx-img-cropper@^0.10.4:
+  version "0.10.4"
+  resolved "https://registry.yarnpkg.com/ngx-img-cropper/-/ngx-img-cropper-0.10.4.tgz#3caf040f38bd5e4b2e933960cb1ac8861dab6e65"
 
 ngx-notify@^1.0.2:
   version "1.0.2"
