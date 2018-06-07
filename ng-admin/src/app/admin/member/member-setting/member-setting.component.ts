@@ -7,7 +7,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd';
 import { ConfigCode } from '@shared/entity/member/configcode';
 import { MessageEmployeeModalComponent } from './message-employee-modal/message-employee-modal.component';
-import { WechatUser } from '@shared/entity/wechat';
+import { WechatUser, WechatUserDto } from '@shared/entity/wechat';
 import { EllipsisComponent } from '@delon/abc';
 import { forEach } from '@angular/router/src/utils/collection';
 
@@ -21,13 +21,16 @@ export class MemberSettingComponent extends AppComponentBase implements OnInit {
     modalVisible = false;
     isDisablec = false;
     employeeOpenId: string[] = [];
+    stringOpenId: string = '';
+    stringName: string = '';
     employeeIds: string[] = [];
     loading = false;
     form: FormGroup;
     config: MemberConfigs[] = [];
     configCode: ConfigCode = new ConfigCode();
     infoConfig: ConfigCode = new ConfigCode();
-    user: WechatUser[] = [];
+    users: WechatUser[] = [];
+    usersDto: WechatUserDto[] = [];
     constructor(injector: Injector, private fb: FormBuilder,
         private modal: NzModalService, private memberconfigsService: MemberConfigsServiceProxy) {
         super(injector);
@@ -75,37 +78,91 @@ export class MemberSettingComponent extends AppComponentBase implements OnInit {
         });
     }
 
+    // getWXInfoConfigsByTenantId() {
+    //     this.memberconfigsService.getMemberConfigs().subscribe((result: PagedResultDtoOfMemberConfigs) => {
+    //         this.config = result.items;
+    //         this.config.forEach(i => {
+    //             if (i.code == 4) {       
+    //                 if (i.desc != null) {
+    //                     this.employeeIds = i.desc.split(',');
+    //                     this.employeeOpenId = i.value.split(',');
+    //                 } else {
+    //                     this.employeeIds = [];
+    //                     this.employeeOpenId = [];
+    //                 }
+    //                 this.infoConfig.userValue = i.value;
+    //                 this.infoConfig.userId = i.id;
+    //                 this.infoConfig.desc = i.desc;
+    //             }
+    //         })
+    //     });
+    // }
+
     getWXInfoConfigsByTenantId() {
         this.memberconfigsService.getMemberConfigs().subscribe((result: PagedResultDtoOfMemberConfigs) => {
             this.config = result.items;
+            this.usersDto = [];
+            let splOpenId = [];
+            let splName = [];
             this.config.forEach(i => {
                 if (i.code == 4) {
-                    if (i.desc != null) {
-                        this.employeeIds = i.desc.split(',');
-                        this.employeeOpenId = i.value.split(',');
-                    } else {
-                        this.employeeIds = [];
-                        this.employeeOpenId = [];
+                    if (i.desc != null && i.value.length != 0) {
+                        splOpenId = i.value.split(',');
+                        splName = i.desc.split(',');
                     }
                     this.infoConfig.userValue = i.value;
-                    // this.infoConfig.userId = i.id;
+                    this.infoConfig.userId = i.id;
                     this.infoConfig.desc = i.desc;
-                    // var list = {id:this.infoConfig.userValue,desc:this.infoConfig.desc}
-                    // console.log(list)
+                    splOpenId.forEach((v, index) => {
+                        this.usersDto.push({
+                            openId: splOpenId[index],
+                            userName: splName[index]
+                        })
+                    })
                 }
             })
         });
     }
 
+    /**
+     * 保存微信用户
+     */
     saveWXInfo() {
-        this.infoConfig.userValue = this.employeeOpenId.join(',');
-        this.infoConfig.desc = this.employeeIds.join(',');
+        // this.infoConfig.userValue = this.employeeOpenId.join(',');
+        // this.infoConfig.desc = this.employeeIds.join(',');
+        // this.memberconfigsService.updateWXinfo(this.infoConfig).subscribe(() => {
+        //     this.notify.info(this.l('保存成功！'));
+        //     this.getWXInfoConfigsByTenantId();
+        // });
+        this.stringName = '';
+        this.stringOpenId = '';
+        // this.users.forEach(v => {
+        //     this.stringOpenId += v.openId + ',';
+        // });
+        // this.users.forEach(v => {
+        //     this.stringName += v.userName + ',';
+        // });
+        this.usersDto.forEach(v => {
+            this.stringOpenId += v.openId + ',';
+        });
+        this.usersDto.forEach(v => {
+            this.stringName += v.userName + ',';
+        });
+        if (this.stringOpenId != null || this.stringOpenId.length >= 0) {
+            this.infoConfig.userValue = this.stringOpenId.substring(0, this.stringOpenId.length - 1);
+        }
+        if (this.stringName != null || this.stringName.length != 0) {
+            this.infoConfig.desc = this.stringName.substring(0, this.stringName.length - 1);
+        }
         this.memberconfigsService.updateWXinfo(this.infoConfig).subscribe(() => {
             this.notify.info(this.l('保存成功！'));
             this.getWXInfoConfigsByTenantId();
         });
     }
 
+    /**
+     * 保存配置信息
+     */
     save() {
         for (const i in this.form.controls) {
             this.form.controls[i].markAsDirty();
@@ -123,16 +180,22 @@ export class MemberSettingComponent extends AppComponentBase implements OnInit {
  * 显示员工列表模态框
  */
     employee(): void {
-        // this.modalVisible=true;
         this.selectsEmployeeModal.show();
     }
 
     cancel() {
-        this.employeeIds.splice(0, this.employeeIds.length);
-        this.employeeIds = [];
-        this.employeeOpenId.splice(0, this.employeeOpenId.length);
-        this.employeeOpenId = [];
+        this.usersDto = [];
+        this.users = [];
+        this.stringName = '';
+        this.stringOpenId = '';
     }
+
+    // cancel() {
+    //     this.employeeIds.splice(0, this.employeeIds.length);
+    //     this.employeeIds = [];
+    //     this.employeeOpenId.splice(0, this.employeeOpenId.length);
+    //     this.employeeOpenId = [];
+    // }
     /**
      * 模态框返回
      */
@@ -164,63 +227,69 @@ export class MemberSettingComponent extends AppComponentBase implements OnInit {
     //     // }
     // }
 
-    // getSelectData = (employee?: WechatUser[]) => {
-    //     for (var i = 0; i < employee.length; i++) {
-    //         alert('这是已经存在的id' + this.employeeOpenId.toString());
-    //         if (this.employeeOpenId.toString().indexOf(employee[i].openId.toString()) == -1) {
-    //             alert('相等吗?' + this.employeeOpenId.toString().indexOf(employee[i].openId.toString()));
-    //             // this.employeeOpenId = this.employeeOpenId.concat(employeeIds.map(v => v.openId));
-    //             // this.employeeIds = this.employeeIds.concat(employeeIds.map(v => v.userName));
-    //             // this.employeeOpenId = this.employeeOpenId.concat(employee[i].openId);
-    //             this.employeeOpenId.push(employee[i].openId);
-    //             this.employeeIds.push(employee[i].userName)
-    //             // this.employeeIds = this.employeeIds.concat(employee[i].userName);
+    /**
+     * 排重
+     */
+    // existsEmployee(openId: string): boolean {
+    //     let bo = false;
+    //     this.users.forEach(element => {
+    //         if (element.openId == openId) {
+    //             bo = true;
+    //             return;
     //         }
-    //         alert('这是for出来的id' + employee[i].openId);
-    //     }
-    //     this.configCode.userId = this.employeeOpenId.join();
-    //     this.configCode.desc = this.employeeIds.join();
-    //     // alert('相等吗?' + this.employeeOpenId.toString().indexOf(refIds.toString()));
-    //     // if (this.employeeOpenId.toString().indexOf(refIds.toString()) == -1) {
-    //     //     this.employeeOpenId = this.employeeOpenId.concat(employeeIds.map(v => v.openId));
-    //     //     this.employeeIds = this.employeeIds.concat(employeeIds.map(v => v.userName));
-    //     // }
+    //     });
+    //     return bo;
     // }
-    getSelectData = (employee?: WechatUser) => {
-        if (this.user.length != 0) {
-            // for (var i = 0; i < employee.length; i++) {
-            // for (var j = 0; j < this.user.length; j++) {
-            this.user.forEach(v => {
-                if (v.openId.toString() != employee.openId.toString()) {
-                    this.user.push(employee);
-                }
-            });
-            // }
-            // alert('这是已经存在的id' + this.user[j].openId.toString());
-            // alert('这是传入的id' + employee[0].openId.toString());
-            // alert(!this.user[j].openId.toString().includes(employee[i].openId.toString()));
-            // }
-        } else {
-            this.user.push(employee);
-        }
+    existsEmployee(openId: string): boolean {
+        let bo = false;
+        this.usersDto.forEach(element => {
+            if (element.openId == openId) {
+                bo = true;
+                return;
+            }
+        });
+        return bo;
     }
 
-    // onClose(e: MouseEvent, item: any): void {
-    //     console.log(item);
-    //     console.log(this.infoConfig.userValue);
-    //     if (this.employeeIds != null) {
-    //         var descIds = this.infoConfig.userValue.split(',');
-    //         for (var i = 0; i < descIds.length; i++) {
-    //             if (descIds[i] != item) {
-    //                 this.infoConfig.userValue += descIds[i] + ",";
+    // getSelectData = (employees?: WechatUser[]) => {
+    //     if (this.users.length != 0) {
+    //         employees.forEach(element => {
+    //             if (!this.existsEmployee(element.openId)) {
+    //                 this.users.push(element);
     //             }
-    //             else {
-    //                 descIds[i] = null;
-    //             }
-    //         }
-    //         if (this.infoConfig.userValue != null) {
-    //             // this.configCode.desc = this.configCode.desc.trim(',');
-    //         }
+    //         });
+    //     }
+    //     else {
+    //         this.users.push(...employees);
     //     }
     // }
+    getSelectData = (employees?: WechatUser[]) => {
+        employees.forEach(element => {
+            if (!this.existsEmployee(element.openId)) {
+                this.usersDto.push({ openId: element.openId, userName: element.userName });
+            }
+        });
+    }
+
+    // onClose(event: Event, openId: string): void {
+    //     let i = 0;
+    //     this.users.forEach(element => {
+    //         if (element.openId == openId) {
+    //             this.users.splice(i, 1);
+    //             return;
+    //         }
+    //         i++;
+    //     });
+    //     console.table(this.users);
+    // }
+    onClose(event: Event, openId: string): void {
+        let i = 0;
+        this.usersDto.forEach(element => {
+            if (element.openId == openId) {
+                this.usersDto.splice(i, 1);
+                return;
+            }
+            i++;
+        });
+    }
 }

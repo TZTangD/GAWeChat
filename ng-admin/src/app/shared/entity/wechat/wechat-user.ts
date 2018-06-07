@@ -110,3 +110,21 @@ export interface IWechatUser {
     isShopkeeper: boolean;
     status: number;
 }
+
+export class WechatUserDto implements IWechatUserDto {
+    openId: string;
+    userName: string;
+
+    constructor(data?: IWechatUserDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+}
+export interface IWechatUserDto {
+    openId: string;
+    userName: string;
+}

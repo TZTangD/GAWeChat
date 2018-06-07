@@ -70,8 +70,12 @@ namespace HC.WeChat.MessageHandler
                             MessageInfo.SubscribeMsg = sinfo.Content;
                         }
                         break;
-                    case WechatEnums.MsgTypeEnum.图文消息:
-                        break;
+                    //case WechatEnums.MsgTypeEnum.图文消息:
+                    //    {
+                    //        //string url = host + "/GAWX/Authorization?page=304&param=" + Id.ToString();
+                    //        MessageInfo.Url = "<a href='wwww.baidu.com'>渠江烟语操作指南</a>";
+                    //    }
+                    //    break;
                     default:
                         break;
                 }    
