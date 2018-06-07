@@ -101,7 +101,8 @@
                         {
                             "text": "意见反馈",
                             "link": "/admin/consumer/advise",
-                            "translate": "advise"
+                            "translate": "advise",
+                            "reuse": false
                         }
                     ]
                 },

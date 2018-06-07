@@ -22,7 +22,7 @@ export class FeedbackComponent extends AppComponentBase implements OnInit {
     imgShow: boolean = false;
 
     uploader: Uploader = new Uploader(<UploaderOptions>{
-        url: AppConsts.remoteServiceBaseUrl + '/WeChatFile/FilesPosts?folder=feedback',
+        url: AppConsts.remoteServiceBaseUrl + '/WeChatFile/FilesPostsCompress?folder=feedback&isCompress=true',
         auto: true,
         limit: 4,
         size: -1,
