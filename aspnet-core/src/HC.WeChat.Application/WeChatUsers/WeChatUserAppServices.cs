@@ -591,10 +591,11 @@ namespace HC.WeChat.WeChatUsers
         [AbpAllowAnonymous]
         public async Task CheckWeChatUserBindStatusAsync(WeChatUserEditDto input)
         {
-            if (input.UserType == UserTypeEnum.内部员工)
-            {
-                await DealMemeberConfigValueAndDesc(input);
-            }
+            //取消该功能
+            //if (input.UserType == UserTypeEnum.内部员工)
+            //{
+            //    await DealMemeberConfigValueAndDesc(input);
+            //}
             await CancelTagAsync(input.UserType, input.OpenId);
             //input.UserType = UserTypeEnum.消费者;
             //input.BindStatus = BindStatusEnum.未绑定;
@@ -612,7 +613,7 @@ namespace HC.WeChat.WeChatUsers
         }
 
         /// <summary>
-        /// 解绑移除会员配置员工信息
+        /// 解绑移除会员配置员工信息 (取消该功能)
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>

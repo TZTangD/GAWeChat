@@ -1,17 +1,30 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js install
+  D:\NodeJs\node.exe D:\Yarn\bin\yarn.js version
 
 PATH: 
-  C:\ProgramData\Oracle\Java\javapath;C:\Program Files (x86)\Intel\iCLS Client\;C:\Program Files\Intel\iCLS Client\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\ATI Technologies\ATI.ACE\Core-Static;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;D:\Program Files\Java\jdk1.8.0_25\bin;C:\Program Files (x86)\GtkSharp\2.12\bin;C:\Users\lt\AppData\Local\Programs\Python\Python36-32;D:\Program Files\Git\cmd;C:\Program Files\Microsoft SQL Server\120\DTS\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\110\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\120\Tools\Binn\;C:\Program Files\Microsoft SQL Server\120\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\120\Tools\Binn\ManagementStudio\;C:\Program Files (x86)\Microsoft SQL Server\120\DTS\Binn\;C:\Program Files\ibm\gsk8\lib64;C:\Program Files (x86)\ibm\gsk8\lib;C:\PROGRA~1\IBM\SQLLIB\BIN;C:\PROGRA~1\IBM\SQLLIB\FUNCTION;C:\PROGRA~1\IBM\SQLLIB\SAMPLES\REPL;C:\Program Files\dotnet\;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\Program Files\nodejs\;C:\Program Files (x86)\Yarn\bin\;C:\Users\lt\AppData\Local\Microsoft\WindowsApps;;C:\Users\lt\AppData\Roaming\npm;d:\Program Files (x86)\Egret\Egret Wing 3\bin;C:\Program Files\Microsoft VS Code\bin;C:\Users\lt\AppData\Local\Yarn\bin
+  C:\Program Files (x86)\Intel\iCLS Client\;C:\Program Files\Intel\iCLS Client\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;D:\NodeJs\;C:\Program Files\dotnet\;D:\Git\cmd;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\Program Files\Microsoft SQL Server\120\DTS\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\110\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\120\Tools\Binn\;C:\Program Files\Microsoft SQL Server\120\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\120\Tools\Binn\ManagementStudio\;C:\Program Files (x86)\Microsoft SQL Server\120\DTS\Binn\;D:\Tortoisegit\bin;D:\Yarn\bin\;C:\Program Files (x86)\dotnet\;C:\Users\Perha\AppData\Local\Microsoft\WindowsApps;;D:\Microsoft VS Code\bin;C:\Users\Perha\AppData\Roaming\npm;C:\Users\Perha\AppData\Local\Yarn\bin
 
 Yarn version: 
-  1.5.1
+  1.6.0
 
 Node version: 
   8.10.0
 
 Platform: 
   win32 x64
+
+Trace: 
+  Error: canceled
+      at Interface.<anonymous> (D:\Yarn\lib\cli.js:129516:13)
+      at emitNone (events.js:106:13)
+      at Interface.emit (events.js:208:7)
+      at Interface._ttyWrite (readline.js:775:16)
+      at ReadStream.onkeypress (readline.js:160:10)
+      at emitTwo (events.js:126:13)
+      at ReadStream.emit (events.js:214:7)
+      at emitKeys (internal/readline.js:420:14)
+      at emitKeys.next (<anonymous>)
+      at ReadStream.onData (readline.js:1011:36)
 
 npm manifest: 
   {
@@ -55,6 +68,7 @@ npm manifest:
     },
     "dependencies": {
       "jsbarcode": "^3.9.0",
+      "ngx-img-cropper": "^0.10.4",
       "node-sass": "^4.9.0"
     },
     "devDependencies": {
@@ -79,7 +93,7 @@ npm manifest:
       "angular-split": "^1.0.0-rc.3",
       "chart.js": "^2.7.1",
       "codecov": "^3.0.0",
-      "codelyzer": "~3.2.0",
+      "codelyzer": "^4.0.0",
       "font-awesome": "^4.7.0",
       "fs-extra": "^5.0.0",
       "g2-mobile": "^2.2.0-beta.3",
@@ -1418,15 +1432,15 @@ Lockfile:
       request "2.81.0"
       urlgrey "0.4.4"
   
-  codelyzer@~3.2.0:
-    version "3.2.2"
-    resolved "https://registry.yarnpkg.com/codelyzer/-/codelyzer-3.2.2.tgz#abbd4e5956c435677740846e5858c915f89679c3"
+  codelyzer@^4.0.0:
+    version "4.3.0"
+    resolved "https://registry.yarnpkg.com/codelyzer/-/codelyzer-4.3.0.tgz#6bf3ba68efd9d655a451ecaa14a2852001a43dfb"
     dependencies:
       app-root-path "^2.0.1"
       css-selector-tokenizer "^0.7.0"
       cssauron "^1.4.0"
       semver-dsl "^1.0.1"
-      source-map "^0.5.6"
+      source-map "^0.5.7"
       sprintf-js "^1.0.3"
   
   collapse-white-space@^1.0.0:
@@ -4700,6 +4714,10 @@ Lockfile:
     version "1.0.3"
     resolved "https://registry.yarnpkg.com/ngx-highlight-js/-/ngx-highlight-js-1.0.3.tgz#b46ef9069d443baae7a43e5e4217d64fb8049003"
   
+  ngx-img-cropper@^0.10.4:
+    version "0.10.4"
+    resolved "https://registry.yarnpkg.com/ngx-img-cropper/-/ngx-img-cropper-0.10.4.tgz#3caf040f38bd5e4b2e933960cb1ac8861dab6e65"
+  
   ngx-notify@^1.0.2:
     version "1.0.2"
     resolved "https://registry.yarnpkg.com/ngx-notify/-/ngx-notify-1.0.2.tgz#53e68e85df77558a8e9ee37e7e9fe9806db6ce43"
@@ -7717,72 +7735,3 @@ Lockfile:
   zone.js@^0.8.14:
     version "0.8.26"
     resolved "https://registry.yarnpkg.com/zone.js/-/zone.js-0.8.26.tgz#7bdd72f7668c5a7ad6b118148b4ea39c59d08d2d"
-
-Trace: 
-  Error: D:\CodeWord\GuangAn\GAWeChat\ng-wechat\node_modules\node-sass: Command failed.
-  Exit code: 1
-  Command: C:\WINDOWS\system32\cmd.exe
-  Arguments: /d /s /c node scripts/build.js
-  Directory: D:\CodeWord\GuangAn\GAWeChat\ng-wechat\node_modules\node-sass
-  Output:
-  Building: C:\Program Files\nodejs\node.exe D:\CodeWord\GuangAn\GAWeChat\ng-wechat\node_modules\node-gyp\bin\node-gyp.js rebuild --verbose --libsass_ext= --libsass_cflags= --libsass_ldflags= --libsass_library=
-  gyp info it worked if it ends with ok
-  gyp verb cli [ 'C:\\Program Files\\nodejs\\node.exe',
-  gyp verb cli   'D:\\CodeWord\\GuangAn\\GAWeChat\\ng-wechat\\node_modules\\node-gyp\\bin\\node-gyp.js',
-  gyp verb cli   'rebuild',
-  gyp verb cli   '--verbose',
-  gyp verb cli   '--libsass_ext=',
-  gyp verb cli   '--libsass_cflags=',
-  gyp verb cli   '--libsass_ldflags=',
-  gyp verb cli   '--libsass_library=' ]
-  gyp info using node-gyp@3.6.2
-  gyp info using node@8.10.0 | win32 | x64
-  gyp verb command rebuild []
-  gyp verb command clean []
-  gyp verb clean removing "build" directory
-  gyp verb command configure []
-  gyp verb check python checking for Python executable "python2" in the PATH
-  gyp verb `which` failed Error: not found: python2
-  gyp verb `which` failed     at getNotFoundError (D:\CodeWord\GuangAn\GAWeChat\ng-wechat\node_modules\which\which.js:13:12)
-  gyp verb `which` failed     at F (D:\CodeWord\GuangAn\GAWeChat\ng-wechat\node_modules\which\which.js:68:19)
-  gyp verb `which` failed     at E (D:\CodeWord\GuangAn\GAWeChat\ng-wechat\node_modules\which\which.js:80:29)
-  gyp verb `which` failed     at D:\CodeWord\GuangAn\GAWeChat\ng-wechat\node_modules\which\which.js:89:16
-  gyp verb `which` failed     at D:\CodeWord\GuangAn\GAWeChat\ng-wechat\node_modules\isexe\index.js:42:5
-  gyp verb `which` failed     at D:\CodeWord\GuangAn\GAWeChat\ng-wechat\node_modules\isexe\windows.js:36:5
-  gyp verb `which` failed     at FSReqWrap.oncomplete (fs.js:152:21)
-  gyp verb `which` failed  python2 { Error: not found: python2
-  gyp verb `which` failed     at getNotFoundError (D:\CodeWord\GuangAn\GAWeChat\ng-wechat\node_modules\which\which.js:13:12)
-  gyp verb `which` failed     at F (D:\CodeWord\GuangAn\GAWeChat\ng-wechat\node_modules\which\which.js:68:19)
-  gyp verb `which` failed     at E (D:\CodeWord\GuangAn\GAWeChat\ng-wechat\node_modules\which\which.js:80:29)
-  gyp verb `which` failed     at D:\CodeWord\GuangAn\GAWeChat\ng-wechat\node_modules\which\which.js:89:16
-  gyp verb `which` failed     at D:\CodeWord\GuangAn\GAWeChat\ng-wechat\node_modules\isexe\index.js:42:5
-  gyp verb `which` failed     at D:\CodeWord\GuangAn\GAWeChat\ng-wechat\node_modules\isexe\windows.js:36:5
-  gyp verb `which` failed     at FSReqWrap.oncomplete (fs.js:152:21)
-  gyp verb `which` failed   stack: 'Error: not found: python2\n    at getNotFoundError (D:\\CodeWord\\GuangAn\\GAWeChat\\ng-wechat\\node_modules\\which\\which.js:13:12)\n    at F (D:\\CodeWord\\GuangAn\\GAWeChat\\ng-wechat\\node_modules\\which\\which.js:68:19)\n    at E (D:\\CodeWord\\GuangAn\\GAWeChat\\ng-wechat\\node_modules\\which\\which.js:80:29)\n    at D:\\CodeWord\\GuangAn\\GAWeChat\\ng-wechat\\node_modules\\which\\which.js:89:16\n    at D:\\CodeWord\\GuangAn\\GAWeChat\\ng-wechat\\node_modules\\isexe\\index.js:42:5\n    at D:\\CodeWord\\GuangAn\\GAWeChat\\ng-wechat\\node_modules\\isexe\\windows.js:36:5\n    at FSReqWrap.oncomplete (fs.js:152:21)',
-  gyp verb `which` failed   code: 'ENOENT' }
-  gyp verb check python checking for Python executable "python" in the PATH
-  gyp verb `which` succeeded python C:\Users\lt\AppData\Local\Programs\Python\Python36-32\python.EXE
-  gyp verb check python version `C:\Users\lt\AppData\Local\Programs\Python\Python36-32\python.EXE -c "import platform; print(platform.python_version());"` returned: "3.6.1\r\n"
-  gyp verb could not find "C:\Users\lt\AppData\Local\Programs\Python\Python36-32\python.EXE". checking python launcher 
-  gyp verb could not find "C:\Users\lt\AppData\Local\Programs\Python\Python36-32\python.EXE". guessing location 
-  gyp verb ensuring that file exists: C:\Python27\python.exe
-  gyp ERR! configure error 
-  gyp ERR! stack Error: Can't find Python executable "C:\Users\lt\AppData\Local\Programs\Python\Python36-32\python.EXE", you can set the PYTHON env variable.
-  gyp ERR! stack     at PythonFinder.failNoPython (D:\CodeWord\GuangAn\GAWeChat\ng-wechat\node_modules\node-gyp\lib\configure.js:483:19)
-  gyp ERR! stack     at PythonFinder.<anonymous> (D:\CodeWord\GuangAn\GAWeChat\ng-wechat\node_modules\node-gyp\lib\configure.js:508:16)
-  gyp ERR! stack     at D:\CodeWord\GuangAn\GAWeChat\ng-wechat\node_modules\graceful-fs\polyfills.js:284:29
-  gyp ERR! stack     at FSReqWrap.oncomplete (fs.js:152:21)
-  gyp ERR! System Windows_NT 10.0.16299
-  gyp ERR! command "C:\\Program Files\\nodejs\\node.exe" "D:\\CodeWord\\GuangAn\\GAWeChat\\ng-wechat\\node_modules\\node-gyp\\bin\\node-gyp.js" "rebuild" "--verbose" "--libsass_ext=" "--libsass_cflags=" "--libsass_ldflags=" "--libsass_library="
-  gyp ERR! cwd D:\CodeWord\GuangAn\GAWeChat\ng-wechat\node_modules\node-sass
-  gyp ERR! node -v v8.10.0
-  gyp ERR! node-gyp -v v3.6.2
-  gyp ERR! not ok 
-  Build failed with error code: 1
-      at ProcessTermError.MessageError (C:\Program Files (x86)\Yarn\lib\cli.js:186:110)
-      at new ProcessTermError (C:\Program Files (x86)\Yarn\lib\cli.js:226:113)
-      at ChildProcess.<anonymous> (C:\Program Files (x86)\Yarn\lib\cli.js:30281:17)
-      at emitTwo (events.js:126:13)
-      at ChildProcess.emit (events.js:214:7)
-      at maybeClose (internal/child_process.js:925:16)
-      at Process.ChildProcess._handle.onexit (internal/child_process.js:209:5)

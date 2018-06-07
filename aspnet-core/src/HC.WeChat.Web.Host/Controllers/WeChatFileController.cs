@@ -18,6 +18,8 @@ using NPOI.HSSF.Util;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
+using System.DrawingCore.Imaging;
+using System.DrawingCore;
 
 namespace HC.WeChat.Web.Host.Controllers
 {
@@ -173,7 +175,7 @@ namespace HC.WeChat.Web.Host.Controllers
                     //fileName = fileName + new DateTime().ToString("yyMMddHH") + i++.ToString();
                     name = name == Guid.Empty ? Guid.NewGuid() : name;
                     string newName = name + fileExt; //新的文件名
-                    var fileDire = webRootPath +string.Format("/upload/{0}/",fileName) ;
+                    var fileDire = webRootPath + string.Format("/upload/{0}/", fileName);
                     if (!Directory.Exists(fileDire))
                     {
                         Directory.CreateDirectory(fileDire);
@@ -336,6 +338,172 @@ namespace HC.WeChat.Web.Host.Controllers
                 }
             }
             return Ok();
+        }
+
+        [RequestFormSizeLimit(valueCountLimit: 2147483647)]
+        //[HttpPost]
+        [AbpAllowAnonymous]
+        //public async Task<IActionResult> FilesPosts(IFormFile[] files, string folder)
+        public async Task<string> FilesImgPostsCompress(IFormFileCollection files, string folder, string newName)
+        {
+            string webRootPath = _hostingEnvironment.WebRootPath;
+            string contentRootPath = _hostingEnvironment.ContentRootPath;
+            var saveUrl = "";
+            foreach (var formFile in files)
+            {
+                if (formFile.Length > 0)
+                {
+                    string fileExt = Path.GetExtension(formFile.FileName); //文件扩展名，不含“.”
+                    long fileSize = formFile.Length; //获得文件大小，以字节为单位
+                    string fileName = newName;
+                    if (string.IsNullOrEmpty(fileName))
+                    {
+                        fileName = Guid.NewGuid().ToString();
+                    }
+                    string newFileName = fileName + fileExt; //新的文件名
+                    var fileDire = webRootPath + string.Format("/upload/{0}/", folder);
+                    if (!Directory.Exists(fileDire))
+                    {
+                        Directory.CreateDirectory(fileDire);
+                    }
+
+                    var filePath = fileDire + newFileName;
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await formFile.CopyToAsync(stream);
+                    }
+                    saveUrl = filePath;
+
+                }
+            }
+            return saveUrl;
+        }
+
+        [RequestFormSizeLimit(valueCountLimit: 2147483647)]
+        [HttpPost]
+        [AbpAllowAnonymous]
+        //public async Task<IActionResult> FilesPosts(IFormFile[] files, string folder)
+        public async Task<IActionResult> FilesPostsCompress(string folder, bool isCompress = false)
+        {
+            var saveUrl = "";
+            var files = Request.Form.Files;
+            string webRootPath = _hostingEnvironment.WebRootPath;
+            var url = await FilesImgPostsCompress(files, folder, null);
+            var endRote= string.Format("/upload/{0}/", folder + "com");
+            var fileDireCom = webRootPath + endRote;
+            if (!Directory.Exists(fileDireCom))
+            {
+                Directory.CreateDirectory(fileDireCom);
+            }
+            if (isCompress)
+            {
+                fileDireCom = fileDireCom + url.Substring(webRootPath.Length + endRote.Length);
+                Bitmap sourceImage = new Bitmap(url);
+                Compress(sourceImage, fileDireCom, 50L);
+                saveUrl = fileDireCom.Substring(webRootPath.Length);
+            }
+            else {
+                saveUrl = url.Substring(webRootPath.Length);
+            }
+
+            return Ok(saveUrl);
+        }
+
+        private static ImageCodecInfo GetEncoderInfo(String mimeType)
+        {
+            int j;
+            ImageCodecInfo[] encoders;
+            encoders = ImageCodecInfo.GetImageEncoders();
+            for (j = 0; j < encoders.Length; ++j)
+            {
+                if (encoders[j].MimeType == mimeType)
+                    return encoders[j];
+            }
+            return null;
+        }
+
+        private static ImageCodecInfo GetEncoder(ImageFormat format)
+        {
+
+            ImageCodecInfo[] codecs = ImageCodecInfo.GetImageDecoders();
+
+            foreach (ImageCodecInfo codec in codecs)
+            {
+                if (codec.FormatID == format.Guid)
+                {
+                    return codec;
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// 图片压缩(降低质量以减小文件的大小)
+        /// </summary>
+        /// <param name="srcBitmap">传入的Bitmap对象</param>
+        /// <param name="destStream">压缩后的Stream对象</param>
+        /// <param name="level">压缩等级，0到100，0 最差质量，100 最佳</param>
+        public static void Compress(Bitmap srcBitmap, Stream destStream, long level)
+        {
+            ImageCodecInfo myImageCodecInfo;
+            Encoder myEncoder;
+            EncoderParameter myEncoderParameter;
+            EncoderParameters myEncoderParameters;
+
+            // Get an ImageCodecInfo object that represents the JPEG codec.
+            myImageCodecInfo = GetEncoder(ImageFormat.Jpeg);
+
+            // Create an Encoder object based on the GUID
+
+            // for the Quality parameter category.
+            myEncoder = Encoder.Quality;
+
+            // Create an EncoderParameters object.
+            // An EncoderParameters object has an array of EncoderParameter
+            // objects. In this case, there is only one
+
+            // EncoderParameter object in the array.
+            myEncoderParameters = new EncoderParameters(1);
+
+            // Save the bitmap as a JPEG file with 给定的 quality level
+            myEncoderParameter = new EncoderParameter(myEncoder, level);
+            myEncoderParameters.Param[0] = myEncoderParameter;
+            float xWidth = srcBitmap.Width;
+            float yWidth = srcBitmap.Height;
+            //当图片大于宽度大于750时对图片的宽度进行压缩
+            if (xWidth > 780)
+            {
+                var nyWidth = (yWidth / xWidth) * 780;
+                Bitmap newImage = new Bitmap((int)(780), (int)(nyWidth));
+                Graphics g = Graphics.FromImage(newImage);
+
+                g.DrawImage(srcBitmap, 0, 0, 780, nyWidth);
+                g.Dispose();
+                srcBitmap = newImage;
+            }
+            srcBitmap.Save(destStream, myImageCodecInfo, myEncoderParameters);
+
+            //Bitmap bmp1 = new Bitmap(@"C:\Users\lt\Desktop\测试图片\2167006.jpg");
+
+            //myEncoderParameter = new EncoderParameter(myEncoder, 50L);
+            //myEncoderParameters.Param[0] = myEncoderParameter;
+            //bmp1.Save(@"D:\CodeWord\GuangAn\GAWeChat\aspnet-core\src\HC.WeChat.Web.Host\wwwroot\upload\feedbackcom\test50.jpg", myImageCodecInfo, myEncoderParameters);
+
+           
+        }
+
+        /// <summary>
+        /// 图片压缩(降低质量以减小文件的大小)
+        /// </summary>
+        /// <param name="srcBitMap">传入的Bitmap对象</param>
+        /// <param name="destFile">压缩后的图片保存路径</param>
+        /// <param name="level">压缩等级，0到100，0 最差质量，100 最佳</param>
+        public static void Compress(Bitmap srcBitMap, string destFile, long level)
+        {
+            Stream s = new FileStream(destFile, FileMode.Create);
+            Compress(srcBitMap, s, level);
+            s.Close();
         }
 
     }

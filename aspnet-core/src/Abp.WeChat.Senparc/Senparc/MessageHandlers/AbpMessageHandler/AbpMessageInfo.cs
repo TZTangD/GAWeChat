@@ -8,6 +8,8 @@ namespace Abp.WeChat.Senparc.MessageHandlers
     {
         public virtual string SubscribeMsg { get; set; }
 
+        public virtual string Url { get; set; }
+
         public virtual Dictionary<string, string> KeyWords { get; set; }
     }
 }
