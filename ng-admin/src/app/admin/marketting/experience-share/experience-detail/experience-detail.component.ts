@@ -131,7 +131,7 @@ export class ExperienceDetailComponent extends AppComponentBase implements OnIni
     push() {
         //发布
         this.article.pushStatus = 1;
-        this.article.pushTime = this.dateFormat(new Date());
+        this.article.pushTime = this.dateFormatHH(new Date());
         this.save(true);
     }
     delete(TplContent) {

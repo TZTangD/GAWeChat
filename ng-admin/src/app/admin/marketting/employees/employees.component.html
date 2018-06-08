@@ -39,13 +39,13 @@
             </div>
         </div>
         <div nz-row [nzGutter]="24">
-            <div nz-col [nzSpan]="2" [nzOffset]="22"  class="mb-md" >
+            <div nz-col style="float:right; padding-left:0px" [nzSpan]="4" [nzOffset]="20"  class="mb-md" >
                 <a style="display: none;" id="aEmployeeExcelUrl" href="#">
                     <button type="button" id="btnEmployeeHref">隐藏下载</button>
                 </a>
-                <button nz-button type="button" (click)="exportExcel()"  [nzSize]="'large'"  [nzLoading]="exportLoading" class="mr-sm">
-                    <!-- <i class="anticon anticon-download"></i> -->
-                    <span>导出公司员工</span>
+                <button nz-button style="float: right;" type="button" (click)="exportExcel()"  [nzSize]="'large'"  [nzLoading]="exportLoading" >
+                    <i class="anticon anticon-download"></i>
+                    <span>导出</span>
                 </button>
             </div>
         </div>

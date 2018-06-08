@@ -103,7 +103,7 @@ namespace HC.WeChat.WeChatUsers
 
             var query = _wechatuserRepository.GetAll()
                 .WhereIf(!string.IsNullOrEmpty(input.UserName), u => u.UserName.Contains(input.UserName))
-                .WhereIf(!string.IsNullOrEmpty(input.Name), u => u.NickName.Contains(input.Name) || u.UserName.Contains(input.Name))
+                .WhereIf(!string.IsNullOrEmpty(input.Name), u => u.NickName.Contains(input.Name) || u.UserName.Contains(input.Name) || u.Phone.Contains(input.Name))
                 .WhereIf(input.UserType.HasValue, u => u.UserType == input.UserType);
 
             //TODO:根据传入的参数添加过滤条件

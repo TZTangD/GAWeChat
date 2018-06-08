@@ -45,4 +45,11 @@ namespace HC.WeChat.Products.Dtos
         /// </summary>
         public Guid? ProductId { get; set; }
     }
+
+    public class WechatImgBase64
+    {
+        public string fileName { get; set; }
+
+        public string imageBase64 { get; set; }
+    }
 }

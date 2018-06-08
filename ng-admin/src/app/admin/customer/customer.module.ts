@@ -13,12 +13,16 @@ import { LayoutModule } from "../../layout/layout.module";
 import { CustomerRoutingModule } from "./customer-routing.module";
 import { StoreDetailComponent } from "./store-management/store-detail/store-detail.component";
 import { CommodityDetailComponent } from "./commodity-management/commodity-detail/commodity-detail.component";
+import { ImageCropperModule } from "ng2-img-cropper";
+import { ColorPickerModule } from "ngx-color-picker";
 
 @NgModule({
     imports: [
         SharedModule,
         LayoutModule,
-        CustomerRoutingModule
+        CustomerRoutingModule,
+        ImageCropperModule,
+        ColorPickerModule,
     ],
     declarations: [
         RetailCustomerComponent,

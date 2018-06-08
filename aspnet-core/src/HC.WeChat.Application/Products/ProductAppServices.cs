@@ -30,6 +30,7 @@ using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using HC.WeChat.Dto;
 using Abp.Domain.Uow;
+using System.Text.RegularExpressions;
 //using System.Linq;
 
 namespace HC.WeChat.Products
@@ -243,7 +244,12 @@ namespace HC.WeChat.Products
         public async Task CreateOrUpdateProductDto(ProductEditDto input)
         {
             string webRootPath = _hostingEnvironment.WebRootPath;
-
+            if (!string.IsNullOrEmpty(input.Img64)&& !string.IsNullOrEmpty(input.FileName))
+            {
+                var base64 = new WechatImgBase64() { fileName = input.FileName, imageBase64 = input.Img64 };
+                var photoUrl = await FilesPostsBase64(base64, "product");
+                input.PhotoUrl = !string.IsNullOrEmpty(photoUrl)? photoUrl : input.PhotoUrl;
+            }
             if (input.Id.HasValue)
             {
                 var entity = _productRepository.GetAsync(input.Id.MapTo<Guid>()).Result;
@@ -252,9 +258,9 @@ namespace HC.WeChat.Products
                 //删除原来的单个图片
                 if (url != result.PhotoUrl && url != "/assets/img/default.png")
                 {
-                    if (System.IO.File.Exists(webRootPath + url))
+                    if (File.Exists(webRootPath + url))
                     {
-                        System.IO.File.Delete(webRootPath + url);
+                        File.Delete(webRootPath + url);
                     }
                 }
 
@@ -263,6 +269,42 @@ namespace HC.WeChat.Products
             {
                 await CreateProductAsync(input);
             }
+        }
+        /// <summary>
+        /// base64转换
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task<string> FilesPostsBase64(WechatImgBase64 input,string fileName)
+        {
+            var saveUrl = "";
+            if (!string.IsNullOrWhiteSpace(input.imageBase64))
+            {
+                var reg = new Regex("data:image/(.*);base64,");
+                input.imageBase64 = reg.Replace(input.imageBase64, "");
+                byte[] imageByte = Convert.FromBase64String(input.imageBase64);
+                var memorystream = new MemoryStream(imageByte);
+
+                string webRootPath = _hostingEnvironment.WebRootPath;
+                string contentRootPath = _hostingEnvironment.ContentRootPath;
+                string fileExt = Path.GetExtension(input.fileName); //文件扩展名，不含“.”
+                string newFileName = Guid.NewGuid().ToString() + fileExt; //随机生成新的文件名
+                var fileDire = webRootPath + string.Format("/upload/{0}/", fileName);
+                if (!Directory.Exists(fileDire))
+                {
+                    Directory.CreateDirectory(fileDire);
+                }
+
+                var filePath = fileDire + newFileName;
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await memorystream.CopyToAsync(stream);
+                }
+                saveUrl = filePath.Substring(webRootPath.Length);
+                return saveUrl;
+            }
+            return saveUrl;
         }
 
         /// <summary>

@@ -20,6 +20,7 @@ export class MemberManagementComponent extends AppComponentBase implements OnIni
         { text: '零售客户', value: 1 },
         { text: '内部员工', value: 2 },
         { text: '消费者', value: 4 },
+        { text: '取消关注', value: 5 },
     ];
     WechatUserName = '';
     constructor(injector: Injector, private wechatUserService: WechatUserServiceProxy, private modal: NzModalService) {

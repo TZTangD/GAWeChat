@@ -20,6 +20,8 @@ export class Products implements IProducts {
     itemCode:string;
     mfrId:string;
     company:string;
+    fileName:string;
+    img64:string;
     constructor(data?: IProducts) {
         if (data) {
             for (var property in data) {
@@ -48,6 +50,8 @@ export class Products implements IProducts {
             this.itemCode = data["itemCode"];
             this.mfrId = data["mfrId"];
             this.company = data["company"];
+            this.fileName = data["fileName"];
+            this.img64 = data["img64"];
 
         }
     }
@@ -77,6 +81,9 @@ export class Products implements IProducts {
         data["itemCode"] = this.itemCode;
         data["mfrId"] = this.mfrId;
         data["company"] = this.company;
+        data["fileName"] = this.fileName;
+        data["img64"] = this.img64;
+        
         return data;
     }
 
@@ -105,4 +112,6 @@ export interface IProducts {
     itemCode:string;
     mfrId:string;
     company:string;
+    fileName:string;
+    img64:string;
 }

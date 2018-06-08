@@ -3,9 +3,11 @@ using HC.WeChat.Products.Dtos.LTMAutoMapper;
 using HC.WeChat.Products;
 using HC.WeChat.WechatEnums;
 using System;
+using Abp.AutoMapper;
 
 namespace HC.WeChat.Products.Dtos
 {
+    [AutoMapFrom(typeof(Product))]
     public class ProductEditDto
     {
         ////BCC/ BEGIN CUSTOM CODE SECTION
@@ -68,5 +70,14 @@ namespace HC.WeChat.Products.Dtos
         /// 商标所属公司
         /// </summary>
         public string Company { get; set; }
+
+        /// <summary>
+        /// 图片文件名
+        /// </summary>
+        public string FileName { get; set; }
+        /// <summary>
+        /// base64
+        /// </summary>
+        public string Img64 { get; set; }
     }
 }

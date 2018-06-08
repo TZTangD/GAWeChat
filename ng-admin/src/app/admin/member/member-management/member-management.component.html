@@ -8,7 +8,7 @@
             <div nz-col [nzSpan]="8" class="mb-md">
                 <div nz-form-item class="d-flex">
                     <div nz-form-control class="flex-1">
-                        <nz-input [(ngModel)]="search.name" name="name" [nzSize]="'large'" [nzPlaceHolder]="'请输入昵称或用户名'" nzId="name"></nz-input>
+                        <nz-input [(ngModel)]="search.name" name="name" [nzSize]="'large'" [nzPlaceHolder]="'请输入昵称、用户名或电话'" nzId="name"></nz-input>
                     </div>
                 </div>
             </div>
@@ -58,8 +58,11 @@
                 <th nz-th>
                     <span>绑定时间</span>
                 </th>
-                <th nz-th>
+                <!-- <th nz-th>
                     <span>解绑时间</span>
+                </th> -->
+                <th nz-th>
+                    <span>电话号码</span>
                 </th>
                 <th nz-th>
                     <span>操作</span>
@@ -75,7 +78,8 @@
                 <td nz-td>{{wechatUser.statusName}}</td>
                 <td nz-td>{{wechatUser.bindStatusName}}</td>
                 <td nz-td>{{wechatUser.bindTime | _date}}</td>
-                <td nz-td>{{wechatUser.unBindTime | _date}}</td>
+                <!-- <td nz-td>{{wechatUser.unBindTime | _date}}</td> -->
+                <td nz-td>{{wechatUser.phone}}</td>
                 <td nz-td>
                     <a *ngIf="wechatUser.bindStatus==1" (click)="unBinding(wechatUser,deleteContent)">解除绑定</a>
                     <!-- <span nz-table-divider></span>
