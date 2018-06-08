@@ -20,7 +20,7 @@ export class BindStaffComponent extends AppComponentBase {
     @ViewChild('loading') loadingToast: ToastComponent;
 
     isOpen: boolean = false;
-    openMsg = '测试验证码：123321 开放时间：2018-06-11 9:00';
+    openMsg = '测试验证码：123321 开放时间：2018-06-11 09:00';
 
     constructor(injector: Injector, 
         private wechatUserService: WechatUserService, 

@@ -27,7 +27,7 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
     successMsg = '';
     cardTitle = '';
     // linkType: any[] = [{ text: '内部链接', value: 1 }, { text: '外部链接', value: 2 }]
-    linkTypes: any[] = [{ text: '内部链接', value: 1 }, { text: '外部链接', value: 2 }]
+    linkTypes: any[] = [{ text: '内部编辑', value: 1 }, { text: '外部链接', value: 2 }]
 
     host = AppConsts.remoteServiceBaseUrl;
     actionUrl = this.host + '/WeChatFile/MarketingInfoPosts?fileName=activity';
@@ -112,7 +112,7 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
             this.article.pushStatusName = '草稿';
             this.article.type = 1;//类型为活动
             this.cardTitle = '新增活动';
-            this.article.linkType = 1;
+            this.article.linkType = 2;
         }
     }
 
