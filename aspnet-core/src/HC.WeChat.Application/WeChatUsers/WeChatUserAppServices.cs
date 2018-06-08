@@ -484,7 +484,7 @@ namespace HC.WeChat.WeChatUsers
                     intDetail.RefId = user.OpenId;//自身赠送
                     intDetail.TenantId = tenantId;
                     intDetail.Type = IntegralTypeEnum.首次注册赠送;
-                    intDetail.Desc = "首次注册赠送";
+                    intDetail.Desc = "首次绑定电话号码注册会员";
                     await _integraldetailRepository.InsertAsync(intDetail);
                     //更新用户总积分
                     user.IntegralTotal = intDetail.FinalIntegral.Value;

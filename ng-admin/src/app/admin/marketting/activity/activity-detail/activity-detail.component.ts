@@ -19,6 +19,7 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
     test: any;
     form: FormGroup;
     id: number;
+    linkVal: any;
     article: Article = new Article();
     isConfirmLoading = false;
     //用于按钮是否显示
@@ -111,13 +112,17 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
             this.article.pushStatusName = '草稿';
             this.article.type = 1;//类型为活动
             this.cardTitle = '新增活动';
-            this.article.linkType = 2;
+            // this.article.linkType = 2;
         }
     }
 
     cleanText() {
-        this.article.content = null;
-        this.article.linkAddress = '';
+        if (this.linkVal != this.article.linkType) {
+            this.article.content = null;
+            this.article.linkAddress = '';
+            this.linkVal = JSON.stringify(this.article.linkType);
+        }
+        // this.article.linkAddress = '';
     }
 
     getFormControl(name: string) {
