@@ -48,6 +48,7 @@ namespace HC.WeChat.Articles.Dtos
 
         public ArticleLinkTypeEnum? LinkType { get; set; }
 
+        public string LinkAddress { get; set; }
 
         public string PushStatusName
         {

@@ -9,7 +9,7 @@
         <div class="weui-panel__bd">
             <weui-infiniteloader class="inf" (loadmore)="onLoadMore($event)" #comp>
 
-                <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg" *ngFor="let item of activityList" (click)="goDetailActivity(item.id)">
+                <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg" *ngFor="let item of activityList" (click)="goDetailActivity(item.id,item.linkType,item.linkAddress)">
                     <!-- <div class="weui-media-box__hd"> -->
                     <div class="weui-media-box__hd weui-cell_img" [ngStyle]="{'background-image':'url('+ hostUrl + item.coverPhoto +')'}">
                     </div>

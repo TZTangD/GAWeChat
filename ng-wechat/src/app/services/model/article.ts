@@ -17,6 +17,8 @@ export class Article implements IArticle {
     deleterUserId: number;
     pushStatus: number;
     pushTime: Date;
+    linkType: number;
+    linkAddress: string;
 
     constructor(data?: IArticle) {
         if (data) {
@@ -47,6 +49,8 @@ export class Article implements IArticle {
             this.deleterUserId = data["deleterUserId"];
             this.pushStatus = data["pushStatus"];
             this.pushTime = data["pushTime"];
+            this.linkType = data["linkType"];
+            this.linkAddress = data["linkAddress"];
         }
     }
 
@@ -86,6 +90,8 @@ export class Article implements IArticle {
         data["deleterUserId"] = this.deleterUserId;
         data["pushStatus"] = this.pushStatus;
         data["pushTime"] = this.pushTime;
+        data["linkType"] = this.linkType;
+        data["linkAddress"] = this.linkAddress;
         return data;
     }
 
@@ -115,5 +121,7 @@ export interface IArticle {
     deleterUserId: number;
     pushStatus: number;
     pushTime: Date;
+    linkType: number;
+    linkAddress: string;
 }
 

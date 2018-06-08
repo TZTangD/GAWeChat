@@ -179,6 +179,7 @@ namespace HC.WeChat.Articles
         {
             //TODO:更新前的逻辑判断，是否允许更新
             var entity = await _articleRepository.GetAsync(input.Id.Value);
+            entity.LinkAddress = input.LinkAddress;
             input.MapTo(entity);
             // ObjectMapper.Map(input, entity);
             var result = await _articleRepository.UpdateAsync(entity);
@@ -275,7 +276,9 @@ namespace HC.WeChat.Articles
                                  Title = a.Title,
                                  PushTime = a.PushTime,
                                  Content = a.Content,
-                                 CoverPhoto = a.CoverPhoto
+                                 CoverPhoto = a.CoverPhoto,
+                                 LinkType =a.LinkType,
+                                 LinkAddress =a.LinkAddress
                              };
 
                 return await entity.OrderByDescending(q => q.PushTime).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
@@ -318,7 +321,9 @@ namespace HC.WeChat.Articles
                                  Title = a.Title,
                                  PushTime = a.PushTime,
                                  Content = a.Content,
-                                 CoverPhoto = a.CoverPhoto
+                                 CoverPhoto = a.CoverPhoto,
+                                 LinkType = a.LinkType,
+                                 LinkAddress = a.LinkAddress
                              };
                 return await entity.OrderByDescending(q => q.PushTime).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
             }

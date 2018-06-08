@@ -27,8 +27,8 @@
                         <div nz-form-label nz-col [nzSm]="4">
                             <label for="author" nz-form-item-required>链接类型</label>
                         </div>
-                        <div nz-form-control nz-col [nzSm]="20" nzHasFeedback [nzValidateStatus]="getFormControl('linkTypes')">
-                            <nz-radio-group formControlName="linkTypes" class="mb-md">
+                        <div nz-form-control nz-col [nzSm]="20" nzHasFeedback [nzValidateStatus]="getFormControl('linkType')">
+                            <nz-radio-group formControlName="linkType" [(ngModel)]="article.linkType" class="mb-md">
                                 <label nz-radio [nzValue]="o.value" *ngFor="let o of linkTypes">
                                     <span>{{o.text}}</span>
                                 </label>
@@ -66,7 +66,7 @@
                             </nz-upload>
                         </div>
                     </div>
-                    <div nz-form-item nz-row>
+                    <div nz-form-item nz-row *ngIf="article.linkType==1">
                         <div nz-form-label nz-col [nzSm]="4">
                             <label for="content">活动内容</label>
                         </div>
@@ -80,13 +80,14 @@
                             <div nz-form-explain *ngIf="getFormControl('content').dirty&&getFormControl('content').hasError('required')">内容不能为空</div>
                         </div>
                     </div>
-                    <div nz-form-item nz-row>
+                    <div nz-form-item nz-row *ngIf="article.linkType==2">
                         <div nz-form-label nz-col [nzSm]="4">
                             <label for="linkAddress" nz-form-item-required>链接地址</label>
                         </div>
                         <div nz-form-control nz-col [nzSm]="20" nzHasFeedback [nzValidateStatus]="getFormControl('linkAddress')">
-                            <nz-input formControlName="linkAddress" [nzId]="'linkAddress'"></nz-input>
-                            <div nz-form-explain *ngIf="getFormControl('linkAddress').dirty&&getFormControl('linkAddress').hasError('required')">请输入链接地址</div>
+                            <nz-input formControlName="linkAddress" [(ngModel)]="article.linkAddress" [nzId]="'linkAddress'"></nz-input>
+                            <!-- <div nz-form-explain *ngIf="getFormControl('linkAddress').dirty&&getFormControl('linkAddress').hasError('maxlength')">字符长度小于等于500</div>
+                            <div nz-form-explain *ngIf="getFormControl('linkAddress').dirty&&getFormControl('linkAddress').hasError('required')">请输入链接地址</div> -->
                         </div>
                     </div>
                 </div>

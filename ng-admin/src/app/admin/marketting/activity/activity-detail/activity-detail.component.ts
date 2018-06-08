@@ -26,8 +26,9 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
     isDelete = false;
     successMsg = '';
     cardTitle = '';
-    radioType: any[] = [{ id: 1, name: '好评', value: 5 }, { id: 2, name: '中评', value: 3 }, { id: 3, name: '差评', value: 1 }];
+    // linkType: any[] = [{ text: '内部链接', value: 1 }, { text: '外部链接', value: 2 }]
     linkTypes: any[] = [{ text: '内部链接', value: 1 }, { text: '外部链接', value: 2 }]
+
     host = AppConsts.remoteServiceBaseUrl;
     actionUrl = this.host + '/WeChatFile/MarketingInfoPosts?fileName=activity';
     config_classic: any = {
@@ -81,13 +82,13 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
             title: [null, Validators.compose([Validators.required, Validators.maxLength(200)])],
             author: [null, Validators.compose([Validators.required, Validators.maxLength(50)])],
             content: [null, Validators.compose([Validators.required])],
-            linkAddress: [null, Validators.compose([Validators.required])],
+            // linkAddress: [null, Validators.compose([Validators.required, Validators.maxLength(500)])],
             // coverPhoto: [null, Validators.compose([Validators.required])], 图片能上传时
             coverPhoto: [null],
+            linkAddress: [null],
             // content: [null],
-            appType: [null, [Validators.required]],
+            linkType: [null, Validators.compose([Validators.required])],
         });
-        this.linkTypes = this.linkTypes[0];
         this.getSingleActivity();
         this.host = AppConsts.remoteServiceBaseUrl;
         this.actionUrl = this.host + '/WeChatFile/MarketingInfoPosts?fileName=activity';
@@ -103,6 +104,7 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
                 if (result.coverPhoto) {
                     this.article.showCoverPhoto = this.host + this.article.coverPhoto;
                 }
+
             });
         } else {
             //新增
@@ -110,6 +112,7 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
             this.article.pushStatusName = '草稿';
             this.article.type = 1;//类型为活动
             this.cardTitle = '新增活动';
+            this.article.linkType = 1;
         }
     }
 
