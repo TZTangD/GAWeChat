@@ -19,11 +19,22 @@ export class BindStaffComponent extends AppComponentBase {
     @ViewChild('toptips') toptips: ToptipsComponent;
     @ViewChild('loading') loadingToast: ToastComponent;
 
+    isOpen: boolean = false;
+    openMsg = '测试验证码：123321 开放时间：2018-06-11 9:00';
+
     constructor(injector: Injector, 
         private wechatUserService: WechatUserService, 
         private router: Router, 
         private srv: ToptipsService) { 
         super(injector);
+
+        let oDate = new Date(2018,5,11,9,0,0,0);
+        //let oDate = new Date(2018,5,8,9,0,0,0);
+        let nDate = new Date();
+        if(nDate >  oDate){
+            this.isOpen = true;
+            this.openMsg = '测试验证码：123321 开放时间：已开放';
+        }
     }
 
     onSave() {

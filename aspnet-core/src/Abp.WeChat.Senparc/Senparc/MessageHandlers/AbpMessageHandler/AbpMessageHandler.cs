@@ -102,15 +102,26 @@ namespace Abp.WeChat.Senparc.MessageHandlers
             var defaultResponseMessage = base.CreateResponseMessage<ResponseMessageText>();
 
             var requestHandler = requestMessage.StartHandler();
-                
+
+            requestHandler.Keywords(new string[] { "使用指南", "使用", "使用手册" , "如何使用" }, () =>
+            {
+                var responseMessage = ResponseMessageBase.CreateFromRequestMessage<ResponseMessageNews>(requestMessage);
+                responseMessage.ArticleCount = 1;
+                responseMessage.Articles.Add(GetSubscribeNews());
+                return responseMessage;
+            });
+
             foreach (var item in this.MessageInfo.KeyWords)
             {
                 if (item.Key == "默认")
                 {
                     requestHandler.Default(() =>
                     {
-                        var responseMessage = this.CreateResponseMessage<ResponseMessageText>();
-                        responseMessage.Content = this.MessageInfo.KeyWords["默认"];
+                        //var responseMessage = this.CreateResponseMessage<ResponseMessageText>();
+                        //responseMessage.Content = this.MessageInfo.KeyWords["默认"];
+                        var responseMessage = ResponseMessageBase.CreateFromRequestMessage<ResponseMessageNews>(requestMessage);
+                        responseMessage.ArticleCount = 1;
+                        responseMessage.Articles.Add(GetSubscribeNews());
                         return responseMessage;
                     });
                 }
@@ -156,7 +167,14 @@ namespace Abp.WeChat.Senparc.MessageHandlers
                 responseMessage.Content = this.MessageInfo.KeyWords["默认"];
                 return responseMessage;
             }
-            return new SuccessResponseMessage();
+            else
+            {
+                var responseMessage = ResponseMessageBase.CreateFromRequestMessage<ResponseMessageNews>(requestMessage);
+                responseMessage.ArticleCount = 1;
+                responseMessage.Articles.Add(GetSubscribeNews());
+                return responseMessage;
+            }
+            //return new SuccessResponseMessage();
         }
 
 
@@ -176,10 +194,20 @@ namespace Abp.WeChat.Senparc.MessageHandlers
             return responseMessage;
         }
 
+        public virtual Article GetSubscribeNews()
+        {
+            return new Article()
+            {
+                Title = "渠江烟语微信平台升级版 使用指南",
+                Description = "2018-06-11早上9点正式开放内测 点击查看详细",
+                PicUrl = "http://ga.intcov.com/files/imgs/syzl.jpg",
+                Url = "https://mp.weixin.qq.com/s/bru-mAd8j7ox0KEWGWrBJA"
+            };
+        }
+
         /// <summary>
         /// 订阅（关注）事件
         /// </summary>
-        /// <returns></returns>
         public override IResponseMessageBase OnEvent_SubscribeRequest(RequestMessageEvent_Subscribe requestMessage)
         {
             if (MessageInfo == null)
@@ -191,13 +219,7 @@ namespace Abp.WeChat.Senparc.MessageHandlers
             //修改成图文消息
             var responseMessage = ResponseMessageBase.CreateFromRequestMessage<ResponseMessageNews>(requestMessage);
             responseMessage.ArticleCount = 1;
-            responseMessage.Articles.Add(new Article()
-            {
-                Title = "渠江烟语微信平台升级版 使用指南",
-                Description = "点击查看详细",
-                PicUrl = "http://ga.intcov.com/files/imgs/syzl.jpg",
-                Url = "https://mp.weixin.qq.com/s/q0e8EUmaCwiDhEyAXi6zGw"
-            });
+            responseMessage.Articles.Add(GetSubscribeNews());
             //关注消息
             Subscribe(requestMessage);
             return responseMessage;

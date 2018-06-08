@@ -19,7 +19,7 @@
                     <label class="weui-label">员工编码</label>
                 </div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" type="text" [(ngModel)]="res.code" name="code" weui-input="code" placeholder="请输入员工编码" weui-required>
+                    <input class="weui-input" type="text" [(ngModel)]="res.code" [disabled]="!isOpen" name="code" weui-input="code" placeholder="请输入员工编码" weui-required>
                 </div>
             </div>
             <div class="weui-cell weui-cell_warn">
@@ -27,9 +27,10 @@
                     <label class="weui-label">验证码</label>
                 </div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" type="text" [(ngModel)]="res.verificationCode" name="verificationCode" weui-input="verificationCode" placeholder="请输入验证码" weui-required>
+                    <input class="weui-input" type="text" [(ngModel)]="res.verificationCode" [disabled]="!isOpen" name="verificationCode" weui-input="verificationCode" placeholder="请输入验证码" weui-required>
                 </div>
             </div>
+            <div class="weui-cells__tips">{{openMsg}}</div>
         </div>
         <div class="weui-btn-area">
             <button class="weui-btn weui-btn_primary" [disabled]="!f.form.valid || !f.form.dirty" [ngClass]="{'weui-btn_disabled': !f.form.valid || !f.form.dirty}">绑定</button>
