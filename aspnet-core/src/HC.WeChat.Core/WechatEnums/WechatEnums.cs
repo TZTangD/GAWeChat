@@ -7,7 +7,6 @@ namespace HC.WeChat.WechatEnums
     public enum MsgTypeEnum
     {
         文字消息 = 1,
-        图文消息 = 2
     }
     /// <summary>
     /// 匹配模式
@@ -146,6 +145,15 @@ namespace HC.WeChat.WechatEnums
     {
         营销活动 = 1,
         经验分享 = 2,
+    }
+
+    /// <summary>
+    /// 链接类型
+    /// </summary>
+    public enum ArticleLinkTypeEnum
+    {
+        内部链接 = 1,
+        外部链接 = 2,
     }
     /// <summary>
     /// 积分类型

@@ -22,6 +22,7 @@ export class ExperienceDetailComponent extends AppComponentBase implements OnIni
     isDelete = false;
     successMsg = '';
     cardTitle = '';
+    linkTypes: any[] = [{ text: '内部链接', value: 1 }, { text: '外部链接', value: 2 }]
     host = AppConsts.remoteServiceBaseUrl;
     actionUrl = this.host + '/WeChatFile/MarketingInfoPosts?fileName=activity';
     config_classic: any = {
@@ -74,8 +75,11 @@ export class ExperienceDetailComponent extends AppComponentBase implements OnIni
             title: [null, Validators.compose([Validators.required, Validators.maxLength(200)])],
             author: [null, Validators.compose([Validators.required, Validators.maxLength(50)])],
             content: [null, Validators.compose([Validators.required])],
+            linkAddress: [null],
+            linkType: [null, Validators.compose([Validators.required])],
         });
         this.getSingleActivity();
+        // alert(this.article.linkType)
     }
     getSingleActivity() {
         if (this.id) {
@@ -87,6 +91,7 @@ export class ExperienceDetailComponent extends AppComponentBase implements OnIni
             });
         } else {
             //新增
+            this.article.linkType = 2;
             this.article.pushStatus = 0;
             this.article.pushStatusName = '草稿';
             this.article.type = 2;//类型为经验分享

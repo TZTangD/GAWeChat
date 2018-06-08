@@ -53,10 +53,22 @@ namespace HC.WeChat.Migrations
             table: "MemberConfigs",
             maxLength:500,
             nullable: true);
+
             migrationBuilder.AlterColumn<string>(
             name: "TemplateIds",
             maxLength: 500,
             table: "WechatAppConfigs",
+            nullable: true);
+
+            migrationBuilder.AlterColumn<int>(
+            name: "LinkType",
+            table: "Articles",
+            nullable: true);
+
+            migrationBuilder.AlterColumn<string>(
+            name: "LinkAddress",
+            maxLength: 500,
+            table: "Articles",
             nullable: true);
         }
 

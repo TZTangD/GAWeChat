@@ -1,12 +1,12 @@
-import {AppComponentBase} from '../../components/app-component-base';
-import {Component, Injector, OnInit, ViewEncapsulation} from '@angular/core';
+import { AppComponentBase } from '../../components/app-component-base';
+import { Component, Injector, OnInit, ViewEncapsulation } from '@angular/core';
 import 'rxjs/add/observable/timer';
-import {Router} from '@angular/router';
-import {JWeiXinService} from 'ngx-weui/jweixin';
-import {Observable} from 'rxjs/Observable';
-import {ArticleService} from '../../../services';
-import {Article, StatisticalDetail} from '../../../services/model';
-import {ToptipsService} from 'ngx-weui';
+import { Router } from '@angular/router';
+import { JWeiXinService } from 'ngx-weui/jweixin';
+import { Observable } from 'rxjs/Observable';
+import { ArticleService } from '../../../services';
+import { Article, StatisticalDetail } from '../../../services/model';
+import { ToptipsService } from 'ngx-weui';
 
 @Component({
     selector: 'share',
@@ -73,16 +73,21 @@ export class ShareComponent extends AppComponentBase implements OnInit {
         });
     }
 
-    goShareDetails(id: string) {
-        this.statisticalDetail.articleId = id;
-        this.statisticalDetail.type = 1;
-        this.statisticalDetail.openId = this.settingsService.openId;
-        this.shareService.AddStatisticalAsync(this.statisticalDetail).subscribe(data => {
-            if (data && data.code === 0) {
-                this.router.navigate(['shares/share-details', {id: id}]);
-            } else {
-                this.srv['warn']('请重试');
-            }
-        });
+    goShareDetails(id: string, linkType: number, linkAddress: string) {
+        if (linkType == 1) {
+            this.statisticalDetail.articleId = id;
+            this.statisticalDetail.type = 1;
+            this.statisticalDetail.openId = this.settingsService.openId;
+            this.shareService.AddStatisticalAsync(this.statisticalDetail).subscribe(data => {
+                if (data && data.code === 0) {
+                    this.router.navigate(['shares/share-details', { id: id }]);
+                } else {
+                    this.srv['warn']('请重试');
+                }
+            });
+        }
+        else {
+            location.href = linkAddress;
+        }
     }
 }

@@ -19,6 +19,8 @@ export class Article implements IArticle {
     pushStatusName: string;
     pushTime: string;
     showCoverPhoto: string;
+    linkType: number;
+    linkAddress: string;
     constructor(data?: IArticle) {
         if (data) {
             for (var property in data) {
@@ -49,7 +51,8 @@ export class Article implements IArticle {
             this.pushStatus = data["pushStatus"];
             this.pushStatusName = data["pushStatusName"];
             this.pushTime = data["pushTime"];
-
+            this.linkType = data["linkType"];
+            this.linkAddress = data["linkAddress"];
         }
     }
 
@@ -79,6 +82,8 @@ export class Article implements IArticle {
         data["deleterUserId"] = this.deleterUserId;
         data["pushStatus"] = this.pushStatus;
         data["pushTime"] = this.pushTime;
+        data["linkType"] = this.linkType;
+        data["linkAddress"] = this.linkAddress;
         return data;
     }
 
@@ -107,4 +112,6 @@ export interface IArticle {
     deletionTime: Date;
     deleterUserId: number;
     pushStatus: number;
+    linkType: number;
+    linkAddress: string;
 }
