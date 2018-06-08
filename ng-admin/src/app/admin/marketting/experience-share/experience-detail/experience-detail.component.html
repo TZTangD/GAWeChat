@@ -26,7 +26,7 @@
                         <label for="author" nz-form-item-required>链接类型</label>
                     </div>
                     <div nz-form-control nz-col [nzSm]="20" nzHasFeedback [nzValidateStatus]="getFormControl('linkType')">
-                        <nz-radio-group formControlName="linkType" [(ngModel)]="article.linkType" class="mb-md">
+                        <nz-radio-group formControlName="linkType" [(ngModel)]="article.linkType" class="mb-md" (click)="cleanText()">
                             <label nz-radio [nzValue]="o.value" *ngFor="let o of linkTypes">
                                     <span>{{o.text}}</span>
                                 </label>
@@ -53,15 +53,15 @@
                         <div nz-form-explain *ngIf="getFormControl('author').dirty&&getFormControl('author').hasError('required')">请输入经验作者</div>
                     </div>
                 </div>
-                <div nz-form-item nz-row *ngIf="article.linkType==1">
+                <div nz-form-item nz-row>
                     <div nz-form-label nz-col [nzSm]="4">
                         <label for="content">经验内容</label>
                     </div>
-                    <!-- <div nz-form-control nz-col [nzSm]="20" nzHasFeedback [nzValidateStatus]="getFormControl('content')">
-                        <nz-input nzType="textarea" nzRows="6" formControlName="content" [(ngModel)]="article.content" [nzId]="'content'"></nz-input>
+                    <div *ngIf="article.linkType==2" nz-form-control nz-col [nzSm]="20" nzHasFeedback [nzValidateStatus]="getFormControl('content')">
+                        <nz-input nzType="textarea" nzRows="3" formControlName="content" [(ngModel)]="article.content" [nzId]="'content'"></nz-input>
                         <div nz-form-explain *ngIf="getFormControl('content').dirty&&getFormControl('content').hasError('required')">经验内容不能为空</div>
-                    </div> -->
-                    <div nz-form-control nz-col [nzSm]="20" nzHasFeedback [nzValidateStatus]="getFormControl('content')">
+                    </div>
+                    <div *ngIf="article.linkType==1" nz-form-control nz-col [nzSm]="20" nzHasFeedback [nzValidateStatus]="getFormControl('content')">
                         <tinymce formControlName="content" [config]="config_classic" loading="loading……" [(ngModel)]="article.content">
                         </tinymce>
                         <div nz-form-explain *ngIf="getFormControl('content').dirty&&getFormControl('content').hasError('required')">内容不能为空</div>

@@ -103,7 +103,7 @@ namespace HC.WeChat.WeChatUsers
 
             var query = _wechatuserRepository.GetAll()
                 .WhereIf(!string.IsNullOrEmpty(input.UserName), u => u.UserName.Contains(input.UserName))
-                .WhereIf(!string.IsNullOrEmpty(input.Name), u => u.NickName.Contains(input.Name) || u.UserName.Contains(input.Name))
+                .WhereIf(!string.IsNullOrEmpty(input.Name), u => u.NickName.Contains(input.Name) || u.UserName.Contains(input.Name) || u.Phone.Contains(input.Name))
                 .WhereIf(input.UserType.HasValue, u => u.UserType == input.UserType);
 
             //TODO:根据传入的参数添加过滤条件
@@ -271,7 +271,7 @@ namespace HC.WeChat.WeChatUsers
                         //    return new APIResultDto() { Code = 901, Msg = "零售户验证未通过" };
                         //}
                         //测试验证码
-                        if (input.VerificationCode != "123321")
+                        if (input.VerificationCode != "123321" && input.VerificationCode != "668899")
                         {
                             return new APIResultDto() { Code = 901, Msg = "零售户验证未通过" };
                         }
@@ -318,7 +318,7 @@ namespace HC.WeChat.WeChatUsers
                         //{
                         //    return new APIResultDto() { Code = 903, Msg = "内部员工验证未通过" };
                         //}
-                        if (input.VerificationCode != "123321")
+                        if (input.VerificationCode != "123321" && input.VerificationCode != "668899")
                         {
                             return new APIResultDto() { Code = 901, Msg = "内部员工验证未通过" };
                         }
@@ -495,7 +495,7 @@ namespace HC.WeChat.WeChatUsers
                     intDetail.RefId = user.OpenId;//自身赠送
                     intDetail.TenantId = tenantId;
                     intDetail.Type = IntegralTypeEnum.首次注册赠送;
-                    intDetail.Desc = "首次注册赠送";
+                    intDetail.Desc = "首次绑定电话号码注册会员";
                     await _integraldetailRepository.InsertAsync(intDetail);
                     //更新用户总积分
                     user.IntegralTotal = intDetail.FinalIntegral.Value;

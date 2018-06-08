@@ -1,4 +1,4 @@
-import { Component, OnInit, Injector } from '@angular/core';
+import { Component, OnInit, Injector, ViewChild } from '@angular/core';
 import { AppComponentBase } from '@shared/app-component-base';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { ProductsServiceProxy } from '@shared/service-proxies/customer-service';
@@ -6,6 +6,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Products } from '@shared/entity/customer';
 import { UploadFile } from 'ng-zorro-antd';
 import { AppConsts } from '@shared/AppConsts';
+import { HttpRequest, HttpClient, HttpResponse } from '@angular/common/http';
+import { filter } from 'rxjs/operators';
+import { CropperSettings, ImageCropperComponent, Bounds } from 'ng2-img-cropper';
 
 @Component({
     moduleId: module.id,
@@ -14,6 +17,8 @@ import { AppConsts } from '@shared/AppConsts';
     styleUrls: ['commodity-detail.component.scss']
 })
 export class CommodityDetailComponent extends AppComponentBase implements OnInit {
+    @ViewChild('cropper', undefined) cropper: ImageCropperComponent;
+    
     form: FormGroup;
     id: number;
     product: Products = new Products();
@@ -37,10 +42,30 @@ export class CommodityDetailComponent extends AppComponentBase implements OnInit
     cardTitle = '';
 
     defalutImg = '/assets/img/default.png';
+    //图片裁剪
+    fileList: UploadFile[] = [];
+    uploading = false;
+
+    cropperSettings: CropperSettings;
+    data1: any = {};
+    //是否是上传状态
+    isUpload = false;
+    //是否选中
+    isSelect = false;
     constructor(injector: Injector, private fb: FormBuilder, private productService: ProductsServiceProxy, private actRouter: ActivatedRoute,
-        private router: Router) {
+        private router: Router, private http: HttpClient) {
         super(injector);
         this.id = this.actRouter.snapshot.params['id'];
+        //图片裁剪数据
+        this.cropperSettings = new CropperSettings();
+        this.cropperSettings.croppedWidth = 200;
+        this.cropperSettings.croppedHeight = 200;
+        // this.cropperSettings.width = 200;
+        // this.cropperSettings.height = 300;
+        this.cropperSettings.cropperDrawSettings.strokeColor = 'rgba(255,255,255,1)';
+        this.cropperSettings.cropperDrawSettings.strokeWidth = 2;
+        this.cropperSettings.noFileInput = true;
+
     }
 
     ngOnInit(): void {
@@ -49,8 +74,8 @@ export class CommodityDetailComponent extends AppComponentBase implements OnInit
             type: [null],
             price: [null],
             isRare: [null],
-            packageCode: [null, Validators.compose([Validators.pattern('^[0-9]*$'),this.confirmationValidatorP])],
-            barCode: [null, Validators.compose([Validators.pattern('^[0-9]*$'),this.confirmationValidatorB])],
+            packageCode: [null, Validators.compose([Validators.pattern('^[0-9]*$'), this.confirmationValidatorP])],
+            barCode: [null, Validators.compose([Validators.pattern('^[0-9]*$'), this.confirmationValidatorB])],
             isAction: [true],
             photoUrl: [null, Validators.compose([Validators.maxLength(500)])],
         });
@@ -79,7 +104,7 @@ export class CommodityDetailComponent extends AppComponentBase implements OnInit
         this.productService.get(this.id).subscribe((result: Products) => {
             this.product = result;
             if (!this.product.id) {
-                this.product.init({ isAction: true,photoUrl:this.defalutImg });
+                this.product.init({ isAction: true, photoUrl: this.defalutImg });
                 this.cardTitle = '新增商品';
             }
             else {
@@ -106,10 +131,12 @@ export class CommodityDetailComponent extends AppComponentBase implements OnInit
                         .finally(() => { this.isConfirmLoading = false; })
                         .subscribe(() => {
                             this.notify.info(this.l('保存成功！'));
+                            this.isUpload=false;
+                            this.getSingleProdct();
                         });
-                }else{
+                } else {
                     this.isConfirmLoading = false;
-                    var errorMsg=result===1?'包码重复':(result===2?'条码重复':(result===3?'包码、条码重复':''));
+                    var errorMsg = result === 1 ? '包码重复' : (result === 2 ? '条码重复' : (result === 3 ? '包码、条码重复' : ''));
                     this.notify.error(this.l(errorMsg));
                 }
             });
@@ -124,34 +151,75 @@ export class CommodityDetailComponent extends AppComponentBase implements OnInit
 
 
     //图片放大
-    handlePreview = (file: UploadFile) => {
-        this.previewImage = file.url || file.thumbUrl;
+    handlePreview = (url: string) => {
+        this.previewImage = url;
         this.previewVisible = true;
     }
-    private getBase64(img: File, callback: (img: any) => void) {
-        const reader = new FileReader();
-        reader.addEventListener('load', () => callback(reader.result));
-        reader.readAsDataURL(img);
+    //#region 前图片上传
+
+    // private getBase64(img: File, callback: (img: any) => void) {
+    //     const reader = new FileReader();
+    //     reader.addEventListener('load', () => callback(reader.result));
+    //     reader.readAsDataURL(img);
+    // }
+
+    // handleChange(info: { file: UploadFile }): void {
+    //     console.table(info);
+
+    //     if (info.file.status === 'error') {
+    //         this.notify.error('上传图片异常，请重试');
+    //     }
+    //     if (info.file.status === 'done') {
+    //         this.getBase64(info.file.originFileObj, (img: any) => {
+    //             // this.loading = false;
+    //             // this.photo = img;
+    //             this.product.showPhotoUrl = img;
+    //         });
+    //         this.product.photoUrl = info.file.response.result.imageName;
+    //         console.log('photoUrl')
+    //         console.log(this.product.photoUrl);
+    //         console.log('imageName')
+    //         console.log(info.file.response.result.imageName);
+    //         this.notify.success('上传图片完成');
+    //     }
+    // }
+
+    //endregion
+
+    //剪切结果返回
+    cropped(bounds: Bounds) {
+        // console.log(bounds);
+    //   console.log(this.data1.image);
+      this.product.img64=this.data1.image;
+        
     }
 
-    handleChange(info: { file: UploadFile }): void {
-        console.table(info);
-
-        if (info.file.status === 'error') {
-            this.notify.error('上传图片异常，请重试');
-        }
-        if (info.file.status === 'done') {
-            this.getBase64(info.file.originFileObj, (img: any) => {
-                // this.loading = false;
-                // this.photo = img;
-                this.product.showPhotoUrl = img;
-            });
-            this.product.photoUrl = info.file.response.result.imageName;
-            console.log('photoUrl')
-            console.log(this.product.photoUrl);
-            console.log('imageName')
-            console.log(info.file.response.result.imageName);
-            this.notify.success('上传图片完成');
-        }
+    //选择图片文件
+    fileChange($event) {
+        this.isUpload = true;
+        this.isSelect=true;
+      console.log(this.isUpload);
+        const image: any = new Image();
+        const file: File = $event.target.files[0];
+        const myReader: FileReader = new FileReader();
+        const that = this;
+        myReader.onloadend = (loadEvent: any) => {
+            image.src = loadEvent.target.result;
+            console.log(file);
+            this.product.fileName=file.name;
+            // console.log(image);
+            this.product.showPhotoUrl = image.src;
+            // this.selecteCutImgModal.show(image);
+            that.cropper.setImage(image);
+        };
+        myReader.readAsDataURL(file);
     }
+    //剪切确定
+    // Select(){
+    //     this.isSelect=false;
+    //     this.product.img64=this.data1.image;
+    // }
+   
+   
+
 }

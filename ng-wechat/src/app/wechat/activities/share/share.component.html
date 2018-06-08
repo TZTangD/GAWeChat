@@ -1,15 +1,24 @@
-<weui-infiniteloader (loadmore)="onLoadMore($event)" #comp>
-    <Page [ngClass]="'aaa'" [showTitle]="false" [spacing]="false" [noBottom]="true" style="margin: 0px; padding: 0px;">
-        <div style="text-align: center; width: 100%;">
-            <img src="assets/images/activity/ic_exp_share.jpg" style="width:100%;">
+<!-- <Page [ngClass]="'aaa'" [showTitle]="false" [spacing]="false" [noBottom]="true" style="margin: 0px; padding: 0px;"> -->
+<Page [ngClass]="'Scan'" [title]="'经验分享'" [showTitle]="false" [spacing]="false">
+    <div class="weui-panel weui-panel_access">
+        <div class="weui-cell" style=" padding-bottom: 0px; padding-top: 0px; padding-left: 0px; padding-right: 0px;">
+            <div style="text-align: center; width: 100%;">
+                <img src="assets/images/activity/ic_exp_share.jpg" style="width:100%;">
+            </div>
         </div>
-        <div class="weui-cells">
-            <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg" *ngFor="let item of items" (click)="goShareDetails(item.id,item.linkType,item.linkAddress)">
+        <div class="weui-panel__bd">
+            <weui-loadmore type="line" *ngIf="!items || items.length == 0"></weui-loadmore>
+            <weui-infiniteloader (loadmore)="onLoadMore($event)" #comp>
+                <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg" *ngFor="let item of items" (click)="goShareDetails(item.id,item.linkType,item.linkAddress)">
+                    <!-- <a href="javascript:void(0);" *ngFor="let item of items" class="weui-cell weui-cell_access" (click)="goShareDetails(item.id,item.linkType,item.linkAddress)"> -->
+                    <div class="weui-cell__bd">{{item.title}}</div>
+                    <div class="weui-cell__ft" style="font-size: 14px;">{{item.pushTime | date:'yyyy-MM-dd'}}</div>
+                </a>
+                <div class="weui-flex__item" style="text-align: center;">
+                    <button weui-button [weui-mini]="'mini'" (click)="goShareWrite()">我要分享</button>
+                </div>
+            </weui-infiniteloader>
+        </div>
+    </div>
 
-                <!-- <a href="javascript:void(0);" *ngFor="let item of items" class="weui-cell weui-cell_access" (click)="goShareDetails(item.id,item.linkType,item.linkAddress)"> -->
-                <div class="weui-cell__bd">{{item.title}}</div>
-                <div class="weui-cell__ft" style="font-size: 14px;">{{item.pushTime | date:'yyyy-MM-dd'}}</div>
-            </a>
-        </div>
-    </Page>
-</weui-infiniteloader>
+</Page>

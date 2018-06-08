@@ -110,7 +110,7 @@ export class StoreDetailComponent extends AppComponentBase implements OnInit {
                     }
                 })
             }
-            this.shopName = '店铺名：' + this.shop.name + '  状态：' + this.shop.statusName;
+            this.shopName =  this.shop.name + '(' + this.shop.statusName+')';
             this.refreshData();
             this.refreshDataE();
             this.getShopProducts();

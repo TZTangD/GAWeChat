@@ -4,7 +4,7 @@
         <div class="weui-flex">
             <div class="weui-flex__item" style="background-image: url(assets/images/integral/integralbanner.png);">
                 <div class="placeholder" style="font-size: 50px;color:#D1A06C;text-align:center ">
-                    <img src="assets/images/integral/integral.png"> {{user.integralTotal}}
+                    <img style="width:32px" src="assets/images/integral/integral.png"> {{user.integralTotal}}
                 </div>
             </div>
         </div>
@@ -17,7 +17,7 @@
                     <img src="assets/images/integral/samleintegral1.png" alt="" style="width:16px;margin-right:5px;display:block">
                 </div>
                 <div class="weui-cell__bd weui-cell_primary">
-                    <p>首次注册可获赠{{configCode.fValue}}积分</p>
+                    <p>首次绑定电话号码注册会员可获赠{{configCode.fValue}}积分</p>
                 </div>
             </div>
             <div class="weui-cell weui-cell_access">
@@ -78,7 +78,7 @@
                         <div class="weui-flex">
                             <div class="weui-flex__item">
                                 <div class="placeholder">
-                                    <h4 class="weui-media-box__info" style="font-weight:normal ;font-size: 15px;font-family: -apple-system-font, Helvetica Neue, Helvetica, sans-serif;color: black">{{item.desc}}</h4>
+                                    <h4 class="weui-media-box__info" style="width: 180px; font-weight:normal ;font-size: 15px;font-family: -apple-system-font, Helvetica Neue, Helvetica, sans-serif;color: black">{{item.desc}}</h4>
                                 </div>
                             </div>
                             <div class="weui-flex__item" *ngIf="item.integral>=0">

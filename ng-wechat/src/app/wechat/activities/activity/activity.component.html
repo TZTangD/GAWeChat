@@ -7,8 +7,8 @@
             </div>
         </div>
         <div class="weui-panel__bd">
+            <weui-loadmore type="line" *ngIf="!activityList || activityList.length == 0"></weui-loadmore>
             <weui-infiniteloader class="inf" (loadmore)="onLoadMore($event)" #comp>
-
                 <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg" *ngFor="let item of activityList" (click)="goDetailActivity(item.id,item.linkType,item.linkAddress)">
                     <!-- <div class="weui-media-box__hd"> -->
                     <div class="weui-media-box__hd weui-cell_img" [ngStyle]="{'background-image':'url('+ hostUrl + item.coverPhoto +')'}">
@@ -23,7 +23,6 @@
                     </div>
                 </a>
             </weui-infiniteloader>
-            <weui-loadmore type="line" *ngIf="!activityList || activityList.length == 0"></weui-loadmore>
         </div>
     </div>
     <!-- </weui-ptr> -->

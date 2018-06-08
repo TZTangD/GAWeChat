@@ -382,7 +382,7 @@ namespace HC.WeChat.Articles
                 ISheet sheet = workbook.CreateSheet("Employees");
                 var rowIndex = 0;
                 IRow titleRow = sheet.CreateRow(rowIndex);
-                string[] titles = { "活动名称", "活动策划者", "阅读量", "点赞数", "发布状态", "发布时间" };
+                string[] titles = { "活动名称", "活动策划者", "阅读量", "点赞数", "发布状态", "发布时间","链接类型","地址" };
                 var fontTitle = workbook.CreateFont();
                 fontTitle.IsBold = true;
                 for (int i = 0; i < titles.Length; i++)
@@ -404,6 +404,9 @@ namespace HC.WeChat.Articles
                     ExcelHelper.SetCell(row.CreateCell(3), font, item.GoodTotal.ToString());
                     ExcelHelper.SetCell(row.CreateCell(4), font, item.PushStatusName);
                     ExcelHelper.SetCell(row.CreateCell(5), font, item.PushTime == null ? "" : item.PushTime.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(6), font, item.LinkType.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(7), font, item.LinkAddress);
+
 
                 }
                 workbook.Write(fs);

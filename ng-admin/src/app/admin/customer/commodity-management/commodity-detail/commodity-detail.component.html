@@ -1,87 +1,86 @@
 <!-- <pro-header></pro-header> -->
-    <nz-card [nzBordered]="false" nzTitle="{{cardTitle}}">
-        <form nz-form [formGroup]="form" id="frm_create_activity">
-            <div nz-row>
-                <ng-template #deleteContent>
-                    <h2>是否删除活动 {{article.title}}?</h2>
-                </ng-template>
-                <div nz-col [nzSpan]="16">
-                    <div nz-form-item nz-row>
-                        <div nz-form-label nz-col [nzSm]="4">
-                            <label nz-form-item-required for="specification">商品规格</label>
-                        </div>
-                        <div nz-form-control nz-col [nzSm]="20" nzHasFeedback [nzValidateStatus]="getFormControl('specification')">
-                            <nz-input formControlName="specification" [(ngModel)]="product.specification" [nzId]="'specification'"></nz-input>
-                            <div nz-form-explain *ngIf="getFormControl('specification').dirty&&getFormControl('specification').hasError('maxlength')">字符长度小于等于200</div>
-                            <div nz-form-explain *ngIf="getFormControl('specification').dirty&&getFormControl('specification').hasError('required')">请输入产品规格</div>
-                        </div>
+<nz-card [nzBordered]="false" nzTitle="{{cardTitle}}">
+    <form nz-form [formGroup]="form" id="frm_create_activity">
+        <div nz-row>
+            <ng-template #deleteContent>
+                <h2>是否删除活动 {{article.title}}?</h2>
+            </ng-template>
+            <div nz-col [nzSpan]="16">
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSm]="4">
+                        <label nz-form-item-required for="specification">商品规格</label>
                     </div>
-                    <div nz-form-item nz-row>
-                        <div nz-form-label nz-col [nzSm]="4">
-                            <label for="type">商品类型</label>
-                        </div>
-                        <div nz-form-control nz-col [nzSm]="20" nzHasFeedback [nzValidateStatus]="getFormControl('type')">
-                            <nz-select formControlName="type" [nzPlaceHolder]="'商品类型'" [(ngModel)]="product.type" [nzShowSearch]="true" nzSize="large">
-                                <nz-option *ngFor="let i of types" [nzLabel]="i.text" [nzValue]="i.value">
-                                </nz-option>
-                            </nz-select>
-                        </div>
+                    <div nz-form-control nz-col [nzSm]="20" nzHasFeedback [nzValidateStatus]="getFormControl('specification')">
+                        <nz-input formControlName="specification" [(ngModel)]="product.specification" [nzId]="'specification'"></nz-input>
+                        <div nz-form-explain *ngIf="getFormControl('specification').dirty&&getFormControl('specification').hasError('maxlength')">字符长度小于等于200</div>
+                        <div nz-form-explain *ngIf="getFormControl('specification').dirty&&getFormControl('specification').hasError('required')">请输入产品规格</div>
                     </div>
-                    <div nz-form-item nz-row>
-                        <div nz-form-label nz-col [nzSm]="4">
-                            <label for="price" >指导零售价</label>
-                        </div>
-                        <div nz-form-control nz-col [nzSm]="20" nzHasFeedback [nzValidateStatus]="getFormControl('price')">
-                            <nz-input-number style="width:100%;" [nzSize]="'large'"  [nzStep]="1" [nzMin]="0" formControlName="price"
-                                [(ngModel)]="product.price"></nz-input-number>
-                        </div>
+                </div>
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSm]="4">
+                        <label for="type">商品类型</label>
                     </div>
-                    <div nz-form-item nz-row>
-                        <div nz-form-label nz-col [nzSm]="4">
-                            <label for="isRare" >是否是特色商品</label>
-                        </div>
-                        <div nz-form-control nz-col [nzSm]="20" nzHasFeedback [nzValidateStatus]="getFormControl('isRare')">
-                            <nz-select formControlName="isRare" [nzPlaceHolder]="'是否是特色商品'" [(ngModel)]="product.isRare" [nzShowSearch]="true" nzSize="large">
-                                <nz-option *ngFor="let i of isRares" [nzLabel]="i.text" [nzValue]="i.value">
-                                </nz-option>
-                            </nz-select>
-                        </div>
+                    <div nz-form-control nz-col [nzSm]="20" nzHasFeedback [nzValidateStatus]="getFormControl('type')">
+                        <nz-select formControlName="type" [nzPlaceHolder]="'商品类型'" [(ngModel)]="product.type" [nzShowSearch]="true" nzSize="large">
+                            <nz-option *ngFor="let i of types" [nzLabel]="i.text" [nzValue]="i.value">
+                            </nz-option>
+                        </nz-select>
                     </div>
-                    <div nz-form-item nz-row>
-                        <div nz-form-label nz-col [nzSm]="4">
-                            <label for="packageCode">包码</label>
-                        </div>
-                        <div nz-form-control nz-col [nzSm]="20" nzHasFeedback [nzValidateStatus]="getFormControl('packageCode')">
-                            <nz-input formControlName="packageCode" [(ngModel)]="product.packageCode" [nzId]="'packageCode'"></nz-input>
-                            <div nz-form-explain *ngIf="getFormControl('packageCode').dirty&&getFormControl('packageCode').hasError('pattern')">包码只能是数字</div>
-                            <div nz-form-explain *ngIf="getFormControl('packageCode').dirty&&getFormControl('packageCode').hasError('confirm')">包码与条码不能相同</div>
-                        </div>
+                </div>
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSm]="4">
+                        <label for="price">指导零售价</label>
                     </div>
-                    <div nz-form-item nz-row>
-                        <div nz-form-label nz-col [nzSm]="4">
-                            <label for="barCode">条码</label>
-                        </div>
-                        <div nz-form-control nz-col [nzSm]="20" nzHasFeedback [nzValidateStatus]="getFormControl('barCode')">
-                            <nz-input formControlName="barCode" [(ngModel)]="product.barCode" [nzId]="'barCode'"></nz-input>
-                            <div nz-form-explain *ngIf="getFormControl('barCode').dirty&&getFormControl('barCode').hasError('pattern')">条码只能是数字</div>
-                            <div nz-form-explain *ngIf="getFormControl('barCode').dirty&&getFormControl('barCode').hasError('confirm')">条码与包码不能相同</div>
-                        </div>
+                    <div nz-form-control nz-col [nzSm]="20" nzHasFeedback [nzValidateStatus]="getFormControl('price')">
+                        <nz-input-number style="width:100%;" [nzSize]="'large'" [nzStep]="1" [nzMin]="0" formControlName="price" [(ngModel)]="product.price"></nz-input-number>
                     </div>
-                    <div nz-form-item nz-row>
-                        <div nz-form-label nz-col [nzSm]="4">
-                        </div>
-                        <div nz-form-control nz-col [nzSm]="20">
-                            <label nz-checkbox nz-col formControlName="isAction" [(ngModel)]="product.isAction">
-                                <span>启用</span>
-                            </label>
-                        </div>
+                </div>
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSm]="4">
+                        <label for="isRare">是否是特色商品</label>
                     </div>
-                    <div nz-form-item nz-row>
-                        <div nz-form-label nz-col [nzSm]="4">
-                            <label for="photoUrl">封面图片</label>
-                        </div>
-                        <div nz-form-control nz-col [nzSm]="20">
-                            <!-- <nz-upload nzAction="{{host + '/WeChatFile/MarketingInfoPosts?fileName=product'}}" nzAccept="'image'" [nzBeforeUpload]="beforeJpgUpload"
+                    <div nz-form-control nz-col [nzSm]="20" nzHasFeedback [nzValidateStatus]="getFormControl('isRare')">
+                        <nz-select formControlName="isRare" [nzPlaceHolder]="'是否是特色商品'" [(ngModel)]="product.isRare" [nzShowSearch]="true" nzSize="large">
+                            <nz-option *ngFor="let i of isRares" [nzLabel]="i.text" [nzValue]="i.value">
+                            </nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSm]="4">
+                        <label for="packageCode">包码</label>
+                    </div>
+                    <div nz-form-control nz-col [nzSm]="20" nzHasFeedback [nzValidateStatus]="getFormControl('packageCode')">
+                        <nz-input formControlName="packageCode" [(ngModel)]="product.packageCode" [nzId]="'packageCode'"></nz-input>
+                        <div nz-form-explain *ngIf="getFormControl('packageCode').dirty&&getFormControl('packageCode').hasError('pattern')">包码只能是数字</div>
+                        <div nz-form-explain *ngIf="getFormControl('packageCode').dirty&&getFormControl('packageCode').hasError('confirm')">包码与条码不能相同</div>
+                    </div>
+                </div>
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSm]="4">
+                        <label for="barCode">条码</label>
+                    </div>
+                    <div nz-form-control nz-col [nzSm]="20" nzHasFeedback [nzValidateStatus]="getFormControl('barCode')">
+                        <nz-input formControlName="barCode" [(ngModel)]="product.barCode" [nzId]="'barCode'"></nz-input>
+                        <div nz-form-explain *ngIf="getFormControl('barCode').dirty&&getFormControl('barCode').hasError('pattern')">条码只能是数字</div>
+                        <div nz-form-explain *ngIf="getFormControl('barCode').dirty&&getFormControl('barCode').hasError('confirm')">条码与包码不能相同</div>
+                    </div>
+                </div>
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSm]="4">
+                    </div>
+                    <div nz-form-control nz-col [nzSm]="20">
+                        <label nz-checkbox nz-col formControlName="isAction" [(ngModel)]="product.isAction">
+                            <span>启用</span>
+                        </label>
+                    </div>
+                </div>
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSm]="4">
+                        <label for="photoUrl">封面图片</label>
+                    </div>
+                    <div nz-form-control nz-col [nzSm]="9">
+                        <!-- <nz-upload nzAction="{{host + '/WeChatFile/MarketingInfoPosts?fileName=product'}}" nzAccept="'image'" [nzBeforeUpload]="beforeJpgUpload"
                                 [nzShowButton]="product.photoUrl==null||product.photoUrl==''" (nzChange)="handleChange($event)"
                                 [nzPreview]="handlePreview" [nzName]="'image'">
                                 <button nz-button>
@@ -90,29 +89,66 @@
                                 <img *ngIf="product.photoUrl" src="{{product.photoUrl}}">
                                 </button>
                             </nz-upload> -->
-                            <nz-upload class="avatar-uploader" nzAction="{{actionUrl}}" [nzName]="'image'" [nzShowUploadList]="false"
-                                 (nzChange)="handleChange($event)" [nzPreview]="handlePreview">
+
+                        <!--<nz-upload class="avatar-uploader" nzAction="{{actionUrl}}" [nzName]="'image'" [nzShowUploadList]="false"
+                                 (nzChange)="handleChange($event)" [nzPreview]="handlePreview" >
                                 <i *ngIf="product.photoUrl==defalutImg" class="anticon anticon-plus avatar-uploader-trigger"></i>
                                 <img *ngIf="product.photoUrl!=defalutImg" [src]="(product.photoUrl|hostUrl)" class="avatar">
-                            </nz-upload>
-                            <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null" (nzOnCancel)="previewVisible=false">
-                                <ng-template #modalContent>
-                                    <img [src]="(previewImage|hostUrl)" [ngStyle]="{ 'width': '100%' }" />
-                                </ng-template>
-                            </nz-modal>
+                            </nz-upload>-->
 
-                        </div>
+                        <!-- <nz-upload class="avatar-uploader" [nzName]="'image'" [nzShowUploadList]="false" [(nzFileList)]="fileList" [nzPreview]="handlePreview"
+                            [nzBeforeUpload]="beforeUpload">
+                            <i *ngIf="!product.showPhotoUrl" class="anticon anticon-plus avatar-uploader-trigger"></i>
+                            <img *ngIf="product.showPhotoUrl" [src]="product.showPhotoUrl" class="avatar">
+                        </nz-upload> -->
+
+                        <!-- <div class="ant-upload ant-upload-select ant-upload-select-text ng-star-inserted">
+                            <button nz-button class="ant-upload">
+                                <input id="file1" style=" display: none;" accept type="file" (change)="fileChange($event)" />
+                                <i *ngIf="!product.showPhotoUrl" class="anticon anticon-plus" style="font-size: 28px; color: #999;"></i>
+                                <img *ngIf="product.showPhotoUrl" style="width: 160px;" [src]="product.showPhotoUrl" class="avatar">
+                            </button>
+                        </div> -->
+                       
+                            <button nz-button class="ant-btn__block file-upload mt-sm">
+                                <input id="file1" accept type="file" (change)="fileChange($event)" />
+                                <i class="anticon anticon-upload"></i>
+                                <span>上传图片</span>
+                            </button>
+                            <div class="my-md" *ngIf="product.photoUrl!=defalutImg && !isUpload" >
+                                <!-- <h3 class="text-md">Cropped image</h3> -->
+                                <img [class.rounded-circle]="false" [src]="(product.photoUrl|hostUrl)"  (click)="handlePreview(product.photoUrl)"  [width]="cropperSettings.croppedWidth" [height]="cropperSettings.croppedHeight">
+                            </div>
+                            <div class="my-md" *ngIf="isUpload && data1.image">
+                                    <!-- <h3 class="text-md">Cropped image</h3> -->
+                                    <img [class.rounded-circle]="false" [src]="data1.image" [width]="cropperSettings.croppedWidth" [height]="cropperSettings.croppedHeight">
+                                </div>
+                       
+                        <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null" (nzOnCancel)="previewVisible=false">
+                            <ng-template #modalContent>
+                                <img [src]="(previewImage|hostUrl)" [ngStyle]="{ 'width': '100%' }" />
+                            </ng-template>
+                        </nz-modal> 
+
+                    </div>
+                    <div nz-form-control nz-col  [nzSm]="9"  [nzOffset]="2" *ngIf="isUpload">
+                            <img-cropper #cropper [image]="data1" [settings]="cropperSettings" (onCrop)="cropped($event)"></img-cropper>
+                            <!-- <button nz-button [nzType]="'primary'" (click)="Select()" [nzSize]="'large'">
+                                    {{l("确定")}}
+                            </button> -->
                     </div>
                 </div>
             </div>
-        </form>
-        <footer-toolbar errorCollect>
-            <button nz-button [nzType]="'default'" (click)="Return()" [nzSize]="'large'">
-                {{l("返回")}}
-            </button>
-            <button nz-button [nzType]="'primary'" (click)="save()" [nzSize]="'large'" [nzLoading]="isConfirmLoading">
-                {{l("保存")}}
-            </button>
-            <!-- <a routerLink="../admin/retail-customer" routerLinkActive="ngOnInit">Heroes</a> -->
-        </footer-toolbar>
-    </nz-card>
+        </div>
+    </form>
+    <footer-toolbar errorCollect>
+        <button nz-button [nzType]="'default'" (click)="Return()" [nzSize]="'large'">
+            {{l("返回")}}
+        </button>
+        <button nz-button [nzType]="'primary'" (click)="save()" [nzSize]="'large'" [nzLoading]="isConfirmLoading">
+            {{l("保存")}}
+        </button>
+        <!-- <a routerLink="../admin/retail-customer" routerLinkActive="ngOnInit">Heroes</a> -->
+    </footer-toolbar>
+</nz-card>
+<!-- <cut-img  #selecteCutImg (modalSelect)="getSelectData($event)"></cut-img> -->

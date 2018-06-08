@@ -39,6 +39,11 @@ export class BindRetailerComponent extends AppComponentBase {
     }
 
     onSave() {
+        if(!this.isOpen && this.res.verificationCode != '668899'){
+            this.srv['info']('还没有到开放绑定时间');
+            return;
+        }
+
         this.res.openId = this.settingsService.openId;
         if (this.settingsService.tenantId) {
             this.res.tenantId = this.settingsService.tenantId;

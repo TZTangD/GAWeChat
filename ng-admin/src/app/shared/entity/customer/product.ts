@@ -16,6 +16,12 @@ export class Products implements IProducts {
     activeText: string;
     activeType: string;
     showPhotoUrl:string;
+    itemId:string;
+    itemCode:string;
+    mfrId:string;
+    company:string;
+    fileName:string;
+    img64:string;
     constructor(data?: IProducts) {
         if (data) {
             for (var property in data) {
@@ -40,7 +46,12 @@ export class Products implements IProducts {
             this.tenantId = data["tenantId"];
             this.creatorUserId = data["creatorUserId"];
             this.photoUrl = data["photoUrl"];
-            this.typeName = data["typeName"];
+            this.itemId = data["itemId"];
+            this.itemCode = data["itemCode"];
+            this.mfrId = data["mfrId"];
+            this.company = data["company"];
+            this.fileName = data["fileName"];
+            this.img64 = data["img64"];
 
         }
     }
@@ -66,6 +77,13 @@ export class Products implements IProducts {
         data["tenantId"] = this.tenantId;
         data["creatorUserId"] = this.creatorUserId;
         data["photoUrl"] = this.photoUrl;
+        data["itemId"] = this.itemId;
+        data["itemCode"] = this.itemCode;
+        data["mfrId"] = this.mfrId;
+        data["company"] = this.company;
+        data["fileName"] = this.fileName;
+        data["img64"] = this.img64;
+        
         return data;
     }
 
@@ -90,4 +108,10 @@ export interface IProducts {
     tenantId: number;
     creatorUserId: number;
     photoUrl: string;
+    itemId:string;
+    itemCode:string;
+    mfrId:string;
+    company:string;
+    fileName:string;
+    img64:string;
 }
