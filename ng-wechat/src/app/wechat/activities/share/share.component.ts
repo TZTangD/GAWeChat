@@ -73,6 +73,10 @@ export class ShareComponent extends AppComponentBase implements OnInit {
         });
     }
 
+    goShareWrite() {
+        this.router.navigate(['shares/share-write']);
+    }
+
     goShareDetails(id: string, linkType: number, linkAddress: string) {
         if (linkType == 1) {
             this.statisticalDetail.articleId = id;

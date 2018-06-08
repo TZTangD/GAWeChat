@@ -22,7 +22,7 @@ export class ExperienceDetailComponent extends AppComponentBase implements OnIni
     isDelete = false;
     successMsg = '';
     cardTitle = '';
-    linkTypes: any[] = [{ text: '内部链接', value: 1 }, { text: '外部链接', value: 2 }]
+    linkTypes: any[] = [{ text: '内部编辑', value: 1 }, { text: '外部链接', value: 2 }]
     host = AppConsts.remoteServiceBaseUrl;
     actionUrl = this.host + '/WeChatFile/MarketingInfoPosts?fileName=activity';
     config_classic: any = {
@@ -81,6 +81,12 @@ export class ExperienceDetailComponent extends AppComponentBase implements OnIni
         this.getSingleActivity();
         // alert(this.article.linkType)
     }
+
+    cleanText() {
+        this.article.content = null;
+        this.article.linkAddress = '';
+    }
+
     getSingleActivity() {
         if (this.id) {
             this.activityService.get(this.id).subscribe((result: Article) => {
