@@ -84,7 +84,6 @@ export class EvaluationDetailComponent extends AppComponentBase implements OnIni
         this.shopEvaluation.evaluation = this.res.radioType.value;
         // this.shopEvaluation.isCorrectQuantity = this.res.radio.value;
         this.shopEvaluation.isCorrectQuantity = this.res.cho;
-        alert(this.shopEvaluation.isCorrectQuantity);
         this.shopEvaluation.purchaseRecordId = this.id;
         this.shopEvaluation.openId = this.settingsService.openId;
         this.shopEvaluation.shopId = this.purchaseRecord.shopId;

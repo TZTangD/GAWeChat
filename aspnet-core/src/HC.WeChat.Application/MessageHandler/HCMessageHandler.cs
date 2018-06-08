@@ -50,6 +50,50 @@ namespace HC.WeChat.MessageHandler
             return _wechatmessageRepository.GetAll().Where(w => w.TenantId == _tenantId && w.MsgType == WechatEnums.MsgTypeEnum.文字消息).ToList();
         }
 
+        /// <summary>
+        /// 返回图文消息主体
+        /// </summary>
+        ///
+        public static string Message_News_Main
+        {
+            get
+            {
+                return @"<xml>
+    <ToUserName><![CDATA[{0}]]></ToUserName>
+    <FromUserName><![CDATA[{1}]]></FromUserName>
+    <CreateTime>{2}</CreateTime>
+    <MsgType><![CDATA[news]]></MsgType>
+    <ArticleCount>{3}</ArticleCount>
+    <Articles>
+    {4}
+    </Articles>
+    </xml> ";
+            }
+        }
+        /// <summary>
+        /// 发送关注时的图文消息
+        /// </summary>
+        /// <param name="requestXML"></param>
+        private void SendWelComeMsg(RequestXML requestXML)
+        {
+            String responseContent = String.Empty;
+
+            string newdate = DateTime.Now.Subtract(new DateTime(1970, 1, 1, 8, 0, 0)).TotalSeconds.ToString();
+
+            //图片的链接地址
+            string PUrlfileName = "http://mmbiz.qpic.cn/mmbiz/7iaiaRJE9s3HAbvxtjqbE85wqmektib1xnwdl8dniaFuK5BMnVhehWzTlK2zW0YVzFfLKjexQfgj12SJcwicGSFOyvw/640?wx_fmt=jpeg&wxfrom=5";
+
+            responseContent = string.Format(ResponseXMl.Message_News_Main, requestXML.FromUserName, requestXML.ToUserName, newdate, "1",
+
+           //参数分别代表发送图文的标题，简介，以及图文的链接地址
+           string.Format(ResponseXMl.Message_News_Item, "欢迎关注我的测试号", "2016年新的机遇和挑战...", PUrlfileName, "http://mp.weixin.qq.com/s?__biz=MzA4NjIwMTg5Nw==&tempkey=1D1FlQbenM0RdbGL7jPebIYV7OWGdyEY8DClNjaJHJ3yoGh1t3KfoVvK2FGXjgeuTMemMzu4GASlT2p4yyPT4oZp8bVWH1kF3BxYJGHGHnPpcr%2Bb8zdejjshCRSr8V18HPS9gh%2Fa0wKarCp%2B2mYOEA%3D%3D&#rd"));
+
+
+            HttpContext.Current.Response.ContentType = "text/xml";
+            HttpContext.Current.Response.ContentEncoding = Encoding.UTF8;
+            HttpContext.Current.Response.Write(responseContent);
+            HttpContext.Current.Response.End();
+        }
         public override void ConfigurationMessageInfo(RequestMessageText requestMessage)
         {
             MessageInfo = new AbpMessageInfo();
@@ -70,12 +114,13 @@ namespace HC.WeChat.MessageHandler
                             MessageInfo.SubscribeMsg = sinfo.Content;
                         }
                         break;
-                    //case WechatEnums.MsgTypeEnum.图文消息:
-                    //    {
-                    //        //string url = host + "/GAWX/Authorization?page=304&param=" + Id.ToString();
-                    //        MessageInfo.Url = "<a href='wwww.baidu.com'>渠江烟语操作指南</a>";
-                    //    }
-                    //    break;
+                    case WechatEnums.MsgTypeEnum.图文消息:
+                        {
+                            SendWelComeMsg(requestXML);//关注时返回的图文消息
+                            //string url = host + "/GAWX/Authorization?page=304&param=" + Id.ToString();
+                            MessageInfo.Url = "<a href='wwww.baidu.com'>渠江烟语操作指南</a>";
+                        }
+                        break;
                     default:
                         break;
                 }    

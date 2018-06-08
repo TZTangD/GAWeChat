@@ -25,6 +25,18 @@
                     </div>
                     <div nz-form-item nz-row>
                         <div nz-form-label nz-col [nzSm]="4">
+                            <label for="author" nz-form-item-required>链接类型</label>
+                        </div>
+                        <div nz-form-control nz-col [nzSm]="20" nzHasFeedback [nzValidateStatus]="getFormControl('linkTypes')">
+                            <nz-radio-group formControlName="linkTypes" class="mb-md">
+                                <label nz-radio [nzValue]="o.value" *ngFor="let o of linkTypes">
+                                    <span>{{o.text}}</span>
+                                </label>
+                            </nz-radio-group>
+                        </div>
+                    </div>
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col [nzSm]="4">
                             <label for="title" nz-form-item-required>活动名称</label>
                         </div>
                         <div nz-form-control nz-col [nzSm]="20" nzHasFeedback [nzValidateStatus]="getFormControl('title')">
@@ -66,6 +78,15 @@
                             <tinymce formControlName="content" [config]="config_classic" loading="loading……" [(ngModel)]="article.content">
                             </tinymce>
                             <div nz-form-explain *ngIf="getFormControl('content').dirty&&getFormControl('content').hasError('required')">内容不能为空</div>
+                        </div>
+                    </div>
+                    <div nz-form-item nz-row>
+                        <div nz-form-label nz-col [nzSm]="4">
+                            <label for="linkAddress" nz-form-item-required>链接地址</label>
+                        </div>
+                        <div nz-form-control nz-col [nzSm]="20" nzHasFeedback [nzValidateStatus]="getFormControl('linkAddress')">
+                            <nz-input formControlName="linkAddress" [nzId]="'linkAddress'"></nz-input>
+                            <div nz-form-explain *ngIf="getFormControl('linkAddress').dirty&&getFormControl('linkAddress').hasError('required')">请输入链接地址</div>
                         </div>
                     </div>
                 </div>
