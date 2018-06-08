@@ -128,7 +128,7 @@ export class ShopService {
     });
   }
 
-  FilesPostsBase64(params: any): Observable<boolean> {
+  FilesPostsBase64(params: any): Observable<any> {
     return this.http.post('/WeChatFile/FilesPostsBase64', params).map(data => {
       return data.result;
     });

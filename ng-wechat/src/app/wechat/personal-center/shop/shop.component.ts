@@ -89,7 +89,7 @@ export class ShopComponent extends AppComponentBase implements OnInit {
                                 .subscribe(result => {
                                     this.shop = result;
                                     if (!this.shop) {//如果没有店铺 需要新增 
-                                        this.router.navigate(['/shops/shop-add']);
+                                        this.router.navigate(['/shopadds/shop-add']);
                                     }
                                 });
                         }
@@ -100,8 +100,7 @@ export class ShopComponent extends AppComponentBase implements OnInit {
     }
 
     goEditShop() {
-        this.router.navigate(['/shops/shop-add', { id: '1' }]);
-        //this.router.navigateByUrl('/center/shop-add');
+        this.router.navigate(['/shopadds/shop-add', { id: '1' }]);
     }
 
     onSelectProducts() {

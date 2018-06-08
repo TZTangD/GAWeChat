@@ -5,20 +5,17 @@ import { SharedModule } from '../../../shared/shared.module';
 import { ComponentsModule } from '../../components/components.module';
 import { ShopComponent } from './shop.component';
 import { WaitAuditComponent } from './wait-audit/wait-audit.component';
-import { ShopAddComponent } from './shop-add/shop-add.component';
 
 import { ShopService } from '../../../services';
 
 // region: components
 
 const COMPONENTS = [ShopComponent,
-    WaitAuditComponent,
-    ShopAddComponent];
+    WaitAuditComponent];
 
 const routes: Routes = [
     { path: 'shop', component: ShopComponent },
-    { path: 'wait-audit', component: WaitAuditComponent },
-    { path: 'shop-add', component: ShopAddComponent } 
+    { path: 'wait-audit', component: WaitAuditComponent }
 ];
 // endregion
 
