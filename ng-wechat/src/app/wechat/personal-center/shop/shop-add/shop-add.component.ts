@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, Injector, OnInit } from '@angular/core';
+import { Component, ViewEncapsulation, Injector, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/timer';
 import { AppComponentBase } from '../../../components/app-component-base';
@@ -8,6 +8,9 @@ import { UploaderOptions, FileItem, Uploader, UploaderHeaders } from 'ngx-weui';
 import { ShopService, AppConsts } from '../../../../services';
 import { ToptipsService } from "ngx-weui/toptips";
 import { JWeiXinService } from 'ngx-weui/jweixin';
+import { PopupComponent } from "ngx-weui/popup";
+
+import { ImageCropperComponent, CropperSettings, Bounds, CropPosition } from 'ngx-img-cropper';
 
 @Component({
     selector: 'wechat-shop-add',
@@ -16,6 +19,14 @@ import { JWeiXinService } from 'ngx-weui/jweixin';
     encapsulation: ViewEncapsulation.None
 })
 export class ShopAddComponent extends AppComponentBase implements OnInit {
+
+    //图片裁剪 2018-06-07
+    @ViewChild('imgCropperPopup') imgCropperPopup: PopupComponent;
+    @ViewChild('shopCropper', undefined) shopCropper: ImageCropperComponent;
+    public cropperSettings: CropperSettings;
+    public imgData: any;
+    fileName: string;
+
     showAddInfo: boolean = true;
     user: WechatUser;
 
@@ -58,14 +69,14 @@ export class ShopAddComponent extends AppComponentBase implements OnInit {
         })
     }
 
-    uploader: Uploader = new Uploader(<UploaderOptions>{
+    /*uploader: Uploader = new Uploader(<UploaderOptions>{
         url: AppConsts.remoteServiceBaseUrl + '/WeChatFile/FilesPosts?folder=shop',
         auto: true,
         limit: 1,
         //size: 153600,
         onUploadStart: ((file: FileItem) => {
             console.table(file._file);
-            console.table(file.file);              
+            console.table(file.file);
             if (file.file.size > 153600) {
                 this.srv['warn']('文件必须小于等于150KB');
                 file.cancel();
@@ -84,13 +95,41 @@ export class ShopAddComponent extends AppComponentBase implements OnInit {
         onUploadComplete: function (file: FileItem, response: string) {
             //console.log('onUploadComplete-' + response, arguments);
         }
-    });
+    });*/
 
     constructor(injector: Injector, private router: Router,
         private shopService: ShopService,
         private wxService: JWeiXinService,
         private srv: ToptipsService) {
         super(injector);
+        this.cropperSettings = new CropperSettings();
+        let winWidth = window.document.body.clientWidth;
+        this.cropperSettings.width = winWidth;
+        this.cropperSettings.height = 200;
+
+        this.cropperSettings.croppedWidth = winWidth;
+        this.cropperSettings.croppedHeight = 200;
+
+        //this.cropperSettings.canvasWidth = 500;
+        //this.cropperSettings.canvasHeight = 300;
+        this.cropperSettings.canvasWidth = winWidth;
+        this.cropperSettings.canvasHeight = 400;
+
+        this.cropperSettings.minWidth = 300;
+        this.cropperSettings.minHeight = 150;
+
+        this.cropperSettings.rounded = false;
+
+        this.cropperSettings.cropperDrawSettings.strokeColor = 'rgba(255,255,255,1)';
+        this.cropperSettings.cropperDrawSettings.strokeWidth = 2;
+
+        this.cropperSettings.keepAspect = true;
+        this.cropperSettings.preserveSize = true;
+        this.cropperSettings.cropOnResize = false;
+        this.cropperSettings.noFileInput = true;
+        this.cropperSettings.compressRatio = 0.1;
+
+        this.imgData = {};
     }
 
     ngOnInit() {
@@ -168,9 +207,9 @@ export class ShopAddComponent extends AppComponentBase implements OnInit {
 
     onDel(item: any) {
         //console.log(item);
-        if (item) {
+        /*if (item) {
             this.uploader.removeFromQueue(item.item);
-        }
+        }*/
         this.coverPhoto = null;
     }
 
@@ -249,5 +288,38 @@ export class ShopAddComponent extends AppComponentBase implements OnInit {
     getlocation() {
         var latLng = new qq.maps.LatLng(this.qqLatitude, this.qqLongitude);
         this.citylocation.searchCityByLatLng(latLng);
+    }
+
+    //裁剪图片后上传 2018-06-07
+    goUploadImg() {
+        this.imgData.image = this.shopCropper.cropper.getCroppedImage(true).src;
+        //console.log(this.fileName);
+        this.shopService.FilesPostsBase64({ fileName: this.fileName, imageBase64: this.imgData.image }).subscribe((res) => {
+            //console.table(res);
+            if (res && res.code == 0) {
+                this.coverPhoto = res.data;
+                this.imgCropperPopup.close();
+                this.srv['success']('上传图片成功');
+            } else {
+                console.log(res);
+                this.srv['warn'](res.msg);
+            }
+        });
+    }
+    cancelUploadImg(){
+        this.imgCropperPopup.close();
+    }
+    //选择图片
+    fileChange($event) {
+        this.imgCropperPopup.show();
+        const image: any = new Image();
+        const file: File = $event.target.files[0];
+        this.fileName = file.name;
+        const myReader: FileReader = new FileReader();
+        myReader.onloadend = (loadEvent: any) => {
+            image.src = loadEvent.target.result;
+            this.shopCropper.setImage(image);
+        };
+        myReader.readAsDataURL(file);
     }
 }

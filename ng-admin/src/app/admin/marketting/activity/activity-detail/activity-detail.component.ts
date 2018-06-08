@@ -19,6 +19,7 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
     test: any;
     form: FormGroup;
     id: number;
+    linkVal: any;
     article: Article = new Article();
     isConfirmLoading = false;
     //用于按钮是否显示
@@ -26,6 +27,8 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
     isDelete = false;
     successMsg = '';
     cardTitle = '';
+    linkTypes: any[] = [{ text: '内部编辑', value: 1 }, { text: '外部链接', value: 2 }]
+
     host = AppConsts.remoteServiceBaseUrl;
     actionUrl = this.host + '/WeChatFile/MarketingInfoPosts?fileName=activity';
     config_classic: any = {
@@ -79,9 +82,12 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
             title: [null, Validators.compose([Validators.required, Validators.maxLength(200)])],
             author: [null, Validators.compose([Validators.required, Validators.maxLength(50)])],
             content: [null, Validators.compose([Validators.required])],
+            // linkAddress: [null, Validators.compose([Validators.required, Validators.maxLength(500)])],
             // coverPhoto: [null, Validators.compose([Validators.required])], 图片能上传时
             coverPhoto: [null],
+            linkAddress: [null],
             // content: [null],
+            linkType: [null, Validators.compose([Validators.required])],
         });
         this.getSingleActivity();
         this.host = AppConsts.remoteServiceBaseUrl;
@@ -98,6 +104,7 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
                 if (result.coverPhoto) {
                     this.article.showCoverPhoto = this.host + this.article.coverPhoto;
                 }
+
             });
         } else {
             //新增
@@ -105,7 +112,17 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
             this.article.pushStatusName = '草稿';
             this.article.type = 1;//类型为活动
             this.cardTitle = '新增活动';
+            // this.article.linkType = 2;
         }
+    }
+
+    cleanText() {
+        if (this.linkVal != this.article.linkType) {
+            this.article.content = null;
+            this.article.linkAddress = '';
+            this.linkVal = JSON.stringify(this.article.linkType);
+        }
+        // this.article.linkAddress = '';
     }
 
     getFormControl(name: string) {
@@ -176,7 +193,6 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
 
     //图片上传返回
     handleChange(info: { file: UploadFile }): void {
-        console.table(info);
 
         if (info.file.status === 'error') {
             this.notify.error('上传图片异常，请重试');

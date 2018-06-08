@@ -42,6 +42,16 @@ namespace HC.WeChat.Articles
         public virtual string CoverPhoto { get; set; }
 
         /// <summary>
+        /// 链接地址
+        /// </summary>
+        public virtual string LinkAddress { get; set; }
+
+        /// <summary>
+        /// 链接类型
+        /// </summary>
+        public virtual ArticleLinkTypeEnum? LinkType { get; set; }
+
+        /// <summary>
         /// 文章内容html
         /// </summary>
         public virtual string Content { get; set; }

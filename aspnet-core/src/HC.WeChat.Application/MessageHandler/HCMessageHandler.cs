@@ -70,8 +70,6 @@ namespace HC.WeChat.MessageHandler
                             MessageInfo.SubscribeMsg = sinfo.Content;
                         }
                         break;
-                    case WechatEnums.MsgTypeEnum.图文消息:
-                        break;
                     default:
                         break;
                 }    

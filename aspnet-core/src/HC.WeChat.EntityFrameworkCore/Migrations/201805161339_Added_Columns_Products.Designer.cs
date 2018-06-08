@@ -1639,7 +1639,8 @@ namespace HC.WeChat.Migrations
                 b.Property<DateTime?>("DeletionTime");
                 b.Property<long?>("DeleterUserId");
                 b.Property<DateTime?>("PushTime");
-
+                b.Property<string>("LinkAddress");
+                b.Property<int>("LinkType");
                 b.HasKey("Id");
 
                 //b.HasIndex("TargetTenantId", "TargetUserId", "ReadState");

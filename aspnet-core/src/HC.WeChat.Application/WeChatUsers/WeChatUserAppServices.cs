@@ -484,7 +484,7 @@ namespace HC.WeChat.WeChatUsers
                     intDetail.RefId = user.OpenId;//自身赠送
                     intDetail.TenantId = tenantId;
                     intDetail.Type = IntegralTypeEnum.首次注册赠送;
-                    intDetail.Desc = "首次注册赠送";
+                    intDetail.Desc = "首次绑定电话号码注册会员";
                     await _integraldetailRepository.InsertAsync(intDetail);
                     //更新用户总积分
                     user.IntegralTotal = intDetail.FinalIntegral.Value;
@@ -591,10 +591,11 @@ namespace HC.WeChat.WeChatUsers
         [AbpAllowAnonymous]
         public async Task CheckWeChatUserBindStatusAsync(WeChatUserEditDto input)
         {
-            if (input.UserType == UserTypeEnum.内部员工)
-            {
-                await DealMemeberConfigValueAndDesc(input);
-            }
+            //取消该功能
+            //if (input.UserType == UserTypeEnum.内部员工)
+            //{
+            //    await DealMemeberConfigValueAndDesc(input);
+            //}
             await CancelTagAsync(input.UserType, input.OpenId);
             //input.UserType = UserTypeEnum.消费者;
             //input.BindStatus = BindStatusEnum.未绑定;
@@ -612,7 +613,7 @@ namespace HC.WeChat.WeChatUsers
         }
 
         /// <summary>
-        /// 解绑移除会员配置员工信息
+        /// 解绑移除会员配置员工信息 (取消该功能)
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>

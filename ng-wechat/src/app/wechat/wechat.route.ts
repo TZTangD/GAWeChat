@@ -8,6 +8,7 @@ export const routes = [
     { path: 'members', loadChildren: './personal-center/member-card/member-card.module#MemberCardModule' },
     { path: 'personals', loadChildren: './personal-center/personal/personal.module#PersonalModule' },
     { path: 'shops', loadChildren: './personal-center/shop/shop.module#ShopModule' },
+    { path: 'shopadds', loadChildren: './personal-center/shop/shop-add/shop-add.module#ShopAddModule' },
     { path: 'scans', loadChildren: './personal-center/scan/scan.module#ScanModule' },
     { path: 'nearbies', loadChildren: './buy/nearby-shop/nearby-shop.module#NearbyShopModule' },
     { path: 'feedbacks', loadChildren: './personal-center/feedback/feedback.module#FeedbackModule' },
@@ -19,7 +20,7 @@ export const routes = [
     { path: 'shopevaluations', loadChildren: './personal-center/shopevaluation/shopevaluation.module#ShopEvaluationModule' },
     { path: 'good-sources', loadChildren: './personal-center/good-source/good-source.module#GoodSourceModule' },
     { path: 'shop-employees', loadChildren: './personal-center/shop-employee/shop-employee.module#ShopEmployeeModule' },
-    { path: 'imgs', loadChildren: './personal-center/img-cropper/img-cropper.module#ImgCropperModule' },
+    //{ path: 'imgs', loadChildren: './personal-center/img-cropper/img-cropper.module#ImgCropperModule' },
     // Not found
     { path: '**', redirectTo: '' }
 ];

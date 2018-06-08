@@ -22,6 +22,8 @@ export class ExperienceDetailComponent extends AppComponentBase implements OnIni
     isDelete = false;
     successMsg = '';
     cardTitle = '';
+    linkTypes: any[] = [{ text: '内部编辑', value: 1 }, { text: '外部链接', value: 2 }]
+    linkVal: any;
     host = AppConsts.remoteServiceBaseUrl;
     actionUrl = this.host + '/WeChatFile/MarketingInfoPosts?fileName=activity';
     config_classic: any = {
@@ -74,19 +76,35 @@ export class ExperienceDetailComponent extends AppComponentBase implements OnIni
             title: [null, Validators.compose([Validators.required, Validators.maxLength(200)])],
             author: [null, Validators.compose([Validators.required, Validators.maxLength(50)])],
             content: [null, Validators.compose([Validators.required])],
+            linkAddress: [null],
+            linkType: [null, Validators.compose([Validators.required])],
         });
         this.getSingleActivity();
+        // alert(this.article.linkType)
     }
+
+    cleanText() {
+        if (this.linkVal != this.article.linkType) {
+            this.article.content = null;
+            this.article.linkAddress = '';
+            this.linkVal = JSON.stringify(this.article.linkType);
+        }
+        // this.article.content = null;
+        // this.article.linkAddress = '';
+    }
+
     getSingleActivity() {
         if (this.id) {
             this.activityService.get(this.id).subscribe((result: Article) => {
                 this.article = result;
+                this.linkVal = JSON.stringify(this.article.linkType);
                 this.isDelete = true;
                 this.isPush = result.pushStatus === 1 ? false : true;
                 this.cardTitle = '编辑经验分享';
             });
         } else {
             //新增
+            this.article.linkType = 2;
             this.article.pushStatus = 0;
             this.article.pushStatusName = '草稿';
             this.article.type = 2;//类型为经验分享

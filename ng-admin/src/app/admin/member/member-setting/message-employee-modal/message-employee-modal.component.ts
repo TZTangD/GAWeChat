@@ -48,13 +48,14 @@ export class MessageEmployeeModalComponent implements OnInit {
      * 获取
      */
     refreshData() {
-        this.eloading = true;
-        this.wechatUserService.getAll(this.q.pi, this.q.ps, this.getParameter()).subscribe((result: PagedResultDtoOfWeChatUser) => {
-            this.eloading = false;
-            // let status = 5;
-            this.employee = result.items;
-            this.q.total = result.totalCount;
-        });
+        if (this.q.no != null && this.q.no.trim().length !== 0) {
+            this.eloading = true;
+            this.wechatUserService.getAll(this.q.pi, this.q.ps, this.getParameter()).subscribe((result: PagedResultDtoOfWeChatUser) => {
+                this.eloading = false;
+                this.employee = result.items;
+                this.q.total = result.totalCount;
+            });
+        }
     }
     getParameter(): Parameter[] {
         var arry = [];
@@ -78,11 +79,11 @@ export class MessageEmployeeModalComponent implements OnInit {
      */
     SelectEmployee() {
         this.q.no = '';
-        var employeeId = this.employee.filter(v => v.selected);
+        var employee = this.employee.filter(v => v.selected);
         // var employeeIds = employeeId.map(v => {
         //     return v.userName;
         // }).join(',');
-        this.modalSelect.emit(employeeId);
+        this.modalSelect.emit(employee);
         this.emodalVisible = false;
     }
 

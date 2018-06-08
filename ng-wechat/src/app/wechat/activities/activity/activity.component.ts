@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { ArticleService, AppConsts } from '../../../services';
 import { JWeiXinService, InfiniteLoaderComponent, PTRComponent, ToptipsService } from 'ngx-weui';
 import { timer } from 'rxjs/observable/timer';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
     selector: 'activity',
@@ -19,9 +20,9 @@ export class ArticleComponent extends AppComponentBase implements OnInit {
     pageModel: PageModel = new PageModel(); // 分页信息
     @ViewChild(InfiniteLoaderComponent) il;
     hostUrl: string = AppConsts.remoteServiceBaseUrl;
-
-    constructor(injector: Injector, private router: Router,
-        private articleService: ArticleService, private srv: ToptipsService, private wxService: JWeiXinService,
+    href: any;
+    constructor(injector: Injector, private router: Router, private sanitizer: DomSanitizer
+        , private articleService: ArticleService, private srv: ToptipsService, private wxService: JWeiXinService,
     ) {
         super(injector);
     }
@@ -53,6 +54,9 @@ export class ArticleComponent extends AppComponentBase implements OnInit {
         var rreg = new RegExp('&rdquo;', "g");
         this.articleService.GetPagedArticles(params).subscribe(result => {
             result.filter(v => {
+                // if (v.linkType == 2) this.ahref = v.linkAddress;
+                // if (v.linkType == 2) this.href = this.sanitizer.bypassSecurityTrustResourceUrl(v.linkAddress);
+                // else this.href = 'javascript:void(0);'
                 v.content = v.content.replace(/<\/?[^>]*>/g, '').replace(lreg, '').replace(rreg, '');
             })
             this.activityList.push(...result);
@@ -62,17 +66,22 @@ export class ArticleComponent extends AppComponentBase implements OnInit {
         });
     }
 
-    goDetailActivity(id: string) {
-        this.statisticalDetail.articleId = id;
-        this.statisticalDetail.type = 1;
-        this.statisticalDetail.openId = this.settingsService.openId;
-        this.articleService.AddStatisticalAsync(this.statisticalDetail).subscribe(data => {
-            if (data && data.code === 0) {
-                this.router.navigate(['/activities/activity-detail', { id: id }]);
-            } else {
-                this.srv['warn']('请重试');
-            }
-        });
+    goDetailActivity(id: string, linkType: number, linkAddress: string) {
+        if (linkType == 1) {
+            this.statisticalDetail.articleId = id;
+            this.statisticalDetail.type = 1;
+            this.statisticalDetail.openId = this.settingsService.openId;
+            this.articleService.AddStatisticalAsync(this.statisticalDetail).subscribe(data => {
+                if (data && data.code === 0) {
+                    this.router.navigate(['/activities/activity-detail', { id: id }]);
+                } else {
+                    this.srv['warn']('请重试');
+                }
+            });
+        }
+        else {
+            location.href = linkAddress;
+        }
     }
 
     /**

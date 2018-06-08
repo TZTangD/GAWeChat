@@ -46,6 +46,10 @@ namespace HC.WeChat.Articles.Dtos
         public ArticlePushStatusEnum? PushStatus { get; set; }
         public DateTime? PushTime { get; set; }
 
+        public ArticleLinkTypeEnum? LinkType { get; set; }
+
+        public string LinkAddress { get; set; }
+
         public string PushStatusName
         {
             get

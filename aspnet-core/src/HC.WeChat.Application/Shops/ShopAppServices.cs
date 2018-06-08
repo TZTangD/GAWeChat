@@ -497,38 +497,38 @@ namespace HC.WeChat.Shops
             {
                 //演示注释 后面需要放开
                 //根据经纬度范围过滤数据
-                //var dataList = await _shopRepository.GetAll()
-                //    .Where(s => s.Status == ShopAuditStatus.审核通过
-                //    && s.Latitude > mbr.MinLatitude 
-                //    && s.Latitude < mbr.MaxLatitude
-                //    && s.Longitude > mbr.MinLongitude
-                //    && s.Longitude < mbr.MaxLongitude).ToListAsync();
+                var dataList = await _shopRepository.GetAll()
+                    .Where(s => s.Status == ShopAuditStatus.已审核
+                    && s.Latitude > mbr.MinLatitude
+                    && s.Latitude < mbr.MaxLatitude
+                    && s.Longitude > mbr.MinLongitude
+                    && s.Longitude < mbr.MaxLongitude).ToListAsync();
 
-                //var resultList = dataList.MapTo<List<NearbyShopDto>>();
-                //foreach (var item in resultList)
-                //{
-                //    if (item.Latitude.HasValue && item.Longitude.HasValue)
-                //    {
-                //        item.Distance = Math.Round(AbpMapByGoogle.GetDistance(latitude, longitude, item.Latitude.Value, item.Longitude.Value), 0);//不保留小数
-                //    }
-                //    else
-                //    {
-                //        item.Distance = 4000;//后面会被过滤
-                //    }
-                //}
-
-                var resultList = (await _shopRepository.GetAll().Where(s => s.Status == ShopAuditStatus.已审核).ToListAsync()).MapTo<List<NearbyShopDto>>();
-                int[] rd = { 92, 108, 201, 255, 374, 488, 509 };
-                int i = 0;
+                var resultList = dataList.MapTo<List<NearbyShopDto>>();
                 foreach (var item in resultList)
                 {
-                    item.Distance = 100 + rd[i];
-                    i++;
-                    if (i == rd.Length)
+                    if (item.Latitude.HasValue && item.Longitude.HasValue)
                     {
-                        i = 0;
+                        item.Distance = Math.Round(AbpMapByGoogle.GetDistance(latitude, longitude, item.Latitude.Value, item.Longitude.Value), 0);//不保留小数
+                    }
+                    else
+                    {
+                        item.Distance = 4000;//后面会被过滤
                     }
                 }
+
+                //var resultList = (await _shopRepository.GetAll().Where(s => s.Status == ShopAuditStatus.已审核).ToListAsync()).MapTo<List<NearbyShopDto>>();
+                //int[] rd = { 92, 108, 201, 255, 374, 488, 509 };
+                //int i = 0;
+                //foreach (var item in resultList)
+                //{
+                //    item.Distance = 100 + rd[i];
+                //    i++;
+                //    if (i == rd.Length)
+                //    {
+                //        i = 0;
+                //    }
+                //}
 
                 return resultList.Where(r => r.Distance <= 3000).OrderBy(r => r.Distance).ToList();
             }
