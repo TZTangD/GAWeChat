@@ -83,7 +83,7 @@ namespace HC.WeChat.Web.Host.Controllers
             APIResultDto result = new APIResultDto();
             //UserOpenId = "oPM5Uv81jfyJqWbVxWAH-RUqsCAs";
             //UserOpenId = "oPM5Uv89yy7Iv8k9gLHjjsMTT5Gw";
-            //UserOpenId = "9A7C8776-A623-473F-AF29-10D3E79A2FAE";
+            UserOpenId = "oWusewPRxWuP4wMz3UmHR0y7CJME";
             if (string.IsNullOrEmpty(UserOpenId))
             {
                 result.Code = 901;

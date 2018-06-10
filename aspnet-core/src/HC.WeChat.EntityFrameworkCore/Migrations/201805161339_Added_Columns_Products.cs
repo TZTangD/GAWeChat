@@ -48,24 +48,24 @@ namespace HC.WeChat.Migrations
             table: "Retailers",
             nullable: true);
 
-            migrationBuilder.AlterColumn<string>(
+            migrationBuilder.AddColumn<string>(
             name: "Desc",
             table: "MemberConfigs",
-            maxLength:500,
+            maxLength: 500,
             nullable: true);
 
-            migrationBuilder.AlterColumn<string>(
+            migrationBuilder.AddColumn<string>(
             name: "TemplateIds",
             maxLength: 500,
             table: "WechatAppConfigs",
             nullable: true);
 
-            migrationBuilder.AlterColumn<int>(
+            migrationBuilder.AddColumn<int>(
             name: "LinkType",
             table: "Articles",
             nullable: true);
 
-            migrationBuilder.AlterColumn<string>(
+            migrationBuilder.AddColumn<string>(
             name: "LinkAddress",
             maxLength: 500,
             table: "Articles",
@@ -103,13 +103,21 @@ namespace HC.WeChat.Migrations
             name: "DepartmentId",
             table: "Retailers");
 
-            migrationBuilder.AlterColumn<string>(
+            migrationBuilder.DropColumn(
             name: "Desc",
             table: "MemberConfigs");
 
-            migrationBuilder.AlterColumn<string>(
+            migrationBuilder.DropColumn(
             name: "TemplateIds",
             table: "WechatAppConfigs");
+
+            migrationBuilder.DropColumn(
+             name: "LinkType",
+            table: "Articles");
+
+            migrationBuilder.DropColumn(
+              name: "LinkAddress",
+            table: "Articles");
         }
     }
 }
