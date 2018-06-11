@@ -1,4 +1,4 @@
-import { Level, Accounts } from ".";
+import { Accounts } from ".";
 
 export class AccountLevels {
     monthAccountBooks: Accounts[];

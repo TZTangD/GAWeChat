@@ -15,8 +15,8 @@ namespace HC.WeChat.Web.Host.Controllers
         IWeChatOAuthAppService _weChatOAuthAppService;
         //private readonly IConfigurationRoot _appConfiguration;
         //private WeChatTenantSetting _settings;
-        //private string host = "http://ga.intcov.com";
-        private string host = "http://localhost:21021";
+        private string host = "http://ga.intcov.com";
+        //private string host = "http://localhost:21021";
         private int? tenantId;
 
         private string UserOpenId
@@ -81,9 +81,9 @@ namespace HC.WeChat.Web.Host.Controllers
         public IActionResult GetCurrentUserOpenId()
         {
             APIResultDto result = new APIResultDto();
-            UserOpenId = "oPM5Uv81jfyJqWbVxWAH-RUqsCAs";
+            //UserOpenId = "oPM5Uv81jfyJqWbVxWAH-RUqsCAs";
             //UserOpenId = "oPM5Uv89yy7Iv8k9gLHjjsMTT5Gw";
-            //UserOpenId = "9A7C8776-A623-473F-AF29-10D3E79A2FAE";
+            UserOpenId = "oWusewPRxWuP4wMz3UmHR0y7CJME";
             if (string.IsNullOrEmpty(UserOpenId))
             {
                 result.Code = 901;
@@ -184,24 +184,24 @@ namespace HC.WeChat.Web.Host.Controllers
                     break;
                 case GAAuthorizationPageEnum.Activity:
                     {
-                        if (!string.IsNullOrEmpty(UserOpenId))
-                        {
-                            return Redirect(GAAuthorizationPageUrl.ActivityUrl);
-                        }
-                        url = host + "/GAWX/Activity";
+                        //if (!string.IsNullOrEmpty(UserOpenId))
+                        //{
+                        return Redirect(GAAuthorizationPageUrl.ActivityUrl);
+                        //}
+                        //url = host + "/GAWX/Activity";
                         //ViewBag.PageUrl = _weChatOAuthAppService.GetAuthorizeUrl(url, "123", Senparc.Weixin.MP.OAuthScope.snsapi_base);
                     }
-                    break;
+                    //break;
                 case GAAuthorizationPageEnum.Share:
                     {
-                        if (!string.IsNullOrEmpty(UserOpenId))
-                        {
-                            return Redirect(GAAuthorizationPageUrl.ShareUrl);
-                        }
-                        url = host + "/GAWX/Share";
+                        //if (!string.IsNullOrEmpty(UserOpenId))
+                        //{
+                        return Redirect(GAAuthorizationPageUrl.ShareUrl);
+                        //}
+                        //url = host + "/GAWX/Share";
                         //ViewBag.PageUrl = _weChatOAuthAppService.GetAuthorizeUrl(url, "123", Senparc.Weixin.MP.OAuthScope.snsapi_base);
                     }
-                    break;
+                    //break;
                 case GAAuthorizationPageEnum.IntegralDetail:
                     {
                         if (!string.IsNullOrEmpty(UserOpenId))
@@ -367,6 +367,12 @@ namespace HC.WeChat.Web.Host.Controllers
         public IActionResult Login(string openId)
         {
             UserOpenId = openId;
+            return Redirect(GAAuthorizationPageUrl.PersonalCenterUrl);
+        }
+
+        [Route("GAWX/Error/{statusCode}")]
+        public IActionResult Error(int statusCode)
+        {
             return Redirect(GAAuthorizationPageUrl.PersonalCenterUrl);
         }
     }
