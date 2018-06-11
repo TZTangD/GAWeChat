@@ -144,6 +144,7 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
                 if (result.coverPhoto) {
                     this.article.showCoverPhoto = this.host + this.article.coverPhoto;
                 }
+                this.linkVal = JSON.stringify(this.article.linkType);
                 this.isDelete = true;
                 this.isPush = result.pushStatus === 1 ? false : true;
                 this.notify.info(this.l(this.successMsg));
