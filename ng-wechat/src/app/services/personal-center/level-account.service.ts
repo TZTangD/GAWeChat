@@ -9,21 +9,44 @@ import 'rxjs/add/operator/catch';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '../httpclient'
 import { Observable } from 'rxjs/Observable';
-import * as moment from 'moment';
-import { Accounts, Level, AccountLevels } from '../model';
+import { Level, AccountLevels } from '../model';
 
 
 @Injectable()
 export class LevelAccountAccpintService {
     constructor(private http: HttpClient) { }
 
-    getAccount(code: any): Observable<AccountLevels>{
-       return this.http.get('/api/services/app/Product/GetCustAndAccountInfoAsync',code).map(data=>{
-           return data.result;
+    private monthAccount: AccountLevels;
+    private quarterAccount: AccountLevels;
+    private halfYearAccount: AccountLevels;
+
+    private level: Level;
+
+    getAccount(input: any): Observable<AccountLevels> {
+        if(input.span == 1 && this.monthAccount){
+            return Observable.of(this.monthAccount);
+        } else if(input.span == 3 && this.quarterAccount){
+            return Observable.of(this.quarterAccount);
+        } else if(input.span == 6 && this.halfYearAccount){
+            return Observable.of(this.halfYearAccount);
+        }
+        return this.http.get('/api/services/app/Product/GetCustAndAccountInfoAsync', input, true).map(data => {
+            if(input.span == 1){
+                this.monthAccount = data.result;
+            } else if(input.span == 3){
+                this.quarterAccount = data.result;
+            } else if(input.span == 6){
+                this.halfYearAccount = data.result;
+            }
+            return data.result;
         });
     }
-    getLevel(input :any):Observable<Level>{
-        return this.http.get('/api/services/app/Product/GetRetailBasicInfoAsync',input).map(data=>{
+    getLevel(input: any): Observable<Level> {
+        if(this.level){
+            return Observable.of(this.level);
+        }
+        return this.http.get('/api/services/app/Product/GetRetailBasicInfoAsync', input, true).map(data => {
+            this.level = data.result;
             return data.result;
         });
     }
