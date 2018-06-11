@@ -15,6 +15,7 @@ import { StoreDetailComponent } from "./store-management/store-detail/store-deta
 import { CommodityDetailComponent } from "./commodity-management/commodity-detail/commodity-detail.component";
 import { ImageCropperModule } from "ng2-img-cropper";
 import { ColorPickerModule } from "ngx-color-picker";
+import { RefuseComponent } from "./store-management/store-detail/refuse/refuse.component";
 
 @NgModule({
     imports: [
@@ -34,6 +35,7 @@ import { ColorPickerModule } from "ngx-color-picker";
         CommodityDetailComponent,
         SourceGoodsLevelComponent,
         AccountManagementComponent,
+        RefuseComponent,
         
     ],
     providers: [

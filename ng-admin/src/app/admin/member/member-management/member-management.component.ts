@@ -12,11 +12,12 @@ import { AppConsts } from '@shared/AppConsts';
     templateUrl: 'member-management.component.html',
 })
 export class MemberManagementComponent extends AppComponentBase implements OnInit {
-    search: any = { name: '', UserType: null };
+    search: any = { name: '', UserType: 6 };
     loading = false;
     exportLoading = false;
     weChatUsers: WechatUser[] = [];
     positions = [
+        { text: '全部', value: 6 },
         { text: '零售客户', value: 1 },
         { text: '内部员工', value: 2 },
         { text: '消费者', value: 4 },
@@ -32,7 +33,7 @@ export class MemberManagementComponent extends AppComponentBase implements OnIni
     refreshData(reset = false, search?: boolean) {
         if (reset) {
             this.query.pageIndex = 1;
-            this.search = { name: '', UserType: null };
+            this.search = { name: '', UserType: 6 };
         }
         if (search) {
             this.query.pageIndex = 1;
@@ -47,7 +48,7 @@ export class MemberManagementComponent extends AppComponentBase implements OnIni
     getParameter(): Parameter[] {
         var arry = [];
         arry.push(Parameter.fromJS({ key: 'Name', value: this.search.name }));
-        arry.push(Parameter.fromJS({ key: 'UserType', value: this.search.UserType }));
+        arry.push(Parameter.fromJS({ key: 'UserType', value: this.search.UserType === 6 ? null : this.search.UserType }));
         return arry;
 
     }

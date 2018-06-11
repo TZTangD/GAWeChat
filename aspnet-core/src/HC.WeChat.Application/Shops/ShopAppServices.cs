@@ -437,6 +437,7 @@ namespace HC.WeChat.Shops
             var entity = await _shopRepository.GetAsync(input.Id);
             entity.Status = input.Status;
             entity.AuditTime = DateTime.Now;
+            entity.Reason = input.Reason; 
             var result = _shopRepository.UpdateAsync(entity);
             //审核通知
             var ShopOpenId = await _wechatuserRepository.GetAll().Where(r => r.UserId == entity.RetailerId).Select(v => v.OpenId).FirstOrDefaultAsync();
@@ -470,7 +471,7 @@ namespace HC.WeChat.Shops
                         {
                             keyword1 = new TemplateDataItem("审核未通过"),
                             keyword2 = new TemplateDataItem(DateTime.Now.ToString("yyyy-MM-dd HH:mm")),
-                            keyword3 = new TemplateDataItem("您的店铺未通过审核,请修改资料重新提交"),
+                            keyword3 = new TemplateDataItem("您的店铺未通过审核,拒绝理由{0},请修改资料重新提交", input.Reason),
                         };
                         await TemplateApi.SendTemplateMessageAsync(appId, openId, ids[3], url, data);
                     }

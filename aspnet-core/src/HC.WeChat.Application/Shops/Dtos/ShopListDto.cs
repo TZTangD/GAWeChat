@@ -36,12 +36,18 @@ namespace HC.WeChat.Shops.Dtos
         }
 
         public string Tel { get; set; }
+
+        /// <summary>
+        /// 拒绝理由
+        /// </summary>
+        public  string Reason { get; set; }
     }
     [AutoMapFrom(typeof(Shop))]
     public class CheckShopDto
     {
         public Guid Id { get; set; }
         public ShopAuditStatus? Status { get; set; }
+        public string Reason { get; set; }
         //public DateTime? AuditTime { get; set; }
     }
     
