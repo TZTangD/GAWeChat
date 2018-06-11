@@ -23,6 +23,11 @@ namespace HC.WeChat.Retailers.Dtos
         public MarketTypeEnum? Markets { get; set; }
 
         /// <summary>
+        /// 状态
+        /// </summary>
+        public bool? Status { get; set; }
+
+        /// <summary>
         /// 正常化排序使用
         /// </summary>
         public void Normalize()

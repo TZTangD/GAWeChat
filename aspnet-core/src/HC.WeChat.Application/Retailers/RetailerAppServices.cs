@@ -66,6 +66,7 @@ namespace HC.WeChat.Retailers
                 .WhereIf(!string.IsNullOrEmpty(input.Name), r => r.Name.Contains(input.Name) || r.Code.Contains(input.Name))
                 .WhereIf(input.Scale.HasValue, r => r.Scale == input.Scale)
                 .WhereIf(input.Markets.HasValue, r => r.MarketType == input.Markets)
+                .WhereIf(input.Status.HasValue, r => r.IsAction == input.Status)
                 .WhereIf(mid.HasValue, r => r.EmployeeId == mid);
 
             //TODO:根据传入的参数添加过滤条件
@@ -261,14 +262,15 @@ namespace HC.WeChat.Retailers
         }
         #region 导出档级模板
 
-        public async Task<List<RetailerListDto>> GetRetailerAllListAsync(GetRetailersInput input)
+        private async Task<List<RetailerListDto>> GetRetailerAllListAsync(GetRetailersInput input)
         {
             var mid = UserManager.GetControlEmployeeId();
             var query = _retailerRepository.GetAll()
-                  .WhereIf(!string.IsNullOrEmpty(input.Name), r => r.Name.Contains(input.Name) || r.Code.Contains(input.Name))
-                  .WhereIf(input.Scale.HasValue, r => r.Scale == input.Scale)
-                  .WhereIf(input.Markets.HasValue, r => r.MarketType == input.Markets)
-                  .WhereIf(mid.HasValue, r => r.EmployeeId == mid);
+                .WhereIf(!string.IsNullOrEmpty(input.Name), r => r.Name.Contains(input.Name) || r.Code.Contains(input.Name))
+                .WhereIf(input.Scale.HasValue, r => r.Scale == input.Scale)
+                .WhereIf(input.Markets.HasValue, r => r.MarketType == input.Markets)
+                .WhereIf(input.Status.HasValue, r => r.IsAction == input.Status)
+                .WhereIf(mid.HasValue, r => r.EmployeeId == mid);
             var retailers = await query.ToListAsync();
             var retailerListDtos =  query.MapTo<List<RetailerListDto>>();
             return  retailerListDtos;
@@ -281,6 +283,7 @@ namespace HC.WeChat.Retailers
                   .WhereIf(!string.IsNullOrEmpty(input.Name), r => r.Name.Contains(input.Name) || r.Code.Contains(input.Name))
                   .WhereIf(input.Scale.HasValue, r => r.Scale == input.Scale)
                   .WhereIf(input.Markets.HasValue, r => r.MarketType == input.Markets)
+                  .WhereIf(input.Status.HasValue, r => r.IsAction == input.Status)
                   .WhereIf(mid.HasValue, r => r.EmployeeId == mid);
             var retailers = await query.ToListAsync();
             var retailerListDtos = query.MapTo<List<RetailerListDto>>();

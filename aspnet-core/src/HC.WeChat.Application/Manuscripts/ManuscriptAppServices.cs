@@ -275,8 +275,12 @@ namespace HC.WeChat.Manuscripts
         }
         private async Task<List<ManuscriptListDto>> GetManuscriptsAsync(GetManuscriptsInput input)
         {
-            var mid = UserManager.GetControlEmployeeId();
-            var query = _manuscriptRepository.GetAll();
+            //var mid = UserManager.GetControlEmployeeId();
+            var query = _manuscriptRepository.GetAll()
+                .WhereIf(!string.IsNullOrEmpty(input.Title), m => m.Title.Contains(input.Title))
+                .WhereIf(!string.IsNullOrEmpty(input.Name), m => m.UserName.Contains(input.Name))
+                .WhereIf(!string.IsNullOrEmpty(input.Phone), m => m.Phone.Contains(input.Phone))
+                .WhereIf(input.Status.HasValue, m => m.Status == input.Status); ;
             var manuscripts = await query.ToListAsync();
             var manuscriptDtos = query.MapTo<List<ManuscriptListDto>>();
             return manuscriptDtos;

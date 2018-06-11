@@ -55,15 +55,14 @@
                 <a style="display: none;" id="aProductsExcelUrl" href="#">
                     <button type="button" id="btnProductsHref">隐藏下载</button>
                 </a>
-                <button nz-button type="button" style="float: right;" (click)="exportExcel()" [nzSize]="'large'" [nzLoading]="exportLoading" >
+                <button nz-button type="button" style="float: right;" (click)="exportExcel()" [nzSize]="'large'" [nzLoading]="exportLoading">
                     <i class="anticon anticon-download"></i>
                     <span>导出</span>
                 </button>
             </div>
         </div>
     </form>
-    <nz-table #nzTable [nzAjaxData]="products" [nzTotal]="query.total" [(nzPageIndex)]="query.pageIndex" [(nzPageSize)]="query.pageSize"
-        [nzLoading]="loading" [nzShowTotal]="'true'" [nzShowSizeChanger]="true" (nzPageIndexChange)="refreshData()" (nzPageSizeChange)="refreshData()">
+    <nz-table #nzTable [nzAjaxData]="products" [nzTotal]="query.total" [(nzPageIndex)]="query.pageIndex" [(nzPageSize)]="query.pageSize" [nzLoading]="loading" [nzShowTotal]="'true'" [nzShowSizeChanger]="true" (nzPageIndexChange)="refreshData()" (nzPageSizeChange)="refreshData()">
         <thead nz-thead>
             <tr>
                 <th nz-th>
@@ -101,8 +100,7 @@
         <tbody nz-tbody>
             <tr nz-tbody-tr *ngFor="let product of nzTable.data">
                 <td nz-td>
-                    <nz-avatar [nzSrc]="(product.photoUrl | hostUrl)" style="width:80px;height: 80px;" (click)="handlePreview(product.photoUrl)"
-                        [nzSize]="'large'" [nzShape]="'square'"></nz-avatar>
+                    <nz-avatar [nzSrc]="(product.photoUrl | hostUrl)" style="width:80px;height: 80px;" (click)="handlePreview(product.photoUrl)" [nzSize]="'large'" [nzShape]="'square'"></nz-avatar>
 
                 </td>
                 <td nz-td>{{product.specification}}</td>

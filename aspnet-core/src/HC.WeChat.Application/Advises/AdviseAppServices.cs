@@ -227,8 +227,12 @@ namespace HC.WeChat.Advises
         }
         private async Task<List<AdviseListDto>> GetAdviseListAsync(GetAdvisesInput input)
         {
-            var mid = UserManager.GetControlEmployeeId();
-            var query = _adviseRepository.GetAll();         
+            //var mid = UserManager.GetControlEmployeeId();
+            var query = _adviseRepository.GetAll()
+                .WhereIf(!string.IsNullOrEmpty(input.Filter)
+                , a => a.Title.Contains(input.Filter)
+                || a.Phone.Contains(input.Filter)
+                || a.Content.Contains(input.Filter)); ;
             var advises = await query.ToListAsync();
             var advisesDtos = query.MapTo<List<AdviseListDto>>();
             return advisesDtos;

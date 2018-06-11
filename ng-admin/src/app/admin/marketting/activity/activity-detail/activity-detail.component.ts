@@ -98,6 +98,7 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
         if (this.id) {
             this.activityService.get(this.id).subscribe((result: Article) => {
                 this.article = result;
+                this.linkVal = JSON.stringify(this.article.linkType);
                 this.isDelete = true;
                 this.isPush = result.pushStatus === 1 ? false : true;
                 this.cardTitle = '编辑活动';
@@ -112,7 +113,7 @@ export class ActivityDetailComponent extends AppComponentBase implements OnInit 
             this.article.pushStatusName = '草稿';
             this.article.type = 1;//类型为活动
             this.cardTitle = '新增活动';
-            // this.article.linkType = 2;
+            this.article.linkType = 2;
         }
     }
 

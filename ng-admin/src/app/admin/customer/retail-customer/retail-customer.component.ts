@@ -19,7 +19,7 @@ export class RetailCustomerComponent extends AppComponentBase implements OnInit 
     host: string = AppConsts.remoteServiceBaseUrl;
     uploadLoading = false;
     status = [
-        { text: '有效', value: false, type: 'success' },
+        { text: '有效', value: true, type: 'success' },
         { text: '无效', value: false, type: 'default' },
     ];
     scales = [
@@ -71,6 +71,7 @@ export class RetailCustomerComponent extends AppComponentBase implements OnInit 
         arry.push(Parameter.fromJS({ key: 'Name', value: this.search.name }));
         arry.push(Parameter.fromJS({ key: 'Scale', value: this.search.scale }));
         arry.push(Parameter.fromJS({ key: 'Markets', value: this.search.market }));
+        arry.push(Parameter.fromJS({ key: 'Status', value: this.search.isAction }));
         return arry;
     }
     editRetail(retail: RetailCustomer) {
@@ -101,7 +102,7 @@ export class RetailCustomerComponent extends AppComponentBase implements OnInit 
      */
     exportExcel() {
         this.exportLoading = true;
-        this.retailService.exportRetailerLevelExcel({ name: this.search.name, scale: this.search.scale, markets: this.search.market }).subscribe(result => {
+        this.retailService.exportRetailerLevelExcel({ name: this.search.name, scale: this.search.scale, markets: this.search.market, status: this.search.isAction }).subscribe(result => {
             if (result.code == 0) {
                 var url = AppConsts.remoteServiceBaseUrl + result.data;
                 document.getElementById('aRetailExcelUrl').setAttribute('href', url);
@@ -118,7 +119,7 @@ export class RetailCustomerComponent extends AppComponentBase implements OnInit 
      */
     exportExcelAll() {
         this.exportLoading = true;
-        this.retailService.exportRetailerAllExcel({ name: this.search.name, scale: this.search.scale, markets: this.search.market }).subscribe(result => {
+        this.retailService.exportRetailerAllExcel({ name: this.search.name, scale: this.search.scale, markets: this.search.market, status: this.search.isAction }).subscribe(result => {
             if (result.code == 0) {
                 var url = AppConsts.remoteServiceBaseUrl + result.data;
                 document.getElementById('aRetailAllExcelUrl').setAttribute('href', url);
