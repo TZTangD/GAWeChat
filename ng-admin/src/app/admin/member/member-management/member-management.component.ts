@@ -29,10 +29,13 @@ export class MemberManagementComponent extends AppComponentBase implements OnIni
     ngOnInit(): void {
         this.refreshData();
     }
-    refreshData(reset = false) {
+    refreshData(reset = false, search?: boolean) {
         if (reset) {
             this.query.pageIndex = 1;
             this.search = { name: '', UserType: null };
+        }
+        if (search) {
+            this.query.pageIndex = 1;
         }
         this.loading = true;
         this.wechatUserService.getAll(this.query.skipCount(), this.query.pageSize, this.getParameter()).subscribe((result: PagedResultDtoOfWeChatUser) => {
