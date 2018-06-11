@@ -123,5 +123,7 @@ namespace HC.WeChat.WeChatUsers.Dtos
         public int? TenantId { get; set; }
 
         public string Phone { get; set; }
+
+        public string Host { get; set; }
     }
 }

@@ -9,13 +9,13 @@ import { Messagess } from '@shared/entity/wechat';
     selector: 'edit-message-modal',
     templateUrl: 'edit-message.component.html',
 })
-export class EditMessageComponent extends AppComponentBase implements OnInit  {
+export class EditMessageComponent extends AppComponentBase implements OnInit {
     @Output() modalSave: EventEmitter<any> = new EventEmitter<any>();
 
     messages: Messagess = new Messagess();
-    modalVisible=false;
+    modalVisible = false;
     isConfirmLoading = false;
-    forme:FormGroup;
+    forme: FormGroup;
     msyTypes = [
         { value: 1, text: '文字消息' },
         // { value: 2, text: '图文消息' },
@@ -24,7 +24,7 @@ export class EditMessageComponent extends AppComponentBase implements OnInit  {
         { value: 1, text: '精准匹配' },
         { value: 2, text: '模糊匹配' },
     ];
-    constructor(injector:Injector ,private messageService: MessageServiceProxy,private fb:FormBuilder) {
+    constructor(injector: Injector, private messageService: MessageServiceProxy, private fb: FormBuilder) {
         super(injector);
     }
 
@@ -34,9 +34,9 @@ export class EditMessageComponent extends AppComponentBase implements OnInit  {
     ngOnInit(): void {
         this.forme = this.fb.group({
             keyWord: [null, [Validators.compose([Validators.required, Validators.maxLength(50)])]],
-            matchMode: [null,Validators.required],
-            msgType: [null,Validators.required],
-            content: [null,[Validators.compose([Validators.required])]]
+            matchMode: [null, Validators.required],
+            msgType: [null, Validators.required],
+            content: [null, [Validators.compose([Validators.required])]]
         });
     }
 
@@ -45,20 +45,20 @@ export class EditMessageComponent extends AppComponentBase implements OnInit  {
      * @param id 
      */
     show(id: number) {
-       this.getMessageById(id);
-       this.modalVisible=true;
+        this.getMessageById(id);
+        this.modalVisible = true;
     }
-     /**
-     * 
-     * @param name 
-     */
+    /**
+    * 
+    * @param name 
+    */
     geteFormControl(name: string) {
         return this.forme.controls[name];
     }
     /**
      * 取消按钮
      */
-    handleCancel(){
+    handleCancel() {
         this.modalVisible = false;
         this.isConfirmLoading = false;
         this.reset();
@@ -78,7 +78,7 @@ export class EditMessageComponent extends AppComponentBase implements OnInit  {
      * 获取单条自动回复消息
      * @param id 自动回复消息id
      */
-    getMessageById(id:number){
+    getMessageById(id: number) {
         this.messageService.get(id).subscribe((result: Messagess) => {
             this.messages = result;
         })
@@ -87,19 +87,19 @@ export class EditMessageComponent extends AppComponentBase implements OnInit  {
     /**
      * 保存自动回复信息
      */
-    save():void{
+    save(): void {
         //将控件标记为已编辑过
-        for(const i in this.forme.controls){
+        for (const i in this.forme.controls) {
             this.forme.controls[i].markAsDirty();
         }
-        if(this.forme.valid){
+        if (this.forme.valid) {
             this.messageService.update(this.messages)
-            .finally(()=>{this.isConfirmLoading=false;})
-            .subscribe(()=>{
-                this.notify.info(this.l('保存成功！'));
-                this.modalVisible=false;
-                this.modalSave.emit(null);
-            });
+                .finally(() => { this.isConfirmLoading = false; })
+                .subscribe(() => {
+                    this.notify.info(this.l('保存成功！'));
+                    this.modalVisible = false;
+                    this.modalSave.emit(null);
+                });
         }
     }
 }

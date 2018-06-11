@@ -467,7 +467,7 @@ namespace HC.WeChat.WeChatUsers
                 }
                 await _wechatuserRepository.UpdateAsync(entity);
                 //首次绑定手机号获赠积分
-                await GivenIntegral(input.OpenId, input.TenantId);
+                await GivenIntegral(input.OpenId,input.TenantId,input.Host);
                 return new APIResultDto() { Code = 0, Msg = "绑定成功", Data = entity.MapTo<WeChatUserListDto>() };
             }
         }
@@ -477,7 +477,7 @@ namespace HC.WeChat.WeChatUsers
         /// </summary>
         /// <param name="openId"></param>
         /// <returns></returns>
-        private async Task GivenIntegral(string openId, int? tenantId)
+        private async Task GivenIntegral(string openId, int? tenantId, string host)
         {
             try
             {
@@ -500,11 +500,52 @@ namespace HC.WeChat.WeChatUsers
                     //更新用户总积分
                     user.IntegralTotal = intDetail.FinalIntegral.Value;
                     await _wechatuserRepository.UpdateAsync(user);
+                    await CurrentUnitOfWork.SaveChangesAsync(); // 先更新用户总积分
+                    int finalIntegral = user.IntegralTotal; // 再传出最终积分
+                    await GivenIntegralSendMessage(host,openId, user.MemberBarCode, config, finalIntegral);
                 }
             }
             catch (Exception ex)
             {
                 Logger.ErrorFormat("注册赠送积分失败 error：{0} Exception：{1}", ex.Message, ex);
+            }
+        }
+
+        /// <summary>
+        /// 注册积分通知
+        /// </summary>
+        /// <param name="host"></param>
+        /// <param name="openId"></param>
+        /// <param name="memberBarCode"></param>
+        /// <param name="config"></param>
+        /// <param name="finalIntegral"></param>
+        /// <returns></returns>
+        private async Task GivenIntegralSendMessage(string host,string openId, string memberBarCode, string config,int finalIntegral)
+        {
+            try
+            {
+                string templateId = await _wechatappconfigRepository.GetAll().Select(v => v.TemplateIds).FirstOrDefaultAsync();
+                if (templateId != null || templateId.Length != 0)
+                {
+                    string[] ids = templateId.Split(',');
+                    //发送微信模板通知-消费者
+                    string appId = AppConfig.AppId;
+                    //string templateId = "3Dgkz89yi8e0jXtwBUhdMSgHeZwPvHi2gz8WrD-CUA4";//模版id  
+                    string url = host + "/GAWX/Authorization?page=301";
+                    object data = new
+                    {
+                        keyword1 = new TemplateDataItem(memberBarCode),
+                        keyword2 = new TemplateDataItem(finalIntegral.ToString() + "积分"),
+                        keyword3 = new TemplateDataItem(config + "积分"),
+                        keyword4 = new TemplateDataItem(DateTime.Now.ToString("yyyy-MM-dd HH:mm"))
+                    };
+                    await TemplateApi.SendTemplateMessageAsync(appId, openId, ids[0], url, data);
+                }
+            }
+            catch (Exception ex)
+            {
+
+                Logger.ErrorFormat("注册积分消息通知失败 error：{0} Exception：{1}", ex.Message, ex);
             }
         }
 
@@ -822,8 +863,11 @@ namespace HC.WeChat.WeChatUsers
         }
         private async Task<List<WeChatUserListDto>> GetWeChatUsersAsync(GetWeChatUsersInput input)
         {
-            var mid = UserManager.GetControlEmployeeId();
-            var query = _wechatuserRepository.GetAll();
+            //var mid = UserManager.GetControlEmployeeId();
+            var query = _wechatuserRepository.GetAll()
+                .WhereIf(!string.IsNullOrEmpty(input.UserName), u => u.UserName.Contains(input.UserName))
+                .WhereIf(!string.IsNullOrEmpty(input.Name), u => u.NickName.Contains(input.Name) || u.UserName.Contains(input.Name) || u.Phone.Contains(input.Name))
+                .WhereIf(input.UserType.HasValue, u => u.UserType == input.UserType); ;
             var manuscripts = await query.ToListAsync();
             var manuscriptDtos = query.MapTo<List<WeChatUserListDto>>();
             return manuscriptDtos;

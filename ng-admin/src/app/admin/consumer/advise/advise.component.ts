@@ -55,7 +55,7 @@ export class AdviseComponent extends AppComponentBase implements OnInit {
 
     exportExcelAll() {
         this.exportLoading = true;
-        this._adviseService.exportExcel({}).subscribe(result => {
+        this._adviseService.exportExcel({ filter: this.parameters.filter,name: this.parameters.name}).subscribe(result => {
             if (result.code == 0) {
                 var url = AppConsts.remoteServiceBaseUrl + result.data;
                 document.getElementById('aAdviseExcelUrl').setAttribute('href', url);

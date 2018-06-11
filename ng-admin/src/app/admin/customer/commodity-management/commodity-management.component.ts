@@ -12,7 +12,7 @@ import { AppConsts } from '@shared/AppConsts';
     selector: 'commodity-management',
     templateUrl: 'commodity-management.component.html',
     styleUrls: ['commodity-management.component.scss']
-    
+
 })
 export class CommodityManagementComponent extends AppComponentBase implements OnInit {
     loading = false;
@@ -39,7 +39,8 @@ export class CommodityManagementComponent extends AppComponentBase implements On
     defalutImg = '/assets/img/default.png';
     // defalutImg = '/upload/product/tobacco.jpg';
     productName = '';
-
+    // sortValue = null;
+    // sortKey = null;
     host = '';
     exportLoading = false;
     constructor(injector: Injector, private productsService: ProductsServiceProxy, private modal: NzModalService,
@@ -51,6 +52,11 @@ export class CommodityManagementComponent extends AppComponentBase implements On
         this.host = AppConsts.remoteServiceBaseUrl;
         // this.defalutImg = this.host + this.defalutImg;
     }
+    // sort(sort: { key: string, value: string }): void {
+    //     this.sortKey = sort.key;
+    //     this.sortValue = sort.value;
+    //     this.refreshData();
+    //   }
     refreshData(reset = false, search?: boolean) {
         if (reset) {
             this.query.pageIndex = 1;
@@ -132,9 +138,9 @@ export class CommodityManagementComponent extends AppComponentBase implements On
     /**
      * 导出商品信息
      */
-    exportExcel(){
-        this.exportLoading=true;
-        this.productsService.ExportExcel({name:this.search.name,type:this.search.type === 0 ? null : this.search.type,isRare:this.search.isRare === 0 ? null : this.search.isRare}).subscribe(data => {
+    exportExcel() {
+        this.exportLoading = true;
+        this.productsService.ExportExcel({ name: this.search.name, type: this.search.type === 0 ? null : this.search.type, isRare: this.search.isRare === 0 ? null : this.search.isRare }).subscribe(data => {
             if (data.code == 0) {
                 var url = AppConsts.remoteServiceBaseUrl + data.data;
                 document.getElementById('aProductsExcelUrl').setAttribute('href', url);
