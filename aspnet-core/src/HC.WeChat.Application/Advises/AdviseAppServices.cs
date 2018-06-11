@@ -22,6 +22,7 @@ using NPOI.XSSF.UserModel;
 using HC.WeChat.Helpers;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using HC.WeChat.WeChatUsers;
 
 namespace HC.WeChat.Advises
 {
@@ -37,17 +38,21 @@ namespace HC.WeChat.Advises
         private readonly IRepository<Advise, Guid> _adviseRepository;
         private readonly IAdviseManager _adviseManager;
         private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IRepository<WeChatUser, Guid> _wechatuserRepository;
+
 
         /// <summary>
         /// 构造函数
         /// </summary>
         public AdviseAppService(IRepository<Advise, Guid> adviseRepository
-      , IAdviseManager adviseManager, IHostingEnvironment hostingEnvironment
+       , IAdviseManager adviseManager, IHostingEnvironment hostingEnvironment
+       , IRepository<WeChatUser, Guid> wechatuserRepository
         )
         {
             _hostingEnvironment = hostingEnvironment;
             _adviseRepository = adviseRepository;
             _adviseManager = adviseManager;
+            _wechatuserRepository = wechatuserRepository;
         }
 
         /// <summary>
@@ -228,7 +233,7 @@ namespace HC.WeChat.Advises
         private async Task<List<AdviseListDto>> GetAdviseListAsync(GetAdvisesInput input)
         {
             var mid = UserManager.GetControlEmployeeId();
-            var query = _adviseRepository.GetAll();         
+            var query = _adviseRepository.GetAll();
             var advises = await query.ToListAsync();
             var advisesDtos = query.MapTo<List<AdviseListDto>>();
             return advisesDtos;
@@ -267,6 +272,53 @@ namespace HC.WeChat.Advises
                 workbook.Write(fs);
             }
             return "/files/downloadtemp/" + fileName;
+        }
+
+
+        /// <summary>
+        /// 获取Advise的分页列表信息连接WeChatUser表
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task<PagedResultDto<AdviseListDto>> GetPagedAdvisesReferenceWeChatUser(GetAdvisesInput input)
+        {
+            var queryAd = _adviseRepository.GetAll()
+                .WhereIf(!string.IsNullOrEmpty(input.Filter), a => a.Title.Contains(input.Filter) || a.Phone.Contains(input.Filter) || a.Content.Contains(input.Filter));
+
+            var queryWe = _wechatuserRepository.GetAll();
+            var query = (from ad in queryAd
+                         join we in queryWe on ad.OpenId equals we.OpenId into aw
+                         from de in aw.DefaultIfEmpty()
+                         select new AdviseListDto()
+                         {
+                             Title = ad.Title,
+                             UserTypeName = ad.UserTypeName,
+                             OpenId = ad.OpenId,
+                             Phone = ad.Phone,
+                             Content = ad.Content,
+                             PhotoUrl = ad.PhotoUrl,
+                             TenantId = ad.TenantId,
+                             CreationTime = ad.CreationTime,
+                             UserName = de.NickName != null ? de.NickName : "",
+                         });
+            //.WhereIf(!string.IsNullOrEmpty(input.Filter), aw => aw.UserName.Contains(input.Filter));
+            query = query.WhereIf(!string.IsNullOrEmpty(input.Name), aw => aw.UserName.Contains(input.Name));
+            //TODO:根据传入的参数添加过滤条件
+            var adviseCount = await query.CountAsync();
+
+            var advises = await query
+                .OrderByDescending(a => a.CreationTime)
+                .PageBy(input)
+                .ToListAsync();
+
+            //var adviseListDtos = ObjectMapper.Map<List <AdviseListDto>>(advises);
+            var adviseListDtos = advises.MapTo<List<AdviseListDto>>();
+
+            return new PagedResultDto<AdviseListDto>(
+                adviseCount,
+                adviseListDtos
+                );
+
         }
 
     }

@@ -467,7 +467,7 @@ namespace HC.WeChat.WeChatUsers
                 }
                 await _wechatuserRepository.UpdateAsync(entity);
                 //首次绑定手机号获赠积分
-                await GivenIntegral(input.OpenId,input.TenantId);
+                await GivenIntegral(input.OpenId, input.TenantId);
                 return new APIResultDto() { Code = 0, Msg = "绑定成功", Data = entity.MapTo<WeChatUserListDto>() };
             }
         }

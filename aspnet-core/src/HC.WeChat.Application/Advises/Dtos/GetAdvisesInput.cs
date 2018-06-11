@@ -12,6 +12,10 @@ namespace HC.WeChat.Advises.Dtos
         /// 模糊搜索使用的关键字
         /// </summary>
         public string Filter { get; set; }
+        /// <summary>
+        /// 用户名
+        /// </summary>
+        public string Name { get; set; }
 
         /// <summary>
         /// 正常化排序使用
