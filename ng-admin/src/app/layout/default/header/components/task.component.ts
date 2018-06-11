@@ -65,6 +65,7 @@ export class HeaderTaskComponent implements OnInit {
             } else {
                 this.count = null;
             }
+            this.settings.user.notifyCount = this.count;
         });
     }
 

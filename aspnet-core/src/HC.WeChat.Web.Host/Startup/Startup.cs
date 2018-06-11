@@ -138,6 +138,8 @@ namespace HC.WeChat.Web.Host.Startup
                 routes.MapHub<AbpCommonHub>("/signalr");
             });
 #endif
+            //404错跳转配置
+            app.UseStatusCodePagesWithRedirects("/GAWX/Error/{0}");
 
             app.UseMvc(routes =>
             {
