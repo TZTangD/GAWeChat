@@ -10,6 +10,8 @@ import { PopupComponent } from "ngx-weui/popup";
 import { ToptipsService } from "ngx-weui/toptips";
 import { JWeiXinService } from 'ngx-weui/jweixin';
 
+import { DialogService, DialogConfig, DialogComponent } from 'ngx-weui/dialog';
+
 @Component({
     selector: 'wechat-shop',
     templateUrl: './shop.component.html',
@@ -17,6 +19,8 @@ import { JWeiXinService } from 'ngx-weui/jweixin';
     encapsulation: ViewEncapsulation.None
 })
 export class ShopComponent extends AppComponentBase implements OnInit {
+
+    @ViewChild('auto') autoAS: DialogComponent;
 
     user: WechatUser;
     shop: Shop;
@@ -167,10 +171,43 @@ export class ShopComponent extends AppComponentBase implements OnInit {
             infoUrl: AppConsts.remoteServiceBaseUrl + '/gawechat/index.html#/shops/shop' // 在查看位置界面底部显示的超链接,可点击跳转
         });
     }
+
+    config = <DialogConfig>{
+        title: '拒绝确认',
+        content: '请填写拒绝理由，注意简洁明了',
+        inputPlaceholder: '拒绝理由',
+        inputError: '必填',
+        inputRequired: true,
+        skin: 'auto',
+        type: 'prompt',
+        confirm: '拒绝',
+        cancel: '取消',
+        input: 'textarea',
+        inputValue: undefined,
+        inputAttributes: {
+            maxlength: 140,
+            cn: 2
+        },
+        inputRegex: null
+    }
+
+    reason: string = '';
+
+    onRejectPrompt() {
+        this.autoAS.show().subscribe((res: any) => {
+            if (res.result) {
+                this.reason = JSON.stringify(res.result);
+                //alert(this.reason);
+                this.audit(0);
+            }
+            //console.log('prompt from component', res);
+        });
+    }
+
     //审核
     audit(status: any) {
-        this.shopService.CheckShop({ id: this.shop.id, status: status}).subscribe((res) =>{
-            if(res){
+        this.shopService.CheckShop({ id: this.shop.id, status: status, reason: this.reason }).subscribe((res) => {
+            if (res) {
                 this.shop.status = status;
                 this.srv['success']('操作成功');
             } else {
