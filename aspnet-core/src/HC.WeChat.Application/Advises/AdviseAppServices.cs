@@ -22,6 +22,7 @@ using NPOI.XSSF.UserModel;
 using HC.WeChat.Helpers;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using HC.WeChat.WeChatUsers;
 
 namespace HC.WeChat.Advises
 {
@@ -37,17 +38,21 @@ namespace HC.WeChat.Advises
         private readonly IRepository<Advise, Guid> _adviseRepository;
         private readonly IAdviseManager _adviseManager;
         private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IRepository<WeChatUser, Guid> _wechatuserRepository;
+
 
         /// <summary>
         /// 构造函数
         /// </summary>
         public AdviseAppService(IRepository<Advise, Guid> adviseRepository
-      , IAdviseManager adviseManager, IHostingEnvironment hostingEnvironment
+       , IAdviseManager adviseManager, IHostingEnvironment hostingEnvironment
+       , IRepository<WeChatUser, Guid> wechatuserRepository
         )
         {
             _hostingEnvironment = hostingEnvironment;
             _adviseRepository = adviseRepository;
             _adviseManager = adviseManager;
+            _wechatuserRepository = wechatuserRepository;
         }
 
         /// <summary>
@@ -228,11 +233,25 @@ namespace HC.WeChat.Advises
         private async Task<List<AdviseListDto>> GetAdviseListAsync(GetAdvisesInput input)
         {
             //var mid = UserManager.GetControlEmployeeId();
-            var query = _adviseRepository.GetAll()
-                .WhereIf(!string.IsNullOrEmpty(input.Filter)
-                , a => a.Title.Contains(input.Filter)
-                || a.Phone.Contains(input.Filter)
-                || a.Content.Contains(input.Filter)); ;
+            var queryAd = _adviseRepository.GetAll() 
+                .WhereIf(!string.IsNullOrEmpty(input.Filter) , a => a.Title.Contains(input.Filter)|| a.Phone.Contains(input.Filter)|| a.Content.Contains(input.Filter));
+
+            var queryWe = _wechatuserRepository.GetAll();
+            var query = (from ad in queryAd
+                         join we in queryWe on ad.OpenId equals we.OpenId into aw
+                         from de in aw.DefaultIfEmpty()
+                         select new AdviseListDto()
+                         {
+                             Title = ad.Title,
+                             UserTypeName = ad.UserTypeName,
+                             OpenId = ad.OpenId,
+                             Phone = ad.Phone,
+                             Content = ad.Content,
+                             PhotoUrl = ad.PhotoUrl,
+                             TenantId = ad.TenantId,
+                             CreationTime = ad.CreationTime,
+                             UserName = de.NickName != null ? de.NickName : "",
+                         }).WhereIf(!string.IsNullOrEmpty(input.Name), aw => aw.UserName.Contains(input.Name));
             var advises = await query.ToListAsync();
             var advisesDtos = query.MapTo<List<AdviseListDto>>();
             return advisesDtos;
@@ -246,7 +265,7 @@ namespace HC.WeChat.Advises
                 ISheet sheet = workbook.CreateSheet("Advise");
                 var rowIndex = 0;
                 IRow titleRow = sheet.CreateRow(rowIndex);
-                string[] titles = { "标题", "用户类型", "联系电话", "举报内容", "微信OpenId", "创建时间" };
+                string[] titles = { "标题", "用户类型","用户名", "联系电话", "举报内容", "微信OpenId", "创建时间" };
                 var fontTitle = workbook.CreateFont();
                 fontTitle.IsBold = true;
                 for (int i = 0; i < titles.Length; i++)
@@ -263,14 +282,62 @@ namespace HC.WeChat.Advises
                     IRow row = sheet.CreateRow(rowIndex);
                     ExcelHelper.SetCell(row.CreateCell(0), font, item.Title);
                     ExcelHelper.SetCell(row.CreateCell(1), font, item.UserTypeName);
-                    ExcelHelper.SetCell(row.CreateCell(2), font, item.Phone);
-                    ExcelHelper.SetCell(row.CreateCell(3), font, item.Content);
-                    ExcelHelper.SetCell(row.CreateCell(4), font, item.OpenId);
-                    ExcelHelper.SetCell(row.CreateCell(5), font, item.CreationTime.ToString("yyyy-MM-dd HH:mm"));
+                    ExcelHelper.SetCell(row.CreateCell(2), font, item.UserName);
+                    ExcelHelper.SetCell(row.CreateCell(3), font, item.Phone);
+                    ExcelHelper.SetCell(row.CreateCell(4), font, item.Content);
+                    ExcelHelper.SetCell(row.CreateCell(5), font, item.OpenId);
+                    ExcelHelper.SetCell(row.CreateCell(6), font, item.CreationTime.ToString("yyyy-MM-dd HH:mm"));
                 }
                 workbook.Write(fs);
             }
             return "/files/downloadtemp/" + fileName;
+        }
+
+
+        /// <summary>
+        /// 获取Advise的分页列表信息连接WeChatUser表
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task<PagedResultDto<AdviseListDto>> GetPagedAdvisesReferenceWeChatUser(GetAdvisesInput input)
+        {
+            var queryAd = _adviseRepository.GetAll()
+                .WhereIf(!string.IsNullOrEmpty(input.Filter), a => a.Title.Contains(input.Filter) || a.Phone.Contains(input.Filter) || a.Content.Contains(input.Filter));
+
+            var queryWe = _wechatuserRepository.GetAll();
+            var query = (from ad in queryAd
+                         join we in queryWe on ad.OpenId equals we.OpenId into aw
+                         from de in aw.DefaultIfEmpty()
+                         select new AdviseListDto()
+                         {
+                             Title = ad.Title,
+                             UserTypeName = ad.UserTypeName,
+                             OpenId = ad.OpenId,
+                             Phone = ad.Phone,
+                             Content = ad.Content,
+                             PhotoUrl = ad.PhotoUrl,
+                             TenantId = ad.TenantId,
+                             CreationTime = ad.CreationTime,
+                             UserName = de.NickName != null ? de.NickName : "",
+                         }).WhereIf(!string.IsNullOrEmpty(input.Name), aw => aw.UserName.Contains(input.Name));
+
+            //query = query.WhereIf(!string.IsNullOrEmpty(input.Name), aw => aw.UserName.Contains(input.Name));
+            //TODO:根据传入的参数添加过滤条件
+            var adviseCount = await query.CountAsync();
+
+            var advises = await query
+                .OrderByDescending(a => a.CreationTime)
+                .PageBy(input)
+                .ToListAsync();
+
+            //var adviseListDtos = ObjectMapper.Map<List <AdviseListDto>>(advises);
+            var adviseListDtos = advises.MapTo<List<AdviseListDto>>();
+
+            return new PagedResultDto<AdviseListDto>(
+                adviseCount,
+                adviseListDtos
+                );
+
         }
 
     }

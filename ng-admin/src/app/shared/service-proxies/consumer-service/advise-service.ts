@@ -85,7 +85,7 @@ export class AdviseService {
      * @return Success
      */
     getAll(skipCount: number, maxResultCount: number, parameter: Parameter[]): Observable<PagedResultDtoOfAdvise> {
-        let url_ = this.baseUrl + "/api/services/app/Advise/GetPagedAdvises?";
+        let url_ = this.baseUrl + "/api/services/app/Advise/GetPagedAdvisesReferenceWeChatUser?";
         if (skipCount !== undefined)
             url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&";
         if (maxResultCount !== undefined)

@@ -6,6 +6,7 @@ using Abp.AutoMapper;
 
 namespace HC.WeChat.Advises.Dtos
 {
+    [AutoMapFrom(typeof(Advise))]
     public class AdviseListDto : EntityDto<Guid>
     {
         ////BCC/ BEGIN CUSTOM CODE SECTION
@@ -18,6 +19,7 @@ namespace HC.WeChat.Advises.Dtos
         public string PhotoUrl { get; set; }
         public int? TenantId { get; set; }
         public DateTime CreationTime { get; set; }
+        public string UserName { get; set; }
     }
 
     [Serializable]
