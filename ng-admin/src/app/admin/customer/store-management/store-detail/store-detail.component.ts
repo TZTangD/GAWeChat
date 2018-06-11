@@ -1,4 +1,4 @@
-import { Component, OnInit, Injector } from '@angular/core';
+import { Component, OnInit, Injector, ViewChild } from '@angular/core';
 import { Shop, ShopEvaluation, ShopProduct } from '@shared/entity/customer';
 import { WechatUser } from '@shared/entity/wechat';
 import { AppComponentBase } from '@shared/app-component-base';
@@ -8,6 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Parameter } from '@shared/service-proxies/entity';
 import { NzModalService } from 'ng-zorro-antd';
 import { AppConsts } from '@shared/AppConsts';
+import { RefuseComponent } from './refuse/refuse.component';
 
 @Component({
     moduleId: module.id,
@@ -16,6 +17,7 @@ import { AppConsts } from '@shared/AppConsts';
     styleUrls: ['store-detail.component.scss']
 })
 export class StoreDetailComponent extends AppComponentBase implements OnInit {
+    @ViewChild('refuseModal') refuseModal: RefuseComponent;
     //积分明细
     queryE: any = {
         pageIndex: 1,
@@ -83,7 +85,7 @@ export class StoreDetailComponent extends AppComponentBase implements OnInit {
             this.shop = result;
             if (this.shop.coverPhoto) {
                 // this.showCoverPhoto = this.host + this.shop.coverPhoto;
-                this.showCoverPhoto=this.shop.coverPhoto;
+                this.showCoverPhoto = this.shop.coverPhoto;
             }
             this.evaluations = [
                 { id: 0, text: '全部', value: true, color: 'blue' },
@@ -110,7 +112,7 @@ export class StoreDetailComponent extends AppComponentBase implements OnInit {
                     }
                 })
             }
-            this.shopName =  this.shop.name + '(' + this.shop.statusName+')';
+            this.shopName = this.shop.name + '(' + this.shop.statusName + ')';
             this.refreshData();
             this.refreshDataE();
             this.getShopProducts();
@@ -166,6 +168,7 @@ export class StoreDetailComponent extends AppComponentBase implements OnInit {
         this.refreshDataE();
     }
 
+    //审核通过
     check(status: number, contentTpl) {
         this.modal.confirm({
             content: contentTpl,
@@ -174,13 +177,18 @@ export class StoreDetailComponent extends AppComponentBase implements OnInit {
             onOk: () => {
                 this.shop.status = status;
                 // this.shop.auditTime = this.dateFormat(new Date);
-                this.shopService.CheckShop(this.shop).subscribe((result: Shop) => {
+                this.shopService.CheckShop({ id: this.shop.id, status: status}).subscribe((result: Shop) => {
                     this.getSingleShop();
                     this.notify.info(this.l('店铺状态更新成功！'));
                 });
             }
         });
     }
+    //拒绝
+    Refuse() {
+        this.refuseModal.show(this.shop.id);
+    }
+
     return() {
         this.router.navigate(['admin/customer/store-management']);
     }

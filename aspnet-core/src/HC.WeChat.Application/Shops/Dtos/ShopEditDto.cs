@@ -78,5 +78,10 @@ namespace HC.WeChat.Shops.Dtos
         //    }
         //}
         public string Tel { get; set; }
+
+        /// <summary>
+        /// 拒绝理由
+        /// </summary>
+        public  string Reason { get; set; }
     }
 }

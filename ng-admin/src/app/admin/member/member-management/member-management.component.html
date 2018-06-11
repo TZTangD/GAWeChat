@@ -1,6 +1,6 @@
 <pro-header></pro-header>
 <nz-card [nzBordered]="false">
-    <form nz-form (ngSubmit)="refreshData()" [nzLayout]="'inline'">
+    <form nz-form (ngSubmit)="refreshData(false,true)" [nzLayout]="'inline'">
         <div nz-row [nzGutter]="24">
             <ng-template #deleteContent>
                 <h2>是否解除绑定微信用户{{WechatUserName}}?</h2>
