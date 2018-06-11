@@ -305,7 +305,7 @@ export class ShopServiceProxy {
     }
 
 
-    CheckShop(input: Shop): Observable<Shop> {
+    CheckShop(input: any): Observable<Shop> {
         let url_ = this.baseUrl + "/api/services/app/Shop/CheckShop";
         url_ = url_.replace(/[?&]$/, "");
 

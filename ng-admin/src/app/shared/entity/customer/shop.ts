@@ -20,6 +20,7 @@ export class Shop implements IShop {
     tel: string;
     qqLongitude: number;
     qqLatitude: number;
+    reason:string;
     constructor(data?: IShop) {
         if (data) {
             for (var property in data) {
@@ -51,6 +52,8 @@ export class Shop implements IShop {
             this.tel = data["tel"];
             this.qqLongitude = data["qqLongitude"];
             this.qqLatitude = data["qqLatitude"];
+            this.reason = data["reason"];
+            
         }
     }
 
@@ -91,6 +94,8 @@ export class Shop implements IShop {
         data["tel"] = this.tel;
         data["qqLongitude"] = this.qqLongitude;
         data["qqLatitude"] = this.qqLatitude;
+        data["reason"] = this.reason;
+        
         return data;
     }
 
@@ -120,4 +125,6 @@ export interface IShop {
     qqLongitude: number;
     qqLatitude: number;
     tel: string;
+    reason:string;
+    
 }

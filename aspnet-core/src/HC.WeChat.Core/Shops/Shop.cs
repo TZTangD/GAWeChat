@@ -104,5 +104,10 @@ namespace HC.WeChat.Shops
         public virtual int? TenantId { get; set; }
 
         public virtual string Tel { get; set; }
+
+        /// <summary>
+        /// 拒绝理由
+        /// </summary>
+        public virtual string Reason { get; set; }
     }
 }

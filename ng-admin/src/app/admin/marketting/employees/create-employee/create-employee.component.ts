@@ -60,7 +60,7 @@ export class CreateEmployeeComponent extends AppComponentBase implements OnInit{
         return this.formc.controls[name];
     }
     /**
-     * 取消按钮时间
+     * 取消按钮事件
      */
     chandleCancel = (e) => {
         this.cmodalVisible = false;
@@ -89,7 +89,7 @@ export class CreateEmployeeComponent extends AppComponentBase implements OnInit{
                     // this.isCodeCValid=true;
                     this.notify.error('员工编码已存在');
                 }
-            })
+            });
 
         }
 
