@@ -186,7 +186,7 @@ export class ShopComponent extends AppComponentBase implements OnInit {
         inputValue: undefined,
         inputAttributes: {
             maxlength: 140,
-            cn: 2
+            cn: 1
         },
         inputRegex: null
     }
