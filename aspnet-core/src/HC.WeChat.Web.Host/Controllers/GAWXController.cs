@@ -15,8 +15,8 @@ namespace HC.WeChat.Web.Host.Controllers
         IWeChatOAuthAppService _weChatOAuthAppService;
         //private readonly IConfigurationRoot _appConfiguration;
         //private WeChatTenantSetting _settings;
-        private string host = "http://ga.intcov.com";
-        //private string host = "http://localhost:21021";
+        //private string host = "http://ga.intcov.com";
+        private string host = "http://localhost:21021";
         private int? tenantId;
 
         private string UserOpenId
@@ -81,7 +81,7 @@ namespace HC.WeChat.Web.Host.Controllers
         public IActionResult GetCurrentUserOpenId()
         {
             APIResultDto result = new APIResultDto();
-            //UserOpenId = "oPM5Uv81jfyJqWbVxWAH-RUqsCAs";
+            UserOpenId = "oPM5Uv81jfyJqWbVxWAH-RUqsCAs";
             //UserOpenId = "oPM5Uv89yy7Iv8k9gLHjjsMTT5Gw";
             //UserOpenId = "oWusewPRxWuP4wMz3UmHR0y7CJME";
             if (string.IsNullOrEmpty(UserOpenId))

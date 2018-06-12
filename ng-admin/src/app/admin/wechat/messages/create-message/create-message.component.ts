@@ -23,7 +23,7 @@ export class CreateMessageComponent extends AppComponentBase implements OnInit {
     // ]
     msyTypes = [
         { value: 1, text: '文字消息' },
-        { value: 2, text: '图文消息' },
+        // { value: 2, text: '图文消息' },
     ];
     matchModes = [
         { value: 1, text: '精准匹配' },
