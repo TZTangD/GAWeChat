@@ -473,7 +473,7 @@ namespace HC.WeChat.Shops
                         {
                             keyword1 = new TemplateDataItem("审核未通过"),
                             keyword2 = new TemplateDataItem(DateTime.Now.ToString("yyyy-MM-dd HH:mm")),
-                            keyword3 = new TemplateDataItem("您的店铺未通过审核,拒绝理由{0},请修改资料重新提交", input.Reason),
+                            keyword3 = new TemplateDataItem(string.Format("未通过原因：{0},请修改重新提交", input.Reason)),
                         };
                         await TemplateApi.SendTemplateMessageAsync(appId, openId, ids[3], url, data);
                     }
