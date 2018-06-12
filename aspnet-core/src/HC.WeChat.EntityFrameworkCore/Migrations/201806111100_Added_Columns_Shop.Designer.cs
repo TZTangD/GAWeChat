@@ -1441,6 +1441,7 @@ namespace HC.WeChat.Migrations
                 b.Property<DateTime?>("DeletionTime");
                 b.Property<long?>("DeleterUserId");
                 b.Property<string>("VerificationCode").HasMaxLength(50);
+                b.Property<string>("InnerCode").HasMaxLength(50);
 
                 b.HasKey("Id");
 

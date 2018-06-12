@@ -14,6 +14,12 @@ namespace HC.WeChat.Migrations
            table: "Shops",
            maxLength: 500,
            nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+           name: "InnerCode",
+           table: "Employees",
+           maxLength: 500,
+           nullable: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -21,6 +27,10 @@ namespace HC.WeChat.Migrations
             migrationBuilder.DropColumn(
             name: "Reason",
             table: "Shops");
+            
+            migrationBuilder.DropColumn(
+            name: "InnerCode",
+            table: "Employees");
         }
     }
 }
