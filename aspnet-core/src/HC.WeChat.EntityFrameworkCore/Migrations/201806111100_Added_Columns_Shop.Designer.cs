@@ -1513,7 +1513,8 @@ namespace HC.WeChat.Migrations
                 b.Property<bool?>("IsShopkeeper");
                 b.Property<int>("UserType").IsRequired();
                 b.Property<int?>("Status");
-
+                b.Property<DateTime?>("AttentionTime");
+                b.Property<DateTime?>("UnfollowTime");
                 b.HasKey("Id");
 
                 //b.HasIndex("TargetTenantId", "TargetUserId", "ReadState");

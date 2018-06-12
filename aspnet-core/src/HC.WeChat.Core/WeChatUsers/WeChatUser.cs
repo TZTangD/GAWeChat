@@ -67,6 +67,16 @@ namespace HC.WeChat.WeChatUsers
         /// 解绑时间
         /// </summary>
         public DateTime? UnBindTime { get; set; }
+        
+        /// <summary>
+        /// 关注时间
+        /// </summary>
+        public DateTime? AttentionTime { get; set; }
+
+        /// <summary>
+        /// 取关时间
+        /// </summary>
+        public DateTime? UnfollowTime { get; set; }
 
         /// <summary>
         /// 用户微信头像

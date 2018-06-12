@@ -53,4 +53,5 @@
     <Folder Include="wwwroot\files\imgs\" />
     <Folder Include="wwwroot\upload\activity\activity-content\" />
   </ItemGroup>
+  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JSONSchema="" /></VisualStudio></ProjectExtensions>
 </Project>

@@ -136,7 +136,7 @@ export class ScanComponent extends AppComponentBase implements OnInit {
     }
 
     scanCard() {
-        //this.setCardNum(this.cardNum);
+        // this.setCardNum('CODE_128,' + this.cardNum);
         this.wxScanQRCode().then((res) => {
             this.setCardNum(res);
         });
@@ -186,7 +186,7 @@ export class ScanComponent extends AppComponentBase implements OnInit {
     }
 
     scanGoodsBarCode() {
-        //this.setGoodsBarCode(this.goodsBarCode);
+        // this.setGoodsBarCode('EAN_13,' + this.goodsBarCode);
         this.wxScanQRCode().then((res) => {
             this.setGoodsBarCode(res);
         });

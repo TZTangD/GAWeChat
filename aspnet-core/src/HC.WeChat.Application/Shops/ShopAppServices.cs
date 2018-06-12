@@ -359,21 +359,83 @@ namespace HC.WeChat.Shops
 
             //TODO:根据传入的参数添加过滤条件
             var shopCount = await query.CountAsync();
+            if (input.SortSaleTotal!=null && input.SortSaleTotal == "ascend")
+            {
+                var shops = await query
+                    .OrderByDescending(s => s.SaleTotal)
+                    .ThenBy(input.Sorting)
+                    .PageBy(input)
+                    .ToListAsync();
 
-            var shops = await query
+                //var shopListDtos = ObjectMapper.Map<List <ShopListDto>>(shops);
+                var shopListDtos = shops.MapTo<List<ShopListDto>>();
+
+                return new PagedResultDto<ShopListDto>(
+                    shopCount,
+                    shopListDtos
+                    );
+            } else if(input.SortSaleTotal != null && input.SortSaleTotal == "descend")
+            {
+                var shops = await query
+                    .OrderBy(s => s.SaleTotal)
+                    .ThenBy(input.Sorting)
+                    .PageBy(input)
+                    .ToListAsync();
+
+                //var shopListDtos = ObjectMapper.Map<List <ShopListDto>>(shops);
+                var shopListDtos = shops.MapTo<List<ShopListDto>>();
+
+                return new PagedResultDto<ShopListDto>(
+                    shopCount,
+                    shopListDtos
+                    );
+            } else if (input.SortReadTotal != null && input.SortReadTotal == "ascend")
+            {
+                var shops = await query
+                    .OrderByDescending(s => s.ReadTotal)
+                    .ThenBy(input.Sorting)
+                    .PageBy(input)
+                    .ToListAsync();
+
+                //var shopListDtos = ObjectMapper.Map<List <ShopListDto>>(shops);
+                var shopListDtos = shops.MapTo<List<ShopListDto>>();
+
+                return new PagedResultDto<ShopListDto>(
+                    shopCount,
+                    shopListDtos
+                    );
+            } else if (input.SortReadTotal != null && input.SortReadTotal == "descend")
+            {
+                var shops = await query
+                  .OrderBy(s => s.ReadTotal)
+                  .ThenBy(input.Sorting)
+                  .PageBy(input)
+                  .ToListAsync();
+
+                //var shopListDtos = ObjectMapper.Map<List <ShopListDto>>(shops);
+                var shopListDtos = shops.MapTo<List<ShopListDto>>();
+
+                return new PagedResultDto<ShopListDto>(
+                    shopCount,
+                    shopListDtos
+                    );
+            }
+            else
+            {
+                var shops = await query
                 .OrderByDescending(s => s.CreationTime)
                 .ThenBy(input.Sorting)
                 .PageBy(input)
                 .ToListAsync();
 
-            //var shopListDtos = ObjectMapper.Map<List <ShopListDto>>(shops);
-            var shopListDtos = shops.MapTo<List<ShopListDto>>();
+                //var shopListDtos = ObjectMapper.Map<List <ShopListDto>>(shops);
+                var shopListDtos = shops.MapTo<List<ShopListDto>>();
 
-            return new PagedResultDto<ShopListDto>(
-                shopCount,
-                shopListDtos
-                );
-
+                return new PagedResultDto<ShopListDto>(
+                    shopCount,
+                    shopListDtos
+                    );
+            }
         }
 
         /// <summary>
@@ -535,16 +597,22 @@ namespace HC.WeChat.Shops
             }
         }
 
-        [AbpAllowAnonymous]
-        public async Task<ShopListDto> GetViewShopByIdAsync(Guid id, int? tenantId)
-        {
-            using (CurrentUnitOfWork.SetTenantId(tenantId))
-            {
-                var shop = await _shopRepository.GetAsync(id);
-                shop.ReadTotal++;
-                return shop.MapTo<ShopListDto>();
-            }
-        }
+        /// <summary>
+        /// 人气查重改写
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="tenantId"></param>
+        /// <returns></returns>
+        //[AbpAllowAnonymous]
+        //public async Task<ShopListDto> GetViewShopByIdAsync(Guid id, int? tenantId)
+        //{
+        //    using (CurrentUnitOfWork.SetTenantId(tenantId))
+        //    {
+        //        var shop = await _shopRepository.GetAsync(id);
+        //        shop.ReadTotal++;
+        //        return shop.MapTo<ShopListDto>();
+        //    }
+        //}
 
         [AbpAllowAnonymous]
         public async Task<List<ShopListDto>> GetShopListByGoodsIdAsync(int? tenantId, Guid goodsId)
@@ -635,11 +703,55 @@ namespace HC.WeChat.Shops
 
             //TODO:根据传入的参数添加过滤条件
             var shopCount = await query.CountAsync();
-
-            var shops = await query.ToListAsync();
-
-            var shopListDtos = shops.MapTo<List<ShopListDto>>();
-            return shopListDtos;
+            if (input.SortSaleTotal != null && input.SortSaleTotal == "ascend")
+            {
+                var shops = await query
+                    .OrderByDescending(s => s.SaleTotal)
+                    .ThenBy(input.Sorting)
+                    .PageBy(input)
+                    .ToListAsync();
+                var shopListDtos = shops.MapTo<List<ShopListDto>>();
+                return shopListDtos;
+            }
+            else if (input.SortSaleTotal != null && input.SortSaleTotal == "descend")
+            {
+                var shops = await query
+                    .OrderBy(s => s.SaleTotal)
+                    .ThenBy(input.Sorting)
+                    .PageBy(input)
+                    .ToListAsync();
+                var shopListDtos = shops.MapTo<List<ShopListDto>>();
+                return shopListDtos;
+            }
+            else if (input.SortReadTotal != null && input.SortReadTotal == "ascend")
+            {
+                var shops = await query
+                    .OrderByDescending(s => s.ReadTotal)
+                    .ThenBy(input.Sorting)
+                    .PageBy(input)
+                    .ToListAsync();
+                var shopListDtos = shops.MapTo<List<ShopListDto>>();
+                return shopListDtos;
+            }
+            else if (input.SortReadTotal != null && input.SortReadTotal == "descend")
+            {
+                var shops = await query
+                    .OrderBy(s => s.ReadTotal)
+                    .ThenBy(input.Sorting)
+                    .PageBy(input)
+                    .ToListAsync();
+                var shopListDtos = shops.MapTo<List<ShopListDto>>();
+                return shopListDtos;
+            }
+            else
+            {
+                var shops = await query
+                              .OrderByDescending(s => s.CreationTime)
+                              .ThenBy(input.Sorting)
+                              .PageBy(input)
+                              .ToListAsync(); var shopListDtos = shops.MapTo<List<ShopListDto>>();
+                return shopListDtos;
+            }
         }
 
         /// <summary>

@@ -52,10 +52,9 @@
                 </button>
             </div>
         </div>
-       
+
     </form>
-    <nz-table #nzTable [nzAjaxData]="shops" [nzTotal]="query.total" [(nzPageIndex)]="query.pageIndex" [(nzPageSize)]="query.pageSize"
-        [nzLoading]="loading" [nzShowTotal]="'true'" [nzShowSizeChanger]="true" (nzPageIndexChange)="refreshData()" (nzPageSizeChange)="refreshData()">
+    <nz-table #nzTable [nzAjaxData]="shops" [nzTotal]="query.total" [(nzPageIndex)]="query.pageIndex" [(nzPageSize)]="query.pageSize" [nzLoading]="loading" [nzShowTotal]="'true'" [nzShowSizeChanger]="true" (nzPageIndexChange)="refreshData()" (nzPageSizeChange)="refreshData()">
         <thead nz-thead>
             <tr>
                 <th nz-th>
@@ -69,9 +68,11 @@
                 </th>
                 <th nz-th>
                     <span>店铺销量</span>
+                    <nz-table-sort [(nzValue)]="sortMap.sale" (nzValueChange)="sort($event,'sale')"></nz-table-sort>
                 </th>
                 <th nz-th>
                     <span>店铺浏览量</span>
+                    <nz-table-sort [(nzValue)]="sortMap.read" (nzValueChange)="sort($event,'read')"></nz-table-sort>
                 </th>
                 <th nz-th>
                     <span>店铺电话</span>

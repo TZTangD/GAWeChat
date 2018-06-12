@@ -30,6 +30,8 @@ using Senparc.Weixin.MP.AdvancedAPIs;
 using Senparc.Weixin.MP.AdvancedAPIs.TemplateMessage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Hosting;
+using HC.WeChat.StatisticalDetails;
+using HC.WeChat.StatisticalDetails.Dtos;
 
 namespace HC.WeChat.PurchaseRecords
 {
@@ -47,6 +49,7 @@ namespace HC.WeChat.PurchaseRecords
         private readonly IRepository<MemberConfig, Guid> _memberConfigRepository;
         private readonly IRepository<ShopEvaluation, Guid> _shopevaluationRepository;
         private readonly IRepository<Shop, Guid> _shopRepository;
+        private readonly IRepository<StatisticalDetail, Guid> _statisticaldetailRepository;
         private readonly IPurchaseRecordManager _purchaserecordManager;
         private readonly IConfigurationRoot _appConfiguration;
         private readonly IRepository<WechatAppConfig, int> _wechatappconfigRepository;
@@ -67,6 +70,7 @@ namespace HC.WeChat.PurchaseRecords
             , IRepository<ShopEvaluation, Guid> shopevaluationRepository
                     , IWechatAppConfigAppService wechatAppConfigAppService
             , IRepository<WechatAppConfig, int> wechatappconfigRepository
+            , IRepository<StatisticalDetail, Guid> statisticaldetailRepository
         )
         {
             _purchaserecordRepository = purchaserecordRepository;
@@ -81,6 +85,7 @@ namespace HC.WeChat.PurchaseRecords
             TenantId = null;
             AppConfig = _wechatAppConfigAppService.GetWechatAppConfig(TenantId).Result;
             _wechatappconfigRepository = wechatappconfigRepository;
+            _statisticaldetailRepository = statisticaldetailRepository;
         }
 
         /// <summary>
@@ -366,7 +371,8 @@ namespace HC.WeChat.PurchaseRecords
 
                 //更新店铺销量
                 var shop = await _shopRepository.GetAsync(input.ShopId.Value);
-                shop.ReadTotal++;//人气增加
+                //shop.ReadTotal++;//人气增加
+                await AddReadTotalAsync(input.OpenId, input.ShopId); // 店铺人气查重改写
                 shop.SaleTotal++;//销量增加
                 await _shopRepository.UpdateAsync(shop);
 
@@ -380,6 +386,40 @@ namespace HC.WeChat.PurchaseRecords
             }
         }
 
+        /// <summary>
+        /// 店铺人气排重
+        /// </summary>
+        /// <param name="openId"></param>
+        /// <param name="shopId"></param>
+        /// <returns></returns>
+        private async Task AddReadTotalAsync(string openId,Guid ?shopId)
+        {
+            try
+            {
+                StatisticalDetailEditDto input = new StatisticalDetailEditDto();
+                input.OpenId = openId;
+                input.Type = CountTypeEnum.店铺人气;
+                input.ArticleId = Guid.Parse(Convert.ToString(shopId));
+                var result = input.MapTo<StatisticalDetail>();
+                var readCount = await _statisticaldetailRepository.GetAll().Where(v => v.OpenId == input.OpenId && v.ArticleId == input.ArticleId && v.Type == CountTypeEnum.店铺人气).CountAsync();
+                if (readCount == 0)
+                {
+                    await _statisticaldetailRepository.InsertAsync(result);
+                    var shop = await _shopRepository.GetAll().Where(v => v.Id == input.ArticleId).FirstOrDefaultAsync();
+                    if (shop.ReadTotal == null)
+                    {
+                        shop.ReadTotal = 0;
+                    }
+                    shop.ReadTotal++;
+                    var shopInfoUpdate = await _shopRepository.UpdateAsync(shop);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.ErrorFormat("店铺人气增加失败 error：{0} Exception：{1}", ex.Message, ex);
+            }
+
+        }
         /// <summary>
         /// 发送微信模板通知-消费者
         /// </summary>

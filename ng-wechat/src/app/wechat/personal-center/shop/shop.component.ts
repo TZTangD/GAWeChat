@@ -68,9 +68,15 @@ export class ShopComponent extends AppComponentBase implements OnInit {
             });
         });
 
+        // if (this.shopId) {
+        //     this.isView = true;
+        //     this.shopService.GetViewShopByIdAsync({ id: this.shopId, tenantId: this.settingsService.tenantId }).subscribe(res => {
+        //         this.shop = res;
+        //     });
+        // }
         if (this.shopId) {
             this.isView = true;
-            this.shopService.GetViewShopByIdAsync({ id: this.shopId, tenantId: this.settingsService.tenantId }).subscribe(res => {
+            this.shopService.AddReadTotalAsync({ articleId: this.shopId, openId: this.settingsService.openId, type: 3, tenantId: this.settingsService.tenantId }).subscribe(res => {
                 this.shop = res;
             });
         }
@@ -169,8 +175,8 @@ export class ShopComponent extends AppComponentBase implements OnInit {
     }
     //审核
     audit(status: any) {
-        this.shopService.CheckShop({ id: this.shop.id, status: status}).subscribe((res) =>{
-            if(res){
+        this.shopService.CheckShop({ id: this.shop.id, status: status }).subscribe((res) => {
+            if (res) {
                 this.shop.status = status;
                 this.srv['success']('操作成功');
             } else {
