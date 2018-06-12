@@ -18,7 +18,7 @@ export class ShopService {
   constructor(private http: HttpClient) { }
 
   WechatCreateOrUpdateShop(params: any): Observable<boolean> {
-    return this.http.post('/api/services/app/Shop/WechatCreateOrUpdateShop', params).map(data => {
+    return this.http.post('/api/services/app/Shop/WechatCreateOrUpdateShop', params, null, true).map(data => {
       return <boolean>data.success;
     });
   }
@@ -129,7 +129,7 @@ export class ShopService {
   }
 
   FilesPostsBase64(params: any): Observable<any> {
-    return this.http.post('/WeChatFile/FilesPostsBase64', params).map(data => {
+    return this.http.post('/WeChatFile/FilesPostsBase64', params, null, true).map(data => {
       return data.result;
     });
   }
