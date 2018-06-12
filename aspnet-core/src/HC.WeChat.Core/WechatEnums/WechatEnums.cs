@@ -189,7 +189,8 @@ namespace HC.WeChat.WechatEnums
     public enum CountTypeEnum
     {
         阅读量 = 1,
-        点赞 = 2
+        点赞 = 2,
+        店铺人气 =3
     }
     /// <summary>
     /// 投稿表处理状态

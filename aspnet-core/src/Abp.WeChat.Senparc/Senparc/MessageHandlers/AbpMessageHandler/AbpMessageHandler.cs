@@ -219,7 +219,7 @@ namespace Abp.WeChat.Senparc.MessageHandlers
             //修改成图文消息
             var responseMessage = ResponseMessageBase.CreateFromRequestMessage<ResponseMessageNews>(requestMessage);
             responseMessage.ArticleCount = 1;
-            responseMessage.Articles.Add(GetSubscribeNews());
+            responseMessage.Articles.Add(GetSubscribeNews()); 
             //关注消息
             Subscribe(requestMessage);
             return responseMessage;
@@ -228,7 +228,7 @@ namespace Abp.WeChat.Senparc.MessageHandlers
         public override IResponseMessageBase OnEvent_UnsubscribeRequest(RequestMessageEvent_Unsubscribe requestMessage)
         {
             //取消关注
-            Unsubscribe(requestMessage);
+            Unsubscribe(requestMessage); 
             return base.OnEvent_UnsubscribeRequest(requestMessage);
         }
 

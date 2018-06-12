@@ -23,6 +23,15 @@ namespace HC.WeChat.WeChatUsers.Dtos
         public DateTime? UnBindTime { get; set; }
 
         private string _headImgUrl;
+        /// <summary>
+        /// 关注时间
+        /// </summary>
+        public DateTime? AttentionTime { get; set; }
+
+        /// <summary>
+        /// 取关时间
+        /// </summary>
+        public DateTime? UnfollowTime { get; set; }
         public string HeadImgUrl
         {
             get

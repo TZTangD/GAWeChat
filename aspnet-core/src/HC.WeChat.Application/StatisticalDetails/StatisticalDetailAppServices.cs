@@ -17,6 +17,8 @@ using HC.WeChat.Dto;
 using System.Linq;
 using HC.WeChat.Articles;
 using HC.WeChat.WechatEnums;
+using HC.WeChat.Shops;
+using HC.WeChat.Shops.Dtos;
 
 namespace HC.WeChat.StatisticalDetails
 {
@@ -31,6 +33,7 @@ namespace HC.WeChat.StatisticalDetails
         private readonly IRepository<StatisticalDetail, Guid> _statisticaldetailRepository;
         private readonly IStatisticalDetailManager _statisticaldetailManager;
         private readonly IRepository<Article, Guid> _articleRepository;
+        private readonly IRepository<Shop, Guid> _shopRepository;
 
         /// <summary>
         /// 构造函数
@@ -38,11 +41,13 @@ namespace HC.WeChat.StatisticalDetails
         public StatisticalDetailAppService(IRepository<StatisticalDetail, Guid> statisticaldetailRepository
       , IStatisticalDetailManager statisticaldetailManager
             , IRepository<Article, Guid> articleRepository
+            ,IRepository<Shop, Guid> shopRepository
         )
         {
             _articleRepository = articleRepository;
             _statisticaldetailRepository = statisticaldetailRepository;
             _statisticaldetailManager = statisticaldetailManager;
+            _shopRepository = shopRepository;
         }
 
         /// <summary>
@@ -254,6 +259,36 @@ namespace HC.WeChat.StatisticalDetails
                     return false;
                 }
                 return true;
+            }
+        }
+
+        /// <summary>
+        /// 统计店铺流量
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task<ShopListDto> AddReadTotalAsync(StatisticalDetailEditDto input)
+        {
+            using (CurrentUnitOfWork.SetTenantId(input.TenantId))
+            {
+                var result = input.MapTo<StatisticalDetail>();
+                Shop shopInfo = await _shopRepository.GetAsync(input.ArticleId);
+                var readCount = await _statisticaldetailRepository.GetAll().Where(v => v.OpenId == input.OpenId && v.ArticleId == input.ArticleId && v.Type == CountTypeEnum.店铺人气).CountAsync();
+                if (readCount == 0)
+                {
+                    await _statisticaldetailRepository.InsertAsync(result);
+                    var shop = await _shopRepository.GetAll().Where(v => v.Id == input.ArticleId).FirstOrDefaultAsync();
+                    if (shop.ReadTotal == null)
+                    {
+                        shop.ReadTotal = 0;
+                    }
+                    shop.ReadTotal++;
+                    var shopInfoUpdate = await _shopRepository.UpdateAsync(shop);
+                    return shopInfoUpdate.MapTo<ShopListDto>();
+                }
+                return shopInfo.MapTo<ShopListDto>();      
+                //return new APIResultDto() { Code = 0, Msg = "成功" };
             }
         }
     }

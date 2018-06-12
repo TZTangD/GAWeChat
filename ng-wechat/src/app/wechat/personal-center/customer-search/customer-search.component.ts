@@ -22,59 +22,74 @@ export class CustomerSearchComponent extends AppComponentBase implements OnInit 
     //是否查询所有符合条件的
     isMore = false;
     test = false;
+    value='';
     constructor(injector: Injector, private router: Router, private customerService: CustomerService) {
         super(injector);
     }
     ngOnInit(): void {
-        this.isLastPage = false;
-        // this.getCustomer(false);
+        // this.isLastPage = false;
+        // this.getCustomers();
     }
-
-    onLoadMore(comp: InfiniteLoaderComponent) {
-        this.query.pageIndex++;
-        this.getCustomer(false,this.search.filter);
-        if (this.isLastPage) {
-            comp.setFinished();
-            return;
-        }
-        comp.resolveLoading();
-
-    }
-    getCustomer(initialize: boolean, filter?: string) {
-        //初始查询
-        if (initialize) {
-            this.query.pageIndex = 1;
-            this.customers = [];
-            this.showMore = false;
-            this.isMore = false;
-        }
+    getCustomers(filter) {
+        this.value=filter;
         this.search.tenantId = this.settingsService.tenantId;
-        this.search.pageSize = this.query.pageSize;
-        this.search.skipCount = this.query.skipCount();
-        this.search.filter = filter;
+        // this.search.pageSize = this.query.pageSize;
+        // this.search.skipCount = this.query.skipCount();
         this.search.isMore = this.isMore;
+        this.search.filter=filter;
         this.customerService.getAll(this.search).subscribe(data => {
-            if (data) {
-                this.customers.push(...data);
-            }
-            if(data.length>0){
-                this.showMore = this.isMore ? false : true;
-            }else{
-                this.showMore=false;
-            }
-            if (data && data.length < this.query.pageSize) {
-                this.isLastPage = true;
-            }
-            
+            this.customers = data;
         });
     }
-    aboutMore() {
-        this.showMore = false;
-        this.isMore = true;
-        this.query.pageIndex = 1;
-        this.customers = [];
-        this.getCustomer(false,this.search.filter);
-    }
+    //#region  分页查询
+
+    // onLoadMore(comp: InfiniteLoaderComponent) {
+    //     this.query.pageIndex++;
+    //     this.getCustomer(false, this.search.filter);
+    //     if (this.isLastPage) {
+    //         comp.setFinished();
+    //         return;
+    //     }
+    //     comp.resolveLoading();
+
+    // }
+    // getCustomer(initialize: boolean, filter?: string) {
+    //     //初始查询
+    //     if (initialize) {
+    //         this.query.pageIndex = 1;
+    //         this.customers = [];
+    //         this.showMore = false;
+    //         this.isMore = false;
+    //     }
+    //     this.search.tenantId = this.settingsService.tenantId;
+    //     this.search.pageSize = this.query.pageSize;
+    //     this.search.skipCount = this.query.skipCount();
+    //     this.search.filter = filter;
+    //     this.search.isMore = this.isMore;
+    //     this.customerService.getAll(this.search).subscribe(data => {
+    //         if (data) {
+    //             this.customers.push(...data);
+    //         }
+    //         if (data.length > 0) {
+    //             this.showMore = this.isMore ? false : true;
+    //         } else {
+    //             this.showMore = false;
+    //         }
+    //         if (data && data.length < this.query.pageSize) {
+    //             this.isLastPage = true;
+    //         }
+
+    //     });
+    // }
+    // //查看更多
+    // aboutMore() {
+    //     this.showMore = false;
+    //     this.isMore = true;
+    //     this.query.pageIndex = 1;
+    //     this.customers = [];
+    //     this.getCustomer(false, this.search.filter);
+    // }
+    //#endregion
     onCancel() {
         console.log('onCancel');
     }
@@ -87,6 +102,6 @@ export class CustomerSearchComponent extends AppComponentBase implements OnInit 
      * 前往台账、档级
      */
     goCustomerLeavel(customer: Customers) {
-        this.router.navigate(['/account-levels/account-level', { id: customer.id,licenseKey:customer.licenseKey }]);
+        this.router.navigate(['/account-levels/account-level', { id: customer.id, licenseKey: customer.licenseKey }]);
     }
 }

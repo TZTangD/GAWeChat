@@ -17,6 +17,8 @@ namespace HC.WeChat.Products.Dtos
         public string Name { get; set; }
         public ProductTypeEnum? Type { get; set; }
         public bool? IsRare { get; set; }
+
+        public string SortValue { get; set; }
         /// <summary>
         /// 正常化排序使用
         /// </summary>

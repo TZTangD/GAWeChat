@@ -112,6 +112,18 @@ export class ShopService {
     });
   }
 
+  AddReadTotalAsync(input: any): Observable<Shop> {
+    return this.http.post('/api/services/app/StatisticalDetail/AddReadTotalAsync', input).map(data => {
+      if (data.result) {
+        let rel = Shop.fromJS(data.result);
+        rel.evaluationArry = rel.evaluation.split(',');
+        return rel;
+      } else {
+        return null;
+      }
+    });
+  }
+
   GetShopListByGoodsIdAsync(params: any): Observable<Shop[]> {
     return this.http.get('/api/services/app/Shop/GetShopListByGoodsIdAsync', params).map(data => {
       if (data.result) {

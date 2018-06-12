@@ -88,6 +88,7 @@
                 </th>
                 <th nz-th>
                     <span>搜索次数</span>
+                    <nz-table-sort [(nzValue)]="sortValue" (nzValueChange)="sort($event)"></nz-table-sort>
                 </th>
                 <th nz-th>
                     <span>是否启用</span>

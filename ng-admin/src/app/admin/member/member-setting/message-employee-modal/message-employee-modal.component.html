@@ -1,4 +1,4 @@
-<nz-modal [nzVisible]="emodalVisible" [nzTitle]="'选择员工'" [nzConfirmLoading]="eloading" [nzContent]="modalContent" (nzOnCancel)="handleeCancel($event)" style="width: 520px;" [nzFooter]="modalFooter">
+<nz-modal [nzVisible]="emodalVisible" [nzTitle]="'选择店铺审核人员'" [nzConfirmLoading]="eloading" [nzContent]="modalContent" (nzOnCancel)="handleeCancel($event)" style="width: 520px;" [nzFooter]="modalFooter">
     <ng-template #modalContent>
         <nz-card [nzBordered]="false" *ngIf="emodalVisible">
             <form nz-form (ngSubmit)="refreshData()" [nzLayout]="'inline'">
@@ -6,7 +6,7 @@
                     <div nz-col [nzSpan]="8" class="mb-md">
                         <div nz-form-item class="d-flex">
                             <div nz-form-control class="flex-1">
-                                <nz-input [nzType]="'search'" [(ngModel)]="q.no" name="no" (nzOnSearch)="refreshData()" [nzSize]="'large'" [nzPlaceHolder]="'请输入员工名'" nzId="no" style="width: 420px;"></nz-input>
+                                <nz-input [nzType]="'search'" [(ngModel)]="q.no" name="no" (nzOnSearch)="refreshData()" [nzSize]="'large'" [nzPlaceHolder]="'请输入内部员工姓名'" nzId="no" style="width: 420px;"></nz-input>
                             </div>
                         </div>
                     </div>
@@ -19,7 +19,7 @@
                             <span>操作</span>
                         </th>
                         <th nz-th>
-                            <span>用户名</span>
+                            <span>姓名</span>
                         </th>
                         <th nz-th>
                             <span>用户类型</span>

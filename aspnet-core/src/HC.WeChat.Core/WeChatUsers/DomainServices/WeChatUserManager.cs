@@ -81,6 +81,7 @@ namespace HC.WeChat.WeChatUsers.DomainServices
                     user.UserName = user.NickName;
                     user.BindTime = DateTime.Now;
                     user.HeadImgUrl = headImgUrl;
+                    user.AttentionTime = DateTime.Now; // 第一次关注时间
                     await _wechatuserRepository.UpdateAsync(user);
                 }
                 else
@@ -92,6 +93,7 @@ namespace HC.WeChat.WeChatUsers.DomainServices
                     user.UserType = WechatEnums.UserTypeEnum.消费者;
                     user.UserName = nickName;
                     user.HeadImgUrl = headImgUrl;
+                    user.AttentionTime = DateTime.Now; // 最后一次关注时间
                     user.IntegralTotal = 0;//积分默认为0
                     user.BindStatus = WechatEnums.BindStatusEnum.未绑定;
                     await _wechatuserRepository.InsertAsync(user);
@@ -133,11 +135,11 @@ namespace HC.WeChat.WeChatUsers.DomainServices
                 //解绑后变成消费者
                 if (user != null)
                 {
+                    user.UnfollowTime = DateTime.Now;// 取关时间
                     user.UserType = WechatEnums.UserTypeEnum.取消关注;
                     await _wechatuserRepository.UpdateAsync(user);
                 }
             }
         }
     }
-
 }

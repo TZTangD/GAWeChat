@@ -1441,6 +1441,7 @@ namespace HC.WeChat.Migrations
                 b.Property<DateTime?>("DeletionTime");
                 b.Property<long?>("DeleterUserId");
                 b.Property<string>("VerificationCode").HasMaxLength(50);
+                b.Property<string>("InnerCode").HasMaxLength(50);
 
                 b.HasKey("Id");
 
@@ -1513,7 +1514,8 @@ namespace HC.WeChat.Migrations
                 b.Property<bool?>("IsShopkeeper");
                 b.Property<int>("UserType").IsRequired();
                 b.Property<int?>("Status");
-
+                b.Property<DateTime?>("AttentionTime");
+                b.Property<DateTime?>("UnfollowTime");
                 b.HasKey("Id");
 
                 //b.HasIndex("TargetTenantId", "TargetUserId", "ReadState");
