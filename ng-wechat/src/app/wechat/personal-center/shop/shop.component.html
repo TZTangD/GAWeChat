@@ -30,7 +30,7 @@
         </div>
     </div>
 </Page>
-<Page [ngClass]="'list'" [subTitle]="'表单输入'" [showTitle]="false" [spacing]="false" *ngIf="shop && (shop.status == 2 || isAudit)">
+<Page [ngClass]="'dialog'" [subTitle]="'表单输入'" [showTitle]="false" [spacing]="false" *ngIf="shop && (shop.status == 2 || isAudit)">
     <div class="weui-cells weui-cells_img" [ngStyle]="{'background-image':'url('+ hostUrl + shop.coverPhoto +')'}">
         <div class="weui-cell" style="height: 120px;">
         </div>
@@ -98,7 +98,7 @@
                         <button weui-button type="button" (click)="audit(2)" >审核通过</button>
                     </div>
                     <div class="weui-cell" *ngIf="isAudit && shop.status == 1">
-                        <button weui-button [weui-type]="'warn'" type="button" (click)="audit(0)" >拒绝</button>
+                        <button weui-button [weui-type]="'warn'" type="button" (click)="onRejectPrompt()" >拒绝</button>
                     </div>
                 </div>
             </div>
@@ -159,4 +159,5 @@
             </weui-popup>
         </weui-tab>
     </weui-navbar>
+    <weui-dialog #auto [config]="config"></weui-dialog>
 </Page>

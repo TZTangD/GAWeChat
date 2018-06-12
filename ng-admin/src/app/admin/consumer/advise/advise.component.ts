@@ -26,12 +26,15 @@ export class AdviseComponent extends AppComponentBase implements OnInit {
         this.refreshData();
     }
 
-    refreshData(reset = false) {
+    refreshData(reset = false, search?: boolean) {
         if (reset) {
+            this.parameters = { beginDate: null, endDate: null }
+            this.query.pageIndex = 1;
+        }
+        if (search) {
             this.query.pageIndex = 1;
         }
         this.loading = true;
-
         this._adviseService.getAll(this.query.skipCount(), this.query.pageSize, this.getParameter()).subscribe((result: PagedResultDtoOfAdvise) => {
             this.loading = false;
             let status = 0;
@@ -43,6 +46,7 @@ export class AdviseComponent extends AppComponentBase implements OnInit {
     getParameter(): Parameter[] {
         let parray = [];
         parray.push(Parameter.fromJS({ key: 'Filter', value: this.parameters.filter }));
+        parray.push(Parameter.fromJS({ key: 'Name', value: this.parameters.name }));
         return parray;
     }
 
@@ -52,7 +56,7 @@ export class AdviseComponent extends AppComponentBase implements OnInit {
 
     exportExcelAll() {
         this.exportLoading = true;
-        this._adviseService.exportExcel({ filter: this.parameters.filter }).subscribe(result => {
+        this._adviseService.exportExcel({ filter: this.parameters.filter, name: this.parameters.name }).subscribe(result => {
             if (result.code == 0) {
                 var url = AppConsts.remoteServiceBaseUrl + result.data;
                 document.getElementById('aAdviseExcelUrl').setAttribute('href', url);

@@ -127,7 +127,7 @@ export class ShopAddComponent extends AppComponentBase implements OnInit {
         this.cropperSettings.preserveSize = true;
         this.cropperSettings.cropOnResize = false;
         this.cropperSettings.noFileInput = true;
-        this.cropperSettings.compressRatio = 0.1;
+        this.cropperSettings.compressRatio = 0.05;
 
         this.imgData = {};
     }
@@ -309,9 +309,11 @@ export class ShopAddComponent extends AppComponentBase implements OnInit {
     cancelUploadImg(){
         this.imgCropperPopup.close();
     }
+    showCropperPopup(){
+        this.imgCropperPopup.show();
+    }
     //选择图片
     fileChange($event) {
-        this.imgCropperPopup.show();
         const image: any = new Image();
         const file: File = $event.target.files[0];
         this.fileName = file.name;

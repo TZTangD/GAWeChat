@@ -199,7 +199,7 @@ namespace Abp.WeChat.Senparc.MessageHandlers
             return new Article()
             {
                 Title = "渠江烟语微信平台升级版 使用指南",
-                Description = "2018-06-11早上9点正式开放内测 点击查看详细",
+                Description = "点击查看详细",
                 PicUrl = "http://ga.intcov.com/files/imgs/syzl.jpg",
                 Url = "https://mp.weixin.qq.com/s/bru-mAd8j7ox0KEWGWrBJA"
             };

@@ -18,7 +18,7 @@ import { CropperSettings, ImageCropperComponent, Bounds } from 'ng2-img-cropper'
 })
 export class CommodityDetailComponent extends AppComponentBase implements OnInit {
     @ViewChild('cropper', undefined) cropper: ImageCropperComponent;
-    
+
     form: FormGroup;
     id: number;
     product: Products = new Products();
@@ -32,6 +32,10 @@ export class CommodityDetailComponent extends AppComponentBase implements OnInit
         { text: '是', value: true },
         { text: '否', value: false },
     ];
+    imgTypes = [
+        { text: '原图', value: 1 },
+        { text: '裁剪', value: 2 },
+    ]
     //图片放大
     previewImage = '';
     previewVisible = false;
@@ -48,10 +52,14 @@ export class CommodityDetailComponent extends AppComponentBase implements OnInit
 
     cropperSettings: CropperSettings;
     data1: any = {};
-    //是否是上传状态
+    //是否是上传状态 裁剪
     isUpload = false;
-    //是否选中
+    //是否选中 裁剪
     isSelect = false;
+
+    //是否是上传状态 原图
+    isUploadY = false;
+    imgType = 1;
     constructor(injector: Injector, private fb: FormBuilder, private productService: ProductsServiceProxy, private actRouter: ActivatedRoute,
         private router: Router, private http: HttpClient) {
         super(injector);
@@ -78,6 +86,8 @@ export class CommodityDetailComponent extends AppComponentBase implements OnInit
             barCode: [null, Validators.compose([Validators.pattern('^[0-9]*$'), this.confirmationValidatorB])],
             isAction: [true],
             photoUrl: [null, Validators.compose([Validators.maxLength(500)])],
+            imgType: [null],
+
         });
         this.getSingleProdct();
         this.host = AppConsts.remoteServiceBaseUrl;
@@ -131,7 +141,8 @@ export class CommodityDetailComponent extends AppComponentBase implements OnInit
                         .finally(() => { this.isConfirmLoading = false; })
                         .subscribe(() => {
                             this.notify.info(this.l('保存成功！'));
-                            this.isUpload=false;
+                            this.isUpload = false;
+                            this.isUploadY = false;
                             this.getSingleProdct();
                         });
                 } else {
@@ -189,28 +200,35 @@ export class CommodityDetailComponent extends AppComponentBase implements OnInit
     //剪切结果返回
     cropped(bounds: Bounds) {
         // console.log(bounds);
-    //   console.log(this.data1.image);
-      this.product.img64=this.data1.image;
-        
+        //   console.log(this.data1.image);
+        this.product.img64 = this.data1.image;
+
     }
 
     //选择图片文件
     fileChange($event) {
-        this.isUpload = true;
-        this.isSelect=true;
-      console.log(this.isUpload);
+
+        this.isSelect = true;
         const image: any = new Image();
         const file: File = $event.target.files[0];
         const myReader: FileReader = new FileReader();
         const that = this;
         myReader.onloadend = (loadEvent: any) => {
             image.src = loadEvent.target.result;
-            console.log(file);
-            this.product.fileName=file.name;
-            // console.log(image);
-            this.product.showPhotoUrl = image.src;
+            this.product.fileName = file.name;
+            if (this.imgType === 1) {
+                this.product.showPhotoUrl = image.src;
+                this.product.img64=image.src;
+                this.isUploadY = true;
+            } else {
+                this.isUpload = true;
+                setTimeout(() => {
+                that.cropper.setImage(image);
+                }, 200);
+                
+            }
+            
             // this.selecteCutImgModal.show(image);
-            that.cropper.setImage(image);
         };
         myReader.readAsDataURL(file);
     }
@@ -219,7 +237,7 @@ export class CommodityDetailComponent extends AppComponentBase implements OnInit
     //     this.isSelect=false;
     //     this.product.img64=this.data1.image;
     // }
-   
-   
+
+
 
 }

@@ -199,7 +199,9 @@ namespace HC.WeChat.Shops
                     input.Shop.ReadTotal = 0;
                     input.Shop.SaleTotal = 0;
                     input.Shop.Evaluation = "0,0,0";
-                    await CreateShopAsync(input.Shop);
+                    var entity = await CreateShopAsync(input.Shop);
+                    await CurrentUnitOfWork.SaveChangesAsync();
+                    input.Shop.Id = entity.Id;//获取审核信息的shop Id
                 }
                 await ShopWXInfo(input);
             }
@@ -533,7 +535,7 @@ namespace HC.WeChat.Shops
                         {
                             keyword1 = new TemplateDataItem("审核未通过"),
                             keyword2 = new TemplateDataItem(DateTime.Now.ToString("yyyy-MM-dd HH:mm")),
-                            keyword3 = new TemplateDataItem("您的店铺未通过审核,拒绝理由{0},请修改资料重新提交", input.Reason),
+                            keyword3 = new TemplateDataItem(string.Format("未通过原因：{0},请修改重新提交", input.Reason)),
                         };
                         await TemplateApi.SendTemplateMessageAsync(appId, openId, ids[3], url, data);
                     }

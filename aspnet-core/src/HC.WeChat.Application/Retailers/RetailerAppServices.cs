@@ -517,7 +517,7 @@ namespace HC.WeChat.Retailers
                 else
                 {
                     var retailListQ = await _retailerRepository.GetAll().Where(r => r.Telephone.Contains(input.Filter) || r.LicenseKey.Contains(input.Filter) || r.Name.Contains(input.Filter))
-                    .OrderBy(r => r.Name).Skip(0).Take(5).ToListAsync();
+                    .OrderBy(r => r.Name).Skip(0).Take(50).ToListAsync();
                     retailList = retailListQ.MapTo<List<RetailerListDto>>();
                 }
                 return retailList;

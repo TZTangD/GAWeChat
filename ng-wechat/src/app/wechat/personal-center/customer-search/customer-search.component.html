@@ -1,7 +1,32 @@
 <Page [ngClass]="'infiniteloader'" [showTitle]="false" [subTitle]="" [spacing]="false" [noBottom]="true">
+    <weui-searchbar (search)="getCustomers($event)" [(value)]="value" (cancel)="onCancel()" placeholder="请输入姓名、专卖号或电话" (clear)="onClear()" [debounceTime]="500"></weui-searchbar>
+    <div class="weui-panel" style="margin-top: 0px;" *ngIf="customers.length>0">
+        <div class="weui-panel__hd">只显示符合【{{value}}】的前50条数据</div>
+        <div class="weui-cells__title">
+            <a class="weui-cell weui-cells__title">
+                <div class="weui-cell__hd">姓名</div>
+                <div class="weui-cell__bd" style="text-align:center;">电话</div>
+                <div class="weui-cell__ft">编码</div>
+            </a>
+        </div>
+        <a *ngFor="let i of customers" class="weui-cell weui-cell_access" (click)="goCustomerLeavel(i)">
+            <div class="weui-cell__hd">{{i.name}}</div>
+            <div class="weui-cell__bd" style="text-align:center;">{{i.telephone}}</div>
+            <div class="weui-cell__ft">{{i.licenseKey}}</div>
+        </a>
+    </div>
+    <weui-loadmore type="line" *ngIf="(!customers||customers.length==0) && !value" [lineText]="'搜索并选择零售户'"></weui-loadmore>
+    <weui-loadmore type="line" *ngIf="customers?.length === 0 && value" [lineText]="'没有符合的零售户信息'"></weui-loadmore>
+    
+    
 
-    <weui-searchbar (search)="getCustomer(true,$event)" (cancel)="onCancel()" placeholder="请输入姓名、专卖号或电话" (clear)="onClear()"
-        [debounceTime]="500"></weui-searchbar>
+
+
+
+
+    <!-- <weui-searchbar (search)="getCustomer(true,$event)" [(value)]="search.filter" (cancel)="onCancel()" placeholder="请输入姓名、专卖号或电话"
+        (clear)="onClear()" [debounceTime]="500"></weui-searchbar>
+    <div class="weui-panel__hd">只显示符合【{{value}}】的前50条数据</div>
     <div class="weui-cells__title">
         <a class="weui-cell weui-cells__title">
             <div class="weui-cell__hd">姓名</div>
@@ -17,12 +42,6 @@
                 <div class="weui-cell__bd" style="text-align:center;">{{i.telephone}}</div>
                 <div class="weui-cell__ft">{{i.licenseKey}}</div>
             </a>
-            <!-- <a class="weui-panel__ft" *ngIf="showMore" (click)="aboutMore()">
-                <div class="weui-cell weui-cell_access weui-cell_link">
-                    <div class="weui-cell__bd">更多>>></div>
-                    <div class="weui-cell__ft"></div>
-                </div>
-            </a> -->
         </weui-infiniteloader>
     </div>
     <weui-loadmore type="line" *ngIf="!customers||customers.length==0" [lineText]="'搜索并选择零售户'"></weui-loadmore>
@@ -33,16 +52,11 @@
             <div class="weui-cell__bd" style="text-align:center;">{{i.telephone}}</div>
             <div class="weui-cell__ft">{{i.licenseKey}}</div>
         </a>
-        <!-- <ng-template #loading>
-            <div class="weui-panel__bd">
-                <div class="weui-media-box weui-media-box_text">Loading...</div>
-            </div>
-        </ng-template> -->
         <a class="weui-panel__ft" *ngIf="showMore" (click)="aboutMore()">
             <div class="weui-cell weui-cell_access weui-cell_link">
                 <div class="weui-cell__bd">更多>>></div>
                 <div class="weui-cell__ft"></div>
             </div>
         </a>
-    </div>
+    </div> -->
 </Page>

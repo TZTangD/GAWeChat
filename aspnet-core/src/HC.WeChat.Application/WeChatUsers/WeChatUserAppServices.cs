@@ -655,7 +655,7 @@ namespace HC.WeChat.WeChatUsers
             //input.UnBindTime = DateTime.Now;
             //input.Status = null;
             var entity = await _wechatuserRepository.GetAsync(input.Id.Value);
-            entity.UserType = UserTypeEnum.消费者;
+            entity.UserType = entity.UserType== UserTypeEnum.取消关注? UserTypeEnum.取消关注: UserTypeEnum.消费者;
             entity.BindStatus = BindStatusEnum.未绑定;
             entity.UserId = null;
             entity.UnBindTime = DateTime.Now;

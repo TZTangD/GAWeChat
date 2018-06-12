@@ -8,7 +8,7 @@ export class Advise implements IAdvise {
     photoUrl: string;
     tenantId: number;
     creationTime: Date;
-
+    userName:string;
     constructor(data?: IAdvise) {
         if (data) {
             for (var property in data) {
@@ -29,6 +29,8 @@ export class Advise implements IAdvise {
             this.photoUrl = data["photoUrl"];
             this.tenantId = data["tenantId"];
             this.creationTime = data["creationTime"];
+            this.userName = data["userName"];
+            
         }
     }
 
@@ -60,6 +62,8 @@ export class Advise implements IAdvise {
         data["photoUrl"] = this.photoUrl;
         data["tenantId"] = this.tenantId;
         data["creationTime"] = this.creationTime;
+        data["userName"] = this.userName;
+        
         return data;
     }
 
@@ -86,6 +90,8 @@ export interface IAdvise {
     photoUrl: string;
     tenantId: number;
     creationTime: Date;
+    userName:string;
+    
 }
 
 

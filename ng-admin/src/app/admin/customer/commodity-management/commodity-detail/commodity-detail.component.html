@@ -77,9 +77,22 @@
                 </div>
                 <div nz-form-item nz-row>
                     <div nz-form-label nz-col [nzSm]="4">
+                        <label for="barCode">图片上传类型</label>
+                    </div>
+                    <div nz-form-control nz-col [nzSm]="20">
+                        <nz-radio-group formControlName="imgType" [(ngModel)]="imgType" class="mb-md">
+                            <label nz-radio [nzValue]="o.value" *ngFor="let o of imgTypes">
+                                <span>{{o.text}}</span>
+                            </label>
+                        </nz-radio-group>
+                    </div>
+                </div>
+                <div nz-form-item nz-row>
+                    <div nz-form-label nz-col [nzSm]="4">
                         <label for="photoUrl">封面图片</label>
                     </div>
-                    <div nz-form-control nz-col [nzSm]="9">
+                    <!-- 裁剪图 -->
+                    <div nz-form-control nz-col [nzSm]="9" *ngIf="imgType===2">
                         <!-- <nz-upload nzAction="{{host + '/WeChatFile/MarketingInfoPosts?fileName=product'}}" nzAccept="'image'" [nzBeforeUpload]="beforeJpgUpload"
                                 [nzShowButton]="product.photoUrl==null||product.photoUrl==''" (nzChange)="handleChange($event)"
                                 [nzPreview]="handlePreview" [nzName]="'image'">
@@ -109,34 +122,49 @@
                                 <img *ngIf="product.showPhotoUrl" style="width: 160px;" [src]="product.showPhotoUrl" class="avatar">
                             </button>
                         </div> -->
-                       
-                            <button nz-button class="ant-btn__block file-upload mt-sm">
-                                <input id="file1" accept type="file" (change)="fileChange($event)" />
-                                <i class="anticon anticon-upload"></i>
-                                <span>上传图片</span>
-                            </button>
-                            <div class="my-md" *ngIf="product.photoUrl!=defalutImg && !isUpload" >
-                                <!-- <h3 class="text-md">Cropped image</h3> -->
-                                <img [class.rounded-circle]="false" [src]="(product.photoUrl|hostUrl)"  (click)="handlePreview(product.photoUrl)"  [width]="cropperSettings.croppedWidth" [height]="cropperSettings.croppedHeight">
-                            </div>
-                            <div class="my-md" *ngIf="isUpload && data1.image">
-                                    <!-- <h3 class="text-md">Cropped image</h3> -->
-                                    <img [class.rounded-circle]="false" [src]="data1.image" [width]="cropperSettings.croppedWidth" [height]="cropperSettings.croppedHeight">
-                                </div>
-                       
-                        <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null" (nzOnCancel)="previewVisible=false">
-                            <ng-template #modalContent>
-                                <img [src]="(previewImage|hostUrl)" [ngStyle]="{ 'width': '100%' }" />
-                            </ng-template>
-                        </nz-modal> 
 
+                        <button nz-button class="ant-btn__block file-upload mt-sm" style="width: 200px;">
+                            <input id="file1" accept type="file" (change)="fileChange($event)" />
+                            <i class="anticon anticon-upload"></i>
+                            <span>上传图片</span>
+                        </button>
+                        <div class="my-md" *ngIf="product.photoUrl!=defalutImg && !isUpload">
+                            <img [class.rounded-circle]="false" [src]="(product.photoUrl|hostUrl)" (click)="handlePreview(product.photoUrl)" [width]="cropperSettings.croppedWidth"
+                                [height]="cropperSettings.croppedHeight">
+                        </div>
+                        <div class="my-md" *ngIf="isUpload && data1.image">
+                            <img [class.rounded-circle]="false" [src]="data1.image" [width]="cropperSettings.croppedWidth" [height]="cropperSettings.croppedHeight">
+                        </div>
                     </div>
-                    <div nz-form-control nz-col  [nzSm]="9"  [nzOffset]="2" *ngIf="isUpload">
-                            <img-cropper #cropper [image]="data1" [settings]="cropperSettings" (onCrop)="cropped($event)"></img-cropper>
-                            <!-- <button nz-button [nzType]="'primary'" (click)="Select()" [nzSize]="'large'">
+                    <div nz-form-control nz-col [nzSm]="9" [nzOffset]="2" *ngIf="isUpload && imgType===2">
+                        <img-cropper #cropper [image]="data1" [settings]="cropperSettings" (onCrop)="cropped($event)"></img-cropper>
+                        <!-- <button nz-button [nzType]="'primary'" (click)="Select()" [nzSize]="'large'">
                                     {{l("确定")}}
                             </button> -->
                     </div>
+
+                    <!-- 上传原图 -->
+                    <div nz-form-control nz-col [nzSm]="9" *ngIf="imgType===1">
+                        <button nz-button class="ant-btn__block file-upload mt-sm" style="width: 200px;">
+                            <input id="file1" accept type="file" (change)="fileChange($event)" />
+                            <i class="anticon anticon-upload"></i>
+                            <span>上传图片</span>
+                        </button>
+                        <div class="my-md" *ngIf="product.photoUrl!=defalutImg && !isUploadY">
+                            <img [class.rounded-circle]="false" [src]="(product.photoUrl|hostUrl)" (click)="handlePreview(product.photoUrl)" [width]="cropperSettings.croppedWidth"
+                                [height]="cropperSettings.croppedHeight">
+                        </div>
+                        <div class="my-md" *ngIf="isUploadY && this.product.showPhotoUrl">
+                            <img [class.rounded-circle]="false" [src]="this.product.showPhotoUrl" [width]="cropperSettings.croppedWidth" [height]="cropperSettings.croppedHeight">
+                        </div>
+                    </div>
+
+                    <!-- 放大图片 -->
+                    <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null" (nzOnCancel)="previewVisible=false">
+                        <ng-template #modalContent>
+                            <img [src]="(previewImage|hostUrl)" [ngStyle]="{ 'width': '100%' }" />
+                        </ng-template>
+                    </nz-modal>
                 </div>
             </div>
         </div>
