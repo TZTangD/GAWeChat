@@ -123,7 +123,7 @@
                             </button>
                         </div> -->
 
-                        <button nz-button class="ant-btn__block file-upload mt-sm">
+                        <button nz-button class="ant-btn__block file-upload mt-sm" style="width: 200px;">
                             <input id="file1" accept type="file" (change)="fileChange($event)" />
                             <i class="anticon anticon-upload"></i>
                             <span>上传图片</span>
@@ -145,7 +145,7 @@
 
                     <!-- 上传原图 -->
                     <div nz-form-control nz-col [nzSm]="9" *ngIf="imgType===1">
-                        <button nz-button class="ant-btn__block file-upload mt-sm">
+                        <button nz-button class="ant-btn__block file-upload mt-sm" style="width: 200px;">
                             <input id="file1" accept type="file" (change)="fileChange($event)" />
                             <i class="anticon anticon-upload"></i>
                             <span>上传图片</span>
