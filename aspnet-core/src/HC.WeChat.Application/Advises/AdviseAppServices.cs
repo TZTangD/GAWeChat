@@ -310,6 +310,7 @@ namespace HC.WeChat.Advises
                          from de in aw.DefaultIfEmpty()
                          select new AdviseListDto()
                          {
+                             Id = ad.Id,
                              Title = ad.Title,
                              UserTypeName = ad.UserTypeName,
                              OpenId = ad.OpenId,
