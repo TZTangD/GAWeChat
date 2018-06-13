@@ -60,6 +60,7 @@ export class CommodityDetailComponent extends AppComponentBase implements OnInit
     //是否是上传状态 原图
     isUploadY = false;
     imgType = 1;
+   
     constructor(injector: Injector, private fb: FormBuilder, private productService: ProductsServiceProxy, private actRouter: ActivatedRoute,
         private router: Router, private http: HttpClient) {
         super(injector);
@@ -139,11 +140,11 @@ export class CommodityDetailComponent extends AppComponentBase implements OnInit
                 if (result === 0) {
                     this.productService.update(this.product)
                         .finally(() => { this.isConfirmLoading = false; })
-                        .subscribe(() => {
+                        .subscribe((data) => {
+                            this.product=data;
                             this.notify.info(this.l('保存成功！'));
                             this.isUpload = false;
                             this.isUploadY = false;
-                            this.getSingleProdct();
                         });
                 } else {
                     this.isConfirmLoading = false;
