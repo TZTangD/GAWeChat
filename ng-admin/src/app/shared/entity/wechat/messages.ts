@@ -9,9 +9,9 @@ export class Messagess implements IMessagess {
     creatorUserId: number;
     lastModificationTime: Date
     lastModifierUserId: number;
-    // picLink: string;
-    // desc: string;
-    // title: string;
+    picLink: string;
+    desc: string;
+    title: string;
 
     constructor(data?: IMessagess) {
         if (data) {
@@ -34,9 +34,9 @@ export class Messagess implements IMessagess {
             this.creatorUserId = data["creatorUserId"];
             this.lastModificationTime = data["lastModificationTime"];
             this.lastModifierUserId = data["lastModifierUserId"];
-            // this.picLink = data["picLink"];
-            // this.desc = data["desc"];
-            // this.title = data["title"];
+            this.picLink = data["picLink"];
+            this.desc = data["desc"];
+            this.title = data["title"];
         }
     }
 
@@ -54,9 +54,9 @@ export class Messagess implements IMessagess {
         data["msgType"] = this.msgType;
         data["content"] = this.content;
         data["tenantId"] = this.tenantId;
-        // data["title"] = this.title;
-        // data["desc"] = this.desc;
-        // data["picLink"] = this.picLink;
+        data["title"] = this.title;
+        data["desc"] = this.desc;
+        data["picLink"] = this.picLink;
         return data;
     }
 
@@ -77,7 +77,7 @@ export interface IMessagess {
     creatorUserId: number;
     lastModificationTime: Date
     lastModifierUserId: number;
-    // picLink: string;
-    // desc: string;
-    // title: string;
+    picLink: string;
+    desc: string;
+    title: string;
 }

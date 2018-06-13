@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Senparc.Weixin.Entities.Request;
 
 namespace HC.WeChat.MessageHandler
 {
@@ -111,37 +112,122 @@ namespace HC.WeChat.MessageHandler
                 if (sinfo != null)
                 {
                     if (sinfo.MsgType == WechatEnums.MsgTypeEnum.文字消息)
-                {
-                    var responseMessage = ResponseMessageBase.CreateFromRequestMessage<ResponseMessageText>(requestMessage);
-                    responseMessage.Content = MessageInfo.SubscribeMsg;
-                    Subscribe(requestMessage);
-                    return responseMessage;
+                    {
+                        var responseMessage = ResponseMessageBase.CreateFromRequestMessage<ResponseMessageText>(requestMessage);
+                        responseMessage.Content = MessageInfo.SubscribeMsg;
+                        Subscribe(requestMessage);
+                        return responseMessage;
+                    }
+                    else
+                    {
+                        var responseMessagePic = ResponseMessageBase.CreateFromRequestMessage<ResponseMessageNews>(requestMessage);
+                        responseMessagePic.ArticleCount = 1;
+                        responseMessagePic.Articles.Add(GetPicSubscribe());
+                        Subscribe(requestMessage);
+                        return responseMessagePic;
+                    }
                 }
-                else
-                {
-                    var responseMessagePic = ResponseMessageBase.CreateFromRequestMessage<ResponseMessageNews>(requestMessage);
-                    responseMessagePic.ArticleCount = 1;
-                    responseMessagePic.Articles.Add(GetPicSubscribe());
-                    Subscribe(requestMessage);
-                    return responseMessagePic;
-                }
+                return new SuccessResponseMessage();
+                ////var responseMessage = ResponseMessageBase.CreateFromRequestMessage<ResponseMessageText>(requestMessage);
+                ////responseMessage.Content = MessageInfo.SubscribeMsg;
+                ////修改成图文消息
+                //var responseMessage = ResponseMessageBase.CreateFromRequestMessage<ResponseMessageNews>(requestMessage);
+                //responseMessage.ArticleCount = 1;
+                //responseMessage.Articles.Add(GetPicSubscribe());
+                ////关注消息
+                //Subscribe(requestMessage);
+                //return responseMessage;
             }
-                return null;
-            ////var responseMessage = ResponseMessageBase.CreateFromRequestMessage<ResponseMessageText>(requestMessage);
-            ////responseMessage.Content = MessageInfo.SubscribeMsg;
-            ////修改成图文消息
-            //var responseMessage = ResponseMessageBase.CreateFromRequestMessage<ResponseMessageNews>(requestMessage);
-            //responseMessage.ArticleCount = 1;
-            //responseMessage.Articles.Add(GetPicSubscribe());
-            ////关注消息
-            //Subscribe(requestMessage);
-            //return responseMessage;
-        }
             catch (Exception ex)
             {
                 Logger.ErrorFormat("微信关注推送消息失败 error：{0} Exception：{1}", ex.Message, ex);
-                return null;
+                return new SuccessResponseMessage();
             }
+        }
+
+        /// <summary>
+        /// 默认回复
+        /// </summary>
+        /// <param name="requestMessage"></param>
+        /// <returns></returns>
+        public override IResponseMessageBase DefaultResponseMessage(IRequestMessageBase requestMessage)
+        {
+            /* 所有没有被处理的消息会默认返回这里的结果，
+            * 因此，如果想把整个微信请求委托出去（例如需要使用分布式或从其他服务器获取请求），
+            * 只需要在这里统一发出委托请求，如：
+            * var responseMessage = MessageAgent.RequestResponseMessage(agentUrl, agentToken, RequestDocument.ToString());
+            * return responseMessage;
+            */
+            if (this.MessageInfo.KeyWords.Keys.Contains("默认"))
+            {
+                var responseMessage = this.CreateResponseMessage<ResponseMessageText>();
+                responseMessage.Content = this.MessageInfo.KeyWords["默认"];
+                return responseMessage;
+            }
+            else
+            {
+                var responseMessage = ResponseMessageBase.CreateFromRequestMessage<ResponseMessageNews>(requestMessage);
+                responseMessage.ArticleCount = 1;
+                responseMessage.Articles.Add(GetPicSubscribe());
+                return responseMessage;
+            }
+            //return new SuccessResponseMessage();
+        }
+
+        public override IResponseMessageBase OnTextRequest(RequestMessageText requestMessage)
+        {
+            //说明：实际项目中这里的逻辑可以交给Service处理具体信息，参考OnLocationRequest方法或/Service/LocationSercice.cs
+            var defaultResponseMessage = base.CreateResponseMessage<ResponseMessageText>();
+
+            var requestHandler = requestMessage.StartHandler();
+
+            requestHandler.Keywords(new string[] { "使用指南", "使用", "使用手册", "如何使用" }, () =>
+            {
+                var responseMessage = ResponseMessageBase.CreateFromRequestMessage<ResponseMessageNews>(requestMessage);
+                responseMessage.ArticleCount = 1;
+                responseMessage.Articles.Add(GetPicSubscribe());
+                return responseMessage;
+            });
+
+            foreach (var item in this.MessageInfo.KeyWords)
+            {
+                if (item.Key == "默认")
+                {
+                    requestHandler.Default(() =>
+                    {
+                        //var responseMessage = this.CreateResponseMessage<ResponseMessageText>();
+                        //responseMessage.Content = this.MessageInfo.KeyWords["默认"];
+                        var responseMessage = ResponseMessageBase.CreateFromRequestMessage<ResponseMessageNews>(requestMessage);
+                        responseMessage.ArticleCount = 1;
+                        responseMessage.Articles.Add(GetPicSubscribe());
+                        return responseMessage;
+                    });
+                }
+                else
+                {
+                    //如果有逗号表示数组
+                    if (item.Key.Contains(','))
+                    {
+                        requestHandler.Keywords(item.Key.Split(','), () =>
+                        {
+                            var responseMessage = this.CreateResponseMessage<ResponseMessageText>();
+                            responseMessage.Content = item.Value;
+                            return responseMessage;
+                        });
+                    }
+                    //表示关键字
+                    else
+                    {
+                        requestHandler.Keyword(item.Key, () =>
+                        {
+                            var responseMessage = this.CreateResponseMessage<ResponseMessageText>();
+                            responseMessage.Content = item.Value;
+                            return responseMessage;
+                        });
+                    }
+                }
+            }
+            return requestHandler.GetResponseMessage() as IResponseMessageBase;
         }
 
         /// <summary>

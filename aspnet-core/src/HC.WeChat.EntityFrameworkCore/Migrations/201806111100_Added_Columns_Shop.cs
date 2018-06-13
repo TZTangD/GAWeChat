@@ -40,6 +40,18 @@ namespace HC.WeChat.Migrations
          name: "PicLink",
          table: "WechatSubscribes",
          nullable: true);
+            migrationBuilder.AddColumn<string>(
+name: "Title",
+table: "WechatMessages",
+nullable: true);
+            migrationBuilder.AddColumn<string>(
+         name: "Desc",
+         table: "WechatMessages",
+         nullable: true);
+            migrationBuilder.AddColumn<string>(
+         name: "PicLink",
+         table: "WechatMessages",
+         nullable: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -67,6 +79,15 @@ namespace HC.WeChat.Migrations
                  migrationBuilder.DropColumn(
          name: "PicLink",
          table: "WechatSubscribes");
+            migrationBuilder.DropColumn(
+name: "Title",
+table: "WechatMessages");
+            migrationBuilder.DropColumn(
+    name: "Desc",
+    table: "WechatMessages");
+            migrationBuilder.DropColumn(
+    name: "PicLink",
+    table: "WechatMessages");
         }
     }
 }
