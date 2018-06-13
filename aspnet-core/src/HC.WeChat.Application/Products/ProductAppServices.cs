@@ -51,7 +51,7 @@ namespace HC.WeChat.Products
         private readonly IRepository<WeChatUser, Guid> _wechatuserRepository;
         private readonly IRepository<EPCo, Guid> _epcoRepository;
         private readonly IRepository<EPCoLine, Guid> _epcolineRepository;
-        private readonly IRepository<GACustPoint, int> _gacustpointRepository;
+        private readonly IRepository<GACustPoint, Guid> _gacustpointRepository;
         private readonly IRepository<GAGrade, int> _gagradeRepository;
 
 
@@ -62,7 +62,7 @@ namespace HC.WeChat.Products
       , IProductManager productManager, IHostingEnvironment hostingEnvironment,
             IRetailerAppService retailerService, IRepository<WeChatUser, Guid> wechatuserRepository,
             IRepository<EPCo, Guid> epcoRepository, IRepository<EPCoLine, Guid> epcolineRepository,
-            IRepository<GACustPoint, int> gacustpointRepository, IRepository<GAGrade, int> gagradeRepository
+            IRepository<GACustPoint, Guid> gacustpointRepository, IRepository<GAGrade, int> gagradeRepository
         )
         {
             _productRepository = productRepository;
@@ -781,7 +781,7 @@ namespace HC.WeChat.Products
                     retailInfo.SiChuanQty = await siChuanOrders.CountAsync() == 0 ? 0 : (int)await siChuanOrders.SumAsync(f => f.QTY_ORD.Value);
 
                     //积分
-                    var allPoints = await _gacustpointRepository.GetAll().Where(f => f.LicenseCode == retail.CustId).ToListAsync();//LicenseCode实际指的是CustId（名字取得有误）
+                    var allPoints = await _gacustpointRepository.GetAll().Where(f => f.CustId == retail.CustId).ToListAsync();//LicenseCode实际指的是CustId（名字取得有误）
                     var totalPoints = allPoints.Count == 0 ? 0 : allPoints.Sum(t => t.Point);
                     int monthPoints = 0;
                     if (allPoints.Count != 0)

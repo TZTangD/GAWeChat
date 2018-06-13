@@ -8,13 +8,13 @@ using System.Text;
 namespace HC.WeChat.GACustPoints
 {
     [Table("GA_CustPoints")]
-    public class GACustPoint : Entity<int>
+    public class GACustPoint : Entity<Guid>
     {
         /// <summary>
         /// 客户ID
         /// </summary>
         [StringLength(100)]
-        public virtual string LicenseCode { get; set; }
+        public virtual string CustId { get; set; }
         /// <summary>
         /// 获得积分月 格式：yyyyMM
         /// </summary>

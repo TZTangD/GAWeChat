@@ -12,6 +12,7 @@ using HC.WeChat.GACustPoints.Authorization;
 using HC.WeChat.GACustPoints.Dtos;
 using HC.WeChat.GACustPoints.DomainServices;
 using HC.WeChat.GACustPoints;
+using System;
 
 namespace HC.WeChat.GACustPoints
 {
@@ -23,13 +24,13 @@ namespace HC.WeChat.GACustPoints
     {
         ////BCC/ BEGIN CUSTOM CODE SECTION
         ////ECC/ END CUSTOM CODE SECTION
-        private readonly IRepository<GACustPoint, int> _gacustpointRepository;
+        private readonly IRepository<GACustPoint, Guid> _gacustpointRepository;
         private readonly IGACustPointManager _gacustpointManager;
 
         /// <summary>
         /// 构造函数
         /// </summary>
-        public GACustPointAppService(IRepository<GACustPoint, int> gacustpointRepository
+        public GACustPointAppService(IRepository<GACustPoint, Guid> gacustpointRepository
       , IGACustPointManager gacustpointManager
         )
         {
@@ -67,7 +68,7 @@ namespace HC.WeChat.GACustPoints
         /// <summary>
         /// 通过指定id获取GACustPointListDto信息
         /// </summary>
-        public async Task<GACustPointListDto> GetGACustPointByIdAsync(EntityDto<int> input)
+        public async Task<GACustPointListDto> GetGACustPointByIdAsync(EntityDto<Guid> input)
         {
             var entity = await _gacustpointRepository.GetAsync(input.Id);
 
@@ -89,7 +90,7 @@ namespace HC.WeChat.GACustPoints
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<GetGACustPointForEditOutput> GetGACustPointForEdit(NullableIdDto<int> input)
+        public async Task<GetGACustPointForEditOutput> GetGACustPointForEdit(NullableIdDto<Guid> input)
         {
             var output = new GetGACustPointForEditOutput();
             GACustPointEditDto gacustpointEditDto;
@@ -163,7 +164,7 @@ namespace HC.WeChat.GACustPoints
         /// <param name="input"></param>
         /// <returns></returns>
         [AbpAuthorize(GACustPointAppPermissions.GACustPoint_DeleteGACustPoint)]
-        public async Task DeleteGACustPoint(EntityDto<int> input)
+        public async Task DeleteGACustPoint(EntityDto<Guid> input)
         {
 
             //TODO:删除前的逻辑判断，是否允许删除
@@ -174,7 +175,7 @@ namespace HC.WeChat.GACustPoints
         /// 批量删除GACustPoint的方法
         /// </summary>
         [AbpAuthorize(GACustPointAppPermissions.GACustPoint_BatchDeleteGACustPoints)]
-        public async Task BatchDeleteGACustPointsAsync(List<int> input)
+        public async Task BatchDeleteGACustPointsAsync(List<Guid> input)
         {
             //TODO:批量删除前的逻辑判断，是否允许删除
             await _gacustpointRepository.DeleteAsync(s => input.Contains(s.Id));

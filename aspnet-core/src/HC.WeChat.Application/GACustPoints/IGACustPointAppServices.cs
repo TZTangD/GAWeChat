@@ -4,6 +4,7 @@ using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using HC.WeChat.GACustPoints.Dtos;
 using HC.WeChat.GACustPoints;
+using System;
 
 namespace HC.WeChat.GACustPoints
 {
@@ -22,7 +23,7 @@ namespace HC.WeChat.GACustPoints
         /// <summary>
         /// 通过指定id获取GACustPointListDto信息
         /// </summary>
-        Task<GACustPointListDto> GetGACustPointByIdAsync(EntityDto<int> input);
+        Task<GACustPointListDto> GetGACustPointByIdAsync(EntityDto<Guid> input);
 
         /// <summary>
         /// 导出GACustPoint为excel表
@@ -34,7 +35,7 @@ namespace HC.WeChat.GACustPoints
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task<GetGACustPointForEditOutput> GetGACustPointForEdit(NullableIdDto<int> input);
+        Task<GetGACustPointForEditOutput> GetGACustPointForEdit(NullableIdDto<Guid> input);
 
         //todo:缺少Dto的生成GetGACustPointForEditOutput
         /// <summary>
@@ -49,11 +50,11 @@ namespace HC.WeChat.GACustPoints
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task DeleteGACustPoint(EntityDto<int> input);
+        Task DeleteGACustPoint(EntityDto<Guid> input);
 
         /// <summary>
         /// 批量删除GACustPoint
         /// </summary>
-        Task BatchDeleteGACustPointsAsync(List<int> input);
+        Task BatchDeleteGACustPointsAsync(List<Guid> input);
     }
 }

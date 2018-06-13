@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using HC.WeChat.GACustPoints.Dtos.LTMAutoMapper;
 using HC.WeChat.GACustPoints;
+using System;
 
 namespace HC.WeChat.GACustPoints.Dtos
 {
@@ -8,12 +9,12 @@ namespace HC.WeChat.GACustPoints.Dtos
     {
         ////BCC/ BEGIN CUSTOM CODE SECTION
         ////ECC/ END CUSTOM CODE SECTION
-        public int? Id { get; set; }
+        public Guid? Id { get; set; }
         /// <summary>
         /// 客户ID
         /// </summary>
         [StringLength(100)]
-        public string LicenseCode { get; set; }
+        public string CustId { get; set; }
 
         /// <summary>
         /// 获得积分月 格式：yyyyMM

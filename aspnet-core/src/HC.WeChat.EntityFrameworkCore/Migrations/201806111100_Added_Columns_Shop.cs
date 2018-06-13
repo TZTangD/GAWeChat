@@ -26,7 +26,7 @@ namespace HC.WeChat.Migrations
             migrationBuilder.AddColumn<string>(
            name: "InnerCode",
            table: "Employees",
-           maxLength: 500,
+           maxLength: 50,
            nullable: true);
         }
 
@@ -41,7 +41,7 @@ namespace HC.WeChat.Migrations
             migrationBuilder.DropColumn(
           name: "UnfollowTime",
           table: "WeChatUsers");
-            
+
             migrationBuilder.DropColumn(
             name: "InnerCode",
             table: "Employees");

@@ -3,31 +3,31 @@ using System.Collections.Generic;
 using System.Linq;
 using Abp.Domain.Repositories;
 using Abp.Domain.Services;
-using HC.WeChat.GACustPoints;
+using HC.WeChat.LevelLogs;
 
-namespace HC.WeChat.GACustPoints.DomainServices
+namespace HC.WeChat.LevelLogs.DomainServices
 {
     /// <summary>
-    /// GACustPoint领域层的业务管理
+    /// LevelLog领域层的业务管理
     /// </summary>
-    public class GACustPointManager : WeChatDomainServiceBase, IGACustPointManager
+    public class LevelLogManager : WeChatDomainServiceBase, ILevelLogManager
     {
         ////BCC/ BEGIN CUSTOM CODE SECTION
         ////ECC/ END CUSTOM CODE SECTION
-        private readonly IRepository<GACustPoint, Guid> _gacustpointRepository;
+        private readonly IRepository<LevelLog, Guid> _levellogRepository;
         /// <summary>
-        /// GACustPoint的构造方法
+        /// LevelLog的构造方法
         /// </summary>
-        public GACustPointManager(IRepository<GACustPoint, Guid> gacustpointRepository)
+        public LevelLogManager(IRepository<LevelLog, Guid> levellogRepository)
         {
-            _gacustpointRepository = gacustpointRepository;
+            _levellogRepository = levellogRepository;
         }
 
         //TODO:编写领域业务代码
         /// <summary>
         ///     初始化
         /// </summary>
-        public void InitGACustPoint()
+        public void InitLevelLog()
         {
             throw new NotImplementedException();
         }
