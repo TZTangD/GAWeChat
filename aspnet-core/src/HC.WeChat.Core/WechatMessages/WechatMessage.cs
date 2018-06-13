@@ -42,6 +42,21 @@ namespace HC.WeChat.WechatMessages
         public string Content { get; set; }
 
         /// <summary>
+        /// 标题
+        /// </summary>
+        public string Title { get; set; }
+
+        /// <summary>
+        /// 描述
+        /// </summary>
+        public string Desc { get; set; }
+
+        /// <summary>
+        /// 图片链接
+        /// </summary>
+        public string PicLink { get; set; }
+
+        /// <summary>
         /// 租户ID
         /// </summary>
         [Required]

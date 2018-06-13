@@ -33,9 +33,7 @@
                     </div>
                 </div>
             </form>
-            <nz-table #nzTable [nzAjaxData]="messagess" [nzTotal]="query.total" [(nzPageIndex)]="query.pageIndex" [(nzPageSize)]="query.pageSize"
-                [nzLoading]="loading" [nzShowSizeChanger]="true" [nzShowTotal]="'true'" (nzPageIndexChange)="getMessgeAll()"
-                (nzPageSizeChange)="getMessgeAll()">
+            <nz-table #nzTable [nzAjaxData]="messagess" [nzTotal]="query.total" [(nzPageIndex)]="query.pageIndex" [(nzPageSize)]="query.pageSize" [nzLoading]="loading" [nzShowSizeChanger]="true" [nzShowTotal]="'true'" (nzPageIndexChange)="getMessgeAll()" (nzPageSizeChange)="getMessgeAll()">
                 <thead nz-thead>
                     <tr>
                         <th nz-th>
@@ -78,14 +76,14 @@
                     <label for="msgType" nz-form-item-required>消息类型</label>
                 </div>
                 <div nz-form-control nz-col [nzSm]="20" nzHasFeedback [nzValidateStatus]="getFormControl('msgType')">
-                    <nz-radio-group formControlName="msgType" [(ngModel)]="subscribes.msgType" class="mb-md">
+                    <nz-radio-group formControlName="msgType" [(ngModel)]="subscribes.msgType" (click)="cleanText()" class="mb-md">
                         <label nz-radio [nzValue]="o.value" *ngFor="let o of msyTypes">
                             <span>{{o.text}}</span>
                         </label>
                     </nz-radio-group>
                 </div>
             </div>
-            <div nz-form-item nz-row>
+            <div nz-form-item nz-row *ngIf="subscribes.msgType==1">
                 <div nz-form-label nz-col [nzSm]="4">
                     <label for="content" nz-form-item-required>回复内容</label>
                 </div>
@@ -94,7 +92,45 @@
                     <div nz-form-explain *ngIf="getFormControl('content').dirty&&getFormControl('content').hasError('required')">内容不能为空</div>
                 </div>
             </div>
-
+            <div nz-form-item nz-row *ngIf="subscribes.msgType==2">
+                <div nz-form-label nz-col [nzSm]="4">
+                    <label for="title" nz-form-item-required>标题</label>
+                </div>
+                <div nz-form-control nz-col [nzSm]="20" nzHasFeedback [nzValidateStatus]="getFormControl('title')">
+                    <nz-input formControlName="title" [(ngModel)]="subscribes.title" [nzId]="'title'"></nz-input>
+                    <!-- <div nz-form-explain *ngIf="getFormControl('title').dirty&&getFormControl('title').hasError('maxlength')">字符长度小于等于100</div>
+                    <div nz-form-explain *ngIf="getFormControl('title').dirty&&getFormControl('title').hasError('required')">请输入标题</div> -->
+                </div>
+            </div>
+            <div nz-form-item nz-row *ngIf="subscribes.msgType==2">
+                <div nz-form-label nz-col [nzSm]="4">
+                    <label for="desc" nz-form-item-required>描述</label>
+                </div>
+                <div nz-form-control nz-col [nzSm]="20" nzHasFeedback [nzValidateStatus]="getFormControl('desc')">
+                    <nz-input formControlName="desc" [(ngModel)]="subscribes.desc" [nzId]="'desc'"></nz-input>
+                    <!-- <div nz-form-explain *ngIf="getFormControl('desc').dirty&&getFormControl('desc').hasError('maxlength')">字符长度小于等于100</div>
+                    <div nz-form-explain *ngIf="getFormControl('desc').dirty&&getFormControl('desc').hasError('required')">请输入描述</div> -->
+                </div>
+            </div>
+            <div nz-form-item nz-row *ngIf="subscribes.msgType==2">
+                <div nz-form-label nz-col [nzSm]="4">
+                    <label for="picLink" nz-form-item-required>图片链接</label>
+                </div>
+                <div nz-form-control nz-col [nzSm]="20" nzHasFeedback [nzValidateStatus]="getFormControl('picLink')">
+                    <nz-input formControlName="picLink" [(ngModel)]="subscribes.picLink" [nzId]="'picLink'"></nz-input>
+                    <!-- <div nz-form-explain *ngIf="getFormControl('picLink').dirty&&getFormControl('picLink').hasError('maxlength')">字符长度小于等于100</div>
+                    <div nz-form-explain *ngIf="getFormControl('picLink').dirty&&getFormControl('picLink').hasError('required')">请输入链接地址</div> -->
+                </div>
+            </div>
+            <div nz-form-item nz-row *ngIf="subscribes.msgType==2">
+                <div nz-form-label nz-col [nzSm]="4">
+                    <label for="content" nz-form-item-required>文章链接</label>
+                </div>
+                <div nz-form-control nz-col [nzSm]="20" nzHasFeedback [nzValidateStatus]="getFormControl('content')">
+                    <nz-input formControlName="content" [(ngModel)]="subscribes.content" [nzId]="'content'"></nz-input>
+                    <div nz-form-explain *ngIf="getFormControl('content').dirty&&getFormControl('content').hasError('required')">请输入链接地址</div>
+                </div>
+            </div>
             <div nz-form-item nz-row>
                 <div nz-col [nzOffset]="4" [nzSm]="7">
                     <button nz-button [nzType]="'default'" [nzSize]="'large'" type="button" (click)="deletes(deletesContent)">

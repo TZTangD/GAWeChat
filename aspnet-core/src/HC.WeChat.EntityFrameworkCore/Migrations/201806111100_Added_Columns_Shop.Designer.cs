@@ -1260,7 +1260,9 @@ namespace HC.WeChat.Migrations
                 b.Property<long?>("CreatorUserId");
                 b.Property<DateTime?>("LastModificationTime");
                 b.Property<long>("LastModifierUserId"); b.HasKey("Id");
-
+                b.Property<string>("Title");
+                b.Property<string>("Desc");
+                b.Property<string>("PicLink");
                 //b.HasIndex("TargetTenantId", "TargetUserId", "ReadState");
 
                 b.ToTable("WechatMessages");
@@ -1276,6 +1278,9 @@ namespace HC.WeChat.Migrations
                 b.Property<long?>("CreatorUserId");
                 b.Property<DateTime?>("LastModificationTime");
                 b.Property<long>("LastModifierUserId"); b.HasKey("Id");
+                b.Property<string>("Title");
+                b.Property<string>("Desc");
+                b.Property<string>("PicLink");
 
                 //b.HasIndex("TargetTenantId", "TargetUserId", "ReadState");
 

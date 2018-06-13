@@ -13,7 +13,7 @@ import { Messagess } from '@shared/entity/wechat/messages';
     selector: 'messages',
     templateUrl: 'messages.component.html',
 })
-export class MessagesComponent extends AppComponentBase implements OnInit{
+export class MessagesComponent extends AppComponentBase implements OnInit {
     @ViewChild('editMessageModal') editMessageModal: EditMessageComponent;
     @ViewChild('createMessageModal') createMessageModal: CreateMessageComponent;
 
@@ -35,8 +35,9 @@ export class MessagesComponent extends AppComponentBase implements OnInit{
     form: FormGroup;
     msyTypes = [
         { value: 1, text: '文字消息' },
-        // { value: 2, text: '图文消息' },
+        { value: 2, text: '图文消息' },
     ];
+    linkVal: any;
     constructor(injector: Injector, private messageService: MessageServiceProxy,
         private subscribeService: SubscribeServiceProxy, private fb: FormBuilder,
         private modal: NzModalService
@@ -51,8 +52,22 @@ export class MessagesComponent extends AppComponentBase implements OnInit{
         this.getSubscribe();
         this.form = this.fb.group({
             msgType: [null, [Validators.compose([Validators.required])]],
-            content: [null, [Validators.compose([Validators.required])]]
-        }, );
+            content: [null, [Validators.compose([Validators.required])]],
+            // title: [null, Validators.compose([Validators.required, Validators.maxLength(100)])],
+            // desc: [null, Validators.compose([Validators.required, Validators.maxLength(100)])],
+            // picLink: [null, Validators.compose([Validators.required, Validators.maxLength(100)])],
+            title: [null],
+            desc: [null],
+            picLink: [null],
+        });
+    }
+    cleanText() {
+        if (this.linkVal != this.subscribes.msgType) {
+            this.subscribes.content = null;
+            this.linkVal = JSON.stringify(this.subscribes.msgType);
+        }
+        // this.article.content = null;
+        // this.article.linkAddress = '';
     }
     //#region 自动回复消息
 
@@ -128,6 +143,7 @@ export class MessagesComponent extends AppComponentBase implements OnInit{
             this.subscribes = result;
             if (!result.id) {
                 this.subscribes.msgType = 1;
+                this.linkVal = JSON.stringify(this.subscribes.msgType);
             }
         });
     }

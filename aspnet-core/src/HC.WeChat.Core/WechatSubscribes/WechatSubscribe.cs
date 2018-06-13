@@ -34,6 +34,21 @@ namespace HC.WeChat.WechatSubscribes
         [Required]
         public int? TenantId { get; set; }
 
+        /// <summary>
+        /// 标题
+        /// </summary>
+        public string Title { get; set; }
+
+        /// <summary>
+        /// 描述
+        /// </summary>
+        public string Desc { get; set; }
+
+        /// <summary>
+        /// 图片链接
+        /// </summary>
+        public string PicLink { get; set; }
+
         ///// <summary>
         ///// CreationTime
         ///// </summary>

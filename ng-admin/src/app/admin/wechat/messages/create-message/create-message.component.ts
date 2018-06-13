@@ -18,12 +18,13 @@ export class CreateMessageComponent extends AppComponentBase implements OnInit {
     isConfirmLoading = false;
     messages: Messagess = new Messagess();
     formc: FormGroup;
+    linkVal: any;
     // msgTypes:[
     //     {text:'文字消息',value:1}
     // ]
     msyTypes = [
         { value: 1, text: '文字消息' },
-        // { value: 2, text: '图文消息' },
+        { value: 2, text: '图文消息' },
     ];
     matchModes = [
         { value: 1, text: '精准匹配' },
@@ -31,8 +32,8 @@ export class CreateMessageComponent extends AppComponentBase implements OnInit {
     ];
     constructor(injector: Injector, private messageService: MessageServiceProxy, private fb: FormBuilder) {
         super(injector);
-
     }
+
     /**
      * 页面初始加载
      */
@@ -41,9 +42,20 @@ export class CreateMessageComponent extends AppComponentBase implements OnInit {
             keyWord: [null, [Validators.compose([Validators.required, Validators.maxLength(50)])]],
             matchMode: [null, Validators.required],
             msgType: [null, Validators.required],
-            content: [null, [Validators.compose([Validators.required])]]
+            content: [null, [Validators.compose([Validators.required])]],
+            title: [null],
+            desc: [null],
+            picLink: [null],
         });
     }
+
+    cleanText() {
+        if (this.linkVal != this.messages.msgType) {
+            this.messages.content = null;
+            this.linkVal = JSON.stringify(this.messages.msgType);
+        }
+    }
+
     /**
      * 显示模态框（进入新增页）
      */
@@ -63,6 +75,7 @@ export class CreateMessageComponent extends AppComponentBase implements OnInit {
         this.isConfirmLoading = false;
         this.reset(e);
     }
+
     reset(e?): void {
         if (e) {
             e.preventDefault();

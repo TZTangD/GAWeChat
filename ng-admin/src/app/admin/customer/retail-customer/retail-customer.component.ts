@@ -15,7 +15,7 @@ export class RetailCustomerComponent extends AppComponentBase implements OnInit 
     loading = false;
     exportExcelUrl: string;
     exportLoading = false;
-    search: any = {};
+    search: any = { status: true };
     host: string = AppConsts.remoteServiceBaseUrl;
     uploadLoading = false;
     status = [
@@ -37,13 +37,15 @@ export class RetailCustomerComponent extends AppComponentBase implements OnInit 
         super(injector);
     }
     ngOnInit(): void {
+        this.search = { isAction: true }
         this.refreshData();
     }
 
     refreshData(reset = false, search?: boolean) {
         if (reset) {
             this.query.pageIndex = 1;
-            this.search = {};
+            this.search = { isAction: true }
+            console.log(this.search)
         }
         if (search) {
             this.query.pageIndex = 1;
@@ -71,7 +73,7 @@ export class RetailCustomerComponent extends AppComponentBase implements OnInit 
         arry.push(Parameter.fromJS({ key: 'Name', value: this.search.name }));
         arry.push(Parameter.fromJS({ key: 'Scale', value: this.search.scale }));
         arry.push(Parameter.fromJS({ key: 'Markets', value: this.search.market }));
-        arry.push(Parameter.fromJS({ key: 'Status', value: this.search.isAction }));
+        arry.push(Parameter.fromJS({ key: 'Status', value: this.search.isAction === true ? true : this.search.isAction }));
         return arry;
     }
     editRetail(retail: RetailCustomer) {
