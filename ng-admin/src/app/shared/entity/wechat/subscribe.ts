@@ -1,5 +1,5 @@
-export class Subscribess implements ISubscribe{
-    id:number;
+export class Subscribess implements ISubscribe {
+    id: number;
     msgType: number;
     content: string;
     tenantId: number;
@@ -7,6 +7,9 @@ export class Subscribess implements ISubscribe{
     creatorUserId: number;
     lastModificationTime: Date;
     lastModifierUserId: Date;
+    picLink: string;
+    desc: string;
+    title: string;
     constructor(data?: ISubscribe) {
         if (data) {
             for (var property in data) {
@@ -26,7 +29,9 @@ export class Subscribess implements ISubscribe{
             this.creatorUserId = data["creatorUserId"];
             this.lastModificationTime = data["lastModificationTime"];
             this.lastModifierUserId = data["lastModifierUserId"];
-          
+            this.picLink = data["picLink"];
+            this.desc = data["desc"];
+            this.title = data["title"];
         }
     }
 
@@ -42,6 +47,9 @@ export class Subscribess implements ISubscribe{
         data["content"] = this.content;
         data["tenantId"] = this.tenantId;
         data["id"] = this.id;
+        data["title"] = this.title;
+        data["desc"] = this.desc;
+        data["picLink"] = this.picLink;
         return data;
     }
 
@@ -53,7 +61,7 @@ export class Subscribess implements ISubscribe{
     }
 }
 export interface ISubscribe {
-    id:number;
+    id: number;
     msgType: number;
     content: string;
     tenantId: number;
@@ -61,4 +69,7 @@ export interface ISubscribe {
     creatorUserId: number;
     lastModificationTime: Date;
     lastModifierUserId: Date;
+    picLink: string;
+    desc: string;
+    title: string;
 }

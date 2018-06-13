@@ -22,7 +22,9 @@ namespace HC.WeChat.MessageHandler
         private readonly IWeChatUserManager _wechatUserManager;
         public ILogger Logger { protected get; set; }
 
-        private int? _tenantId = 0;
+        //private int? _tenantId = 0;
+        private int? _tenantId;
+
 
         public HCMessageHandler(IRepository<WechatMessage, Guid> wechatmessageRepository, 
             IRepository<WechatSubscribe, Guid> wechatsubscribeRepository, 
@@ -45,7 +47,7 @@ namespace HC.WeChat.MessageHandler
 
         private List<WechatMessage> GetWechatMessageList()
         {
-            
+
             //先处理文字消息
             return _wechatmessageRepository.GetAll().Where(w => w.TenantId == _tenantId && w.MsgType == WechatEnums.MsgTypeEnum.文字消息).ToList();
         }
@@ -72,7 +74,7 @@ namespace HC.WeChat.MessageHandler
                         break;
                     default:
                         break;
-                }    
+                }
             }
         }
 
@@ -92,6 +94,71 @@ namespace HC.WeChat.MessageHandler
             Logger.InfoFormat("关注用户:{0}", wechatUser);
             //关注公众号
             _wechatUserManager.SubscribeAsync(requestMessage.FromUserName, wechatUser.nickname, wechatUser.headimgurl, _tenantId);
+        }
+
+        /// <summary>
+        /// 订阅（关注）事件
+        /// </summary>
+        public override IResponseMessageBase OnEvent_SubscribeRequest(RequestMessageEvent_Subscribe requestMessage)
+        {
+            try
+            {
+                if (MessageInfo == null)
+                {
+                    return new SuccessResponseMessage();
+                }
+                var sinfo = GetWechatSubscribe();
+                if (sinfo != null)
+                {
+                    if (sinfo.MsgType == WechatEnums.MsgTypeEnum.文字消息)
+                {
+                    var responseMessage = ResponseMessageBase.CreateFromRequestMessage<ResponseMessageText>(requestMessage);
+                    responseMessage.Content = MessageInfo.SubscribeMsg;
+                    Subscribe(requestMessage);
+                    return responseMessage;
+                }
+                else
+                {
+                    var responseMessagePic = ResponseMessageBase.CreateFromRequestMessage<ResponseMessageNews>(requestMessage);
+                    responseMessagePic.ArticleCount = 1;
+                    responseMessagePic.Articles.Add(GetPicSubscribe());
+                    Subscribe(requestMessage);
+                    return responseMessagePic;
+                }
+            }
+                return null;
+            ////var responseMessage = ResponseMessageBase.CreateFromRequestMessage<ResponseMessageText>(requestMessage);
+            ////responseMessage.Content = MessageInfo.SubscribeMsg;
+            ////修改成图文消息
+            //var responseMessage = ResponseMessageBase.CreateFromRequestMessage<ResponseMessageNews>(requestMessage);
+            //responseMessage.ArticleCount = 1;
+            //responseMessage.Articles.Add(GetPicSubscribe());
+            ////关注消息
+            //Subscribe(requestMessage);
+            //return responseMessage;
+        }
+            catch (Exception ex)
+            {
+                Logger.ErrorFormat("微信关注推送消息失败 error：{0} Exception：{1}", ex.Message, ex);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 从数据库中获取图文配置
+        /// </summary>
+        /// <returns></returns>
+        public virtual Article GetPicSubscribe()
+        {
+            //var subscribe = _wechatsubscribeRepository.GetAll().FirstOrDefault();
+            var subscribe = GetWechatSubscribe();
+            return new Article()
+            {
+                Title = subscribe.Title,
+                Description = subscribe.Desc,
+                PicUrl = subscribe.PicLink,
+                Url = subscribe.Content
+            };
         }
     }
 }

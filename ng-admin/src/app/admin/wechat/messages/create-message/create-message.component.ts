@@ -41,7 +41,10 @@ export class CreateMessageComponent extends AppComponentBase implements OnInit {
             keyWord: [null, [Validators.compose([Validators.required, Validators.maxLength(50)])]],
             matchMode: [null, Validators.required],
             msgType: [null, Validators.required],
-            content: [null, [Validators.compose([Validators.required])]]
+            content: [null, [Validators.compose([Validators.required])]],
+            // title: [null],
+            // desc: [null],
+            // picLink: [null],
         });
     }
     /**

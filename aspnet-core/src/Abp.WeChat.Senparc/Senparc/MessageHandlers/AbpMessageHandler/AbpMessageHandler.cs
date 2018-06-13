@@ -208,22 +208,22 @@ namespace Abp.WeChat.Senparc.MessageHandlers
         /// <summary>
         /// 订阅（关注）事件
         /// </summary>
-        public override IResponseMessageBase OnEvent_SubscribeRequest(RequestMessageEvent_Subscribe requestMessage)
-        {
-            if (MessageInfo == null)
-            {
-                return new SuccessResponseMessage();
-            }
-            //var responseMessage = ResponseMessageBase.CreateFromRequestMessage<ResponseMessageText>(requestMessage);
-            //responseMessage.Content = MessageInfo.SubscribeMsg;
-            //修改成图文消息
-            var responseMessage = ResponseMessageBase.CreateFromRequestMessage<ResponseMessageNews>(requestMessage);
-            responseMessage.ArticleCount = 1;
-            responseMessage.Articles.Add(GetSubscribeNews()); 
-            //关注消息
-            Subscribe(requestMessage);
-            return responseMessage;
-        }
+        //public override IResponseMessageBase OnEvent_SubscribeRequest(RequestMessageEvent_Subscribe requestMessage)
+        //{
+        //    if (MessageInfo == null)
+        //    {
+        //        return new SuccessResponseMessage();
+        //    }
+        //    //var responseMessage = ResponseMessageBase.CreateFromRequestMessage<ResponseMessageText>(requestMessage);
+        //    //responseMessage.Content = MessageInfo.SubscribeMsg;
+        //    //修改成图文消息
+        //    var responseMessage = ResponseMessageBase.CreateFromRequestMessage<ResponseMessageNews>(requestMessage);
+        //    responseMessage.ArticleCount = 1;
+        //    responseMessage.Articles.Add(GetSubscribeNews()); 
+        //    //关注消息
+        //    Subscribe(requestMessage);
+        //    return responseMessage;
+        //}
 
         public override IResponseMessageBase OnEvent_UnsubscribeRequest(RequestMessageEvent_Unsubscribe requestMessage)
         {

@@ -7,6 +7,7 @@ namespace HC.WeChat.WechatEnums
     public enum MsgTypeEnum
     {
         文字消息 = 1,
+        图文消息 =2
     }
     /// <summary>
     /// 匹配模式

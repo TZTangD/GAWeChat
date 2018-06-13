@@ -37,7 +37,8 @@
                         {
                             "text": "自动回复",
                             "link": "/admin/wechat/message",
-                            "translate": "aut-res"
+                            "translate": "aut-res",
+                            "reuse": false
                         }
                     ]
                 },
