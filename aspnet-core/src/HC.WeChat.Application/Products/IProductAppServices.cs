@@ -62,7 +62,7 @@ namespace HC.WeChat.Products
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task CreateOrUpdateProductDto(ProductEditDto input);
+        Task<ProductListDto> CreateOrUpdateProductDto(ProductEditDto input);
 
         /// <summary>
         /// 获取特色商品

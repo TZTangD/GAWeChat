@@ -274,20 +274,20 @@ namespace HC.WeChat.Products
         /// 新增Product
         /// </summary>
         //[AbpAuthorize(ProductAppPermissions.Product_CreateProduct)]
-        protected virtual async Task<ProductEditDto> CreateProductAsync(ProductEditDto input)
+        protected virtual async Task<ProductListDto> CreateProductAsync(ProductEditDto input)
         {
             //TODO:新增前的逻辑判断，是否允许新增
             var entity = ObjectMapper.Map<Product>(input);
             entity.SearchCount = 0;
             entity = await _productRepository.InsertAsync(entity);
-            return entity.MapTo<ProductEditDto>();
+            return entity.MapTo<ProductListDto>();
         }
 
         /// <summary>
         /// 编辑Product
         /// </summary>
         //[AbpAuthorize(ProductAppPermissions.Product_EditProduct)]
-        protected virtual async Task<ProductEditDto> UpdateProductAsync(ProductEditDto input)
+        protected virtual async Task<ProductListDto> UpdateProductAsync(ProductEditDto input)
         {
             //TODO:更新前的逻辑判断，是否允许更新
             var entity = await _productRepository.GetAsync(input.Id.Value);
@@ -295,7 +295,7 @@ namespace HC.WeChat.Products
 
             // ObjectMapper.Map(input, entity);
             var result = await _productRepository.UpdateAsync(entity);
-            return result.MapTo<ProductEditDto>();
+            return result.MapTo<ProductListDto>();
         }
 
         /// <summary>
@@ -338,7 +338,7 @@ namespace HC.WeChat.Products
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task CreateOrUpdateProductDto(ProductEditDto input)
+        public async Task<ProductListDto> CreateOrUpdateProductDto(ProductEditDto input)
         {
             string webRootPath = _hostingEnvironment.WebRootPath;
             if (!string.IsNullOrEmpty(input.Img64)&& !string.IsNullOrEmpty(input.FileName))
@@ -360,11 +360,13 @@ namespace HC.WeChat.Products
                         File.Delete(webRootPath + url);
                     }
                 }
+                return result;
 
             }
             else
             {
-                await CreateProductAsync(input);
+             return  await CreateProductAsync(input);
+                
             }
         }
         /// <summary>
