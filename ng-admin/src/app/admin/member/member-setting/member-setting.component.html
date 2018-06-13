@@ -78,7 +78,7 @@
     </nz-tab>
     <nz-tab>
         <ng-template #nzTabHeading>
-            微信用户配置
+            店铺审核人员配置
         </ng-template>
         <nz-card>
             <form nz-form [formGroup]="form" id="frm_create_role" (ngSubmit)="save()">
@@ -86,18 +86,18 @@
                     <div nz-col [nzSpan]="16">
                         <div nz-form-item nz-row>
                             <div nz-form-label nz-col [nzSm]="5">
-                                <label for="rcValue">用户选择</label>
+                                <label for="rcValue"> 选择店铺审核人员</label>
                             </div>
                             <div nz-col [nzSm]="4">
-                                <button nz-button style="width: 126px" [nzType]="'primary'" [nzSize]="'large'" type="button" (click)="employee()">
-                                    选择员工
+                                <button nz-button style="width: 145px" [nzType]="'primary'" [nzSize]="'large'" type="button" (click)="employee()">
+                                    选择店铺审核人员
                                 </button>
                             </div>
                         </div>
 
                         <div nz-form-item nz-row>
                             <div nz-form-label nz-col [nzSm]="5">
-                                <label for="user">已选择用户</label>
+                                <label for="user">已选择店铺审核人员</label>
                             </div>
                             <!-- <div nz-form-control nz-col [nzSm]="19">
                                 <h4 class="mb-md">{{employeeIds}}</h4>

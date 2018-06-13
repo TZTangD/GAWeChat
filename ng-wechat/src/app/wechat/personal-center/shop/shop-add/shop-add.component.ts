@@ -9,6 +9,7 @@ import { ShopService, AppConsts } from '../../../../services';
 import { ToptipsService } from "ngx-weui/toptips";
 import { JWeiXinService } from 'ngx-weui/jweixin';
 import { PopupComponent } from "ngx-weui/popup";
+import { ToastService } from "ngx-weui/toast";
 
 import { ImageCropperComponent, CropperSettings, Bounds, CropPosition } from 'ngx-img-cropper';
 
@@ -100,7 +101,8 @@ export class ShopAddComponent extends AppComponentBase implements OnInit {
     constructor(injector: Injector, private router: Router,
         private shopService: ShopService,
         private wxService: JWeiXinService,
-        private srv: ToptipsService) {
+        private srv: ToptipsService,
+        private srvToast: ToastService) {
         super(injector);
         this.cropperSettings = new CropperSettings();
         let winWidth = window.document.body.clientWidth;
@@ -127,7 +129,7 @@ export class ShopAddComponent extends AppComponentBase implements OnInit {
         this.cropperSettings.preserveSize = true;
         this.cropperSettings.cropOnResize = false;
         this.cropperSettings.noFileInput = true;
-        this.cropperSettings.compressRatio = 0.05;
+        this.cropperSettings.compressRatio = 0.1;
 
         this.imgData = {};
     }
@@ -293,6 +295,11 @@ export class ShopAddComponent extends AppComponentBase implements OnInit {
     //裁剪图片后上传 2018-06-07
     goUploadImg() {
         this.imgData.image = this.shopCropper.cropper.getCroppedImage(true).src;
+        if(!this.imgData.image){
+            this.srv['info']('请重新选择图片');
+            this.imgCropperPopup.close();
+            return;
+        }
         //console.log(this.fileName);
         this.shopService.FilesPostsBase64({ fileName: this.fileName, imageBase64: this.imgData.image }).subscribe((res) => {
             //console.table(res);
@@ -314,14 +321,29 @@ export class ShopAddComponent extends AppComponentBase implements OnInit {
     }
     //选择图片
     fileChange($event) {
+        this.srvToast.show(null, 10000, null, 'loading');
         const image: any = new Image();
         const file: File = $event.target.files[0];
+        //alert(file.size);
+        this.setCompressRatio(file.size);
         this.fileName = file.name;
         const myReader: FileReader = new FileReader();
         myReader.onloadend = (loadEvent: any) => {
             image.src = loadEvent.target.result;
             this.shopCropper.setImage(image);
+            this.srvToast.hide();
         };
         myReader.readAsDataURL(file);
+    }
+
+    //根据图片大小设置压缩率
+    setCompressRatio(size: number){
+        //如果小于200kb 不压缩
+        let msize = 204800;
+        if(size <= msize){
+            this.shopCropper.settings.compressRatio = 1;
+        } else {
+            this.shopCropper.settings.compressRatio = msize/size;
+        }
     }
 }

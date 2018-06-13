@@ -9,7 +9,7 @@ import { Messagess } from '@shared/entity/wechat';
     selector: 'create-message-modal',
     templateUrl: 'create-message.component.html',
 })
-export class CreateMessageComponent extends AppComponentBase implements OnInit{
+export class CreateMessageComponent extends AppComponentBase implements OnInit {
     @Output() modalSave: EventEmitter<any> = new EventEmitter<any>();
 
     //模态框是否可见
@@ -51,7 +51,7 @@ export class CreateMessageComponent extends AppComponentBase implements OnInit{
         this.reset();
         this.messages = new Messagess();
         this.messages.msgType = 1;
-        this.messages.matchMode=1;
+        this.messages.matchMode = 1;
         this.modalVisible = true;
     }
 

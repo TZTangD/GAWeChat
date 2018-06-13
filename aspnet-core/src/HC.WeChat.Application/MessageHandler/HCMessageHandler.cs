@@ -25,7 +25,7 @@ namespace HC.WeChat.MessageHandler
         private int? _tenantId = 0;
 
         public HCMessageHandler(IRepository<WechatMessage, Guid> wechatmessageRepository, 
-            IRepository<WechatSubscribe, Guid> wechatsubscribeRepository,
+            IRepository<WechatSubscribe, Guid> wechatsubscribeRepository, 
             IWeChatUserManager wechatUserManager,
             int? tenantId, Stream inputStream, 
             PostModel postModel, 

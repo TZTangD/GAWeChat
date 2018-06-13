@@ -83,29 +83,126 @@ namespace HC.WeChat.Products
         /// <returns></returns>
         public async Task<PagedResultDto<ProductListDto>> GetPagedProducts(GetProductsInput input)
         {
+            // if (input.SortValue == "ascend")
+            // {
+            //     var query = _productRepository.GetAll()
+            //    .WhereIf(!string.IsNullOrEmpty(input.Name), p => p.Specification.Contains(input.Name))
+            //    .WhereIf(input.Type.HasValue, p => p.Type == input.Type)
+            //    .WhereIf(input.IsRare.HasValue, p => p.IsRare == input.IsRare);
+            //     //TODO:根据传入的参数添加过滤条件
+            //     var productCount = await query.CountAsync();
 
+            //     var products = await query
+            //         .OrderByDescending(p => p.SearchCount)
+            //         .ThenBy(input.Sorting)
+            //         .PageBy(input)
+            //         .ToListAsync();
+
+            //     //var productListDtos = ObjectMapper.Map<List <ProductListDto>>(products);
+            //     var productListDtos = products.MapTo<List<ProductListDto>>();
+
+            //     return new PagedResultDto<ProductListDto>(
+            //         productCount,
+            //         productListDtos
+            //         );
+            // }
+            // else if (input.SortValue == "descend")
+            // {
+            //     var query = _productRepository.GetAll()
+            //             .WhereIf(!string.IsNullOrEmpty(input.Name), p => p.Specification.Contains(input.Name))
+            //             .WhereIf(input.Type.HasValue, p => p.Type == input.Type)
+            //             .WhereIf(input.IsRare.HasValue, p => p.IsRare == input.IsRare);
+            //     //TODO:根据传入的参数添加过滤条件
+            //     var productCount = await query.CountAsync();
+
+            //     var products = await query
+            //         .OrderBy(p => p.SearchCount)
+            //         .ThenBy(input.Sorting)
+            //         .PageBy(input)
+            //         .ToListAsync();
+
+            //     //var productListDtos = ObjectMapper.Map<List <ProductListDto>>(products);
+            //     var productListDtos = products.MapTo<List<ProductListDto>>();
+
+            //     return new PagedResultDto<ProductListDto>(
+            //         productCount,
+            //         productListDtos
+            //         );
+            // }
+            // else
+            // {
+            //     var query = _productRepository.GetAll()
+            //.WhereIf(!string.IsNullOrEmpty(input.Name), p => p.Specification.Contains(input.Name))
+            //.WhereIf(input.Type.HasValue, p => p.Type == input.Type)
+            //.WhereIf(input.IsRare.HasValue, p => p.IsRare == input.IsRare);
+            //     //TODO:根据传入的参数添加过滤条件
+            //     var productCount = await query.CountAsync();
+            //     var products = await query
+            //         .OrderBy(p => p.Specification)
+            //         .ThenBy(input.Sorting)
+            //         .PageBy(input)
+            //         .ToListAsync();
+
+            //     //var productListDtos = ObjectMapper.Map<List <ProductListDto>>(products);
+            //     var productListDtos = products.MapTo<List<ProductListDto>>();
+
+            //     return new PagedResultDto<ProductListDto>(
+            //         productCount,
+            //         productListDtos
+            //         );
+            // }
             var query = _productRepository.GetAll()
-                .WhereIf(!string.IsNullOrEmpty(input.Name), p => p.Specification.Contains(input.Name))
-                .WhereIf(input.Type.HasValue, p => p.Type == input.Type)
-                .WhereIf(input.IsRare.HasValue, p => p.IsRare == input.IsRare);
+           .WhereIf(!string.IsNullOrEmpty(input.Name), p => p.Specification.Contains(input.Name))
+           .WhereIf(input.Type.HasValue, p => p.Type == input.Type)
+           .WhereIf(input.IsRare.HasValue, p => p.IsRare == input.IsRare);
             //TODO:根据传入的参数添加过滤条件
             var productCount = await query.CountAsync();
+            if (input.SortValue == "ascend")
+            {
+                var products = await query
+                     .OrderByDescending(p => p.SearchCount)
+                     .ThenBy(input.Sorting)
+                     .PageBy(input)
+                     .ToListAsync();
+                var productListDtos = products.MapTo<List<ProductListDto>>();
 
-            var products = await query
-                .OrderBy(p => p.Specification)
-                .ThenBy(input.Sorting)
-                .PageBy(input)
-                .ToListAsync();
+                return new PagedResultDto<ProductListDto>(
+                    productCount,
+                    productListDtos
+                    );
+            } else if(input.SortValue == "descend")
+            {
+                var products = await query
+                    .OrderBy(p => p.SearchCount)
+                    .ThenBy(input.Sorting)
+                    .PageBy(input)
+                    .ToListAsync();
 
-            //var productListDtos = ObjectMapper.Map<List <ProductListDto>>(products);
-            var productListDtos = products.MapTo<List<ProductListDto>>();
+                //var productListDtos = ObjectMapper.Map<List <ProductListDto>>(products);
+                var productListDtos = products.MapTo<List<ProductListDto>>();
 
-            return new PagedResultDto<ProductListDto>(
-                productCount,
-                productListDtos
-                );
+                return new PagedResultDto<ProductListDto>(
+                    productCount,
+                    productListDtos
+                    );
+            }
+            else
+            {
+                var products = await query
+                    .OrderBy(p => p.Specification)
+                    .ThenBy(input.Sorting)
+                    .PageBy(input)
+                    .ToListAsync();
 
+                //var productListDtos = ObjectMapper.Map<List <ProductListDto>>(products);
+                var productListDtos = products.MapTo<List<ProductListDto>>();
+
+                return new PagedResultDto<ProductListDto>(
+                    productCount,
+                    productListDtos
+                    );        
         }
+    }
 
         /// <summary>
         /// 通过指定id获取ProductListDto信息
@@ -719,19 +816,45 @@ namespace HC.WeChat.Products
         /// <returns></returns>
         private async Task<List<ProductListDto>> GeProductsNoPage(GetProductsInput input)
         {
+            //var query = _productRepository.GetAll()
+            //   .WhereIf(!string.IsNullOrEmpty(input.Name), p => p.Specification.Contains(input.Name))
+            //   .WhereIf(input.Type.HasValue, p => p.Type == input.Type)
+            //   .WhereIf(input.IsRare.HasValue, p => p.IsRare == input.IsRare);
+            ////TODO:根据传入的参数添加过滤条件
+            //var productCount = await query.CountAsync();
+
+            //var products = await query.ToListAsync();
+
+            ////var productListDtos = ObjectMapper.Map<List <ProductListDto>>(products);
+            //var productListDtos = products.MapTo<List<ProductListDto>>();
+
+            //return productListDtos;
             var query = _productRepository.GetAll()
-               .WhereIf(!string.IsNullOrEmpty(input.Name), p => p.Specification.Contains(input.Name))
-               .WhereIf(input.Type.HasValue, p => p.Type == input.Type)
-               .WhereIf(input.IsRare.HasValue, p => p.IsRare == input.IsRare);
+                 .WhereIf(!string.IsNullOrEmpty(input.Name), p => p.Specification.Contains(input.Name))
+                .WhereIf(input.Type.HasValue, p => p.Type == input.Type)
+                .WhereIf(input.IsRare.HasValue, p => p.IsRare == input.IsRare);
             //TODO:根据传入的参数添加过滤条件
             var productCount = await query.CountAsync();
-
-            var products = await query.ToListAsync();
-
-            //var productListDtos = ObjectMapper.Map<List <ProductListDto>>(products);
-            var productListDtos = products.MapTo<List<ProductListDto>>();
-
-            return productListDtos;
+            List<Product> products;
+            List<ProductListDto> productListDtos;
+            if (input.SortValue == "ascend")
+            {
+                products = await query.OrderByDescending(p => p.SearchCount).ThenBy(input.Sorting).ToListAsync();
+                productListDtos = products.MapTo<List<ProductListDto>>();
+                return productListDtos;
+            }
+            else if (input.SortValue == "descend")
+            {
+                products = await query.OrderBy(p => p.SearchCount).ThenBy(input.Sorting).ToListAsync();
+                productListDtos = products.MapTo<List<ProductListDto>>();
+                return productListDtos;
+            }
+            else
+            {
+                products = await query.OrderBy(p => p.Specification).ThenBy(input.Sorting).ToListAsync();
+                productListDtos = products.MapTo<List<ProductListDto>>();
+                return productListDtos;
+            }
         }
 
         /// <summary>

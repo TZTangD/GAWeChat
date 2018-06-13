@@ -21,7 +21,7 @@ namespace HC.WeChat.StatisticalDetails.Dtos
 
 
         /// <summary>
-        /// 统计查看文章Id
+        /// 统计查看文章Id&&店铺Id
         /// </summary>
         [Required]
         public Guid ArticleId { get; set; }

@@ -27,8 +27,16 @@ export class StoreManagementComponent extends AppComponentBase implements OnInit
         { text: '已审核', value: 2 },
         // { text: '已关闭店铺', value: 3 },
     ];
+
+    sortMap = {
+        sale: null,
+        read: null,
+    };
+
     loading = false;
     exportLoading = false;
+    sortSaleTotal = null;
+    sortReadTotal = null;
     constructor(injector: Injector, private shopServie: ShopServiceProxy,
         private router: Router) {
         super(injector);
@@ -37,10 +45,30 @@ export class StoreManagementComponent extends AppComponentBase implements OnInit
         this.refreshData();
     }
 
+    sort(value, para: string) {
+        if (para == 'sale') {
+            this.sortSaleTotal = value;
+            this.sortReadTotal = null;
+            this.sortMap.read = null;
+            this.refreshData();
+        } else {
+            this.sortReadTotal = value;
+            this.sortSaleTotal = null;
+            this.sortMap.sale = null;
+            this.refreshData();
+        }
+    }
+
     refreshData(reset = false, search?: boolean) {
         if (reset) {
             this.query.pageIndex = 1;
             this.search = { status: 4 };
+            this.sortSaleTotal = null;
+            this.sortReadTotal = null;
+            this.sortMap = {
+                sale: null,
+                read: null,
+            };
         }
         if (search) {
             this.query.pageIndex = 1;
@@ -61,6 +89,8 @@ export class StoreManagementComponent extends AppComponentBase implements OnInit
         arry.push(Parameter.fromJS({ key: 'Name', value: this.search.name }));
         arry.push(Parameter.fromJS({ key: 'Tel', value: this.search.tel }));
         arry.push(Parameter.fromJS({ key: 'Status', value: this.search.status === 4 ? null : this.search.status }));
+        arry.push(Parameter.fromJS({ key: 'sortSaleTotal', value: this.sortSaleTotal }));
+        arry.push(Parameter.fromJS({ key: 'sortReadTotal', value: this.sortReadTotal }));
         return arry;
     }
     editShop(shop: Shop) {
@@ -70,9 +100,9 @@ export class StoreManagementComponent extends AppComponentBase implements OnInit
     /**
      * 导出店铺信息
      */
-    exportExcel(){
-        this.exportLoading=true;
-        this.shopServie.ExportExcel({name:this.search.name,tel:this.search.tel,status:this.search.status === 4 ? null : this.search.status}).subscribe(data => {
+    exportExcel() {
+        this.exportLoading = true;
+        this.shopServie.ExportExcel({ name: this.search.name, tel: this.search.tel, status: this.search.status === 4 ? null : this.search.status, sortSaleTotal: this.sortSaleTotal, sortReadTotal: this.sortReadTotal }).subscribe(data => {
             if (data.code == 0) {
                 var url = AppConsts.remoteServiceBaseUrl + data.data;
                 document.getElementById('aShopExcelUrl').setAttribute('href', url);

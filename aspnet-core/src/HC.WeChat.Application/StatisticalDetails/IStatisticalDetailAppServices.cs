@@ -6,6 +6,7 @@ using HC.WeChat.StatisticalDetails.Dtos;
 using HC.WeChat.StatisticalDetails;
 using System;
 using HC.WeChat.Dto;
+using HC.WeChat.Shops.Dtos;
 
 namespace HC.WeChat.StatisticalDetails
 {
@@ -60,6 +61,7 @@ namespace HC.WeChat.StatisticalDetails
         Task<APIResultDto> AddStatisticalAsync(StatisticalDetailEditDto input);
         Task<bool> GetIsGoodAsync(int? tenantId, string openId, Guid? articleId);
         Task<APIResultDto> AddGoodAsync(StatisticalDetailEditDto input);
+        Task<ShopListDto> AddReadTotalAsync(StatisticalDetailEditDto input);
 
     }
 }

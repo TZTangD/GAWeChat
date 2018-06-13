@@ -39,8 +39,7 @@ export class CommodityManagementComponent extends AppComponentBase implements On
     defalutImg = '/assets/img/default.png';
     // defalutImg = '/upload/product/tobacco.jpg';
     productName = '';
-    // sortValue = null;
-    // sortKey = null;
+    sortValue = null;
     host = '';
     exportLoading = false;
     constructor(injector: Injector, private productsService: ProductsServiceProxy, private modal: NzModalService,
@@ -52,15 +51,17 @@ export class CommodityManagementComponent extends AppComponentBase implements On
         this.host = AppConsts.remoteServiceBaseUrl;
         // this.defalutImg = this.host + this.defalutImg;
     }
-    // sort(sort: { key: string, value: string }): void {
-    //     this.sortKey = sort.key;
-    //     this.sortValue = sort.value;
-    //     this.refreshData();
-    //   }
+
+    sort(value) {
+        this.sortValue = value;
+        this.refreshData();
+    }
+
     refreshData(reset = false, search?: boolean) {
         if (reset) {
             this.query.pageIndex = 1;
             this.search = { isRare: 0, type: 0 };
+            this.sortValue = null;
         }
         if (search) {
             this.query.pageIndex = 1;
@@ -94,6 +95,7 @@ export class CommodityManagementComponent extends AppComponentBase implements On
         arry.push(Parameter.fromJS({ key: 'Name', value: this.search.name }));
         arry.push(Parameter.fromJS({ key: 'Type', value: this.search.type === 0 ? null : this.search.type }));
         arry.push(Parameter.fromJS({ key: 'IsRare', value: this.search.isRare === 0 ? null : this.search.isRare }));
+        arry.push(Parameter.fromJS({ key: 'SortValue', value: this.sortValue }));
         return arry;
     }
     handlePreview = (url: string) => {
@@ -140,7 +142,7 @@ export class CommodityManagementComponent extends AppComponentBase implements On
      */
     exportExcel() {
         this.exportLoading = true;
-        this.productsService.ExportExcel({ name: this.search.name, type: this.search.type === 0 ? null : this.search.type, isRare: this.search.isRare === 0 ? null : this.search.isRare }).subscribe(data => {
+        this.productsService.ExportExcel({ name: this.search.name, type: this.search.type === 0 ? null : this.search.type, isRare: this.search.isRare === 0 ? null : this.search.isRare, sortValue: this.sortValue }).subscribe(data => {
             if (data.code == 0) {
                 var url = AppConsts.remoteServiceBaseUrl + data.data;
                 document.getElementById('aProductsExcelUrl').setAttribute('href', url);
