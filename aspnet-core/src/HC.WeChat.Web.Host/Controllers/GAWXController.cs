@@ -81,7 +81,7 @@ namespace HC.WeChat.Web.Host.Controllers
         public IActionResult GetCurrentUserOpenId()
         {
             APIResultDto result = new APIResultDto();
-            //UserOpenId = "oPM5Uv81jfyJqWbVxWAH-RUqsCAs";
+            UserOpenId = "oPM5Uv81jfyJqWbVxWAH-RUqsCAs";
             //UserOpenId = "oPM5Uv89yy7Iv8k9gLHjjsMTT5Gw";
             //UserOpenId = "oB4nYjnoHhuWrPVi2pYLuPjnCaU0";
             //UserOpenId = "oWusewPRxWuP4wMz3UmHR0y7CJME";
@@ -371,8 +371,9 @@ namespace HC.WeChat.Web.Host.Controllers
             return Redirect(GAAuthorizationPageUrl.PersonalCenterUrl);
         }
 
-        [Route("GAWX/Error/{statusCode}")]
-        public IActionResult Error(int statusCode)
+        //[Route("GAWX/Error/{statusCode}")]
+        //[Route("GAWX/Error")]
+        public IActionResult Error(int? statusCode)
         {
             return Redirect(GAAuthorizationPageUrl.PersonalCenterUrl);
         }
