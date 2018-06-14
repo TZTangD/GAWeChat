@@ -198,6 +198,7 @@ namespace HC.WeChat.Shops
                     input.Shop.Status = WechatEnums.ShopAuditStatus.待审核;
                     input.Shop.ReadTotal = 0;
                     input.Shop.SaleTotal = 0;
+                    input.Shop.SingleTotal = 0;
                     input.Shop.Evaluation = "0,0,0";
                     var entity = await CreateShopAsync(input.Shop);
                     await CurrentUnitOfWork.SaveChangesAsync();
@@ -355,6 +356,7 @@ namespace HC.WeChat.Shops
                             CreationTime = s.CreationTime,
                             TenantId = s.TenantId,
                             Tel = s.Tel,
+                            SingleTotal = s.SingleTotal,
                             //RetailerName = r != null ? r.Name : "",
                             RetailerName = r.Name
                         };
@@ -406,10 +408,43 @@ namespace HC.WeChat.Shops
                     shopCount,
                     shopListDtos
                     );
-            } else if (input.SortReadTotal != null && input.SortReadTotal == "descend")
+            }
+            else if (input.SortReadTotal != null && input.SortReadTotal == "descend")
             {
                 var shops = await query
                   .OrderBy(s => s.ReadTotal)
+                  .ThenBy(input.Sorting)
+                  .PageBy(input)
+                  .ToListAsync();
+
+                //var shopListDtos = ObjectMapper.Map<List <ShopListDto>>(shops);
+                var shopListDtos = shops.MapTo<List<ShopListDto>>();
+
+                return new PagedResultDto<ShopListDto>(
+                    shopCount,
+                    shopListDtos
+                    );
+            }
+            else if (input.SortSingleTotal != null && input.SortSingleTotal == "ascend")
+            {
+                var shops = await query
+                  .OrderByDescending(s => s.SingleTotal)
+                  .ThenBy(input.Sorting)
+                  .PageBy(input)
+                  .ToListAsync();
+
+                //var shopListDtos = ObjectMapper.Map<List <ShopListDto>>(shops);
+                var shopListDtos = shops.MapTo<List<ShopListDto>>();
+
+                return new PagedResultDto<ShopListDto>(
+                    shopCount,
+                    shopListDtos
+                    );
+            }
+            else if (input.SortSingleTotal != null && input.SortSingleTotal == "descend")
+            {
+                var shops = await query
+                  .OrderBy(s => s.SingleTotal)
                   .ThenBy(input.Sorting)
                   .PageBy(input)
                   .ToListAsync();
@@ -699,6 +734,7 @@ namespace HC.WeChat.Shops
                             CreationTime = s.CreationTime,
                             TenantId = s.TenantId,
                             Tel = s.Tel,
+                            SingleTotal = s.SingleTotal,
                             //RetailerName = r != null ? r.Name : "",
                             RetailerName = r.Name
                         };
@@ -745,6 +781,26 @@ namespace HC.WeChat.Shops
                 var shopListDtos = shops.MapTo<List<ShopListDto>>();
                 return shopListDtos;
             }
+            else if (input.SortSingleTotal != null && input.SortSingleTotal == "ascend")
+            {
+                var shops = await query
+                    .OrderByDescending(s => s.SingleTotal)
+                    .ThenBy(input.Sorting)
+                    .PageBy(input)
+                    .ToListAsync();
+                var shopListDtos = shops.MapTo<List<ShopListDto>>();
+                return shopListDtos;
+            }
+            else if (input.SortSingleTotal != null && input.SortSingleTotal == "descend")
+            {
+                var shops = await query
+                    .OrderBy(s => s.SingleTotal)
+                    .ThenBy(input.Sorting)
+                    .PageBy(input)
+                    .ToListAsync();
+                var shopListDtos = shops.MapTo<List<ShopListDto>>();
+                return shopListDtos;
+            }
             else
             {
                 var shops = await query
@@ -771,7 +827,7 @@ namespace HC.WeChat.Shops
                 ISheet sheet = workbook.CreateSheet("Employees");
                 var rowIndex = 0;
                 IRow titleRow = sheet.CreateRow(rowIndex);
-                string[] titles = { "店铺名称", "店铺地址", "店铺描述", "零售客户", "店铺销量", "店铺浏览量", "店铺电话", "审核状态", "审核时间", "店铺评价", "经度", "纬度" };
+                string[] titles = { "店铺名称", "店铺地址", "店铺描述", "零售客户", "店铺销量", "店铺浏览量", "店铺用户量","店铺电话", "审核状态", "审核时间", "店铺评价", "经度", "纬度" };
                 var fontTitle = workbook.CreateFont();
                 fontTitle.IsBold = true;
                 for (int i = 0; i < titles.Length; i++)
@@ -799,12 +855,13 @@ namespace HC.WeChat.Shops
                     ExcelHelper.SetCell(row.CreateCell(3), font, item.RetailerName);
                     ExcelHelper.SetCell(row.CreateCell(4), font, item.SaleTotal.ToString());
                     ExcelHelper.SetCell(row.CreateCell(5), font, item.ReadTotal.ToString());
-                    ExcelHelper.SetCell(row.CreateCell(6), font, item.Tel);
-                    ExcelHelper.SetCell(row.CreateCell(7), font, item.StatusName);
-                    ExcelHelper.SetCell(row.CreateCell(8), font, item.AuditTime.ToString());
-                    ExcelHelper.SetCell(row.CreateCell(9), font, evaluationStr);
-                    ExcelHelper.SetCell(row.CreateCell(10), font, item.Longitude.ToString());
-                    ExcelHelper.SetCell(row.CreateCell(11), font, item.Latitude.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(6), font, item.SingleTotal.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(7), font, item.Tel);
+                    ExcelHelper.SetCell(row.CreateCell(8), font, item.StatusName);
+                    ExcelHelper.SetCell(row.CreateCell(9), font, item.AuditTime.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(10), font, evaluationStr);
+                    ExcelHelper.SetCell(row.CreateCell(11), font, item.Longitude.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(12), font, item.Latitude.ToString());
 
                 }
                 workbook.Write(fs);

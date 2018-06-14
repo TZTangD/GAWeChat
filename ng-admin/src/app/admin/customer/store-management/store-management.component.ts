@@ -31,12 +31,14 @@ export class StoreManagementComponent extends AppComponentBase implements OnInit
     sortMap = {
         sale: null,
         read: null,
+        single: null
     };
 
     loading = false;
     exportLoading = false;
     sortSaleTotal = null;
     sortReadTotal = null;
+    sortSingleTotal = null;
     constructor(injector: Injector, private shopServie: ShopServiceProxy,
         private router: Router) {
         super(injector);
@@ -49,12 +51,25 @@ export class StoreManagementComponent extends AppComponentBase implements OnInit
         if (para == 'sale') {
             this.sortSaleTotal = value;
             this.sortReadTotal = null;
+            this.sortSingleTotal = null;
             this.sortMap.read = null;
+            this.sortMap.single = null;
             this.refreshData();
-        } else {
+        } else if (para == 'single') {
+            console.log(value + para)
+            this.sortSingleTotal = value;
+            this.sortReadTotal = null;
+            this.sortSaleTotal = null;
+            this.sortMap.read = null;
+            this.sortMap.sale = null;
+            this.refreshData();
+        }
+        else {
             this.sortReadTotal = value;
             this.sortSaleTotal = null;
+            this.sortSingleTotal = null;
             this.sortMap.sale = null;
+            this.sortMap.single = null;
             this.refreshData();
         }
     }
@@ -65,9 +80,11 @@ export class StoreManagementComponent extends AppComponentBase implements OnInit
             this.search = { status: 4 };
             this.sortSaleTotal = null;
             this.sortReadTotal = null;
+            this.sortSingleTotal = null;
             this.sortMap = {
                 sale: null,
                 read: null,
+                single: null
             };
         }
         if (search) {
@@ -91,6 +108,7 @@ export class StoreManagementComponent extends AppComponentBase implements OnInit
         arry.push(Parameter.fromJS({ key: 'Status', value: this.search.status === 4 ? null : this.search.status }));
         arry.push(Parameter.fromJS({ key: 'sortSaleTotal', value: this.sortSaleTotal }));
         arry.push(Parameter.fromJS({ key: 'sortReadTotal', value: this.sortReadTotal }));
+        arry.push(Parameter.fromJS({ key: 'sortSingleTotal', value: this.sortSingleTotal }));
         return arry;
     }
     editShop(shop: Shop) {
@@ -102,7 +120,7 @@ export class StoreManagementComponent extends AppComponentBase implements OnInit
      */
     exportExcel() {
         this.exportLoading = true;
-        this.shopServie.ExportExcel({ name: this.search.name, tel: this.search.tel, status: this.search.status === 4 ? null : this.search.status, sortSaleTotal: this.sortSaleTotal, sortReadTotal: this.sortReadTotal }).subscribe(data => {
+        this.shopServie.ExportExcel({ name: this.search.name, tel: this.search.tel, status: this.search.status === 4 ? null : this.search.status, sortSaleTotal: this.sortSaleTotal, sortReadTotal: this.sortReadTotal, sortSingleTotal: this.sortSingleTotal }).subscribe(data => {
             if (data.code == 0) {
                 var url = AppConsts.remoteServiceBaseUrl + data.data;
                 document.getElementById('aShopExcelUrl').setAttribute('href', url);

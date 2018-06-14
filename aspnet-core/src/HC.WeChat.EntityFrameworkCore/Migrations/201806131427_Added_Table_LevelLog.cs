@@ -21,11 +21,19 @@ namespace HC.WeChat.Migrations
                 {
                     table.PrimaryKey("PK_LevelLogs", x => x.Id);
                 });
+
+            migrationBuilder.AddColumn<string>(
+            name: "SingleTotal", 
+            table: "Shops",
+            nullable: true);
         }
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                  name: "LevelLogs");
+            migrationBuilder.DropColumn(
+                    name: "SingleTotal",
+                    table: "Shops");
         }
     }
 }

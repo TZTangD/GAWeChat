@@ -1769,7 +1769,7 @@ namespace HC.WeChat.Migrations
                 b.Property<DateTime>("CreationTime").IsRequired();
                 b.Property<int?>("TenantId");
                 b.Property<string>("Tel").HasMaxLength(20);
-
+                b.Property<int?>("SingleTotal");
                 b.HasKey("Id");
 
                 //b.HasIndex("TargetTenantId", "TargetUserId", "ReadState");

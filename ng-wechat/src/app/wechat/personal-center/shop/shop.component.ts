@@ -80,7 +80,7 @@ export class ShopComponent extends AppComponentBase implements OnInit {
         // }
         if (this.shopId) {
             this.isView = true;
-            this.shopService.AddReadTotalAsync({ articleId: this.shopId, openId: this.settingsService.openId, type: 3, tenantId: this.settingsService.tenantId }).subscribe(res => {
+            this.shopService.AddSingleTotalAsync({ articleId: this.shopId, openId: this.settingsService.openId, type: 3, tenantId: this.settingsService.tenantId }).subscribe(res => {
                 this.shop = res;
             });
         }

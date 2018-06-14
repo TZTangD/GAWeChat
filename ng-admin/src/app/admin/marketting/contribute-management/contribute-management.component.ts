@@ -61,7 +61,7 @@ export class ContributeManagementComponent extends AppComponentBase implements O
 
     exportExcelAll() {
         this.exportLoading = true;
-        this.manuscriptService.exportExcel({ title: this.search.title, name: this.search.name, phone: this.search.phone, status: this.search.status }).subscribe(result => {
+        this.manuscriptService.exportExcel({ title: this.search.title, name: this.search.name, phone: this.search.phone, status: this.search.status === 2 ? null : this.search.status }).subscribe(result => {
             if (result.code == 0) {
                 var url = AppConsts.remoteServiceBaseUrl + result.data;
                 document.getElementById('aManuscriptExcelUrl').setAttribute('href', url);

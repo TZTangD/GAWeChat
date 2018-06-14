@@ -50,7 +50,11 @@ namespace HC.WeChat.Shops
         /// 店铺销量
         /// </summary>
         public virtual int? SaleTotal { get; set; }
-
+        
+        /// <summary>
+        /// 排重浏览量
+        /// </summary>
+        public virtual int? SingleTotal { get; set; }
         /// <summary>
         /// 店铺浏览量，热度
         /// </summary>

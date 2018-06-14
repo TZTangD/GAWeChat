@@ -61,7 +61,7 @@ namespace HC.WeChat.StatisticalDetails
         Task<APIResultDto> AddStatisticalAsync(StatisticalDetailEditDto input);
         Task<bool> GetIsGoodAsync(int? tenantId, string openId, Guid? articleId);
         Task<APIResultDto> AddGoodAsync(StatisticalDetailEditDto input);
-        Task<ShopListDto> AddReadTotalAsync(StatisticalDetailEditDto input);
+        Task<ShopListDto> AddSingleTotalAsync(StatisticalDetailEditDto input);
 
     }
 }

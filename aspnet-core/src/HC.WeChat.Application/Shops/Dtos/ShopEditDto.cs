@@ -46,7 +46,10 @@ namespace HC.WeChat.Shops.Dtos
         public int? SaleTotal { get; set; }
         public int? ReadTotal { get; set; }
 
-
+        /// <summary>
+        /// 排重浏览量
+        /// </summary>
+        public int? SingleTotal { get; set; }
         /// <summary>
         /// 评价描述（好（0），中（10），差（0））
         /// </summary>

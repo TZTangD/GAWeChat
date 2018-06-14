@@ -7,6 +7,7 @@ export class Shop implements IShop {
     coverPhoto: string;
     saleTotal: number;
     readTotal: number;
+    singleTotal: number;
     evaluation: string;
     longitude: Number;
     latitude: Number;
@@ -20,7 +21,7 @@ export class Shop implements IShop {
     tel: string;
     qqLongitude: number;
     qqLatitude: number;
-    reason:string;
+    reason: string;
     constructor(data?: IShop) {
         if (data) {
             for (var property in data) {
@@ -53,7 +54,7 @@ export class Shop implements IShop {
             this.qqLongitude = data["qqLongitude"];
             this.qqLatitude = data["qqLatitude"];
             this.reason = data["reason"];
-            
+            this.singleTotal = data["singleTotal"];
         }
     }
 
@@ -95,7 +96,7 @@ export class Shop implements IShop {
         data["qqLongitude"] = this.qqLongitude;
         data["qqLatitude"] = this.qqLatitude;
         data["reason"] = this.reason;
-        
+        data["singleTotal"] = this.singleTotal;
         return data;
     }
 
@@ -115,6 +116,7 @@ export interface IShop {
     coverPhoto: string;
     saleTotal: number;
     readTotal: number;
+    singleTotal: number;
     evaluation: string;
     longitude: Number;
     latitude: Number;
@@ -125,6 +127,6 @@ export interface IShop {
     qqLongitude: number;
     qqLatitude: number;
     tel: string;
-    reason:string;
-    
+    reason: string;
+
 }

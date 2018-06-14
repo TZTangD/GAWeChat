@@ -15,6 +15,7 @@ export class IntegralDetails implements IIntegralDetails {
     memberBarCode: string;
     phone: string;
     nickName: string;
+    integralTotal: number;
     constructor(data?: IIntegralDetails) {
         if (data) {
             for (var property in data) {
@@ -41,7 +42,8 @@ export class IntegralDetails implements IIntegralDetails {
             this.userTypeName = data["userTypeName"];
             this.memberBarCode = data["memberBarCode"];
             this.phone = data["phone"];
-            this.nickName = data["nickName"]
+            this.nickName = data["nickName"];
+            this.integralTotal = data["integralTotal"];
         }
     }
 
@@ -65,6 +67,7 @@ export class IntegralDetails implements IIntegralDetails {
         data["tenantId"] = this.tenantId;
         data["wxName"] = this.wxName;
         data["phone"] = this.phone;
+        data["integralTotal"] = this.integralTotal;
         return data;
     }
 
@@ -86,4 +89,5 @@ export interface IIntegralDetails {
     refId: string;
     creationTime: Date;
     tenantId: number;
+    integralTotal: number;
 }

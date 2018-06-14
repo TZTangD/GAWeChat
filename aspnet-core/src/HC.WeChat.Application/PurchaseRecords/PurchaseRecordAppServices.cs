@@ -371,8 +371,8 @@ namespace HC.WeChat.PurchaseRecords
 
                 //更新店铺销量
                 var shop = await _shopRepository.GetAsync(input.ShopId.Value);
-                //shop.ReadTotal++;//人气增加
-                await AddReadTotalAsync(input.OpenId, input.ShopId); // 店铺人气查重改写
+                shop.ReadTotal++;//人气增加
+                await AddSingleTotalAsync(input.OpenId, input.ShopId); // 店铺人气查重改写
                 shop.SaleTotal++;//销量增加
                 await _shopRepository.UpdateAsync(shop);
 
@@ -392,7 +392,7 @@ namespace HC.WeChat.PurchaseRecords
         /// <param name="openId"></param>
         /// <param name="shopId"></param>
         /// <returns></returns>
-        private async Task AddReadTotalAsync(string openId,Guid ?shopId)
+        private async Task AddSingleTotalAsync(string openId,Guid ?shopId)
         {
             try
             {
@@ -406,11 +406,11 @@ namespace HC.WeChat.PurchaseRecords
                 {
                     await _statisticaldetailRepository.InsertAsync(result);
                     var shop = await _shopRepository.GetAll().Where(v => v.Id == input.ArticleId).FirstOrDefaultAsync();
-                    if (shop.ReadTotal == null)
+                    if (shop.SingleTotal == null)
                     {
-                        shop.ReadTotal = 0;
+                        shop.SingleTotal = 0;
                     }
-                    shop.ReadTotal++;
+                    shop.SingleTotal++;
                     var shopInfoUpdate = await _shopRepository.UpdateAsync(shop);
                 }
             }

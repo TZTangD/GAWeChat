@@ -18,6 +18,11 @@ namespace HC.WeChat.Shops.Dtos
         public string CoverPhoto { get; set; }
         public int? SaleTotal { get; set; }
         public int? ReadTotal { get; set; }
+
+        /// <summary>
+        /// 排重浏览量
+        /// </summary>
+        public int? SingleTotal { get; set; }
         public string Evaluation { get; set; }
         public double? Longitude { get; set; }
         public double? Latitude { get; set; }

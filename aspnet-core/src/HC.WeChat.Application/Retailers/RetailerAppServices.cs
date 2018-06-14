@@ -286,7 +286,7 @@ namespace HC.WeChat.Retailers
                   .WhereIf(input.Status.HasValue, r => r.IsAction == input.Status)
                   .WhereIf(mid.HasValue, r => r.EmployeeId == mid);
             var retailers = await query.ToListAsync();
-            var retailerListDtos = query.MapTo<List<RetailerListDto>>();
+            var retailerListDtos = retailers.MapTo<List<RetailerListDto>>();
             return retailerListDtos;
         }
 
