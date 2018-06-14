@@ -139,7 +139,8 @@ namespace HC.WeChat.Web.Host.Startup
             });
 #endif
             //404错跳转配置
-            app.UseStatusCodePagesWithRedirects("/GAWX/Error/{0}");
+            //app.UseStatusCodePagesWithRedirects("/GAWX/Error/{0}");
+            app.UseStatusCodePagesWithRedirects("/GAWX/Error");
 
             app.UseMvc(routes =>
             {
