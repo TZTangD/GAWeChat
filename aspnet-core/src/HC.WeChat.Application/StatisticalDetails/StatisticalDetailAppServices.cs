@@ -268,22 +268,23 @@ namespace HC.WeChat.StatisticalDetails
         /// <param name="input"></param>
         /// <returns></returns>
         [AbpAllowAnonymous]
-        public async Task<ShopListDto> AddReadTotalAsync(StatisticalDetailEditDto input)
+        public async Task<ShopListDto> AddSingleTotalAsync(StatisticalDetailEditDto input)
         {
             using (CurrentUnitOfWork.SetTenantId(input.TenantId))
             {
                 var result = input.MapTo<StatisticalDetail>();
                 Shop shopInfo = await _shopRepository.GetAsync(input.ArticleId);
+                shopInfo.ReadTotal++;
                 var readCount = await _statisticaldetailRepository.GetAll().Where(v => v.OpenId == input.OpenId && v.ArticleId == input.ArticleId && v.Type == CountTypeEnum.店铺人气).CountAsync();
                 if (readCount == 0)
                 {
                     await _statisticaldetailRepository.InsertAsync(result);
                     var shop = await _shopRepository.GetAll().Where(v => v.Id == input.ArticleId).FirstOrDefaultAsync();
-                    if (shop.ReadTotal == null)
+                    if (shop.SingleTotal == null)
                     {
-                        shop.ReadTotal = 0;
+                        shop.SingleTotal = 0;
                     }
-                    shop.ReadTotal++;
+                    shop.SingleTotal++;
                     var shopInfoUpdate = await _shopRepository.UpdateAsync(shop);
                     return shopInfoUpdate.MapTo<ShopListDto>();
                 }

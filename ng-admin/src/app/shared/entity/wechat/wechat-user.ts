@@ -20,7 +20,8 @@ export class WechatUser implements IWechatUser {
     status: number;
     statusName: string;
     selected: boolean = false;
-
+    attentionTime: Date;
+    unfollowTime: Date;
     constructor(data?: IWechatUser) {
         if (data) {
             for (var property in data) {
@@ -51,7 +52,8 @@ export class WechatUser implements IWechatUser {
             this.isShopkeeper = data["isShopkeeper"];
             this.status = data["status"];
             this.statusName = data["statusName"];
-
+            this.attentionTime = data["attentionTime"];
+            this.unfollowTime = data["unfollowTime"];
 
         }
     }
@@ -81,6 +83,8 @@ export class WechatUser implements IWechatUser {
         data["isShopkeeper"] = this.isShopkeeper;
         data["status"] = this.status;
         data["headImgUrl"] = this.headImgUrl;
+        data["attentionTime"] = this.attentionTime;
+        data["unfollowTime"] = this.unfollowTime;
         return data;
     }
 
@@ -109,6 +113,8 @@ export interface IWechatUser {
     integralTotal: number;
     isShopkeeper: boolean;
     status: number;
+    attentionTime: Date;
+    unfollowTime: Date;
 }
 
 export class WechatUserDto implements IWechatUserDto {

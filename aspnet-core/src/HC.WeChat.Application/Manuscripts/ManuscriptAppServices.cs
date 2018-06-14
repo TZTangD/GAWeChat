@@ -282,7 +282,7 @@ namespace HC.WeChat.Manuscripts
                 .WhereIf(!string.IsNullOrEmpty(input.Phone), m => m.Phone.Contains(input.Phone))
                 .WhereIf(input.Status.HasValue, m => m.Status == input.Status); ;
             var manuscripts = await query.ToListAsync();
-            var manuscriptDtos = query.MapTo<List<ManuscriptListDto>>();
+            var manuscriptDtos = manuscripts.MapTo<List<ManuscriptListDto>>();
             return manuscriptDtos;
         }
         private string SaveManuscriptsExcel(string fileName, List<ManuscriptListDto> data)

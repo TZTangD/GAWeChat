@@ -48,19 +48,27 @@ namespace HC.WeChat.MessageHandler
 
         private List<WechatMessage> GetWechatMessageList()
         {
-
+            //return _wechatmessageRepository.GetAll().Where(w => w.TenantId == _tenantId).ToList();
             //先处理文字消息
             return _wechatmessageRepository.GetAll().Where(w => w.TenantId == _tenantId && w.MsgType == WechatEnums.MsgTypeEnum.文字消息).ToList();
+        }
+        private List<WechatMessage> GetWechatMessagePicList()
+        {
+            //处理图文消息
+            return _wechatmessageRepository.GetAll().Where(w => w.TenantId == _tenantId && w.MsgType == WechatEnums.MsgTypeEnum.图文消息).ToList();
         }
 
         public override void ConfigurationMessageInfo(RequestMessageText requestMessage)
         {
             MessageInfo = new AbpMessageInfo();
-            MessageInfo.KeyWords = new Dictionary<string, string>();
+            MessageInfo.KeyWords = new Dictionary<string, string>(); // 文本
+            MessageInfo.KeyWordsPic = new Dictionary<string, Article>(); // 图文
             var keyWordList = GetWechatMessageList();
+            var keyPicList = GetWechatMessagePicList();
             if (keyWordList.Count > 0)
             {
                 MessageInfo.KeyWords = keyWordList.ToDictionary(key => key.KeyWord, value => value.Content);
+                MessageInfo.KeyWordsPic = keyPicList.ToDictionary(key => key.KeyWord, value =>new Article(){ Title =value.Title,Description =value.Desc,PicUrl=value.PicLink,Url=value.Content});
             }
 
             var sinfo = GetWechatSubscribe();
@@ -128,15 +136,6 @@ namespace HC.WeChat.MessageHandler
                     }
                 }
                 return new SuccessResponseMessage();
-                ////var responseMessage = ResponseMessageBase.CreateFromRequestMessage<ResponseMessageText>(requestMessage);
-                ////responseMessage.Content = MessageInfo.SubscribeMsg;
-                ////修改成图文消息
-                //var responseMessage = ResponseMessageBase.CreateFromRequestMessage<ResponseMessageNews>(requestMessage);
-                //responseMessage.ArticleCount = 1;
-                //responseMessage.Articles.Add(GetPicSubscribe());
-                ////关注消息
-                //Subscribe(requestMessage);
-                //return responseMessage;
             }
             catch (Exception ex)
             {
@@ -226,6 +225,16 @@ namespace HC.WeChat.MessageHandler
                         });
                     }
                 }
+            }
+            foreach (var item in this.MessageInfo.KeyWordsPic)
+            {
+                        requestHandler.Keyword(item.Key, () =>
+                        {
+                            var responseMessage = ResponseMessageBase.CreateFromRequestMessage<ResponseMessageNews>(requestMessage);
+                            responseMessage.ArticleCount = 1;
+                            responseMessage.Articles.Add(item.Value);
+                            return responseMessage;
+                        });
             }
             return requestHandler.GetResponseMessage() as IResponseMessageBase;
         }

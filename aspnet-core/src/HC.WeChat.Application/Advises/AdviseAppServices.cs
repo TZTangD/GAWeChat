@@ -253,7 +253,7 @@ namespace HC.WeChat.Advises
                              UserName = de.NickName != null ? de.NickName : "",
                          }).WhereIf(!string.IsNullOrEmpty(input.Name), aw => aw.UserName.Contains(input.Name));
             var advises = await query.ToListAsync();
-            var advisesDtos = query.MapTo<List<AdviseListDto>>();
+            var advisesDtos = advises.MapTo<List<AdviseListDto>>();
             return advisesDtos;
         }
         private string SaveAdviseExcel(string fileName, List<AdviseListDto> data)

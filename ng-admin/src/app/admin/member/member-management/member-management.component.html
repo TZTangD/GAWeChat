@@ -40,9 +40,9 @@
                 <th nz-th>
                     <span>微信昵称</span>
                 </th>
-                <th nz-th>
+                <!-- <th nz-th>
                     <span>微信OpenId</span>
-                </th>
+                </th> -->
                 <th nz-th>
                     <span>用户类型</span>
                 </th>
@@ -64,6 +64,12 @@
                 <th nz-th>
                     <span>电话号码</span>
                 </th>
+                <!-- <th nz-th>
+                    <span>关注时间</span>
+                </th>
+                <th nz-th>
+                    <span>取消关注时间</span>
+                </th> -->
                 <th nz-th>
                     <span>操作</span>
                 </th>
@@ -72,7 +78,7 @@
         <tbody nz-tbody>
             <tr nz-tbody-tr *ngFor="let wechatUser of nzTable.data">
                 <td nz-td>{{wechatUser.nickName}}</td>
-                <td nz-td>{{wechatUser.openId}}</td>
+                <!-- <td nz-td>{{wechatUser.openId}}</td> -->
                 <td nz-td>{{wechatUser.userTypeName}}</td>
                 <td nz-td>{{wechatUser.userName}}</td>
                 <td nz-td>{{wechatUser.statusName}}</td>
@@ -80,6 +86,8 @@
                 <td nz-td>{{wechatUser.bindTime | _date}}</td>
                 <!-- <td nz-td>{{wechatUser.unBindTime | _date}}</td> -->
                 <td nz-td>{{wechatUser.phone}}</td>
+                <!-- <td nz-td>{{wechatUser.attentionTime | _date}}</td>
+                <td nz-td>{{wechatUser.unfollowTime | _date}}</td> -->
                 <td nz-td>
                     <a *ngIf="wechatUser.bindStatus==1" (click)="unBinding(wechatUser,deleteContent)">解除绑定</a>
                     <!-- <span nz-table-divider></span>

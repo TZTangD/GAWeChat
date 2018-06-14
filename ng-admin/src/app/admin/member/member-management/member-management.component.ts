@@ -77,7 +77,7 @@ export class MemberManagementComponent extends AppComponentBase implements OnIni
     }
     exportExcelAll() {
         this.exportLoading = true;
-        this.wechatUserService.exportExcel({ name: this.search.name, userType: this.search.UserType }).subscribe(result => {
+        this.wechatUserService.exportExcel({ name: this.search.name, userType: this.search.UserType === 6 ? null : this.search.UserType }).subscribe(result => {
             if (result.code == 0) {
                 var url = AppConsts.remoteServiceBaseUrl + result.data;
                 document.getElementById('aMemberExcelUrl').setAttribute('href', url);

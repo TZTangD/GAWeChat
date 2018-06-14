@@ -112,8 +112,8 @@ export class ShopService {
     });
   }
 
-  AddReadTotalAsync(input: any): Observable<Shop> {
-    return this.http.post('/api/services/app/StatisticalDetail/AddReadTotalAsync', input).map(data => {
+  AddSingleTotalAsync(input: any): Observable<Shop> {
+    return this.http.post('/api/services/app/StatisticalDetail/AddSingleTotalAsync', input).map(data => {
       if (data.result) {
         let rel = Shop.fromJS(data.result);
         rel.evaluationArry = rel.evaluation.split(',');

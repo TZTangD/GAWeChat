@@ -19,6 +19,7 @@ export class RetailCustomerComponent extends AppComponentBase implements OnInit 
     host: string = AppConsts.remoteServiceBaseUrl;
     uploadLoading = false;
     status = [
+        { text: '全部', value: 0, type: '123' },
         { text: '有效', value: true, type: 'success' },
         { text: '无效', value: false, type: 'default' },
     ];
@@ -44,8 +45,7 @@ export class RetailCustomerComponent extends AppComponentBase implements OnInit 
     refreshData(reset = false, search?: boolean) {
         if (reset) {
             this.query.pageIndex = 1;
-            this.search = { isAction: true }
-            console.log(this.search)
+            this.search = { isAction: 0 }
         }
         if (search) {
             this.query.pageIndex = 1;
@@ -56,9 +56,9 @@ export class RetailCustomerComponent extends AppComponentBase implements OnInit 
             let status = 0;
             this.retailCustomer = result.items.map(i => {
                 if (i.isAction) {
-                    status = 0;
-                } else {
                     status = 1;
+                } else {
+                    status = 2;
                 }
                 const statusItem = this.status[status];
                 i.activeText = statusItem.text;
@@ -73,7 +73,7 @@ export class RetailCustomerComponent extends AppComponentBase implements OnInit 
         arry.push(Parameter.fromJS({ key: 'Name', value: this.search.name }));
         arry.push(Parameter.fromJS({ key: 'Scale', value: this.search.scale }));
         arry.push(Parameter.fromJS({ key: 'Markets', value: this.search.market }));
-        arry.push(Parameter.fromJS({ key: 'Status', value: this.search.isAction === true ? true : this.search.isAction }));
+        arry.push(Parameter.fromJS({ key: 'Status', value: this.search.isAction === 0 ? null : this.search.isAction }));
         return arry;
     }
     editRetail(retail: RetailCustomer) {
@@ -104,7 +104,7 @@ export class RetailCustomerComponent extends AppComponentBase implements OnInit 
      */
     exportExcel() {
         this.exportLoading = true;
-        this.retailService.exportRetailerLevelExcel({ name: this.search.name, scale: this.search.scale, markets: this.search.market, status: this.search.isAction }).subscribe(result => {
+        this.retailService.exportRetailerLevelExcel({ name: this.search.name, scale: this.search.scale, markets: this.search.market, status: this.search.isAction === 0 ? null : this.search.isAction }).subscribe(result => {
             if (result.code == 0) {
                 var url = AppConsts.remoteServiceBaseUrl + result.data;
                 document.getElementById('aRetailExcelUrl').setAttribute('href', url);
@@ -121,7 +121,7 @@ export class RetailCustomerComponent extends AppComponentBase implements OnInit 
      */
     exportExcelAll() {
         this.exportLoading = true;
-        this.retailService.exportRetailerAllExcel({ name: this.search.name, scale: this.search.scale, markets: this.search.market, status: this.search.isAction }).subscribe(result => {
+        this.retailService.exportRetailerAllExcel({ name: this.search.name, scale: this.search.scale, markets: this.search.market, status: this.search.isAction === 0 ? null : this.search.isAction }).subscribe(result => {
             if (result.code == 0) {
                 var url = AppConsts.remoteServiceBaseUrl + result.data;
                 document.getElementById('aRetailAllExcelUrl').setAttribute('href', url);

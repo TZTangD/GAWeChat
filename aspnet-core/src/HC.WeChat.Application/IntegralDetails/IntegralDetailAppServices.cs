@@ -296,7 +296,8 @@ namespace HC.WeChat.IntegralDetails
                              Phone = u.Phone,
                              MemberBarCode = u.MemberBarCode,
                              NickName = u.NickName,
-                             UserType = u.UserType
+                             UserType = u.UserType,
+                             IntegralTotal =u.IntegralTotal
                          }).FirstOrDefaultAsync();
             return  entity;
         }

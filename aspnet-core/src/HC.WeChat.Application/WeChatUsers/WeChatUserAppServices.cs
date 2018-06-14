@@ -867,10 +867,10 @@ namespace HC.WeChat.WeChatUsers
             var query = _wechatuserRepository.GetAll()
                 .WhereIf(!string.IsNullOrEmpty(input.UserName), u => u.UserName.Contains(input.UserName))
                 .WhereIf(!string.IsNullOrEmpty(input.Name), u => u.NickName.Contains(input.Name) || u.UserName.Contains(input.Name) || u.Phone.Contains(input.Name))
-                .WhereIf(input.UserType.HasValue, u => u.UserType == input.UserType); ;
-            var manuscripts = await query.ToListAsync();
-            var manuscriptDtos = query.MapTo<List<WeChatUserListDto>>();
-            return manuscriptDtos;
+                .WhereIf(input.UserType.HasValue, u => u.UserType == input.UserType);
+            var user = await query.ToListAsync();
+            var UserDtos = user.MapTo<List<WeChatUserListDto>>();
+            return UserDtos;
         }
         private string SaveWeChatUsersExcel(string fileName, List<WeChatUserListDto> data)
         {
@@ -881,7 +881,7 @@ namespace HC.WeChat.WeChatUsers
                 ISheet sheet = workbook.CreateSheet("WeChatUser");
                 var rowIndex = 0;
                 IRow titleRow = sheet.CreateRow(rowIndex);
-                string[] titles = { "微信OpenId", "微信昵称", "用户类型", "用户名", "绑定状态", "绑定时间", "解绑时间", "绑定电话", "会员卡条形码", "用户总积分", "是否是店主", "审核状态" };
+                string[] titles = { "微信OpenId", "微信昵称", "用户类型", "用户名", "绑定状态", "绑定时间", "解绑时间", "绑定电话", "会员卡条形码", "用户总积分", "是否是店主", "审核状态","关注时间","取消关注时间"};
                 var fontTitle = workbook.CreateFont();
                 fontTitle.IsBold = true;
                 for (int i = 0; i < titles.Length; i++)
@@ -908,6 +908,8 @@ namespace HC.WeChat.WeChatUsers
                     ExcelHelper.SetCell(row.CreateCell(9), font, item.IntegralTotal);
                     ExcelHelper.SetCell(row.CreateCell(10), font, item.IsShopkeeper.ToString());
                     ExcelHelper.SetCell(row.CreateCell(11), font, item.StatusName);
+                    ExcelHelper.SetCell(row.CreateCell(12), font, item.AttentionTime.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(13), font, item.UnfollowTime.ToString());
                 }
                 workbook.Write(fs);
             }

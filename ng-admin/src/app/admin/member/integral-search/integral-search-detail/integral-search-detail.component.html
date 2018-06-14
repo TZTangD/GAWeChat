@@ -2,10 +2,11 @@
     <ng-template #content>
         <div nz-row>
             <div nz-col nzXs="24" nzSm="16">
-                <desc-list size="small" col="4">
+                <desc-list size="small" col="10">
                     <desc-list-item term="会员名称">{{userInfo.nickName}}</desc-list-item>
                     <desc-list-item term="会员类型">{{userInfo.userTypeName}}</desc-list-item>
                     <desc-list-item term="电话号码">{{userInfo.phone}}</desc-list-item>
+                    <desc-list-item term="积分总额">{{userInfo.integralTotal}}</desc-list-item>
                     <desc-list-item term="会员卡号">{{userInfo.memberBarCode}}</desc-list-item>
                 </desc-list>
             </div>
