@@ -1,7 +1,8 @@
 <Page [ngClass]="'infiniteloader'" [showTitle]="false" [subTitle]="" [spacing]="false" [noBottom]="true">
     <weui-searchbar (search)="getCustomers($event)" [(value)]="value" (cancel)="onCancel()" placeholder="请输入姓名、专卖号或电话" (clear)="onClear()" [debounceTime]="500"></weui-searchbar>
+    <div class="weui-cells__title">只显示匹配【{{value}}】的前20条数据</div>
     <div class="weui-panel" style="margin-top: 0px;" *ngIf="customers.length>0">
-        <div class="weui-panel__hd">只显示符合【{{value}}】的前50条数据</div>
+        <!-- <div class="weui-panel__hd">只显示符合【{{value}}】的前50条数据</div> -->
         <div class="weui-cells__title">
             <a class="weui-cell weui-cells__title">
                 <div class="weui-cell__hd">姓名</div>
@@ -44,9 +45,9 @@
             </a>
         </weui-infiniteloader>
     </div>
-    <weui-loadmore type="line" *ngIf="!customers||customers.length==0" [lineText]="'搜索并选择零售户'"></weui-loadmore>
+    <weui-loadmore type="line" *ngIf="!customers||customers.length==0" [lineText]="'搜索并选择零售户'"></weui-loadmore> -->
 
-    <div class="weui-panel" style="margin-top: 0px;" *ngIf="!isMore">
+    <!-- <div class="weui-panel" style="margin-top: 0px;" *ngIf="!isMore">
         <a *ngFor="let i of customers" class="weui-cell weui-cell_access" (click)="goCustomerLeavel(i)">
             <div class="weui-cell__hd">{{i.name}}</div>
             <div class="weui-cell__bd" style="text-align:center;">{{i.telephone}}</div>

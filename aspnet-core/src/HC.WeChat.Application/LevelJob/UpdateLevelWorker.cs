@@ -13,6 +13,7 @@ using HC.WeChat.GAGrades;
 using AutoMapper;
 using Abp.AutoMapper;
 using Abp.Dependency;
+using Abp.Domain.Uow;
 
 namespace HC.WeChat.LevelJob
 {
@@ -22,67 +23,86 @@ namespace HC.WeChat.LevelJob
         private readonly IRepository<Retailer, Guid> _retailerRepository;
         private readonly IRepository<LevelLog, Guid> _levellogRepository;
         private readonly IRepository<GAGrade, int> _gagradeRepository;
-        private DateTime preDate = DateTime.Now.AddDays(-1);//用于控制在合适时间段中只执行一次档级更新
+        private readonly ILevelLogAppService _levellogService;
+        private string  preDate = DateTime.Now.AddDays(-1).ToString("d");//用于控制在合适时间段中只执行一次档级更新(保证只会去数据库去请求一次levellog的存在)
 
         public UpdateLevelWorker(AbpTimer timer, IRepository<GACustPoint, Guid> gacustpointRepository,
             IRepository<Retailer, Guid> retailerRepository, IRepository<LevelLog, Guid> levellogRepository,
-            IRepository<GAGrade, int> gagradeRepository) : base(timer)
+            IRepository<GAGrade, int> gagradeRepository, ILevelLogAppService levellogService) : base(timer)
         {
-            Timer.Period = 180000;
+            Timer.Period = 1800000;
             _gacustpointRepository = gacustpointRepository;
             _retailerRepository = retailerRepository;
             _levellogRepository = levellogRepository;
             _gagradeRepository = gagradeRepository;
+            _levellogService = levellogService;
         }
+        [UnitOfWork]
         protected override void DoWork()
         {
-            var updateStartDate = Convert.ToDateTime(GetDate(0, false) + "-13 17:00");
-            var updateEndDate = Convert.ToDateTime(GetDate(0, false) + "-13 19:00");
+            Logger.InfoFormat("进入job开始时间：{0}", DateTime.Now);
+            var updateStartDate = Convert.ToDateTime(GetDate(0, false,"-") + "-15 2:00:00");
+            var updateEndDate = Convert.ToDateTime(GetDate(0, false,"-") + "-15 6:00:00");
 
-            if (DateTime.Now >= updateStartDate && updateEndDate >= DateTime.Now && DateTime.Now.AddDays(0) != preDate)
+            if (DateTime.Now >= updateStartDate && updateEndDate >= DateTime.Now && DateTime.Now.AddDays(0).ToString("d") != preDate)
             {
-                var isUpdate = _levellogRepository.GetAll().Any(c => c.LevelData == GetDate(-1, false));
-                var retails = _retailerRepository.GetAll().ToList();
+                var isUpdate = _levellogRepository.GetAll().Any(c => c.LevelData == GetDate(1, false,""));
                 if (!isUpdate)
                 {
-                    for (var i = 0; i < retails.Count; i++)
-                    {
-                        var mothPoint = _gacustpointRepository.GetAll().Where(c => c.CustId == retails[i].CustId && c.Pmonth == GetDate(-1, false)).SingleOrDefault().Point;
-                        var level = _gagradeRepository.GetAll().Where(g => g.StartPoint <= mothPoint).OrderByDescending(g => g.StartPoint).FirstOrDefault();
-                        var entity = _retailerRepository.Get(retails[i].Id);
-                        retails[i].MapTo(entity);
-                        //var entity= ObjectMapper.Map<Retailer>(retails[i])
-                        _retailerRepository.Update(entity);
-                        preDate = i == retails.Count - 1 ? DateTime.Now.AddDays(0) : preDate;
+                    var result = UpdateRetail();
+                    if (result) {
+                        var levelLog = new LevelLog();
+                        levelLog.Id = Guid.NewGuid();
+                        levelLog.LevelData = GetDate(1, false, "");
+                        levelLog.ChangeTime = DateTime.Now;
+                        _levellogRepository.Insert(levelLog);
+                        preDate = result ? DateTime.Now.AddDays(0).ToString("d") : preDate;
                     }
                     Logger.InfoFormat("当前更新档级时间：{0}", DateTime.Now);
                 }
             }
+            Logger.InfoFormat("进入job结束时间：{0}", DateTime.Now);
+        }
+        [UnitOfWork]
+        public bool UpdateRetail()
+        {
+            var retails = _retailerRepository.GetAll().ToList();
+            var lastIndex = 0;
+            for (var i = 0; i < retails.Count; i++)
+            {
+                var s = GetDate(1, false, "");
+                var mothPointdates = _gacustpointRepository.GetAll().SingleOrDefault(c => c.CustId == retails[i].CustId && c.Pmonth == GetDate(1, false,""));
+                var mothPoint = mothPointdates == null ? 0 : mothPointdates.Point;
+                var gradLevel = _gagradeRepository.GetAll().Where(g => g.StartPoint <= mothPoint).OrderByDescending(g => g.StartPoint).FirstOrDefault();
+                retails[i].ArchivalLevel = gradLevel == null ? "1档" : gradLevel.GradeLevel.ToString() + "档";
+                lastIndex = i;
+            }
+            return lastIndex == retails.Count - 1;
 
         }
-        public string GetDate(int span, bool isDay)
+        public string GetDate(int span, bool isDay,string style="")
         {
             var year = DateTime.Now.AddMonths(-span).Year.ToString();
             if (DateTime.Now.AddMonths(-span).Month < 10)
             {
                 if (isDay)
                 {
-                    return year + "0" + DateTime.Now.AddMonths(-span).Month.ToString() + "01";
+                    return year + style+ "0" + DateTime.Now.AddMonths(-span).Month.ToString() + "01";
                 }
                 else
                 {
-                    return year + "0" + DateTime.Now.AddMonths(-span).Month.ToString();
+                    return year + style+ "0" + DateTime.Now.AddMonths(-span).Month.ToString();
                 }
             }
             else
             {
                 if (isDay)
                 {
-                    return year + DateTime.Now.AddMonths(-span).Month.ToString() + "01";
+                    return year + style + DateTime.Now.AddMonths(-span).Month.ToString() + "01";
                 }
                 else
                 {
-                    return year + DateTime.Now.AddMonths(-span).Month.ToString();
+                    return year + style + DateTime.Now.AddMonths(-span).Month.ToString();
                 }
             }
         }

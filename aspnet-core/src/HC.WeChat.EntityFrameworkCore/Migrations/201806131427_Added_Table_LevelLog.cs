@@ -14,7 +14,7 @@ namespace HC.WeChat.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    LevelData = table.Column<string>(nullable: false),
+                    LevelData = table.Column<string>(maxLength: 50,nullable: false),
                     ChangeTime = table.Column<DateTime>(nullable: true),
                 },
                 constraints: table =>
