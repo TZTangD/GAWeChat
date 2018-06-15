@@ -236,7 +236,7 @@ namespace HC.WeChat.Shops
                                 string url = input.Host + "/GAWX/Authorization?page=303&param=" + input.Shop.Id.ToString();
                                 object data = new
                                 {
-                                    first = new TemplateDataItem("有店铺资料提交或更改，请您尽快审核"),
+                                    first = new TemplateDataItem("有店铺资料提交或更改，请您尽快审核", "#FF0000"),
                                     keyword1 = new TemplateDataItem(input.Shop.Name.ToString()),
                                     keyword2 = new TemplateDataItem(DateTime.Now.ToString("yyyy-MM-dd HH:mm"))
                                 };

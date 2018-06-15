@@ -377,10 +377,11 @@ namespace HC.WeChat.WeChatUsers
                     string appId = AppConfig.AppId;
                     string openId = OpenId;
                     //string templateId = "qvt7CNXBY4FzfzdX54TvMUaOi9jZ3-tdsb2NRhVp0yg";//模版id  
+                    host = host ?? "http://ga.intcov.com";//host配置
                     string url = host + "/GAWX/Authorization?page=302";
                     object data = new
                     {
-                        first = new TemplateDataItem("店员审核通知，请您尽快审核"),
+                        first = new TemplateDataItem("店员审核通知，请您尽快审核", "#FF0000"),
                         keyword1 = new TemplateDataItem(currentName.ToString()),
                         keyword2 = new TemplateDataItem(DateTime.Now.ToString("yyyy-MM-dd HH:mm"))
                     };
@@ -531,6 +532,7 @@ namespace HC.WeChat.WeChatUsers
                     //发送微信模板通知-消费者
                     string appId = AppConfig.AppId;
                     //string templateId = "3Dgkz89yi8e0jXtwBUhdMSgHeZwPvHi2gz8WrD-CUA4";//模版id  
+                    host = host ?? "http://ga.intcov.com";//host配置
                     string url = host + "/GAWX/Authorization?page=301";
                     object data = new
                     {

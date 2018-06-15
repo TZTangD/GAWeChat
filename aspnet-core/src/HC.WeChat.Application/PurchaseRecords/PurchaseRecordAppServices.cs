@@ -440,6 +440,7 @@ namespace HC.WeChat.PurchaseRecords
                     //发送微信模板通知-消费者
                     string appId = AppConfig.AppId;
                     string openId = OpenId;
+                    host = host ?? "http://ga.intcov.com";//host配置
                     //string templateId = "3Dgkz89yi8e0jXtwBUhdMSgHeZwPvHi2gz8WrD-CUA4";//模版id  
                     string url = host + "/GAWX/Authorization?page=301";
                     object data = new
@@ -471,6 +472,7 @@ namespace HC.WeChat.PurchaseRecords
                     string appId = AppConfig.AppId;
                     string openId = OpenId;
                     //string templateId = "3Dgkz89yi8e0jXtwBUhdMSgHeZwPvHi2gz8WrD-CUA4";//模版id  
+                    host = host ?? "http://ga.intcov.com";//host配置
                     string url = host + "/GAWX/Authorization?page=301";
                     object data = new
                     {
