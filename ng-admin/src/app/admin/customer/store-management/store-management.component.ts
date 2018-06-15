@@ -56,7 +56,7 @@ export class StoreManagementComponent extends AppComponentBase implements OnInit
             this.sortMap.single = null;
             this.refreshData();
         } else if (para == 'single') {
-            console.log(value + para)
+            // console.log(value + para)
             this.sortSingleTotal = value;
             this.sortReadTotal = null;
             this.sortSaleTotal = null;
