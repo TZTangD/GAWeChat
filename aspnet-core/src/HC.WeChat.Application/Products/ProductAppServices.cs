@@ -965,8 +965,7 @@ namespace HC.WeChat.Products
                 var mothPointdates = _gacustpointRepository.GetAll().SingleOrDefault(c => c.CustId == retails[i].CustId && c.Pmonth == GetDate(1, false, ""));
                 var mothPoint = mothPointdates == null ? 0 : mothPointdates.Point;
                 var gradLevel = _gagradeRepository.GetAll().Where(g => g.StartPoint <= mothPoint).OrderByDescending(g => g.StartPoint).FirstOrDefault();
-                retails[i].ArchivalLevel = gradLevel == null ? "1档" : gradLevel.GradeLevel.ToString() + "档";
-                retails[i].BusinessAddress = "成都双流";
+                retails[i].ArchivalLevel = gradLevel == null ? "1" : gradLevel.GradeLevel.ToString();
                 lastIndex = i;
             }
             return Task.FromResult(lastIndex == retails.Count - 1);
