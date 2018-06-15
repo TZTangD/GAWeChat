@@ -67,7 +67,7 @@ namespace HC.WeChat.LevelLogs
         /// 新增档级更新日志
         /// </summary>
         /// <returns></returns>
-        Task<LevelLogEditDto> CreateSingleLevelLogAsync();
+        Task<LevelLogEditDto> CreateSingleLevelLog();
 
     }
 }

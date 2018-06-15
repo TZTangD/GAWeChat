@@ -111,6 +111,6 @@ namespace HC.WeChat.Products
         /// 手动更新档级
         /// </summary>
         /// <returns></returns>
-        Task UpdateLevel();
+        void UpdateLevel();
     }
 }

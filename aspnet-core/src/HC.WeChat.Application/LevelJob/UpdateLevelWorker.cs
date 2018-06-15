@@ -26,7 +26,7 @@ namespace HC.WeChat.LevelJob
         public UpdateLevelWorker(AbpTimer timer,
           IProductAppService productAppService) : base(timer)
         {
-            Timer.Period = 100000;
+            Timer.Period = 1000;
             _productAppService = productAppService;
 
             //启动日志
@@ -54,8 +54,13 @@ namespace HC.WeChat.LevelJob
                 //    }
                 //    Logger.InfoFormat("当前更新档级时间：{0}", DateTime.Now);
                 //}
-               _productAppService.UpdateLevel();
                 preDate = DateTime.Today;
+                using (CurrentUnitOfWork.DisableFilter(AbpDataFilters.MayHaveTenant))
+                {
+                    _productAppService.UpdateLevel();
+                    CurrentUnitOfWork.SaveChanges();
+                }
+               
             }
             Logger.InfoFormat("进入job结束时间：{0}", DateTime.Now);
         }

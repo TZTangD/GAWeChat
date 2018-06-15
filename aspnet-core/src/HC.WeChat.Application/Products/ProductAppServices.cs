@@ -941,23 +941,23 @@ namespace HC.WeChat.Products
 
         #region  手动更新档级
         [AbpAllowAnonymous]
-        public async Task UpdateLevel()
+        public void UpdateLevel()
         {
-            var isUpdate = await _levelLogAppService.IsUpdateLevel();
+            var isUpdate = _levelLogAppService.IsUpdateLevel().Result;
             if (!isUpdate)
             {
-                var result = await UpdateRetail();
+                var result = UpdateRetail().Result;
                 if (result)
                 {
-                   await _levelLogAppService.CreateSingleLevelLogAsync();
+                   _levelLogAppService.CreateSingleLevelLog();
                 }
                 Logger.InfoFormat("当前更新档级时间：{0}", DateTime.Now);
             }
         }
         [AbpAllowAnonymous]
-        public async Task<bool> UpdateRetail()
+        public Task<bool> UpdateRetail()
         {
-            var retails = await _retailerRepository.GetAll().ToListAsync();
+            var retails =  _retailerRepository.GetAll().ToList();
             var lastIndex = 0;
             for (var i = 0; i < retails.Count; i++)
             {
@@ -969,7 +969,7 @@ namespace HC.WeChat.Products
                 retails[i].BusinessAddress = "成都双流";
                 lastIndex = i;
             }
-            return lastIndex == retails.Count - 1;
+            return Task.FromResult(lastIndex == retails.Count - 1);
         }
         #endregion
     }

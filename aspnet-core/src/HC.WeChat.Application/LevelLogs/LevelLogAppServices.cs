@@ -189,9 +189,9 @@ namespace HC.WeChat.LevelLogs
         /// </summary>
         /// <returns></returns>
         [AbpAllowAnonymous]
-        public async Task<bool> IsUpdateLevel()
+        public Task<bool> IsUpdateLevel()
         {
-           return await _levellogRepository.GetAll().AnyAsync(c => c.LevelData == GetDate(1, false, ""));
+           return Task.FromResult(_levellogRepository.GetAll().Any(c => c.LevelData == GetDate(1, false, "")));
         }
 
         /// <summary>
@@ -199,15 +199,15 @@ namespace HC.WeChat.LevelLogs
         /// </summary>
         /// <returns></returns>
         [AbpAllowAnonymous]
-        public async Task<LevelLogEditDto> CreateSingleLevelLogAsync()
+        public Task<LevelLogEditDto> CreateSingleLevelLog()
         {
             var levelLog = new LevelLog();
             levelLog.LevelData = GetDate(1, false, "");
             levelLog.ChangeTime = DateTime.Now;
             var entity = ObjectMapper.Map<LevelLog>(levelLog);
 
-            entity = await _levellogRepository.InsertAsync(entity);
-            return entity.MapTo<LevelLogEditDto>();
+            entity = _levellogRepository.Insert(entity);
+            return Task.FromResult(entity.MapTo<LevelLogEditDto>());
         }
 
         [AbpAllowAnonymous]
