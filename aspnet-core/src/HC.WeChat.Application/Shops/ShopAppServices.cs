@@ -278,11 +278,11 @@ namespace HC.WeChat.Shops
             //TODO:更新前的逻辑判断，是否允许更新
             var entity = await _shopRepository.GetAsync(input.Shop.Id.Value);
             var orgStatus = entity.Status;
-            input.MapTo(entity);
+            input.Shop.MapTo(entity);
             // ObjectMapper.Map(input, entity);
             await _shopRepository.UpdateAsync(entity);
             //当审核状态改为待审核
-            if (orgStatus == ShopAuditStatus.已审核 && input.Shop.Status == ShopAuditStatus.待审核)
+            if ((orgStatus == ShopAuditStatus.已审核 || orgStatus == ShopAuditStatus.已拒绝) && input.Shop.Status == ShopAuditStatus.待审核)
             {
                 //发送审核通知
                 await SendAuditNotice(input);
