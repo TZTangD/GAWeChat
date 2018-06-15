@@ -24,7 +24,7 @@ namespace HC.WeChat.LevelJob
         private readonly IRepository<LevelLog, Guid> _levellogRepository;
         private readonly IRepository<GAGrade, int> _gagradeRepository;
         private readonly ILevelLogAppService _levellogService;
-        private string  preDate = DateTime.Now.AddDays(-1).ToString("d");//用于控制在合适时间段中只执行一次档级更新(保证只会去数据库去请求一次levellog的存在)
+        private DateTime preDate = DateTime.Now.AddDays(-1);//用于控制在合适时间段中只执行一次档级更新(保证只会去数据库去请求一次levellog的存在)
 
         public UpdateLevelWorker(AbpTimer timer, IRepository<GACustPoint, Guid> gacustpointRepository,
             IRepository<Retailer, Guid> retailerRepository, IRepository<LevelLog, Guid> levellogRepository,
@@ -36,15 +36,14 @@ namespace HC.WeChat.LevelJob
             _levellogRepository = levellogRepository;
             _gagradeRepository = gagradeRepository;
             _levellogService = levellogService;
+            //启动日志
         }
         [UnitOfWork]
         protected override void DoWork()
         {
             Logger.InfoFormat("进入job开始时间：{0}", DateTime.Now);
-            var updateStartDate = Convert.ToDateTime(GetDate(0, false,"-") + "-16 2:00:00");
-            var updateEndDate = Convert.ToDateTime(GetDate(0, false,"-") + "-16 6:00:00");
 
-            if (DateTime.Now >= updateStartDate && updateEndDate >= DateTime.Now && DateTime.Now.AddDays(0).ToString("d") != preDate)
+            if (DateTime.Now.Day == 2 && DateTime.Now.Hour >= 11 && preDate != DateTime.Today)
             {
                 var isUpdate = _levellogRepository.GetAll().Any(c => c.LevelData == GetDate(1, false,""));
                 if (!isUpdate)
@@ -56,7 +55,7 @@ namespace HC.WeChat.LevelJob
                         levelLog.LevelData = GetDate(1, false, "");
                         levelLog.ChangeTime = DateTime.Now;
                         _levellogRepository.Insert(levelLog);
-                        preDate = result ? DateTime.Now.AddDays(0).ToString("d") : preDate;
+                        preDate = DateTime.Today;
                     }
                     Logger.InfoFormat("当前更新档级时间：{0}", DateTime.Now);
                 }
