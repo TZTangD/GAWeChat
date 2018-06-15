@@ -107,5 +107,11 @@ namespace HC.WeChat.Products
         /// <returns></returns>
         Task<RetailInfoDto> GetRetailBasicInfoAsync(int? tenantId, Guid userId);
 
+        /// <summary>
+        /// 手动更新档级
+        /// </summary>
+        /// <returns></returns>
+        Task UpdateLevel();
+
     }
 }

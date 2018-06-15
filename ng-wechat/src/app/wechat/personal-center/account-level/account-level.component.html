@@ -30,7 +30,7 @@
                     <span style="vertical-align: middle; font-size: 14px;">档级货源</span>
                 </div>
                 <div class="weui-cell__ft" >
-                    {{level.level==null?1:level.level}}档
+                    {{level.level==null?"1档":level.level}}
                 </div>
             </div>
             <div class="weui-cell__ft">
@@ -43,7 +43,7 @@
                 <div class="weui-cell__bd">
                     <p>本月订货金额</p>
                 </div>
-                <div class="weui-cell__ft infoCss">{{level.monthOrderMoney}}</div>
+                <div class="weui-cell__ft infoCss">{{level.monthOrderMoney}}¥</div>
             </div>
             <div class="weui-cell">
                 <div class="weui-cell__bd">
@@ -55,7 +55,7 @@
                 <div class="weui-cell__bd">
                     <p>上月订货金额</p>
                 </div>
-                <div class="weui-cell__ft infoCss">{{level.preMonthOrderMoney}}</div>
+                <div class="weui-cell__ft infoCss">{{level.preMonthOrderMoney}}¥</div>
             </div>
             <div class="weui-cell">
                 <div class="weui-cell__bd">

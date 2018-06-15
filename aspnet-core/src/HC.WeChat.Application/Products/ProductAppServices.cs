@@ -31,6 +31,7 @@ using NPOI.XSSF.UserModel;
 using HC.WeChat.Dto;
 using Abp.Domain.Uow;
 using System.Text.RegularExpressions;
+using HC.WeChat.LevelLogs;
 //using System.Linq;
 
 namespace HC.WeChat.Products
@@ -53,6 +54,8 @@ namespace HC.WeChat.Products
         private readonly IRepository<EPCoLine, Guid> _epcolineRepository;
         private readonly IRepository<GACustPoint, Guid> _gacustpointRepository;
         private readonly IRepository<GAGrade, int> _gagradeRepository;
+        private readonly IRepository<LevelLog, Guid> _levellogRepository;
+        private readonly IRepository<Retailer, Guid> _retailerRepository;
 
 
         /// <summary>
@@ -62,7 +65,8 @@ namespace HC.WeChat.Products
       , IProductManager productManager, IHostingEnvironment hostingEnvironment,
             IRetailerAppService retailerService, IRepository<WeChatUser, Guid> wechatuserRepository,
             IRepository<EPCo, Guid> epcoRepository, IRepository<EPCoLine, Guid> epcolineRepository,
-            IRepository<GACustPoint, Guid> gacustpointRepository, IRepository<GAGrade, int> gagradeRepository
+            IRepository<GACustPoint, Guid> gacustpointRepository, IRepository<GAGrade, int> gagradeRepository,
+            IRepository<LevelLog, Guid> levellogRepository, IRepository<Retailer, Guid> retailerRepository
         )
         {
             _productRepository = productRepository;
@@ -74,6 +78,8 @@ namespace HC.WeChat.Products
             _epcolineRepository = epcolineRepository;
             _gacustpointRepository = gacustpointRepository;
             _gagradeRepository = gagradeRepository;
+            _levellogRepository = levellogRepository;
+            _retailerRepository = retailerRepository;
         }
 
         /// <summary>
@@ -170,7 +176,8 @@ namespace HC.WeChat.Products
                     productCount,
                     productListDtos
                     );
-            } else if(input.SortValue == "descend")
+            }
+            else if (input.SortValue == "descend")
             {
                 var products = await query
                     .OrderBy(p => p.SearchCount)
@@ -200,9 +207,9 @@ namespace HC.WeChat.Products
                 return new PagedResultDto<ProductListDto>(
                     productCount,
                     productListDtos
-                    );        
+                    );
+            }
         }
-    }
 
         /// <summary>
         /// 通过指定id获取ProductListDto信息
@@ -341,11 +348,11 @@ namespace HC.WeChat.Products
         public async Task<ProductListDto> CreateOrUpdateProductDto(ProductEditDto input)
         {
             string webRootPath = _hostingEnvironment.WebRootPath;
-            if (!string.IsNullOrEmpty(input.Img64)&& !string.IsNullOrEmpty(input.FileName))
+            if (!string.IsNullOrEmpty(input.Img64) && !string.IsNullOrEmpty(input.FileName))
             {
                 var base64 = new WechatImgBase64() { fileName = input.FileName, imageBase64 = input.Img64 };
                 var photoUrl = await FilesPostsBase64(base64, "product");
-                input.PhotoUrl = !string.IsNullOrEmpty(photoUrl)? photoUrl : input.PhotoUrl;
+                input.PhotoUrl = !string.IsNullOrEmpty(photoUrl) ? photoUrl : input.PhotoUrl;
             }
             if (input.Id.HasValue)
             {
@@ -365,8 +372,8 @@ namespace HC.WeChat.Products
             }
             else
             {
-             return  await CreateProductAsync(input);
-                
+                return await CreateProductAsync(input);
+
             }
         }
         /// <summary>
@@ -374,7 +381,7 @@ namespace HC.WeChat.Products
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<string> FilesPostsBase64(WechatImgBase64 input,string fileName)
+        public async Task<string> FilesPostsBase64(WechatImgBase64 input, string fileName)
         {
             var saveUrl = "";
             if (!string.IsNullOrWhiteSpace(input.imageBase64))
@@ -781,12 +788,13 @@ namespace HC.WeChat.Products
                     retailInfo.SiChuanQty = await siChuanOrders.CountAsync() == 0 ? 0 : (int)await siChuanOrders.SumAsync(f => f.QTY_ORD.Value);
 
                     //积分
-                    var allPoints = await _gacustpointRepository.GetAll().Where(f => f.CustId == retail.CustId).ToListAsync();//LicenseCode实际指的是CustId（名字取得有误）
-                    var totalPoints = allPoints.Count == 0 ? 0 : allPoints.Sum(t => t.Point);
+                    var allPoints = _gacustpointRepository.GetAll().Where(f => f.CustId == retail.CustId);//.ToListAsync();//LicenseCode实际指的是CustId（名字取得有误）
+                    var count = await allPoints.CountAsync();
+                    var totalPoints = count == 0 ? 0 : await allPoints.SumAsync(t => t.Point);
                     int monthPoints = 0;
-                    if (allPoints.Count != 0)
+                    if (count != 0)
                     {
-                        var mothPointData = allPoints.SingleOrDefault(t => t.Pmonth == queryMonth);
+                        var mothPointData = await allPoints.SingleOrDefaultAsync(t => t.Pmonth == queryMonth);
                         monthPoints = mothPointData == null ? 0 : mothPointData.Point;
                     }
                     //积分暂未获得？
@@ -928,6 +936,41 @@ namespace HC.WeChat.Products
                 Logger.ErrorFormat("ExportProductsExcel errormsg{0} Exception{1}", ex.Message, ex);
                 return new APIResultDto() { Code = 901, Msg = "网络忙...请待会儿再试！" };
             }
+        }
+        #endregion
+
+        #region  手动更新档级
+        public async Task UpdateLevel()
+        {
+            var isUpdate = await _levellogRepository.GetAll().AnyAsync(c => c.LevelData == GetDate(1, false, ""));
+            if (!isUpdate)
+            {
+                var result = await UpdateRetail();
+                if (result)
+                {
+                    var levelLog = new LevelLog();
+                    levelLog.Id = Guid.NewGuid();
+                    levelLog.LevelData = GetDate(1, false, "");
+                    levelLog.ChangeTime = DateTime.Now;
+                    _levellogRepository.Insert(levelLog);
+                }
+                Logger.InfoFormat("手动更新-当前更新档级时间：{0}", DateTime.Now);
+            }
+        }
+        public async Task<bool> UpdateRetail()
+        {
+            var retails = await _retailerRepository.GetAll().ToListAsync();
+            var lastIndex = 0;
+            for (var i = 0; i < retails.Count; i++)
+            {
+                var s = GetDate(1, false, "");
+                var mothPointdates = _gacustpointRepository.GetAll().SingleOrDefault(c => c.CustId == retails[i].CustId && c.Pmonth == GetDate(1, false, ""));
+                var mothPoint = mothPointdates == null ? 0 : mothPointdates.Point;
+                var gradLevel = _gagradeRepository.GetAll().Where(g => g.StartPoint <= mothPoint).OrderByDescending(g => g.StartPoint).FirstOrDefault();
+                retails[i].ArchivalLevel = gradLevel == null ? "1档" : gradLevel.GradeLevel.ToString() + "档";
+                lastIndex = i;
+            }
+            return lastIndex == retails.Count - 1;
         }
         #endregion
     }
