@@ -14,13 +14,15 @@ using HC.WeChat.LevelLogs.Dtos;
 using HC.WeChat.LevelLogs.DomainServices;
 using HC.WeChat.LevelLogs;
 using System;
+using HC.WeChat.Authorization;
 
 namespace HC.WeChat.LevelLogs
 {
     /// <summary>
     /// LevelLog应用层服务的接口实现方法
     /// </summary>
-    [AbpAuthorize(LevelLogAppPermissions.LevelLog)]
+    //[AbpAuthorize(LevelLogAppPermissions.LevelLog)]
+    [AbpAuthorize(AppPermissions.Pages)]
     public class LevelLogAppService : WeChatAppServiceBase, ILevelLogAppService
     {
         ////BCC/ BEGIN CUSTOM CODE SECTION
@@ -135,7 +137,7 @@ namespace HC.WeChat.LevelLogs
         /// <summary>
         /// 新增LevelLog
         /// </summary>
-        [AbpAuthorize(LevelLogAppPermissions.LevelLog_CreateLevelLog)]
+        //[AbpAuthorize(LevelLogAppPermissions.LevelLog_CreateLevelLog)]
         protected virtual async Task<LevelLogEditDto> CreateLevelLogAsync(LevelLogEditDto input)
         {
             //TODO:新增前的逻辑判断，是否允许新增
@@ -148,7 +150,7 @@ namespace HC.WeChat.LevelLogs
         /// <summary>
         /// 编辑LevelLog
         /// </summary>
-        [AbpAuthorize(LevelLogAppPermissions.LevelLog_EditLevelLog)]
+        //[AbpAuthorize(LevelLogAppPermissions.LevelLog_EditLevelLog)]
         protected virtual async Task UpdateLevelLogAsync(LevelLogEditDto input)
         {
             //TODO:更新前的逻辑判断，是否允许更新
@@ -164,7 +166,7 @@ namespace HC.WeChat.LevelLogs
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        [AbpAuthorize(LevelLogAppPermissions.LevelLog_DeleteLevelLog)]
+        //[AbpAuthorize(LevelLogAppPermissions.LevelLog_DeleteLevelLog)]
         public async Task DeleteLevelLog(EntityDto<Guid> input)
         {
 
@@ -175,13 +177,66 @@ namespace HC.WeChat.LevelLogs
         /// <summary>
         /// 批量删除LevelLog的方法
         /// </summary>
-        [AbpAuthorize(LevelLogAppPermissions.LevelLog_BatchDeleteLevelLogs)]
+        //[AbpAuthorize(LevelLogAppPermissions.LevelLog_BatchDeleteLevelLogs)]
         public async Task BatchDeleteLevelLogsAsync(List<Guid> input)
         {
             //TODO:批量删除前的逻辑判断，是否允许删除
             await _levellogRepository.DeleteAsync(s => input.Contains(s.Id));
         }
 
+        /// <summary>
+        /// 上月是否更新档级
+        /// </summary>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task<bool> IsUpdateLevel()
+        {
+           return await _levellogRepository.GetAll().AnyAsync(c => c.LevelData == GetDate(1, false, ""));
+        }
+
+        /// <summary>
+        /// 新增档级更新日志
+        /// </summary>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task<LevelLogEditDto> CreateSingleLevelLogAsync()
+        {
+            var levelLog = new LevelLog();
+            levelLog.LevelData = GetDate(1, false, "");
+            levelLog.ChangeTime = DateTime.Now;
+            var entity = ObjectMapper.Map<LevelLog>(levelLog);
+
+            entity = await _levellogRepository.InsertAsync(entity);
+            return entity.MapTo<LevelLogEditDto>();
+        }
+
+        [AbpAllowAnonymous]
+        public string GetDate(int span, bool isDay, string style = "")
+        {
+            var year = DateTime.Now.AddMonths(-span).Year.ToString();
+            if (DateTime.Now.AddMonths(-span).Month < 10)
+            {
+                if (isDay)
+                {
+                    return year + style + "0" + DateTime.Now.AddMonths(-span).Month.ToString() + "01";
+                }
+                else
+                {
+                    return year + style + "0" + DateTime.Now.AddMonths(-span).Month.ToString();
+                }
+            }
+            else
+            {
+                if (isDay)
+                {
+                    return year + style + DateTime.Now.AddMonths(-span).Month.ToString() + "01";
+                }
+                else
+                {
+                    return year + style + DateTime.Now.AddMonths(-span).Month.ToString();
+                }
+            }
+        }
     }
 }
 

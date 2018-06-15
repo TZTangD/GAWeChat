@@ -56,5 +56,18 @@ namespace HC.WeChat.LevelLogs
         /// 批量删除LevelLog
         /// </summary>
         Task BatchDeleteLevelLogsAsync(List<Guid> input);
+
+        /// <summary>
+        /// 上月是否更新档级
+        /// </summary>
+        /// <returns></returns>
+        Task<bool> IsUpdateLevel();
+
+        /// <summary>
+        /// 新增档级更新日志
+        /// </summary>
+        /// <returns></returns>
+        Task<LevelLogEditDto> CreateSingleLevelLogAsync();
+
     }
 }

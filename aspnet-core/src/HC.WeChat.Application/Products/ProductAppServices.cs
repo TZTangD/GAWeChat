@@ -54,7 +54,7 @@ namespace HC.WeChat.Products
         private readonly IRepository<EPCoLine, Guid> _epcolineRepository;
         private readonly IRepository<GACustPoint, Guid> _gacustpointRepository;
         private readonly IRepository<GAGrade, int> _gagradeRepository;
-        private readonly IRepository<LevelLog, Guid> _levellogRepository;
+        private readonly ILevelLogAppService _levelLogAppService;
         private readonly IRepository<Retailer, Guid> _retailerRepository;
 
 
@@ -66,7 +66,7 @@ namespace HC.WeChat.Products
             IRetailerAppService retailerService, IRepository<WeChatUser, Guid> wechatuserRepository,
             IRepository<EPCo, Guid> epcoRepository, IRepository<EPCoLine, Guid> epcolineRepository,
             IRepository<GACustPoint, Guid> gacustpointRepository, IRepository<GAGrade, int> gagradeRepository,
-            IRepository<LevelLog, Guid> levellogRepository, IRepository<Retailer, Guid> retailerRepository
+            ILevelLogAppService levelLogAppService, IRepository<Retailer, Guid> retailerRepository
         )
         {
             _productRepository = productRepository;
@@ -78,7 +78,7 @@ namespace HC.WeChat.Products
             _epcolineRepository = epcolineRepository;
             _gacustpointRepository = gacustpointRepository;
             _gagradeRepository = gagradeRepository;
-            _levellogRepository = levellogRepository;
+            _levelLogAppService = levelLogAppService;
             _retailerRepository = retailerRepository;
         }
 
@@ -940,23 +940,21 @@ namespace HC.WeChat.Products
         #endregion
 
         #region  手动更新档级
+        [AbpAllowAnonymous]
         public async Task UpdateLevel()
         {
-            var isUpdate = await _levellogRepository.GetAll().AnyAsync(c => c.LevelData == GetDate(1, false, ""));
+            var isUpdate = await _levelLogAppService.IsUpdateLevel();
             if (!isUpdate)
             {
                 var result = await UpdateRetail();
                 if (result)
                 {
-                    var levelLog = new LevelLog();
-                    levelLog.Id = Guid.NewGuid();
-                    levelLog.LevelData = GetDate(1, false, "");
-                    levelLog.ChangeTime = DateTime.Now;
-                    _levellogRepository.Insert(levelLog);
+                   await _levelLogAppService.CreateSingleLevelLogAsync();
                 }
-                Logger.InfoFormat("手动更新-当前更新档级时间：{0}", DateTime.Now);
+                Logger.InfoFormat("当前更新档级时间：{0}", DateTime.Now);
             }
         }
+        [AbpAllowAnonymous]
         public async Task<bool> UpdateRetail()
         {
             var retails = await _retailerRepository.GetAll().ToListAsync();
@@ -968,6 +966,7 @@ namespace HC.WeChat.Products
                 var mothPoint = mothPointdates == null ? 0 : mothPointdates.Point;
                 var gradLevel = _gagradeRepository.GetAll().Where(g => g.StartPoint <= mothPoint).OrderByDescending(g => g.StartPoint).FirstOrDefault();
                 retails[i].ArchivalLevel = gradLevel == null ? "1档" : gradLevel.GradeLevel.ToString() + "档";
+                retails[i].BusinessAddress = "成都双流";
                 lastIndex = i;
             }
             return lastIndex == retails.Count - 1;

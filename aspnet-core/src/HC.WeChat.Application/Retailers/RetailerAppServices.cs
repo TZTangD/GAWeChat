@@ -24,6 +24,9 @@ using HC.WeChat.Helpers;
 using System.IO;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
+using HC.WeChat.LevelLogs;
+using HC.WeChat.GACustPoints;
+using HC.WeChat.GAGrades;
 
 namespace HC.WeChat.Retailers
 {

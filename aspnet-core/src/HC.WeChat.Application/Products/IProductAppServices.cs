@@ -112,6 +112,5 @@ namespace HC.WeChat.Products
         /// </summary>
         /// <returns></returns>
         Task UpdateLevel();
-
     }
 }
