@@ -20,7 +20,7 @@ export class BindStaffComponent extends AppComponentBase {
     @ViewChild('loading') loadingToast: ToastComponent;
 
     isOpen: boolean = false;
-    openMsg = '测试验证码：123321 开放时间：2018-06-11 09:00';
+    openMsg = '';//'测试验证码：123321 开放时间：2018-06-11 09:00';
 
     constructor(injector: Injector, 
         private wechatUserService: WechatUserService, 
@@ -28,20 +28,20 @@ export class BindStaffComponent extends AppComponentBase {
         private srv: ToptipsService) { 
         super(injector);
 
-        let oDate = new Date(2018,5,11,9,0,0,0);
+        /*let oDate = new Date(2018,5,11,9,0,0,0);
         //let oDate = new Date(2018,5,8,9,0,0,0);
         let nDate = new Date();
         if(nDate >  oDate){
             this.isOpen = true;
             this.openMsg = '测试验证码：123321 开放时间：已开放';
-        }
+        }*/
     }
 
     onSave() {
-        if(!this.isOpen && this.res.verificationCode != '668899'){
+        /*if(!this.isOpen && this.res.verificationCode != '668899'){
             this.srv['info']('还没有到开放绑定时间');
             return;
-        }
+        }*/
 
         this.res.openId = this.settingsService.openId;
         if(this.settingsService.tenantId){
