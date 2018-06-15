@@ -7,6 +7,7 @@ export class Shop implements IShop {
     coverPhoto: string;
     saleTotal: number;
     readTotal: number;
+    singleTotal: number;
     evaluation: string;
     longitude: number;
     latitude: number;
@@ -48,6 +49,7 @@ export class Shop implements IShop {
             this.creationTime = data["creationTime"];
             this.tenantId = data["tenantId"];
             this.tel = data["tel"];
+            this.singleTotal = data["singleTotal"];
         }
     }
 
@@ -63,8 +65,8 @@ export class Shop implements IShop {
             let item = new Shop();
             item.init(result);
             array.push(item);
-        });   
-      
+        });
+
         return array;
     }
 
@@ -88,6 +90,7 @@ export class Shop implements IShop {
         data["creationTime"] = this.creationTime;
         data["tenantId"] = this.tenantId;
         data["tel"] = this.tel;
+        data["singleTotal"] = this.singleTotal;
         return data;
     }
 
@@ -107,6 +110,7 @@ export interface IShop {
     coverPhoto: string;
     saleTotal: number;
     readTotal: number;
+    singleTotal: number;
     evaluation: string;
     longitude: number;
     latitude: number;
