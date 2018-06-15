@@ -56,7 +56,7 @@ export class EditRoleComponent extends AppComponentBase implements OnInit {
             .subscribe(
                 (result) => {
                     this.role = result;
-                    this.permissionsConvert = this.permissions.items.map(i => { return { label: i.displayName, value: i.id, checked: true,name:i.name}; });
+                    this.permissionsConvert = this.permissions.items.map(i => { return { label: i.displayName, value: i.id, checked: true, name: i.name }; });
                     console.log(this.permissions.items);
                     this.roleInPerssion();
                     this.loading = false;
@@ -83,7 +83,7 @@ export class EditRoleComponent extends AppComponentBase implements OnInit {
         this.service.getAllPermissions()
             .subscribe((permissions: ListResultDtoOfPermissionDto) => {
                 this.permissions = permissions;
-                this.permissionsConvert = this.permissions.items.map(i => { return { label: i.displayName, value: i.id, checked: true,name:i.name }; });
+                this.permissionsConvert = this.permissions.items.map(i => { return { label: i.displayName, value: i.id, checked: true, name: i.name }; });
             });
     }
     /**
