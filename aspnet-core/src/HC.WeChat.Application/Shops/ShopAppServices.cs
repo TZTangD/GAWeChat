@@ -172,7 +172,7 @@ namespace HC.WeChat.Shops
         {
             if (input.Shop.Id.HasValue)
             {
-                await UpdateShopAsync(input.Shop);
+                await UpdateShopAsync(input);
             }
             else
             {
@@ -185,12 +185,13 @@ namespace HC.WeChat.Shops
         {
             using (CurrentUnitOfWork.SetTenantId(input.TenantId))
             {
+                //更新
                 if (input.Shop.Id.HasValue)
                 {
                     input.Shop.Status = WechatEnums.ShopAuditStatus.待审核;
-                    await UpdateShopAsync(input.Shop);
+                    await UpdateShopAsync(input);
                 }
-                else
+                else//新增
                 {
                     var user = await _wechatuserManager.GetWeChatUserAsync(input.OpenId, input.TenantId);
                     input.Shop.TenantId = input.TenantId;
@@ -203,11 +204,15 @@ namespace HC.WeChat.Shops
                     var entity = await CreateShopAsync(input.Shop);
                     await CurrentUnitOfWork.SaveChangesAsync();
                     input.Shop.Id = entity.Id;//获取审核信息的shop Id
+
+                    await SendAuditNotice(input);
                 }
-                await ShopWXInfo(input);
             }
         }
-        private async Task ShopWXInfo(CreateOrUpdateShopInput input)
+        /// <summary>
+        /// 发送审核通知
+        /// </summary>
+        private async Task SendAuditNotice(CreateOrUpdateShopInput input)
         {
             try
             {
@@ -227,10 +232,11 @@ namespace HC.WeChat.Shops
                                 string appId = AppConfig.AppId;
                                 string openId = item;
                                 //string templateId = "qvt7CNXBY4FzfzdX54TvMUaOi9jZ3-tdsb2NRhVp0yg";//模版id  
+                                input.Host = input.Host ?? "http://ga.intcov.com";//host配置
                                 string url = input.Host + "/GAWX/Authorization?page=303&param=" + input.Shop.Id.ToString();
                                 object data = new
                                 {
-                                    first = new TemplateDataItem("有新的店铺资料提交，请您尽快审核"),
+                                    first = new TemplateDataItem("有店铺资料提交或更改，请您尽快审核"),
                                     keyword1 = new TemplateDataItem(input.Shop.Name.ToString()),
                                     keyword2 = new TemplateDataItem(DateTime.Now.ToString("yyyy-MM-dd HH:mm"))
                                 };
@@ -267,15 +273,20 @@ namespace HC.WeChat.Shops
         /// </summary>
         //[AbpAuthorize(ShopAppPermissions.Shop_EditShop)]
         [AbpAllowAnonymous]
-        protected virtual async Task UpdateShopAsync(ShopEditDto input)
+        protected virtual async Task UpdateShopAsync(CreateOrUpdateShopInput input)
         {
             //TODO:更新前的逻辑判断，是否允许更新
-            var entity = await _shopRepository.GetAsync(input.Id.Value);
+            var entity = await _shopRepository.GetAsync(input.Shop.Id.Value);
+            var orgStatus = entity.Status;
             input.MapTo(entity);
-
             // ObjectMapper.Map(input, entity);
-            entity = await _shopRepository.UpdateAsync(entity);
-            entity.MapTo<ShopEditDto>();
+            await _shopRepository.UpdateAsync(entity);
+            //当审核状态改为待审核
+            if (orgStatus == ShopAuditStatus.已审核 && input.Shop.Status == ShopAuditStatus.待审核)
+            {
+                //发送审核通知
+                await SendAuditNotice(input);
+            }
         }
 
         /// <summary>
@@ -311,7 +322,7 @@ namespace HC.WeChat.Shops
             var entity = new ShopEditDto();
             if (input.Id.HasValue)
             {
-                await UpdateShopAsync(input);
+                await UpdateShopAsync(new CreateOrUpdateShopInput() {  Shop = input });
             }
             else
             {
