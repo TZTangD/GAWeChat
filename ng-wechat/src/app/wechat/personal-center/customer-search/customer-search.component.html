@@ -1,6 +1,6 @@
 <Page [ngClass]="'infiniteloader'" [showTitle]="false" [subTitle]="" [spacing]="false" [noBottom]="true">
     <weui-searchbar (search)="getCustomers($event)" [(value)]="value" (cancel)="onCancel()" placeholder="请输入姓名、专卖号或电话" (clear)="onClear()" [debounceTime]="500"></weui-searchbar>
-    <div class="weui-cells__title">只显示匹配的前20条数据</div>
+    <div class="weui-cells__title">只显示匹配搜索条件的前20条数据</div>
     <div class="weui-panel" style="margin-top: 0px;" *ngIf="customers.length>0">
         <!-- <div class="weui-panel__hd">只显示符合【{{value}}】的前50条数据</div> -->
         <div class="weui-cells__title">
