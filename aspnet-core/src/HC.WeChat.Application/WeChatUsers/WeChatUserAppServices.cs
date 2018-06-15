@@ -265,16 +265,15 @@ namespace HC.WeChat.WeChatUsers
                     var retalilerDto = retaliler.MapTo<RetailerListDto>();
                     if (retalilerDto != null)
                     {
-                        //测试环境注释
-                        //if (retalilerDto.RetailerVerificationCode != input.VerificationCode)
-                        //{
-                        //    return new APIResultDto() { Code = 901, Msg = "零售户验证未通过" };
-                        //}
-                        //测试验证码
-                        if (input.VerificationCode != "123321" && input.VerificationCode != "668899")
+                        if (retalilerDto.RetailerVerificationCode != input.VerificationCode)
                         {
                             return new APIResultDto() { Code = 901, Msg = "零售户验证未通过" };
                         }
+                        //测试验证码
+                        //if (input.VerificationCode != "123321" && input.VerificationCode != "668899")
+                        //{
+                        //    return new APIResultDto() { Code = 901, Msg = "零售户验证未通过" };
+                        //}
                     }
                     else
                     {
@@ -313,15 +312,14 @@ namespace HC.WeChat.WeChatUsers
                     var employeeDto = employee.MapTo<EmployeeListDto>();
                     if (employeeDto != null)
                     {
-                        //测试环境注释
-                        //if (employeeDto.EmployeeVerificationCode != input.VerificationCode)
-                        //{
-                        //    return new APIResultDto() { Code = 903, Msg = "内部员工验证未通过" };
-                        //}
-                        if (input.VerificationCode != "123321" && input.VerificationCode != "668899")
+                        if (employeeDto.EmployeeVerificationCode != input.VerificationCode)
                         {
-                            return new APIResultDto() { Code = 901, Msg = "内部员工验证未通过" };
+                            return new APIResultDto() { Code = 903, Msg = "内部员工验证未通过" };
                         }
+                        //if (input.VerificationCode != "123321" && input.VerificationCode != "668899")
+                        //{
+                        //    return new APIResultDto() { Code = 901, Msg = "内部员工验证未通过" };
+                        //}
                     }
                     else
                     {
