@@ -26,9 +26,8 @@ namespace HC.WeChat.LevelJob
         public UpdateLevelWorker(AbpTimer timer,
           IProductAppService productAppService) : base(timer)
         {
-            Timer.Period = 1000;
+            Timer.Period = 18000000;
             _productAppService = productAppService;
-
             //启动日志
             Logger.InfoFormat("启动job时间：{0}", DateTime.Now);
         }
@@ -38,22 +37,9 @@ namespace HC.WeChat.LevelJob
             Logger.InfoFormat("进入job开始时间：{0}", DateTime.Now);
             var s = DateTime.Today;
             var m = DateTime.Now.AddDays(-1);
-            if (DateTime.Now.Day == 15 && DateTime.Now.Hour >= 11 && preDate != DateTime.Today)
+            if (DateTime.Now.Day == 2 && DateTime.Now.Hour >= 4 && preDate != DateTime.Today)
             {
-                //var isUpdate = _levellogRepository.GetAll().Any(c => c.LevelData == GetDate(1, false,""));
-                //if (!isUpdate)
-                //{
-                //    var result = UpdateRetail();
-                //    if (result) {
-                //        var levelLog = new LevelLog();
-                //        levelLog.Id = Guid.NewGuid();
-                //        levelLog.LevelData = GetDate(1, false, "");
-                //        levelLog.ChangeTime = DateTime.Now;
-                //        _levellogRepository.Insert(levelLog);
-                //        preDate = DateTime.Today;
-                //    }
-                //    Logger.InfoFormat("当前更新档级时间：{0}", DateTime.Now);
-                //}
+              
                 preDate = DateTime.Today;
                 using (CurrentUnitOfWork.DisableFilter(AbpDataFilters.MayHaveTenant))
                 {
@@ -64,51 +50,6 @@ namespace HC.WeChat.LevelJob
             }
             Logger.InfoFormat("进入job结束时间：{0}", DateTime.Now);
         }
-        //[UnitOfWork]
-        //public bool UpdateRetail()
-        //{
-        //    var retails = _retailerRepository.GetAll().ToList();
-        //    var lastIndex = 0;
-        //    for (var i = 0; i < retails.Count; i++)
-        //    {
-        //        var s = GetDate(1, false, "");
-        //        var mothPointdates = _gacustpointRepository.GetAll().SingleOrDefault(c => c.CustId == retails[i].CustId && c.Pmonth == GetDate(1, false,""));
-        //        var mothPoint = mothPointdates == null ? 0 : mothPointdates.Point;
-        //        var gradLevel = _gagradeRepository.GetAll().Where(g => g.StartPoint <= mothPoint).OrderByDescending(g => g.StartPoint).FirstOrDefault();
-        //        retails[i].ArchivalLevel = gradLevel == null ? "1档" : gradLevel.GradeLevel.ToString() + "档";
-        //        lastIndex = i;
-        //    }
-        //    return lastIndex == retails.Count - 1;
-
-        //}
-
-
-        //public string GetDate(int span, bool isDay,string style="")
-        //{
-        //    var year = DateTime.Now.AddMonths(-span).Year.ToString();
-        //    if (DateTime.Now.AddMonths(-span).Month < 10)
-        //    {
-        //        if (isDay)
-        //        {
-        //            return year + style+ "0" + DateTime.Now.AddMonths(-span).Month.ToString() + "01";
-        //        }
-        //        else
-        //        {
-        //            return year + style+ "0" + DateTime.Now.AddMonths(-span).Month.ToString();
-        //        }
-        //    }
-        //    else
-        //    {
-        //        if (isDay)
-        //        {
-        //            return year + style + DateTime.Now.AddMonths(-span).Month.ToString() + "01";
-        //        }
-        //        else
-        //        {
-        //            return year + style + DateTime.Now.AddMonths(-span).Month.ToString();
-        //        }
-        //    }
-        //}
     }
 
 }
