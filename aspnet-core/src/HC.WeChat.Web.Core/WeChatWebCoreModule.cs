@@ -79,7 +79,7 @@ namespace HC.WeChat
         public override void PostInitialize()
         {
             var workManager = IocManager.Resolve<IBackgroundWorkerManager>();
-            //workManager.Add(IocManager.Resolve<UpdateLevelWorker>());
+            workManager.Add(IocManager.Resolve<UpdateLevelWorker>());
         }
     }
 }
