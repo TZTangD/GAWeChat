@@ -41,8 +41,8 @@ namespace HC.WeChat.LevelJob
         protected override void DoWork()
         {
             Logger.InfoFormat("进入job开始时间：{0}", DateTime.Now);
-            var updateStartDate = Convert.ToDateTime(GetDate(0, false,"-") + "-15 2:00:00");
-            var updateEndDate = Convert.ToDateTime(GetDate(0, false,"-") + "-15 6:00:00");
+            var updateStartDate = Convert.ToDateTime(GetDate(0, false,"-") + "-16 2:00:00");
+            var updateEndDate = Convert.ToDateTime(GetDate(0, false,"-") + "-16 6:00:00");
 
             if (DateTime.Now >= updateStartDate && updateEndDate >= DateTime.Now && DateTime.Now.AddDays(0).ToString("d") != preDate)
             {
