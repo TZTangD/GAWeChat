@@ -429,7 +429,7 @@ namespace HC.WeChat.PurchaseRecords
         /// <param name="finalIntegral"></param>
         /// <param name="integral"></param>
         /// <returns></returns>
-        public async Task PurchaseSendWXMesssageToCust(string OpenId, string host, string memberBarCode, int? finalIntegral, int? integral)
+        private async Task PurchaseSendWXMesssageToCust(string OpenId, string host, string memberBarCode, int? finalIntegral, int? integral)
         {
             try
             {
@@ -460,7 +460,7 @@ namespace HC.WeChat.PurchaseRecords
             }
         }
 
-        public async Task PurchaseSendWXMesssageToShopKeeper(string OpenId, string host, string memberBarCode, int? finalIntegral, int? integral)
+        private async Task PurchaseSendWXMesssageToShopKeeper(string OpenId, string host, string memberBarCode, int? finalIntegral, int? integral)
         {
             try
             {
