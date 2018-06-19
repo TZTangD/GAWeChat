@@ -565,7 +565,7 @@ namespace HC.WeChat.Shops
                         string url = "";
                         object data = new
                         {
-                            first = new TemplateDataItem("您的店铺已通过审核"),
+                            first = new TemplateDataItem("您所提交的店铺资料已通过审核"),
                             keyword1 = new TemplateDataItem("通过审核"),
                             keyword2 = new TemplateDataItem(DateTime.Now.ToString("yyyy-MM-dd HH:mm"))
                         };

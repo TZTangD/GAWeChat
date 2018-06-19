@@ -32,6 +32,7 @@ export class AccountLevelComponent extends AppComponentBase implements OnInit {
     nowDate = '';
     //季度、年度
     qypreData = '';
+    currentId = '';
     constructor(injector: Injector, private actRouter: ActivatedRoute, private router: Router,
         private weChatUserService: WechatUserService, private customerService: CustomerService,
         private levelAccountAccpintService: LevelAccountAccpintService) {
@@ -42,12 +43,7 @@ export class AccountLevelComponent extends AppComponentBase implements OnInit {
         this.nowDate = this.dateFormat(date);
     }
     ngOnInit(): void {
-        if (this.id) {
-            this.getLevel();
-            this.getAccount(1);
-        } else {
-            this.getCurrentUser();
-        }
+        this.getCurrentUser();
     }
 
     /**
@@ -60,16 +56,22 @@ export class AccountLevelComponent extends AppComponentBase implements OnInit {
     //     });
     // }
 
-    /**
-     * 当零售户进入当页时获取微信用户信息
-     */
+
     getCurrentUser() {
         this.settingsService.getUser().subscribe(data => {
             this.user = data;
             this.headImg = this.user.headImgUrl;
-            this.id = data.userId;
+            this.currentId = data.userId;
+            if (!this.id) {
+                this.id = data.userId;
+            }
             this.getLevel();
             this.getAccount(1);
+            if (this.user.userType == UserType.Staff || this.user.isShopkeeper) {
+                this.showCode = true;
+            } else {
+                this.showCode = false;
+            }
         });
     }
     /**
@@ -87,11 +89,7 @@ export class AccountLevelComponent extends AppComponentBase implements OnInit {
             if (this.id !== this.user.userId) {
                 this.headImg = (data.headImgUrl === '' || data.headImgUrl === null) ? this.defaultHed : data.headImgUrl;
             }
-            if (this.user.userType === UserType.Staff || data.isShopkeeper) {
-                this.showCode = true;
-            } else {
-                this.showCode = false;
-            }
+
         });
     }
 
