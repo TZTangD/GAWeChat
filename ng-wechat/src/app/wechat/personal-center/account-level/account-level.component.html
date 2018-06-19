@@ -30,7 +30,7 @@
                     <span style="vertical-align: middle; font-size: 14px;">档级货源</span>
                 </div>
                 <div class="weui-cell__ft" >
-                    {{level.level==null?1:level.level}}档
+                    {{(level.level==null||level.level=="")?1:level.level}}档
                 </div>
             </div>
             <div class="weui-cell__ft">

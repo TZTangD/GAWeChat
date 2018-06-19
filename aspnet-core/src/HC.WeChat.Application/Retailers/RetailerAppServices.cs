@@ -513,13 +513,13 @@ namespace HC.WeChat.Retailers
                 var retailList = new List<RetailerListDto>();
                 if (input.IsMore)
                 {
-                    var retailListQ = await _retailerRepository.GetAll().Where(r => r.Telephone.Contains(input.Filter) || r.LicenseKey.Contains(input.Filter) || r.Name.Contains(input.Filter))
+                    var retailListQ = await _retailerRepository.GetAll().Where(r => r.Telephone.Contains(input.Filter) || r.LicenseKey.Contains(input.Filter) || r.Name.Contains(input.Filter) && r.IsAction==true)
                    .OrderBy(r => r.Name).Skip(input.SkipCount).Take(input.MaxResultCount).ToListAsync();
                     retailList = retailListQ.MapTo<List<RetailerListDto>>();
                 }
                 else
                 {
-                    var retailListQ = await _retailerRepository.GetAll().Where(r => r.Telephone.Contains(input.Filter) || r.LicenseKey.Contains(input.Filter) || r.Name.Contains(input.Filter))
+                    var retailListQ = await _retailerRepository.GetAll().Where(r => r.Telephone.Contains(input.Filter) || r.LicenseKey.Contains(input.Filter) || r.Name.Contains(input.Filter) && r.IsAction == true)
                     .OrderBy(r => r.Name).Skip(0).Take(20).ToListAsync();
                     retailList = retailListQ.MapTo<List<RetailerListDto>>();
                 }

@@ -277,8 +277,8 @@ namespace HC.WeChat.Articles
                                  PushTime = a.PushTime,
                                  Content = a.Content,
                                  CoverPhoto = a.CoverPhoto,
-                                 LinkType =a.LinkType,
-                                 LinkAddress =a.LinkAddress
+                                 LinkType = a.LinkType,
+                                 LinkAddress = a.LinkAddress
                              };
 
                 return await entity.OrderByDescending(q => q.PushTime).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
@@ -360,7 +360,11 @@ namespace HC.WeChat.Articles
                 .WhereIf(!string.IsNullOrEmpty(input.Author), a => a.Author.Contains(input.Author))
                 .WhereIf(input.Status.HasValue, a => a.PushStatus == input.Status);
             //TODO:根据传入的参数添加过滤条件
-            var articles = await query .ToListAsync();
+            var articles = await query
+                .OrderByDescending(a => a.PushTime)
+                .ThenByDescending(a => a.CreationTime)
+                .ThenBy(input.Sorting)
+                .ToListAsync();
 
             var articleListDtos = articles.MapTo<List<ArticleListDto>>();
 
@@ -382,7 +386,7 @@ namespace HC.WeChat.Articles
                 ISheet sheet = workbook.CreateSheet("Employees");
                 var rowIndex = 0;
                 IRow titleRow = sheet.CreateRow(rowIndex);
-                string[] titles = { "活动名称", "活动策划者", "阅读量", "点赞数", "发布状态", "发布时间","链接类型","地址" };
+                string[] titles = { "活动名称", "活动策划者", "阅读量", "点赞数", "发布状态", "发布时间", "链接类型", "地址" };
                 var fontTitle = workbook.CreateFont();
                 fontTitle.IsBold = true;
                 for (int i = 0; i < titles.Length; i++)
@@ -427,7 +431,7 @@ namespace HC.WeChat.Articles
                 var exportData = await GeArticleNoPage(input);
                 var result = new APIResultDto();
                 result.Code = 0;
-                result.Data = SaveArticleExcel((input.Type == ArticleTypeEnum.经验分享?"经验分享.xlsx":"营销活动.xlsx"), exportData);
+                result.Data = SaveArticleExcel((input.Type == ArticleTypeEnum.经验分享 ? "经验分享.xlsx" : "营销活动.xlsx"), exportData);
                 return result;
             }
             catch (Exception ex)
