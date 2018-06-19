@@ -254,7 +254,8 @@ namespace HC.WeChat.WeChatUsers
             var entity = await _wechatuserManager.GetWeChatUserAsync(input.OpenId, input.TenantId);
             if (entity == null)
             {
-                entity = input.MapTo<WeChatUser>();
+                //entity = input.MapTo<WeChatUser>();
+                return new APIResultDto() { Code = 902, Msg = "用户不存在" };
             }
             using (CurrentUnitOfWork.SetTenantId(input.TenantId))
             {

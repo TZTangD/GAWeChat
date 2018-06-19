@@ -22,31 +22,41 @@ export class LevelAccountAccpintService {
 
     private level: Level;
 
+    private customerId: string = '';
+    private monthCid: string = '';
+    private quarterCid: string = '';
+    private yearCid: string = '';
+
     getAccount(input: any): Observable<AccountLevels> {
-        if(input.span == 1 && this.monthAccount){
+        if (input.span == 1 && this.monthAccount && this.monthCid == input.userId) {
             return Observable.of(this.monthAccount);
-        } else if(input.span == 3 && this.quarterAccount){
+        } else if (input.span == 3 && this.quarterAccount && this.quarterCid == input.userId) {
             return Observable.of(this.quarterAccount);
-        } else if(input.span == 6 && this.halfYearAccount){
+        } else if (input.span == 6 && this.halfYearAccount && this.yearCid == input.userId) {
             return Observable.of(this.halfYearAccount);
         }
         return this.http.get('/api/services/app/Product/GetCustAndAccountInfoAsync', input, true).map(data => {
-            if(input.span == 1){
+            if (input.span == 1) {
                 this.monthAccount = data.result;
-            } else if(input.span == 3){
+                this.monthCid = input.userId;
+            } else if (input.span == 3) {
                 this.quarterAccount = data.result;
-            } else if(input.span == 6){
+                this.quarterCid = input.userId;
+            } else if (input.span == 6) {
                 this.halfYearAccount = data.result;
+                this.yearCid = input.userId;
             }
+            
             return data.result;
         });
     }
     getLevel(input: any): Observable<Level> {
-        if(this.level){
+        if (this.level && this.customerId == input.userId) {
             return Observable.of(this.level);
         }
         return this.http.get('/api/services/app/Product/GetRetailBasicInfoAsync', input, true).map(data => {
             this.level = data.result;
+            this.customerId = input.userId;
             return data.result;
         });
     }

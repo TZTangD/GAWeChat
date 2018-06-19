@@ -15,8 +15,8 @@ namespace HC.WeChat.Web.Host.Controllers
         IWeChatOAuthAppService _weChatOAuthAppService;
         //private readonly IConfigurationRoot _appConfiguration;
         //private WeChatTenantSetting _settings;
-        private string host = "http://ga.intcov.com";
-        //private string host = "http://localhost:21021";
+        //private string host = "http://ga.intcov.com";
+        private string host = "http://localhost:21021";
         private int? tenantId;
 
         private string UserOpenId
