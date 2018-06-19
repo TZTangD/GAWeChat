@@ -274,8 +274,8 @@ namespace HC.WeChat.Retailers
                 .WhereIf(input.Markets.HasValue, r => r.MarketType == input.Markets)
                 .WhereIf(input.Status.HasValue, r => r.IsAction == input.Status)
                 .WhereIf(mid.HasValue, r => r.EmployeeId == mid);
-            var retailers = await query.ToListAsync();
-            var retailerListDtos =  query.MapTo<List<RetailerListDto>>();
+            var retailers = await query.OrderByDescending(r => r.CreationTime).ToListAsync();
+            var retailerListDtos = retailers.MapTo<List<RetailerListDto>>();
             return  retailerListDtos;
         }
 
@@ -288,7 +288,7 @@ namespace HC.WeChat.Retailers
                   .WhereIf(input.Markets.HasValue, r => r.MarketType == input.Markets)
                   .WhereIf(input.Status.HasValue, r => r.IsAction == input.Status)
                   .WhereIf(mid.HasValue, r => r.EmployeeId == mid);
-            var retailers = await query.ToListAsync();
+            var retailers = await query.OrderByDescending(r => r.CreationTime).ToListAsync();
             var retailerListDtos = retailers.MapTo<List<RetailerListDto>>();
             return retailerListDtos;
         }
