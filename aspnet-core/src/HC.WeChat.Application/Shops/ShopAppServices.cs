@@ -282,7 +282,7 @@ namespace HC.WeChat.Shops
             // ObjectMapper.Map(input, entity);
             await _shopRepository.UpdateAsync(entity);
             //当审核状态改为待审核
-            if (orgStatus == ShopAuditStatus.已审核 && input.Shop.Status == ShopAuditStatus.待审核)
+            if ((orgStatus == ShopAuditStatus.已审核 || orgStatus == ShopAuditStatus.已拒绝) && input.Shop.Status == ShopAuditStatus.待审核)
             {
                 //发送审核通知
                 await SendAuditNotice(input);
@@ -751,7 +751,7 @@ namespace HC.WeChat.Shops
                         };
 
             //TODO:根据传入的参数添加过滤条件
-            var shopCount = await query.CountAsync();
+            //var shopCount = await query.CountAsync();
             if (input.SortSaleTotal != null && input.SortSaleTotal == "ascend")
             {
                 var shops = await query
