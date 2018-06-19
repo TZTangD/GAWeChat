@@ -957,18 +957,19 @@ namespace HC.WeChat.Products
         [AbpAllowAnonymous]
         public Task<bool> UpdateRetail()
         {
-            var retails =  _retailerRepository.GetAll().ToList();
-            var lastIndex = 0;
-            for (var i = 0; i < retails.Count; i++)
+            var pmonth = GetDate(1, false, "");
+            var retails =  _retailerRepository.GetAll().Where(r => r.IsAction).ToList();
+            var gradeList = _gagradeRepository.GetAll().ToList();
+            var gacustpoint = _gacustpointRepository.GetAll().Where(c => c.Pmonth == pmonth).ToList();
+           
+            foreach (var item in retails)
             {
-                var s = GetDate(1, false, "");
-                var mothPointdates = _gacustpointRepository.GetAll().SingleOrDefault(c => c.CustId == retails[i].CustId && c.Pmonth == GetDate(1, false, ""));
+                var mothPointdates = gacustpoint.SingleOrDefault(c => c.CustId == item.CustId);
                 var mothPoint = mothPointdates == null ? 0 : mothPointdates.Point;
-                var gradLevel = _gagradeRepository.GetAll().Where(g => g.StartPoint <= mothPoint).OrderByDescending(g => g.StartPoint).FirstOrDefault();
-                retails[i].ArchivalLevel = gradLevel == null ? "1" : gradLevel.GradeLevel.ToString();
-                lastIndex = i;
+                var gradLevel = gradeList.Where(g => g.StartPoint <= mothPoint).OrderByDescending(g => g.StartPoint).FirstOrDefault();
+                item.ArchivalLevel = gradLevel == null ? "1" : gradLevel.GradeLevel.ToString();
             }
-            return Task.FromResult(lastIndex == retails.Count - 1);
+            return Task.FromResult(true);
         }
         #endregion
     }
