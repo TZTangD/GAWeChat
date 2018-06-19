@@ -27,9 +27,11 @@ namespace HC.WeChat.LevelJob
           IProductAppService productAppService) : base(timer)
         {
             Timer.Period = 18000000;
+            //Timer.Period = 10000;
             _productAppService = productAppService;
             //启动日志
-            Logger.InfoFormat("启动job时间：{0}", DateTime.Now);
+            //Logger.InfoFormat("启动job时间：{0}", DateTime.Now);
+            DoWork();
         }
         [UnitOfWork]
         protected override void DoWork()
@@ -39,16 +41,15 @@ namespace HC.WeChat.LevelJob
             var m = DateTime.Now.AddDays(-1);
             if (DateTime.Now.Day == 2 && DateTime.Now.Hour >= 4 && preDate != DateTime.Today)
             {
-              
+                Logger.InfoFormat("执行job逻辑开始时间：{0}", DateTime.Now);
                 preDate = DateTime.Today;
                 using (CurrentUnitOfWork.DisableFilter(AbpDataFilters.MayHaveTenant))
                 {
                     _productAppService.UpdateLevel();
                     CurrentUnitOfWork.SaveChanges();
                 }
-               
+                Logger.InfoFormat("执行job逻辑结束时间：{0}", DateTime.Now);
             }
-            Logger.InfoFormat("进入job结束时间：{0}", DateTime.Now);
         }
     }
 
