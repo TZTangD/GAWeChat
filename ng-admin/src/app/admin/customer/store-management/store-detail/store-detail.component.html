@@ -23,22 +23,24 @@
             </div>
             <div nz-col nzXs="24" nzSm="18">
                 <!-- <nz-card  [nzBordered]="false" nzNoPadding> -->
-                    <desc-list size="small" col="3" class="mb-md">
-                        <desc-list-item term="店铺名称">{{shop.name}}</desc-list-item>
-                        <desc-list-item term="店铺地址">{{shop.address}}</desc-list-item>
-                        <desc-list-item term="零售客户">{{shop.retailerName}}</desc-list-item>
-                        <desc-list-item term="店铺销量">{{shop.saleTotal}}</desc-list-item>
-                        <desc-list-item term="店铺浏览量">{{shop.readTotal}}</desc-list-item>
-                        <desc-list-item term="店铺电话">{{shop.tel}}</desc-list-item>
-                        <desc-list-item term="经度">{{shop.longitude}}</desc-list-item>
-                        <desc-list-item term="纬度">{{shop.latitude}}</desc-list-item>
-                        <desc-list-item term="审核时间">{{shop.auditTime|_date}}</desc-list-item>
-                        <!-- <desc-list-item term="评价描述">{{evaluationShow}}</desc-list-item> -->
-                        <!-- <desc-list-item term="店铺描述" > <p>{{shop.desc}}</p></desc-list-item> -->
-                    </desc-list>
-                    <desc-list size="small" col="1" class="mb-md">
-                        <desc-list-item term="店铺描述" col="24" > <p>{{shop.desc}}</p></desc-list-item>
-                    </desc-list>
+                <desc-list size="small" col="3" class="mb-md">
+                    <desc-list-item term="店铺名称">{{shop.name}}</desc-list-item>
+                    <desc-list-item term="店铺地址">{{shop.address}}</desc-list-item>
+                    <desc-list-item term="零售客户">{{shop.retailerName}}</desc-list-item>
+                    <desc-list-item term="店铺销量">{{shop.saleTotal}}</desc-list-item>
+                    <desc-list-item term="店铺浏览量">{{shop.readTotal}}</desc-list-item>
+                    <desc-list-item term="店铺电话">{{shop.tel}}</desc-list-item>
+                    <desc-list-item term="经度">{{shop.longitude}}</desc-list-item>
+                    <desc-list-item term="纬度">{{shop.latitude}}</desc-list-item>
+                    <desc-list-item term="审核时间">{{shop.auditTime|_date}}</desc-list-item>
+                    <!-- <desc-list-item term="评价描述">{{evaluationShow}}</desc-list-item> -->
+                    <!-- <desc-list-item term="店铺描述" > <p>{{shop.desc}}</p></desc-list-item> -->
+                </desc-list>
+                <desc-list size="small" col="1" class="mb-md">
+                    <desc-list-item term="店铺描述" col="24">
+                        <p>{{shop.desc}}</p>
+                    </desc-list-item>
+                </desc-list>
                 <!-- </nz-card> -->
             </div>
         </div>
@@ -48,8 +50,7 @@
             <nz-tab>
 
                 <ng-template #nzTabHeading>特色产品</ng-template>
-                <nz-table #nzTable3 [nzAjaxData]="shopProducts" [nzTotal]="querySP.total" [(nzPageIndex)]="querySP.pageIndex" [(nzPageSize)]="querySP.pageSize"
-                    [nzLoading]="loadingSP" [nzShowTotal]="'true'" [nzShowSizeChanger]="true" (nzPageIndexChange)="getShopProducts()"
+                <nz-table #nzTable3 [nzAjaxData]="shopProducts" [nzTotal]="querySP.total" [(nzPageIndex)]="querySP.pageIndex" [(nzPageSize)]="querySP.pageSize" [nzLoading]="loadingSP" [nzShowTotal]="'true'" [nzShowSizeChanger]="true" (nzPageIndexChange)="getShopProducts()"
                     (nzPageSizeChange)="getShopProducts()">
                     <thead nz-thead>
                         <tr>
@@ -76,8 +77,7 @@
                     <tbody nz-tbody>
                         <tr nz-tbody-tr *ngFor="let shopProduct of nzTable3.data">
                             <td nz-td>
-                                <nz-avatar [nzSrc]="(shopProduct.photoUrl | hostUrl)" style="width:80px;height: 80px;" (click)="handlePreview(shopProduct.photoUrl)"
-                                    [nzSize]="'large'" [nzShape]="'square'"></nz-avatar>
+                                <nz-avatar [nzSrc]="(shopProduct.photoUrl | hostUrl)" style="width:80px;height: 80px;" (click)="handlePreview(shopProduct.photoUrl)" [nzSize]="'large'" [nzShape]="'square'"></nz-avatar>
                             </td>
                             <td nz-td>{{shopProduct.specification }}</td>
                             <td nz-td>{{shopProduct.typeName}}</td>
@@ -95,9 +95,7 @@
             </nz-tab>
             <nz-tab>
                 <ng-template #nzTabHeading>店铺人员</ng-template>
-                <nz-table #nzTable1 [nzAjaxData]="shopEmployees" [nzTotal]="query.total" [(nzPageIndex)]="query.pageIndex" [(nzPageSize)]="query.pageSize"
-                    [nzLoading]="loading" [nzShowTotal]="'true'" [nzShowSizeChanger]="true" (nzPageIndexChange)="refreshData()"
-                    (nzPageSizeChange)="refreshData()">
+                <nz-table #nzTable1 [nzAjaxData]="shopEmployees" [nzTotal]="query.total" [(nzPageIndex)]="query.pageIndex" [(nzPageSize)]="query.pageSize" [nzLoading]="loading" [nzShowTotal]="'true'" [nzShowSizeChanger]="true" (nzPageIndexChange)="refreshData()" (nzPageSizeChange)="refreshData()">
                     <thead nz-thead>
                         <tr>
                             <th nz-th>
@@ -150,15 +148,13 @@
                     <standard-form-row block style="padding-bottom: 9px;">
                         <div nz-form-item>
                             <div nz-form-control>
-                                <nz-checkable-tag *ngFor="let i of evaluations; let idx=index" [nzColor]="evaluationSearch == i.id? '' : i.color" [nzChecked]="i.value"
-                                    (nzChange)="changeCategory($event,idx, i.id)">
+                                <nz-checkable-tag *ngFor="let i of evaluations; let idx=index" [nzColor]="evaluationSearch == i.id? '' : i.color" [nzChecked]="i.value" (nzChange)="changeCategory($event,idx, i.id)">
                                     {{i.text}}
                                 </nz-checkable-tag>
                             </div>
                         </div>
                     </standard-form-row>
-                    <nz-table #nzTable2 [nzAjaxData]="shopEvaluations" [nzTotal]="queryE.total" [(nzPageIndex)]="queryE.pageIndex" [(nzPageSize)]="queryE.pageSize"
-                        [nzLoading]="loadingE" [nzShowTotal]="'true'" [nzShowSizeChanger]="true" (nzPageIndexChange)="refreshDataE()"
+                    <nz-table #nzTable2 [nzAjaxData]="shopEvaluations" [nzTotal]="queryE.total" [(nzPageIndex)]="queryE.pageIndex" [(nzPageSize)]="queryE.pageSize" [nzLoading]="loadingE" [nzShowTotal]="'true'" [nzShowSizeChanger]="true" (nzPageIndexChange)="refreshDataE()"
                         (nzPageSizeChange)="refreshDataE()">
                         <thead nz-thead>
                             <tr>

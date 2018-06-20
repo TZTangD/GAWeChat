@@ -14,7 +14,8 @@ namespace HC.WeChat.WeChatUsers.Dtos
         /// 模糊搜索使用的关键字
         /// </summary>
         public string Name { get; set; }
-        
+        public string Phone { get; set; }
+
         /// <summary>
         /// 后台会员配置指定姓名搜索
         /// </summary>
@@ -35,6 +36,7 @@ namespace HC.WeChat.WeChatUsers.Dtos
                 Sorting = "Id";
             }
         }
+        public string SortValue { get; set; }
 
     }
 
