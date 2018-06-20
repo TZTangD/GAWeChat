@@ -12,6 +12,7 @@ namespace HC.WeChat.PurchaseRecords.Dtos
         /// 模糊搜索使用的关键字
         /// </summary>
         public string Filter { get; set; }
+        public string OpenId { get; set; }
 
         /// <summary>
         /// 正常化排序使用
@@ -23,6 +24,5 @@ namespace HC.WeChat.PurchaseRecords.Dtos
                 Sorting = "Id";
             }
         }
-
     }
 }

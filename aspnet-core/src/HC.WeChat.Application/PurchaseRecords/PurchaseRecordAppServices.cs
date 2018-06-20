@@ -231,6 +231,37 @@ namespace HC.WeChat.PurchaseRecords
             await _purchaserecordRepository.DeleteAsync(s => input.Contains(s.Id));
         }
 
+        /// <summary>
+        /// 获取指定用户购买记录的分页列表信息
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task<PagedResultDto<PurchaseRecordListDto>> GetPagedPurchaseRecordsByIdAsync(GetPurchaseRecordsInput input)
+        {
+            var query = _purchaserecordRepository.GetAll().Where(v => v.OpenId == input.OpenId);
+            var result = from p in query
+                         select
+                                new PurchaseRecordListDto()
+                                {
+                                    Specification = p.Specification,
+                                    CreationTime = p.CreationTime,
+                                    Integral = p.Integral,
+                                    Remark = p.Remark,
+                                    ShopName = p.ShopName,
+                                    Quantity = p.Quantity
+                                };
+            var purchaserecordCount = await result.CountAsync();
+            var purchaserecords = await result
+                .OrderByDescending(v=>v.CreationTime)
+                .PageBy(input)
+                .ToListAsync();
+            var purchaserecordListDtos = purchaserecords.MapTo<List<PurchaseRecordListDto>>();
+            return new PagedResultDto<PurchaseRecordListDto>(
+                purchaserecordCount,
+                purchaserecordListDtos
+                );
+        }
+
         private async Task<Dictionary<DeployCodeEnum?, decimal>> GetIntegralConfig(int? tenantId)
         {
             using (CurrentUnitOfWork.SetTenantId(tenantId))

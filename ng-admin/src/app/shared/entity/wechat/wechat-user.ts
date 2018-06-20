@@ -12,7 +12,6 @@ export class WechatUser implements IWechatUser {
     headImgUrl: string;
     userTypeName: string;
     bindStatusName: string;
-
     phone: string;
     memberBarCode: string;
     integralTotal: number;
@@ -45,7 +44,7 @@ export class WechatUser implements IWechatUser {
             this.unBindTime = data["unBindTime"];
             this.userTypeName = data["userTypeName"];
             this.bindStatusName = data["bindStatusName"];
-
+            this.headImgUrl = data["headImgUrl"];
             this.phone = data["phone"];
             this.memberBarCode = data["memberBarCode"];
             this.integralTotal = data["integralTotal"];
@@ -76,7 +75,7 @@ export class WechatUser implements IWechatUser {
         data["bindTime"] = this.bindTime;
         data["tenantId"] = this.tenantId;
         data["unBindTime"] = this.unBindTime;
-
+        data["userTypeName"] = this.userTypeName;
         data["phone"] = this.phone;
         data["memberBarCode"] = this.memberBarCode;
         data["integralTotal"] = this.integralTotal;
@@ -107,7 +106,7 @@ export interface IWechatUser {
     tenantId: number;
     unBindTime: Date;
     headImgUrl: string;
-
+    userTypeName: string;
     phone: string;
     memberBarCode: string;
     integralTotal: number;

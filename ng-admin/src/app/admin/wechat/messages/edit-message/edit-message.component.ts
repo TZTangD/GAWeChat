@@ -70,10 +70,10 @@ export class EditMessageComponent extends AppComponentBase implements OnInit {
     /**
      * 取消按钮
      */
-    handleCancel() {
+    handleCancel = (e) =>  {
         this.modalVisible = false;
         this.isConfirmLoading = false;
-        this.reset();
+        this.reset(e);
     }
     reset(e?): void {
         if (e) {
