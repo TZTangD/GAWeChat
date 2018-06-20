@@ -290,7 +290,9 @@ namespace HC.WeChat.Employees
                   .WhereIf(mid.HasValue, e => e.Id == mid);
             //TODO:根据传入的参数添加过滤条件
 
-            var employees = await query.ToListAsync();
+            var employees = await query
+                .OrderBy(input.Sorting)
+                .ToListAsync();
 
             var employeeListDtos = employees.MapTo<List<EmployeeListDto>>();
 

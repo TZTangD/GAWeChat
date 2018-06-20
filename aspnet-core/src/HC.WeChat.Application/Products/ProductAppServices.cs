@@ -842,7 +842,7 @@ namespace HC.WeChat.Products
                 .WhereIf(input.Type.HasValue, p => p.Type == input.Type)
                 .WhereIf(input.IsRare.HasValue, p => p.IsRare == input.IsRare);
             //TODO:根据传入的参数添加过滤条件
-            var productCount = await query.CountAsync();
+            //var productCount = await query.CountAsync();
             List<Product> products;
             List<ProductListDto> productListDtos;
             if (input.SortValue == "ascend")

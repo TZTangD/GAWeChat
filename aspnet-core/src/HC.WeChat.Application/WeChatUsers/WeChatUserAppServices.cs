@@ -467,7 +467,7 @@ namespace HC.WeChat.WeChatUsers
                 }
                 await _wechatuserRepository.UpdateAsync(entity);
                 //首次绑定手机号获赠积分
-                await GivenIntegral(input.OpenId,input.TenantId,input.Host);
+                await GivenIntegral(input.OpenId, input.TenantId, input.Host);
                 return new APIResultDto() { Code = 0, Msg = "绑定成功", Data = entity.MapTo<WeChatUserListDto>() };
             }
         }
@@ -502,7 +502,7 @@ namespace HC.WeChat.WeChatUsers
                     await _wechatuserRepository.UpdateAsync(user);
                     await CurrentUnitOfWork.SaveChangesAsync(); // 先更新用户总积分
                     int finalIntegral = user.IntegralTotal; // 再传出最终积分
-                    await GivenIntegralSendMessage(host,openId, user.MemberBarCode, config, finalIntegral);
+                    await GivenIntegralSendMessage(host, openId, user.MemberBarCode, config, finalIntegral);
                 }
             }
             catch (Exception ex)
@@ -520,7 +520,7 @@ namespace HC.WeChat.WeChatUsers
         /// <param name="config"></param>
         /// <param name="finalIntegral"></param>
         /// <returns></returns>
-        private async Task GivenIntegralSendMessage(string host,string openId, string memberBarCode, string config,int finalIntegral)
+        private async Task GivenIntegralSendMessage(string host, string openId, string memberBarCode, string config, int finalIntegral)
         {
             try
             {
@@ -656,7 +656,7 @@ namespace HC.WeChat.WeChatUsers
             //input.UnBindTime = DateTime.Now;
             //input.Status = null;
             var entity = await _wechatuserRepository.GetAsync(input.Id.Value);
-            entity.UserType = entity.UserType== UserTypeEnum.取消关注? UserTypeEnum.取消关注: UserTypeEnum.消费者;
+            entity.UserType = entity.UserType == UserTypeEnum.取消关注 ? UserTypeEnum.取消关注 : UserTypeEnum.消费者;
             entity.BindStatus = BindStatusEnum.未绑定;
             entity.UserId = null;
             entity.UnBindTime = DateTime.Now;
@@ -869,7 +869,9 @@ namespace HC.WeChat.WeChatUsers
                 .WhereIf(!string.IsNullOrEmpty(input.UserName), u => u.UserName.Contains(input.UserName))
                 .WhereIf(!string.IsNullOrEmpty(input.Name), u => u.NickName.Contains(input.Name) || u.UserName.Contains(input.Name) || u.Phone.Contains(input.Name))
                 .WhereIf(input.UserType.HasValue, u => u.UserType == input.UserType);
-            var user = await query.ToListAsync();
+            var user = await query
+                .OrderBy(input.Sorting)
+                .ToListAsync();
             var UserDtos = user.MapTo<List<WeChatUserListDto>>();
             return UserDtos;
         }
@@ -882,7 +884,7 @@ namespace HC.WeChat.WeChatUsers
                 ISheet sheet = workbook.CreateSheet("WeChatUser");
                 var rowIndex = 0;
                 IRow titleRow = sheet.CreateRow(rowIndex);
-                string[] titles = { "微信OpenId", "微信昵称", "用户类型", "用户名", "绑定状态", "绑定时间", "解绑时间", "绑定电话", "会员卡条形码", "用户总积分", "是否是店主", "审核状态","关注时间","取消关注时间"};
+                string[] titles = { "微信OpenId", "微信昵称", "用户类型", "用户名", "绑定状态", "绑定时间", "解绑时间", "绑定电话", "会员卡条形码", "用户总积分", "是否是店主", "审核状态", "关注时间", "取消关注时间" };
                 var fontTitle = workbook.CreateFont();
                 fontTitle.IsBold = true;
                 for (int i = 0; i < titles.Length; i++)
