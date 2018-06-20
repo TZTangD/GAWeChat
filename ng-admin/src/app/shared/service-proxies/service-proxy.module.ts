@@ -8,7 +8,7 @@ import { ActivityGoodsServiceProxy } from '@shared/service-proxies/marketing-ser
 import { ActivityBanquetServiceProxy, ActivityDeliveryInfoServiceProxy, UserAnswerService, UserQuestionService, ArticleServiceProxy } from '@shared/service-proxies/marketing-service';
 import { RetailCustomerServiceProxy } from '@shared/service-proxies/customer-service/retail-cunstomer-service';
 import { AdviseService } from '@shared/service-proxies/consumer-service';
-import { WechatUserServiceProxy, WeChatGroupServiceProxy } from '@shared/service-proxies/wechat-service';
+import { WechatUserServiceProxy, WeChatGroupServiceProxy, PurchaseRecordServiceProxy } from '@shared/service-proxies/wechat-service';
 import { ManuscriptServiceProxy } from '@shared/service-proxies/marketing-service/manuscript-service';
 import { ShopServiceProxy } from '@shared/service-proxies/customer-service/shop-service';
 import { ShopEvaluationServiceProxy } from '@shared/service-proxies/customer-service/shop-evaluation-service';
@@ -52,6 +52,7 @@ import { MemberConfigsServiceProxy } from '@shared/service-proxies/member/member
         IntegralServiceProxy,
         MemberConfigsServiceProxy,
         GoodSourceServiceProxy,
+        PurchaseRecordServiceProxy,
     ]
 })
 export class ServiceProxyModule { }

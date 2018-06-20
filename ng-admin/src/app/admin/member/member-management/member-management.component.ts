@@ -5,6 +5,7 @@ import { WechatUserServiceProxy, PagedResultDtoOfWeChatUser } from '@shared/serv
 import { NzModalService } from 'ng-zorro-antd';
 import { Parameter } from '@shared/service-proxies/entity';
 import { AppConsts } from '@shared/AppConsts';
+import { Router } from '@angular/router';
 
 @Component({
     moduleId: module.id,
@@ -24,7 +25,7 @@ export class MemberManagementComponent extends AppComponentBase implements OnIni
         { text: '取消关注', value: 5 },
     ];
     WechatUserName = '';
-    constructor(injector: Injector, private wechatUserService: WechatUserServiceProxy, private modal: NzModalService) {
+    constructor(injector: Injector, private wechatUserService: WechatUserServiceProxy, private modal: NzModalService, private router: Router) {
         super(injector);
     }
     ngOnInit(): void {
@@ -87,5 +88,9 @@ export class MemberManagementComponent extends AppComponentBase implements OnIni
             }
             this.exportLoading = false;
         });
+    }
+
+    editIntegral(openId: string) {
+        this.router.navigate(['admin/member/integral-search-detail', openId])
     }
 }

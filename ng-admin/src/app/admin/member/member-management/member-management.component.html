@@ -89,6 +89,8 @@
                 <!-- <td nz-td>{{wechatUser.attentionTime | _date}}</td>
                 <td nz-td>{{wechatUser.unfollowTime | _date}}</td> -->
                 <td nz-td>
+                    <a (click)="editIntegral(wechatUser.openId)">详情</a>
+                    <span *ngIf="wechatUser.bindStatus==1" nz-table-divider></span>
                     <a *ngIf="wechatUser.bindStatus==1" (click)="unBinding(wechatUser,deleteContent)">解除绑定</a>
                     <!-- <span nz-table-divider></span>
                     <a (click)="delete(employee,deleteContent)">删除</a> -->
