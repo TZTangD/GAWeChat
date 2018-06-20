@@ -238,7 +238,6 @@ namespace HC.WeChat.PurchaseRecords
         /// <returns></returns>
         public async Task<PagedResultDto<PurchaseRecordListDto>> GetPagedPurchaseRecordsByIdAsync(GetPurchaseRecordsInput input)
         {
-
             var query = _purchaserecordRepository.GetAll().Where(v => v.OpenId == input.OpenId);
             var result = from p in query
                          select
@@ -251,9 +250,7 @@ namespace HC.WeChat.PurchaseRecords
                                     ShopName = p.ShopName,
                                     Quantity = p.Quantity
                                 };
-            //TODO:根据传入的参数添加过滤条件
             var purchaserecordCount = await result.CountAsync();
-
             var purchaserecords = await result
                 .OrderByDescending(v=>v.CreationTime)
                 .PageBy(input)
