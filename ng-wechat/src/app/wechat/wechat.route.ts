@@ -22,6 +22,7 @@ export const routes = [
     { path: 'shop-employees', loadChildren: './personal-center/shop-employee/shop-employee.module#ShopEmployeeModule' },
     //{ path: 'imgs', loadChildren: './personal-center/img-cropper/img-cropper.module#ImgCropperModule' },
     // Not found
+    { path: 'lotteries', loadChildren: './activities/lottery/lottery.module#LotteryModule' },
     { path: '**', redirectTo: '' }
 ];
 
