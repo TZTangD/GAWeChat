@@ -1,13 +1,24 @@
 <pro-header>
     <ng-template #content>
-        <div nz-row>
-            <div nz-col nzXs="24" nzSm="16">
-                <desc-list size="small" col="10">
-                    <desc-list-item term="会员名称">{{userInfo.nickName}}</desc-list-item>
-                    <desc-list-item term="会员类型">{{userInfo.userTypeName}}</desc-list-item>
-                    <desc-list-item term="电话号码">{{userInfo.phone}}</desc-list-item>
-                    <desc-list-item term="积分总额">{{userInfo.integralTotal}}</desc-list-item>
-                    <desc-list-item term="会员卡号">{{userInfo.memberBarCode}}</desc-list-item>
+        <div nz-row nzGutter="16">
+            <div nz-col nzXs="24" nzMd="3" *ngIf="weChatUser.headImgUrl">
+                <nz-card [nzBordered]="false" class="ant-card__img">
+                    <img class="img ng-star-inserted" src="{{weChatUser.headImgUrl}}">
+                </nz-card>
+            </div>
+            <div nz-col nzXs="24" nzSm="18">
+                <desc-list size="small" col="4" class="mb-md">
+                    <desc-list-item term="会员名称">{{weChatUser.nickName}}</desc-list-item>
+                    <desc-list-item term="用户类型">{{weChatUser.userTypeName}}</desc-list-item>
+                    <desc-list-item *ngIf="weChatUser.phone" term="电话号码">{{weChatUser.phone}}</desc-list-item>
+                    <desc-list-item term="积分总额">{{weChatUser.integralTotal}}</desc-list-item>
+                    <desc-list-item term="会员卡号">{{weChatUser.memberBarCode}}</desc-list-item>
+                    <desc-list-item term="绑定状态">{{weChatUser.bindStatusName}}</desc-list-item>
+                    <desc-list-item *ngIf="weChatUser.bindTime" term="绑定时间">{{weChatUser.bindTime| _date}}</desc-list-item>
+                    <desc-list-item *ngIf="weChatUser.unBindTime" term="解绑时间">{{weChatUser.unBindTime| _date}}</desc-list-item>
+                    <desc-list-item *ngIf="weChatUser.attentionTime" term="关注时间">{{weChatUser.attentionTime| _date}}</desc-list-item>
+                    <desc-list-item *ngIf="weChatUser.unfollowTime" term="取关时间">{{weChatUser.unfollowTime| _date}}</desc-list-item>
+                    <desc-list-item term="微信编号">{{weChatUser.openId}}</desc-list-item>
                 </desc-list>
             </div>
         </div>
@@ -15,8 +26,8 @@
     <ng-template #tab>
         <nz-tabset [nzSize]="'default'">
             <nz-tab>
-                <ng-template #nzTabHeading>积分详情</ng-template>
-                <nz-table #nzTable3 [nzAjaxData]="integralDetails" [nzTotal]="query.total" [(nzPageIndex)]="query.pageIndex" [(nzPageSize)]="query.pageSize" [nzLoading]="loading" [nzShowTotal]="'true'" [nzShowSizeChanger]="true" (nzPageIndexChange)="getSingleIntegral()"
+                <ng-template #nzTabHeading>积分明细</ng-template>
+                <nz-table #nzTable [nzAjaxData]="integralDetails" [nzTotal]="query.total" [(nzPageIndex)]="query.pageIndex" [(nzPageSize)]="query.pageSize" [nzLoading]="loading" [nzShowTotal]="'true'" [nzShowSizeChanger]="true" (nzPageIndexChange)="getSingleIntegral()"
                     (nzPageSizeChange)="getSingleIntegral()">
                     <thead nz-thead>
                         <tr>
@@ -41,13 +52,51 @@
                         </tr>
                     </thead>
                     <tbody nz-tbody>
-                        <tr nz-tbody-tr *ngFor="let integral of nzTable3.data">
+                        <tr nz-tbody-tr *ngFor="let integral of nzTable.data">
                             <td nz-td>{{integral.wxName}}</td>
                             <td nz-td>{{integral.typeName}}</td>
                             <td nz-td>{{integral.initialIntegral}}</td>
                             <td nz-td>{{integral.integral}}</td>
                             <td nz-td>{{integral.finalIntegral}}</td>
                             <td nz-td>{{integral.creationTime|_date}}</td>
+                        </tr>
+                    </tbody>
+                </nz-table>
+            </nz-tab>
+            <nz-tab>
+                <ng-template #nzTabHeading>购买记录</ng-template>
+                <nz-table #nzTable1 [nzAjaxData]="purchaseRecord" [nzTotal]="queryRecord.total" [(nzPageIndex)]="queryRecord.pageIndex" [(nzPageSize)]="queryRecord.pageSize" [nzLoading]="recordLoading" [nzShowTotal]="'true'" [nzShowSizeChanger]="true" (nzPageIndexChange)="getPurchaseRecordsById()"
+                    (nzPageSizeChange)="getPurchaseRecordsById()">
+                    <thead nz-thead>
+                        <tr>
+                            <th nz-th>
+                                <span>产品规格</span>
+                            </th>
+                            <th nz-th>
+                                <span>购买数量</span>
+                            </th>
+                            <th nz-th>
+                                <span>店铺名称</span>
+                            </th>
+                            <th nz-th>
+                                <span>兑换积分</span>
+                            </th>
+                            <th nz-th>
+                                <span>兑换备注</span>
+                            </th>
+                            <th nz-th>
+                                <span>购买时间</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody nz-tbody>
+                        <tr nz-tbody-tr *ngFor="let record of nzTable1.data">
+                            <td nz-td>{{record.specification}}</td>
+                            <td nz-td>{{record.quantity}}</td>
+                            <td nz-td>{{record.shopName}}</td>
+                            <td nz-td>{{record.integral}}</td>
+                            <td nz-td>{{record.remark}}</td>
+                            <td nz-td>{{record.creationTime|_date}}</td>
                         </tr>
                     </tbody>
                 </nz-table>

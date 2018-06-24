@@ -274,8 +274,8 @@ namespace HC.WeChat.Retailers
                 .WhereIf(input.Markets.HasValue, r => r.MarketType == input.Markets)
                 .WhereIf(input.Status.HasValue, r => r.IsAction == input.Status)
                 .WhereIf(mid.HasValue, r => r.EmployeeId == mid);
-            var retailers = await query.ToListAsync();
-            var retailerListDtos =  query.MapTo<List<RetailerListDto>>();
+            var retailers = await query.OrderByDescending(r => r.CreationTime).ToListAsync();
+            var retailerListDtos = retailers.MapTo<List<RetailerListDto>>();
             return  retailerListDtos;
         }
 
@@ -288,7 +288,7 @@ namespace HC.WeChat.Retailers
                   .WhereIf(input.Markets.HasValue, r => r.MarketType == input.Markets)
                   .WhereIf(input.Status.HasValue, r => r.IsAction == input.Status)
                   .WhereIf(mid.HasValue, r => r.EmployeeId == mid);
-            var retailers = await query.ToListAsync();
+            var retailers = await query.OrderByDescending(r => r.CreationTime).ToListAsync();
             var retailerListDtos = retailers.MapTo<List<RetailerListDto>>();
             return retailerListDtos;
         }
@@ -513,13 +513,13 @@ namespace HC.WeChat.Retailers
                 var retailList = new List<RetailerListDto>();
                 if (input.IsMore)
                 {
-                    var retailListQ = await _retailerRepository.GetAll().Where(r => r.Telephone.Contains(input.Filter) || r.LicenseKey.Contains(input.Filter) || r.Name.Contains(input.Filter))
+                    var retailListQ = await _retailerRepository.GetAll().Where(r => r.Telephone.Contains(input.Filter) || r.LicenseKey.Contains(input.Filter) || r.Name.Contains(input.Filter) && r.IsAction==true)
                    .OrderBy(r => r.Name).Skip(input.SkipCount).Take(input.MaxResultCount).ToListAsync();
                     retailList = retailListQ.MapTo<List<RetailerListDto>>();
                 }
                 else
                 {
-                    var retailListQ = await _retailerRepository.GetAll().Where(r => r.Telephone.Contains(input.Filter) || r.LicenseKey.Contains(input.Filter) || r.Name.Contains(input.Filter))
+                    var retailListQ = await _retailerRepository.GetAll().Where(r => r.Telephone.Contains(input.Filter) || r.LicenseKey.Contains(input.Filter) || r.Name.Contains(input.Filter) && r.IsAction == true)
                     .OrderBy(r => r.Name).Skip(0).Take(20).ToListAsync();
                     retailList = retailListQ.MapTo<List<RetailerListDto>>();
                 }

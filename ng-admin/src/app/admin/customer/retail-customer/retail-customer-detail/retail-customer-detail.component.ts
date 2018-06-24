@@ -58,7 +58,7 @@ export class RetailCustomerDetailComponent extends AppComponentBase implements O
     }
     ngOnInit(): void {
         this.form = this.fb.group({
-            code: [null, Validators.compose([Validators.required, Validators.maxLength(50), Validators.pattern('^[0-9]*$')])],
+            code: [null, Validators.compose([Validators.required, Validators.maxLength(50), Validators.pattern('^[0-9]*$'),Validators.minLength(6)])],
             name: [null, Validators.compose([Validators.required, Validators.maxLength(50)])],
             businessAddress: [null, Validators.compose([Validators.maxLength(500)])],
             archivalLevel: [null, Validators.compose([Validators.maxLength(100)])],

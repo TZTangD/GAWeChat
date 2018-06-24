@@ -165,7 +165,7 @@
         <tbody nz-tbody>
             <tr nz-tbody-tr *ngFor="let retail of nzTable.data">
                 <td nz-td>{{retail.code}}</td>
-                <td nz-td>{{retail.name}}</td>
+                <td nz-td>{{retail.name| lengthLimit:9}}</td>
                 <!-- <td nz-td>{{retail.businessAddress}}</td> -->
                 <td nz-td>{{retail.archivalLevel}}</td>
                 <!-- <td nz-td>{{retail.orderCycle}}</td> -->

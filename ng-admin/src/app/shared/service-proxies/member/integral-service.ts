@@ -90,56 +90,6 @@ export class IntegralServiceProxy {
         return Observable.of<PagedResultDtoOfIntegralDetails>(<any>null);
     }
 
-    GetUserInfo(openId: string): Observable<IntegralDetails> {
-        let url_ = this.baseUrl + "/api/services/app/IntegralDetail/GetUserInfoAsync?";
-        if (openId !== undefined)
-            url_ += "openId=" + encodeURIComponent("" + openId) + "&";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_ = {
-            method: "get",
-            headers: new Headers({
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            })
-        };
-        return this.http.request(url_, options_).flatMap((response_) => {
-            return this.processGetUserInfo(response_);
-        }).catch((response_: any) => {
-            if (response_ instanceof Response) {
-                try {
-                    return this.processGetUserInfo(response_);
-                } catch (e) {
-                    return <Observable<IntegralDetails>><any>Observable.throw(e);
-                }
-            } else
-                return <Observable<IntegralDetails>><any>Observable.throw(response_);
-        });
-    }
-
-    protected processGetUserInfo(response: Response): Observable<IntegralDetails> {
-        const status = response.status;
-
-        let _headers: any = response.headers ? response.headers.toJSON() : {};
-        if (status === 200) {
-            const _responseText = response.text();
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 ? IntegralDetails.fromJS(resultData200) : new IntegralDetails();
-            return Observable.of(result200);
-        } else if (status === 401) {
-            const _responseText = response.text();
-            return throwException("A server error occurred.", status, _responseText, _headers);
-        } else if (status === 403) {
-            const _responseText = response.text();
-            return throwException("A server error occurred.", status, _responseText, _headers);
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.text();
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Observable.of<IntegralDetails>(<any>null);
-    }
-
     getIntegralDetailsById(skipCount: number, maxResultCount: number, openId: string): Observable<PagedResultDtoOfIntegralDetails> {
         let url_ = this.baseUrl + "/api/services/app/IntegralDetail/GetPagedIntegralDetailsByIdAsync?";
         if (skipCount !== undefined)

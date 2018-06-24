@@ -565,7 +565,7 @@ namespace HC.WeChat.Shops
                         string url = "";
                         object data = new
                         {
-                            first = new TemplateDataItem("您的店铺已通过审核"),
+                            first = new TemplateDataItem("您所提交的店铺资料已通过审核"),
                             keyword1 = new TemplateDataItem("通过审核"),
                             keyword2 = new TemplateDataItem(DateTime.Now.ToString("yyyy-MM-dd HH:mm"))
                         };
@@ -751,13 +751,12 @@ namespace HC.WeChat.Shops
                         };
 
             //TODO:根据传入的参数添加过滤条件
-            var shopCount = await query.CountAsync();
+            //var shopCount = await query.CountAsync();
             if (input.SortSaleTotal != null && input.SortSaleTotal == "ascend")
             {
                 var shops = await query
                     .OrderByDescending(s => s.SaleTotal)
                     .ThenBy(input.Sorting)
-                    .PageBy(input)
                     .ToListAsync();
                 var shopListDtos = shops.MapTo<List<ShopListDto>>();
                 return shopListDtos;
@@ -767,7 +766,6 @@ namespace HC.WeChat.Shops
                 var shops = await query
                     .OrderBy(s => s.SaleTotal)
                     .ThenBy(input.Sorting)
-                    .PageBy(input)
                     .ToListAsync();
                 var shopListDtos = shops.MapTo<List<ShopListDto>>();
                 return shopListDtos;
@@ -777,7 +775,6 @@ namespace HC.WeChat.Shops
                 var shops = await query
                     .OrderByDescending(s => s.ReadTotal)
                     .ThenBy(input.Sorting)
-                    .PageBy(input)
                     .ToListAsync();
                 var shopListDtos = shops.MapTo<List<ShopListDto>>();
                 return shopListDtos;
@@ -787,7 +784,6 @@ namespace HC.WeChat.Shops
                 var shops = await query
                     .OrderBy(s => s.ReadTotal)
                     .ThenBy(input.Sorting)
-                    .PageBy(input)
                     .ToListAsync();
                 var shopListDtos = shops.MapTo<List<ShopListDto>>();
                 return shopListDtos;
@@ -797,7 +793,6 @@ namespace HC.WeChat.Shops
                 var shops = await query
                     .OrderByDescending(s => s.SingleTotal)
                     .ThenBy(input.Sorting)
-                    .PageBy(input)
                     .ToListAsync();
                 var shopListDtos = shops.MapTo<List<ShopListDto>>();
                 return shopListDtos;
@@ -807,7 +802,6 @@ namespace HC.WeChat.Shops
                 var shops = await query
                     .OrderBy(s => s.SingleTotal)
                     .ThenBy(input.Sorting)
-                    .PageBy(input)
                     .ToListAsync();
                 var shopListDtos = shops.MapTo<List<ShopListDto>>();
                 return shopListDtos;
@@ -817,7 +811,6 @@ namespace HC.WeChat.Shops
                 var shops = await query
                               .OrderByDescending(s => s.CreationTime)
                               .ThenBy(input.Sorting)
-                              .PageBy(input)
                               .ToListAsync(); var shopListDtos = shops.MapTo<List<ShopListDto>>();
                 return shopListDtos;
             }

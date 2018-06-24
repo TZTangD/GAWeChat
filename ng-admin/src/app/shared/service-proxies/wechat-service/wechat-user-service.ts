@@ -34,6 +34,56 @@ export class WechatUserServiceProxy {
         this.http = http;
         this.baseUrl = baseUrl ? baseUrl : "";
     }
+    getUserInfoAsync(openId: string): Observable<WechatUser> {
+        let url_ = this.baseUrl + "/api/services/app/IntegralDetail/GetUserInfoAsync?";
+        if (openId !== undefined)
+            url_ += "openId=" + encodeURIComponent("" + openId) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = {
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_) => {
+            return this.processGetUserInfoAsync(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processGetUserInfoAsync(response_);
+                } catch (e) {
+                    return <Observable<WechatUser>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<WechatUser>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processGetUserInfoAsync(response: Response): Observable<WechatUser> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? WechatUser.fromJS(resultData200) : Observable.of<WechatUser>(<any>null);
+            return Observable.of(result200);
+        } else if (status === 401) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status === 403) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<WechatUser>(<any>null);
+    }
 
     exportExcel(input: any): Observable<ApiResult> {
         let url_ = this.baseUrl + "/api/services/app/WeChatUser/ExportWeChatUsersExcel";
@@ -63,6 +113,7 @@ export class WechatUserServiceProxy {
                 return <Observable<ApiResult>><any>Observable.throw(response_);
         });
     }
+
     protected processExportExcel(response: Response): Observable<ApiResult> {
         const status = response.status;
 
@@ -84,6 +135,67 @@ export class WechatUserServiceProxy {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Observable.of<ApiResult>(<any>null);
+    }
+    getIntegralList(skipCount: number, maxResultCount: number, parameter: Parameter[]): Observable<PagedResultDtoOfWeChatUser> {
+        let url_ = this.baseUrl + "/api/services/app/IntegralDetail/GetPagedIntegralDetailsAsync?";
+        if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&";
+        if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&";
+
+        if (parameter.length > 0) {
+            parameter.forEach(element => {
+                if (element.value !== undefined && element.value !== null) {
+                    url_ += element.key + "=" + encodeURIComponent("" + element.value) + "&";
+                }
+            });
+        }
+
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = {
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_) => {
+            return this.processGetAll(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processGetAll(response_);
+                } catch (e) {
+                    return <Observable<PagedResultDtoOfWeChatUser>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<PagedResultDtoOfWeChatUser>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processGetIntegralList(response: Response): Observable<PagedResultDtoOfWeChatUser> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? PagedResultDtoOfWeChatUser.fromJS(resultData200) : new PagedResultDtoOfWeChatUser();
+            return Observable.of(result200);
+        } else if (status === 401) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status === 403) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<PagedResultDtoOfWeChatUser>(<any>null);
     }
     /**
      * 获取所有微信用户信息
