@@ -7,7 +7,7 @@ namespace HC.WeChat.WechatEnums
     public enum MsgTypeEnum
     {
         文字消息 = 1,
-        图文消息 =2
+        图文消息 = 2
     }
     /// <summary>
     /// 匹配模式
@@ -191,7 +191,7 @@ namespace HC.WeChat.WechatEnums
     {
         阅读量 = 1,
         点赞 = 2,
-        店铺人气 =3
+        店铺人气 = 3
     }
     /// <summary>
     /// 投稿表处理状态
@@ -207,7 +207,7 @@ namespace HC.WeChat.WechatEnums
     public enum DeployTypeEnum
     {
         积分配置 = 1,
-        通知配置 =2
+        通知配置 = 2
     }
     /// <summary>
     /// 配置代码
@@ -234,7 +234,7 @@ namespace HC.WeChat.WechatEnums
     /// </summary>
     public enum UserAuditStatus
     {
-        未审核 = 0, 
+        未审核 = 0,
         已审核 = 1
     }
 
@@ -247,8 +247,51 @@ namespace HC.WeChat.WechatEnums
         已审核 = 2,
         已拒绝 = 0
     }
+
+    /// <summary>
+    /// 抽奖方式
+    /// </summary>
     public enum LotteryType
     {
         积分抽奖 = 1,
+    }
+
+    /// <summary>
+    /// 奖品类型(默认积分)
+    /// </summary>
+    public enum PrizeType
+    {
+        积分 = 1,
+        实物商品 = 2,
+        未中奖 = 3
+    }
+    /// <summary>
+    /// 兑换方式
+    /// </summary>
+    public enum ExchangeStyle
+    {
+        线上兑换 = 1,
+        线下兑换 = 2,
+        邮寄兑换 = 3
+    }
+
+    /// <summary>
+    ///限量方式 
+    /// </summary>
+    public enum LimitStyle
+    {
+        不限量 = 1,
+        每天 = 2,
+        每月 = 3,
+    }
+    /// <summary>
+    /// 中奖奖品状态
+    /// </summary>
+    public enum WinPrizeStatus
+    {
+        未兑换 = 1,
+        已申领 = 2,
+        已兑换 = 3,
+        已过期 = 4,
     }
 }

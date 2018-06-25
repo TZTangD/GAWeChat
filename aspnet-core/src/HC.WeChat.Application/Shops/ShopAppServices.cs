@@ -747,7 +747,8 @@ namespace HC.WeChat.Shops
                             Tel = s.Tel,
                             SingleTotal = s.SingleTotal,
                             //RetailerName = r != null ? r.Name : "",
-                            RetailerName = r.Name
+                            RetailerName = r.Name,
+                            RetailerCode=r.Code
                         };
 
             //TODO:根据传入的参数添加过滤条件
@@ -831,7 +832,7 @@ namespace HC.WeChat.Shops
                 ISheet sheet = workbook.CreateSheet("Employees");
                 var rowIndex = 0;
                 IRow titleRow = sheet.CreateRow(rowIndex);
-                string[] titles = { "店铺名称", "店铺地址", "店铺描述", "零售客户", "店铺销量", "店铺浏览量", "店铺用户量","店铺电话", "审核状态", "审核时间", "店铺评价", "经度", "纬度" };
+                string[] titles = { "店铺名称", "店铺地址", "店铺描述", "零售客户","客户编码", "店铺销量", "店铺浏览量", "店铺用户量","店铺电话", "审核状态", "审核时间", "店铺评价", "经度", "纬度" };
                 var fontTitle = workbook.CreateFont();
                 fontTitle.IsBold = true;
                 for (int i = 0; i < titles.Length; i++)
@@ -857,15 +858,16 @@ namespace HC.WeChat.Shops
                     ExcelHelper.SetCell(row.CreateCell(1), font, item.Address);
                     ExcelHelper.SetCell(row.CreateCell(2), font, item.Desc);
                     ExcelHelper.SetCell(row.CreateCell(3), font, item.RetailerName);
-                    ExcelHelper.SetCell(row.CreateCell(4), font, item.SaleTotal.ToString());
-                    ExcelHelper.SetCell(row.CreateCell(5), font, item.ReadTotal.ToString());
-                    ExcelHelper.SetCell(row.CreateCell(6), font, item.SingleTotal.ToString());
-                    ExcelHelper.SetCell(row.CreateCell(7), font, item.Tel);
-                    ExcelHelper.SetCell(row.CreateCell(8), font, item.StatusName);
-                    ExcelHelper.SetCell(row.CreateCell(9), font, item.AuditTime.ToString());
-                    ExcelHelper.SetCell(row.CreateCell(10), font, evaluationStr);
-                    ExcelHelper.SetCell(row.CreateCell(11), font, item.Longitude.ToString());
-                    ExcelHelper.SetCell(row.CreateCell(12), font, item.Latitude.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(4), font, item.RetailerCode);
+                    ExcelHelper.SetCell(row.CreateCell(5), font, item.SaleTotal.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(6), font, item.ReadTotal.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(7), font, item.SingleTotal.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(8), font, item.Tel);
+                    ExcelHelper.SetCell(row.CreateCell(9), font, item.StatusName);
+                    ExcelHelper.SetCell(row.CreateCell(10), font, item.AuditTime.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(11), font, evaluationStr);
+                    ExcelHelper.SetCell(row.CreateCell(12), font, item.Longitude.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(13), font, item.Latitude.ToString());
 
                 }
                 workbook.Write(fs);

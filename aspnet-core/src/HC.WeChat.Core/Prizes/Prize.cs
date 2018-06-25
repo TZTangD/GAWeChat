@@ -1,5 +1,6 @@
 ﻿using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
+using HC.WeChat.WechatEnums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -38,7 +39,7 @@ namespace HC.WeChat.Prizes
         /// 类型（积分、实物商品、未中奖 枚举）默认第一个
         /// </summary>
         [Required]
-        public virtual int Type { get; set; }
+        public virtual PrizeType Type { get; set; }
 
         /// <summary>
         /// 颜色
@@ -50,7 +51,7 @@ namespace HC.WeChat.Prizes
         /// 兑换方式（线上兑换、线下兑换、邮寄兑换 枚举）默认第一个
         /// </summary>
         [Required]
-        public virtual int GetWay { get; set; }
+        public virtual ExchangeStyle GetWay { get; set; }
 
         /// <summary>
         /// 投放总量 不填表示不受限制
@@ -85,7 +86,7 @@ namespace HC.WeChat.Prizes
         /// <summary>
         /// 限量方式（不限量、每天、每月）默认不限量
         /// </summary>
-        public virtual int? LimitedMode { get; set; }
+        public virtual LimitStyle? LimitedMode { get; set; }
 
         /// <summary>
         /// 限量数量

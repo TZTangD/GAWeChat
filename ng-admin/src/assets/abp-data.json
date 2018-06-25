@@ -128,12 +128,6 @@
                             "link": "/admin/member/member-setting",
                             "translate": "member-setting",
                             "reuse": false
-                        }, 
-                        {
-                            "text": "抽奖设置",
-                            "link": "/admin/member/lottery-setting",
-                            "translate": "lottery-setting",
-                            "reuse": false
                         }
                     ]
                 }

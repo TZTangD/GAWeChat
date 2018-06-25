@@ -3,8 +3,9 @@ import { AppComponentBase } from '@shared/app-component-base';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Route } from '@angular/compiler/src/core';
 import { Router } from '@angular/router';
-import { LotterySettingServiceProxy } from '@shared/service-proxies/member';
-import { LuckyDraw } from '@shared/entity/member';
+import { LotterySettingServiceProxy, WinningRecordServiceProxy, PagedResultDtoOfWinningRecord } from '@shared/service-proxies/member';
+import { LuckyDraw, WinningRecord } from '@shared/entity/member';
+import { Parameter } from '@shared/service-proxies/entity';
 
 @Component({
     moduleId: module.id,
@@ -18,7 +19,13 @@ export class LotterySettingComponent extends AppComponentBase implements OnInit 
     qty = '';
     luckyDraw = new LuckyDraw();
     isConfirmLoading = false;
-    constructor(injector: Injector, private fb: FormBuilder, private router: Router, private lotterySettingService: LotterySettingServiceProxy) {
+
+    winningRecords: WinningRecord[]=[];
+    loading=false;
+    search: any = { status: 2};
+
+    constructor(injector: Injector, private fb: FormBuilder, private router: Router, private lotterySettingService: LotterySettingServiceProxy,
+    private winningRecordService:WinningRecordServiceProxy) {
         super(injector);
     }
     ngOnInit(): void {
@@ -27,10 +34,12 @@ export class LotterySettingComponent extends AppComponentBase implements OnInit 
             consume: [null],
             frequency: [null],
         });
+        this.getSingleLotterySetting();
         this.refreshData();
 
     }
-    refreshData() {
+    //#region  抽奖设置
+    getSingleLotterySetting() {
         this.lotterySettingService.get().subscribe(data => {
             this.luckyDraw = data;
             console.log(data);
@@ -61,7 +70,33 @@ export class LotterySettingComponent extends AppComponentBase implements OnInit 
     getFormControl(name: string) {
         return this.form.controls[name];
     }
+    //#endregion
+    refreshData(reset = false, search?: boolean){
+        if (reset) {
+            this.query.pageIndex = 1;
+            this.search = { status: 2 };
+        }
+        if (search) {
+            this.query.pageIndex = 1;
+        }
+        this.loading = true;
+        this.winningRecordService.getAll(this.query.skipCount(), this.query.pageSize, this.getParameter()).subscribe((result: PagedResultDtoOfWinningRecord) => {
+            this.loading = false;
+            this.winningRecords = result.items;
+            this.query.total = result.totalCount;
+        })
+    }
 
+    getParameter(): Parameter[] {
+        var arry = [];
+        arry.push(Parameter.fromJS({ key: 'Name', value: this.search.name }));
+        arry.push(Parameter.fromJS({ key: 'Author', value: this.search.author }));
+        arry.push(Parameter.fromJS({ key: 'Status', value: this.search.status === 2 ? null : this.search.status }));
+        return arry;
+    }
+    //#region  中奖记录
+
+    //#endregion
     detail(id: string) {
         this.router.navigate(["admin/member/lottery-record-detail", { id: id }])
     }

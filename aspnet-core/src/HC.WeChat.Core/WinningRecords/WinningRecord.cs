@@ -1,5 +1,6 @@
 ﻿using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
+using HC.WeChat.WechatEnums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -49,7 +50,7 @@ namespace HC.WeChat.WinningRecords
         /// <summary>
         /// 状态（未兑换、已申领、已兑换、已过期 枚举）
         /// </summary>
-        public virtual int? Status { get; set; }
+        public virtual WinPrizeStatus? Status { get; set; }
 
         /// <summary>
         /// 申领时间

@@ -56,5 +56,12 @@ namespace HC.WeChat.WinningRecords
         /// 批量删除WinningRecord
         /// </summary>
         Task BatchDeleteWinningRecordsAsync(List<Guid> input);
+
+        /// <summary>
+        /// 获取中奖记录
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        Task<PagedResultDto<WinningRecordListDto>> GetPagedWinningRecordsOtherTable(GetWinningRecordsInput input);
     }
 }

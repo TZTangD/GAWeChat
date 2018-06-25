@@ -3,6 +3,7 @@ using HC.WeChat.WinningRecords.Dtos.LTMAutoMapper;
 using HC.WeChat.WinningRecords;
 using System.Collections.Generic;
 using System;
+using HC.WeChat.WechatEnums;
 
 namespace HC.WeChat.WinningRecords.Dtos
 {
@@ -23,7 +24,7 @@ namespace HC.WeChat.WinningRecords.Dtos
         /// </summary>
         [Required]
         public DateTime ExpiryTime { get; set; }
-        public int? Status { get; set; }
+        public WinPrizeStatus? Status { get; set; }
         public DateTime? ApplyTime { get; set; }
         public DateTime? CompleteTime { get; set; }
 

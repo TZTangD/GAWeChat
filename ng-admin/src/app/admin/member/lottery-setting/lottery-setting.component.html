@@ -57,7 +57,7 @@
     <nz-tab>
         <ng-template #nzTabHeading>中奖记录</ng-template>
         <nz-card>
-            <!-- <nz-table #nzTable1 [nzAjaxData]="shopEmployees" [nzTotal]="query.total" [(nzPageIndex)]="query.pageIndex" [(nzPageSize)]="query.pageSize"
+            <nz-table #nzTable1 [nzAjaxData]="winningRecords" [nzTotal]="query.total" [(nzPageIndex)]="query.pageIndex" [(nzPageSize)]="query.pageSize"
                 [nzLoading]="loading" [nzShowTotal]="'true'" [nzShowSizeChanger]="true" (nzPageIndexChange)="refreshData()" (nzPageSizeChange)="refreshData()">
                 <thead nz-thead>
                     <tr>
@@ -65,13 +65,22 @@
                             <span>微信用户名</span>
                         </th>
                         <th nz-th>
-                            <span>店铺角色</span>
+                            <span>奖品</span>
                         </th>
                         <th nz-th>
-                            <span>绑定电话</span>
+                            <span>中奖时间</span>
                         </th>
                         <th nz-th>
-                            <span>审核状态</span>
+                            <span>中奖数量</span>
+                        </th>
+                        <th nz-th>
+                            <span>申领时间</span>
+                        </th>
+                        <th nz-th>
+                            <span>过期时间</span>
+                        </th>
+                        <th nz-th>
+                            <span>兑换时间</span>
                         </th>
                         <th nz-th>
                             <span>操作</span>
@@ -79,15 +88,18 @@
                     </tr>
                 </thead>
                 <tbody nz-tbody>
-                    <tr nz-tbody-tr *ngFor="let shopEmployee of nzTable1.data">
-                        <td nz-td>{{shopEmployee.nickName}}</td>
-                        <td nz-td>{{shopEmployee.isShopkeeper == true? '店铺管理员':'店员'}}</td>
-                        <td nz-td>{{shopEmployee.phone}}</td>
-                        <td nz-td>{{shopEmployee.statusName}}</td>
+                    <tr nz-tbody-tr *ngFor="let winningRecord of nzTable1.data">
+                        <td nz-td>{{winningRecord.userName}}</td>
+                        <td nz-td>{{winningRecord.prizeName}}</td>
+                        <td nz-td>{{winningRecord.winningTime}}</td>
+                        <td nz-td>{{winningRecord.num}}</td>
+                        <td nz-td>{{winningRecord.applyTime}}</td>
+                        <td nz-td>{{winningRecord.expiryTime}}</td>
+                        <td nz-td>{{winningRecord.completeTime}}</td>
                         <td nz-td> <a (click)="detail(retail)">详情</a></td>
                     </tr>
                 </tbody>
-            </nz-table> -->
+            </nz-table>
         </nz-card>
     </nz-tab>
 </nz-tabset>

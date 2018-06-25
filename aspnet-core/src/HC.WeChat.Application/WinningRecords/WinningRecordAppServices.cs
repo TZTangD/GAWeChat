@@ -15,6 +15,8 @@ using HC.WeChat.WinningRecords.DomainServices;
 using HC.WeChat.WinningRecords;
 using System;
 using HC.WeChat.Authorization;
+using HC.WeChat.WeChatUsers;
+using HC.WeChat.Prizes;
 
 namespace HC.WeChat.WinningRecords
 {
@@ -29,16 +31,22 @@ namespace HC.WeChat.WinningRecords
         ////ECC/ END CUSTOM CODE SECTION
         private readonly IRepository<WinningRecord, Guid> _winningrecordRepository;
         private readonly IWinningRecordManager _winningrecordManager;
+        private readonly IRepository<WeChatUser, Guid> _wechatuserRepository;
+        private readonly IRepository<Prize, Guid> _prizeRepository;
+
 
         /// <summary>
         /// 构造函数
         /// </summary>
         public WinningRecordAppService(IRepository<WinningRecord, Guid> winningrecordRepository
-      , IWinningRecordManager winningrecordManager
+      , IWinningRecordManager winningrecordManager, IRepository<WeChatUser, Guid> wechatuserRepository,
+            IRepository<Prize, Guid> prizeRepository
         )
         {
             _winningrecordRepository = winningrecordRepository;
             _winningrecordManager = winningrecordManager;
+            _wechatuserRepository = wechatuserRepository;
+            _prizeRepository = prizeRepository;
         }
 
         /// <summary>
@@ -182,6 +190,50 @@ namespace HC.WeChat.WinningRecords
         {
             //TODO:批量删除前的逻辑判断，是否允许删除
             await _winningrecordRepository.DeleteAsync(s => input.Contains(s.Id));
+        }
+
+        /// <summary>
+        /// 获取中奖记录
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task<PagedResultDto<WinningRecordListDto>> GetPagedWinningRecordsOtherTable(GetWinningRecordsInput input)
+        {
+            var queryWin = _winningrecordRepository.GetAll();
+            var queryPr = _prizeRepository.GetAll();
+            var queryWe = _wechatuserRepository.GetAll();
+            var query = from w in queryWin
+                        join we in queryWe on w.UserId equals we.Id into qw
+                        from wp in qw.DefaultIfEmpty()
+                        join pr in queryPr on w.PrizeId equals pr.Id into qp
+                        from wpw in qp.DefaultIfEmpty()
+                        select new WinningRecordListDto
+                        {
+                            Id=w.Id,
+                            PrizeName=wpw!=null?wpw.Name:"",
+                            UserName=wp!=null?wp.NickName:"",
+                            WinningTime=w.WinningTime,
+                            Num=w.Num,
+                            ExpiryTime=w.ExpiryTime,
+                            Status=w.Status,
+                            ApplyTime=w.ApplyTime,
+                            CompleteTime=w.CompleteTime,
+                        };
+            //TODO:根据传入的参数添加过滤条件
+            var winningrecordCount = await query.CountAsync();
+
+            var winningrecords = await query
+                .OrderBy(input.Sorting).AsNoTracking()
+                .PageBy(input)
+                .ToListAsync();
+
+            //var winningrecordListDtos = ObjectMapper.Map<List <WinningRecordListDto>>(winningrecords);
+            var winningrecordListDtos = winningrecords.MapTo<List<WinningRecordListDto>>();
+
+            return new PagedResultDto<WinningRecordListDto>(
+                winningrecordCount,
+                winningrecordListDtos
+                );
         }
 
     }
