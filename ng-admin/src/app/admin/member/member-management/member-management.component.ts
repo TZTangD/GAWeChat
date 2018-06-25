@@ -69,6 +69,7 @@ export class MemberManagementComponent extends AppComponentBase implements OnIni
                 // wechatUser.bindStatus = 0;
                 // wechatUser.userId=null;
                 // wechatUser.userName=null;
+                this.loading = true;
                 this.wechatUserService.update(wechatUser).subscribe(() => {
                     this.notify.info(this.l('解除绑定成功！'));
                     this.refreshData();

@@ -33,6 +33,8 @@ export class AuthSettingComponent extends AppComponentBase implements OnInit {
     search: any = {};
     loading = false;
     groupName = '';
+    authLoading = false;
+    grouploading = false;
     constructor(injector: Injector, private fb: FormBuilder, private service: AuthSettingServiceProxy,
         private modal: NzModalService, private WeChatGroupService: WeChatGroupServiceProxy) {
         super(injector);
@@ -80,9 +82,11 @@ export class AuthSettingComponent extends AppComponentBase implements OnInit {
                     okText: '继续',
                     cancelText: '取消',
                     onOk: () => {
+                        this.authLoading = true;
                         this.service.update(this.authSet).subscribe(() => {
                             this.notify.info(this.l('保存成功！'));
                             this.getAuthSetByTenantId();
+                            this.authLoading = false;
                         });
                     }
                 });
@@ -152,8 +156,10 @@ export class AuthSettingComponent extends AppComponentBase implements OnInit {
      * 批量分组
      */
     batchMark() {
+        this.grouploading=true;
         this.WeChatGroupService.BatchMarkWeChatUser().subscribe(() => {
-            this.notify.info(this.l('分组成功！'))
+            this.notify.info(this.l('分组成功！'));
+            this.grouploading=false;
         });
     }
 
@@ -179,7 +185,7 @@ export class AuthSettingComponent extends AppComponentBase implements OnInit {
             cancelText: '否',
             onOk: () => {
                 this.service
-                this.WeChatGroupService.delete(wechatGroup.id,wechatGroup.tagId).subscribe(() => {
+                this.WeChatGroupService.delete(wechatGroup.id, wechatGroup.tagId).subscribe(() => {
                     this.notify.info(this.l('删除成功！'));
                     this.refreshData();
                 })

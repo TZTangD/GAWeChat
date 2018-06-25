@@ -31,6 +31,7 @@ export class MemberSettingComponent extends AppComponentBase implements OnInit {
     infoConfig: ConfigCode = new ConfigCode();
     users: WechatUser[] = [];
     usersDto: WechatUserDto[] = [];
+    wxloading = false;
     constructor(injector: Injector, private fb: FormBuilder,
         private modal: NzModalService, private memberconfigsService: MemberConfigsServiceProxy) {
         super(injector);
@@ -154,9 +155,11 @@ export class MemberSettingComponent extends AppComponentBase implements OnInit {
         if (this.stringName != null || this.stringName.length != 0) {
             this.infoConfig.desc = this.stringName.substring(0, this.stringName.length - 1);
         }
+        this.wxloading = true;
         this.memberconfigsService.updateWXinfo(this.infoConfig).subscribe(() => {
             this.notify.info(this.l('保存成功！'));
             this.getWXInfoConfigsByTenantId();
+            this.wxloading = false;
         });
     }
 
@@ -168,9 +171,11 @@ export class MemberSettingComponent extends AppComponentBase implements OnInit {
             this.form.controls[i].markAsDirty();
         }
         if (this.form.valid) {
+            this.loading = true;
             this.memberconfigsService.update(this.configCode).subscribe(() => {
                 this.notify.info(this.l('保存成功！'));
                 this.getMemberConfigsByTenantId();
+                this.loading = false;
             });
         }
         abp.multiTenancy.setTenantIdCookie();

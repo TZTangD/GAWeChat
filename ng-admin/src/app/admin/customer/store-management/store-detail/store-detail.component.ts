@@ -67,6 +67,7 @@ export class StoreDetailComponent extends AppComponentBase implements OnInit {
     evaluationShow: string;
     host = '';
     showCoverPhoto = '';
+    auteloading = false;
     constructor(injector: Injector, private shopService: ShopServiceProxy, private shopEvaluationService: ShopEvaluationServiceProxy,
         private weChatService: WechatUserServiceProxy, private Acroute: ActivatedRoute, private modal: NzModalService,
         private shopProductService: ShopProductsServiceProxy,
@@ -175,11 +176,13 @@ export class StoreDetailComponent extends AppComponentBase implements OnInit {
             okText: '是',
             cancelText: '否',
             onOk: () => {
+                this.auteloading = true;
                 this.shop.status = status;
                 // this.shop.auditTime = this.dateFormat(new Date);
-                this.shopService.CheckShop({ id: this.shop.id, status: status}).subscribe((result: Shop) => {
+                this.shopService.CheckShop({ id: this.shop.id, status: status }).subscribe((result: Shop) => {
                     this.getSingleShop();
                     this.notify.info(this.l('店铺状态更新成功！'));
+                    this.auteloading = false;
                 });
             }
         });

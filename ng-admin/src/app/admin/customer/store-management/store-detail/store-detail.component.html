@@ -9,7 +9,7 @@
     <ng-template #action>
         <!-- <button nz-button [nzType]="'danger'" (click)="check(3)" *ngIf="shop.status == 1" [nzSize]="'large'">关闭店铺</button> -->
         <button nz-button [nzType]="'danger'" (click)="Refuse()" *ngIf="shop.status == 1" [nzSize]="'large'">拒绝</button>
-        <button nz-button [nzType]="'primary'" (click)="check(2,checkContent)" *ngIf="shop.status == 1" [nzSize]="'large'">审核通过</button>
+        <button nz-button [nzType]="'primary'" (click)="check(2,checkContent)" *ngIf="shop.status == 1" [nzSize]="'large'" [nzLoading]="auteloading">审核通过</button>
     </ng-template>
     <ng-template #content>
         <!-- <img class="img" src="https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png"> -->
