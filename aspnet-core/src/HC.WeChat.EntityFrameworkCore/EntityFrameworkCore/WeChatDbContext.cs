@@ -36,6 +36,10 @@ using HC.WeChat.GAGoodses;
 using HC.WeChat.GAGrades;
 using HC.WeChat.GoodSources;
 using HC.WeChat.LevelLogs;
+using HC.WeChat.LuckyDraws;
+using HC.WeChat.Prizes;
+using HC.WeChat.UserAddresss;
+using HC.WeChat.WinningRecords;
 
 namespace HC.WeChat.EntityFrameworkCore
 {
@@ -115,5 +119,14 @@ namespace HC.WeChat.EntityFrameworkCore
         public virtual DbSet<GoodSource> GoodSources { get; set; }
 
         public virtual DbSet<LevelLog> LevelLogs { get; set; }
+
+        public virtual DbSet<LuckyDraw> LuckyDraws { get; set; }
+
+        public virtual DbSet<Prize> Prizes { get; set; }
+
+        public virtual DbSet<UserAddress> UserAddresss { get; set; }
+
+        public virtual DbSet<WinningRecord> WinningRecords { get; set; }
+
     }
 }

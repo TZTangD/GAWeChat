@@ -7,11 +7,11 @@ using Abp.Domain.Entities;
 
 namespace HC.WeChat.LevelLogs.Dtos
 {
-    public class LevelLogEditDto: Entity<Guid>
+    public class LevelLogEditDto: Entity<Guid?>
     {
         ////BCC/ BEGIN CUSTOM CODE SECTION
         ////ECC/ END CUSTOM CODE SECTION
-        public Guid? Id { get; set; }
+        //public Guid? Id { get; set; }
         /// <summary>
         /// 档级日期
         /// </summary>

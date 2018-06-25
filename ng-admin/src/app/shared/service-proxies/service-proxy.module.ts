@@ -13,7 +13,7 @@ import { ManuscriptServiceProxy } from '@shared/service-proxies/marketing-servic
 import { ShopServiceProxy } from '@shared/service-proxies/customer-service/shop-service';
 import { ShopEvaluationServiceProxy } from '@shared/service-proxies/customer-service/shop-evaluation-service';
 import { ShopProductsServiceProxy, ProductsServiceProxy, GoodSourceServiceProxy } from '@shared/service-proxies/customer-service';
-import { IntegralServiceProxy } from '@shared/service-proxies/member';
+import { IntegralServiceProxy, LotterySettingServiceProxy } from '@shared/service-proxies/member';
 import { MemberConfigsServiceProxy } from '@shared/service-proxies/member/memberconfigs-service';
 
 @NgModule({
@@ -53,6 +53,7 @@ import { MemberConfigsServiceProxy } from '@shared/service-proxies/member/member
         MemberConfigsServiceProxy,
         GoodSourceServiceProxy,
         PurchaseRecordServiceProxy,
+        LotterySettingServiceProxy,
     ]
 })
 export class ServiceProxyModule { }

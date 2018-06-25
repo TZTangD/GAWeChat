@@ -247,4 +247,8 @@ namespace HC.WeChat.WechatEnums
         已审核 = 2,
         已拒绝 = 0
     }
+    public enum LotteryType
+    {
+        积分抽奖 = 1,
+    }
 }
