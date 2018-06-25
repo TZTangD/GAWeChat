@@ -102,14 +102,16 @@ export class CreateMessageComponent extends AppComponentBase implements OnInit {
             this.formc.controls[i].markAsDirty();
         }
         this.isConfirmLoading = true;
-        this.messageService.update(this.messages)
-            .finally(() => {
-                this.isConfirmLoading = false;
-            })
-            .subscribe(() => {
-                this.notify.info(this.l('保存成功！'));
-                this.modalVisible = false;
-                this.modalSave.emit(null);
-            });
+        if (this.formc.valid) {
+            this.messageService.update(this.messages)
+                .finally(() => {
+                    this.isConfirmLoading = false;
+                })
+                .subscribe(() => {
+                    this.notify.info(this.l('保存成功！'));
+                    this.modalVisible = false;
+                    this.modalSave.emit(null);
+                });
+        }
     }
 }
