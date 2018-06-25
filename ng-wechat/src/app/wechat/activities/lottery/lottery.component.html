@@ -1,0 +1,16 @@
+
+<!--wrapper-->
+<div id="wrapper" class="wrapper fw oh" style="background-image:url('./assets/images/lottery/lottery_bg.jpg')">
+    <div>
+        <strong class="fd dy05">当日抽奖机会：
+            <span id="lottery_num">3</span>次</strong>
+        <p class="fd dy08">每个用户每天可免费获得 3 次抽奖机会</p>
+    </div>
+    <div class="lottery_box fd dy05">
+        <div class="lottery_turntable pr">
+            <div class="turntable fw" style="background-image:url('./assets/images/lottery/dot.png');"></div>
+            <canvas id="lotterys" class="lotterys" width="300" height="300"></canvas>
+            <div id="go" style="background:url('./assets/images/lottery/go.png') no-repeat center center;" (click)="lottery()" class="go fd dy05"></div>
+        </div>
+    </div>
+</div>
