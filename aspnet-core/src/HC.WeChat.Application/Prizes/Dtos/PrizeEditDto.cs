@@ -6,6 +6,7 @@ using System;
 using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
 using Abp.Application.Services.Dto;
+using HC.WeChat.WechatEnums;
 
 namespace HC.WeChat.Prizes.Dtos
 {
@@ -41,7 +42,7 @@ namespace HC.WeChat.Prizes.Dtos
         /// 类型（积分、实物商品、未中奖 枚举）默认第一个
         /// </summary>
         [Required]
-        public int Type { get; set; }
+        public PrizeType Type { get; set; }
 
 
         /// <summary>
@@ -55,14 +56,14 @@ namespace HC.WeChat.Prizes.Dtos
         /// 兑换方式（线上兑换、线下兑换、邮寄兑换 枚举）默认第一个
         /// </summary>
         [Required]
-        public int GetWay { get; set; }
+        public ExchangeStyle GetWay { get; set; }
         public int? Num { get; set; }
         public int? UserMaxNum { get; set; }
         public int? WinningNum { get; set; }
         public decimal? WinningRate { get; set; }
         public int? Seq { get; set; }
         public int? ExpiryDay { get; set; }
-        public int? LimitedMode { get; set; }
+        public LimitStyle? LimitedMode { get; set; }
         public int? LimitedNum { get; set; }
 
 
