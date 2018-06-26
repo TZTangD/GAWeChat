@@ -39,7 +39,7 @@ namespace HC.WeChat.LevelJob
             Logger.InfoFormat("进入job开始时间：{0}", DateTime.Now);
             var s = DateTime.Today;
             var m = DateTime.Now.AddDays(-1);
-            if (DateTime.Now.Day == 3 && DateTime.Now.Hour >= 0 && preDate != DateTime.Today)
+            if (DateTime.Now.Day == 3 && DateTime.Now.Hour >= 4 && preDate != DateTime.Today)
             {
                 Logger.InfoFormat("执行job逻辑开始时间：{0}", DateTime.Now);
                 preDate = DateTime.Today;
