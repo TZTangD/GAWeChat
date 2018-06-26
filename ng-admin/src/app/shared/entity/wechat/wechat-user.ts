@@ -21,6 +21,7 @@ export class WechatUser implements IWechatUser {
     selected: boolean = false;
     attentionTime: Date;
     unfollowTime: Date;
+    code:string;
     constructor(data?: IWechatUser) {
         if (data) {
             for (var property in data) {
@@ -53,6 +54,7 @@ export class WechatUser implements IWechatUser {
             this.statusName = data["statusName"];
             this.attentionTime = data["attentionTime"];
             this.unfollowTime = data["unfollowTime"];
+            this.code = data["code"];
 
         }
     }
@@ -84,6 +86,7 @@ export class WechatUser implements IWechatUser {
         data["headImgUrl"] = this.headImgUrl;
         data["attentionTime"] = this.attentionTime;
         data["unfollowTime"] = this.unfollowTime;
+        data["code"] = this.code;
         return data;
     }
 
@@ -114,6 +117,8 @@ export interface IWechatUser {
     status: number;
     attentionTime: Date;
     unfollowTime: Date;
+    code:string;
+    
 }
 
 export class WechatUserDto implements IWechatUserDto {

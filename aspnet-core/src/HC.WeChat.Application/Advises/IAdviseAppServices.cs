@@ -65,5 +65,12 @@ namespace HC.WeChat.Advises
         Task<APIResultDto> ExportAdviseExcel(GetAdvisesInput input);
         //Task<List<AdviseListDto>> GetAdviseListAsync(GetAdvisesInput input);
 
+        /// <summary>
+        /// 获取单条意见反馈信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<AdviseListDto> GetSingleAdviseByIdReferenceWeChatUser(Guid id);
+
     }
 }

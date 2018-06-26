@@ -80,5 +80,10 @@ namespace HC.WeChat.WeChatUsers.Dtos
                 return Status.ToString();
             }
         }
+
+        /// <summary>
+        /// 零售户编码或内部员工编码
+        /// </summary>
+        public string Code { get; set; }
     }
 }

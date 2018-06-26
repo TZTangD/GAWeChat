@@ -38,6 +38,11 @@ namespace HC.WeChat.WeChatUsers.Dtos
         }
         public string SortValue { get; set; }
 
+        /// <summary>
+        /// 零售户编码或内部员工编码
+        /// </summary>
+        public string Code { get; set; }
+
     }
 
     /// <summary>

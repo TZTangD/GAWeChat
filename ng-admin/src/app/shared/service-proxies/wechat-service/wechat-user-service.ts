@@ -202,7 +202,7 @@ export class WechatUserServiceProxy {
      * @return Success
      */
     getAll(skipCount: number, maxResultCount: number, parameter: Parameter[]): Observable<PagedResultDtoOfWeChatUser> {
-        let url_ = this.baseUrl + "/api/services/app/WeChatUser/GetPagedWeChatUsers?";
+        let url_ = this.baseUrl + "/api/services/app/WeChatUser/GetPagedWeChatUsersReEmAndRE?";
         if (skipCount !== undefined)
             url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&";
         if (maxResultCount !== undefined)

@@ -50,6 +50,7 @@ export class MemberManagementComponent extends AppComponentBase implements OnIni
         var arry = [];
         arry.push(Parameter.fromJS({ key: 'Name', value: this.search.name }));
         arry.push(Parameter.fromJS({ key: 'UserType', value: this.search.UserType === 6 ? null : this.search.UserType }));
+        arry.push(Parameter.fromJS({ key: 'Code', value: this.search.code }));
         return arry;
 
     }
@@ -79,7 +80,7 @@ export class MemberManagementComponent extends AppComponentBase implements OnIni
     }
     exportExcelAll() {
         this.exportLoading = true;
-        this.wechatUserService.exportExcel({ name: this.search.name, userType: this.search.UserType === 6 ? null : this.search.UserType }).subscribe(result => {
+        this.wechatUserService.exportExcel({ name: this.search.name, userType: this.search.UserType === 6 ? null : this.search.UserType, code: this.search.code }).subscribe(result => {
             if (result.code == 0) {
                 var url = AppConsts.remoteServiceBaseUrl + result.data;
                 document.getElementById('aMemberExcelUrl').setAttribute('href', url);

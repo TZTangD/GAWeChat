@@ -109,6 +109,7 @@ export class StoreManagementComponent extends AppComponentBase implements OnInit
         arry.push(Parameter.fromJS({ key: 'sortSaleTotal', value: this.sortSaleTotal }));
         arry.push(Parameter.fromJS({ key: 'sortReadTotal', value: this.sortReadTotal }));
         arry.push(Parameter.fromJS({ key: 'sortSingleTotal', value: this.sortSingleTotal }));
+        arry.push(Parameter.fromJS({ key: 'RetailCode', value: this.search.code }));
         return arry;
     }
     editShop(shop: Shop) {

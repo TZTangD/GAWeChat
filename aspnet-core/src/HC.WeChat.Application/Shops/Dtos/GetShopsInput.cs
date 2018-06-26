@@ -19,6 +19,7 @@ namespace HC.WeChat.Shops.Dtos
         public string SortSaleTotal { get; set; }
         public string SortReadTotal { get; set; }
         public string SortSingleTotal { get; set; }
+        public string RetailCode { get; set; }
         /// <summary>
         /// 正常化排序使用
         /// </summary>

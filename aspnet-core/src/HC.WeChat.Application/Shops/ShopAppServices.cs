@@ -322,7 +322,7 @@ namespace HC.WeChat.Shops
             var entity = new ShopEditDto();
             if (input.Id.HasValue)
             {
-                await UpdateShopAsync(new CreateOrUpdateShopInput() {  Shop = input });
+                await UpdateShopAsync(new CreateOrUpdateShopInput() { Shop = input });
             }
             else
             {
@@ -344,7 +344,9 @@ namespace HC.WeChat.Shops
                 .WhereIf(!string.IsNullOrEmpty(input.Name), s => s.Name.Contains(input.Name))
                 .WhereIf(input.Status.HasValue, s => s.Status == input.Status)
                 .WhereIf(!string.IsNullOrEmpty(input.Tel), s => s.Tel.Contains(input.Tel));
-            var queryRetailer = _retailerRepository.GetAll().WhereIf(mid.HasValue, r => r.EmployeeId == mid);
+            var queryRetailer = _retailerRepository.GetAll()
+                .WhereIf(mid.HasValue, r => r.EmployeeId == mid)
+                .WhereIf(!string.IsNullOrEmpty(input.RetailCode), r => r.Code.Contains(input.RetailCode));
             var query = from s in queryShop
                         join r in queryRetailer on s.RetailerId equals r.Id
                         //into queryS
@@ -369,12 +371,14 @@ namespace HC.WeChat.Shops
                             Tel = s.Tel,
                             SingleTotal = s.SingleTotal,
                             //RetailerName = r != null ? r.Name : "",
-                            RetailerName = r.Name
+                            RetailerName = r.Name,
+                            RetailerCode = r.Code
+
                         };
 
             //TODO:根据传入的参数添加过滤条件
             var shopCount = await query.CountAsync();
-            if (input.SortSaleTotal!=null && input.SortSaleTotal == "ascend")
+            if (input.SortSaleTotal != null && input.SortSaleTotal == "ascend")
             {
                 var shops = await query
                     .OrderByDescending(s => s.SaleTotal)
@@ -389,7 +393,8 @@ namespace HC.WeChat.Shops
                     shopCount,
                     shopListDtos
                     );
-            } else if(input.SortSaleTotal != null && input.SortSaleTotal == "descend")
+            }
+            else if (input.SortSaleTotal != null && input.SortSaleTotal == "descend")
             {
                 var shops = await query
                     .OrderBy(s => s.SaleTotal)
@@ -404,7 +409,8 @@ namespace HC.WeChat.Shops
                     shopCount,
                     shopListDtos
                     );
-            } else if (input.SortReadTotal != null && input.SortReadTotal == "ascend")
+            }
+            else if (input.SortReadTotal != null && input.SortReadTotal == "ascend")
             {
                 var shops = await query
                     .OrderByDescending(s => s.ReadTotal)
@@ -547,7 +553,7 @@ namespace HC.WeChat.Shops
             var entity = await _shopRepository.GetAsync(input.Id);
             entity.Status = input.Status;
             entity.AuditTime = DateTime.Now;
-            entity.Reason = input.Reason; 
+            entity.Reason = input.Reason;
             var result = _shopRepository.UpdateAsync(entity);
             //审核通知
             var ShopOpenId = await _wechatuserRepository.GetAll().Where(r => r.UserId == entity.RetailerId).Select(v => v.OpenId).FirstOrDefaultAsync();
@@ -748,7 +754,7 @@ namespace HC.WeChat.Shops
                             SingleTotal = s.SingleTotal,
                             //RetailerName = r != null ? r.Name : "",
                             RetailerName = r.Name,
-                            RetailerCode=r.Code
+                            RetailerCode = r.Code
                         };
 
             //TODO:根据传入的参数添加过滤条件
@@ -832,7 +838,7 @@ namespace HC.WeChat.Shops
                 ISheet sheet = workbook.CreateSheet("Employees");
                 var rowIndex = 0;
                 IRow titleRow = sheet.CreateRow(rowIndex);
-                string[] titles = { "店铺名称", "店铺地址", "店铺描述", "零售客户","客户编码", "店铺销量", "店铺浏览量", "店铺用户量","店铺电话", "审核状态", "审核时间", "店铺评价", "经度", "纬度" };
+                string[] titles = { "店铺名称", "店铺地址", "店铺描述", "零售客户", "客户编码", "店铺销量", "店铺浏览量", "店铺用户量", "店铺电话", "审核状态", "审核时间", "店铺评价", "经度", "纬度" };
                 var fontTitle = workbook.CreateFont();
                 fontTitle.IsBold = true;
                 for (int i = 0; i < titles.Length; i++)
