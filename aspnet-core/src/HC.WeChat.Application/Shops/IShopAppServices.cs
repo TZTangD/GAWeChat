@@ -89,9 +89,6 @@ namespace HC.WeChat.Shops
         /// <summary>
         /// 店铺审核
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="status"></param>
-        /// <returns></returns>
         Task CheckShop(CheckShopDto input);
         
         //Task<ShopListDto> GetViewShopByIdAsync(Guid id, int? tenantId);
@@ -103,5 +100,10 @@ namespace HC.WeChat.Shops
         Task<HomeInfo> GetHomeInfo();
 
         Task<List<ShopListDto>> GetPendingShopList();
+
+        /// <summary>
+        /// 生成店码
+        /// </summary>
+        Task<string> GenerateShopCode(string shopId);
     }
 }

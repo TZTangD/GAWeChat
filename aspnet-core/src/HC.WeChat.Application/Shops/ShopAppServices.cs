@@ -652,23 +652,6 @@ namespace HC.WeChat.Shops
             }
         }
 
-        /// <summary>
-        /// 人气查重改写
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="tenantId"></param>
-        /// <returns></returns>
-        //[AbpAllowAnonymous]
-        //public async Task<ShopListDto> GetViewShopByIdAsync(Guid id, int? tenantId)
-        //{
-        //    using (CurrentUnitOfWork.SetTenantId(tenantId))
-        //    {
-        //        var shop = await _shopRepository.GetAsync(id);
-        //        shop.ReadTotal++;
-        //        return shop.MapTo<ShopListDto>();
-        //    }
-        //}
-
         [AbpAllowAnonymous]
         public async Task<List<ShopListDto>> GetShopListByGoodsIdAsync(int? tenantId, Guid goodsId)
         {
@@ -704,16 +687,6 @@ namespace HC.WeChat.Shops
             var shopList = await _shopRepository.GetAll().Where(s => s.Status == ShopAuditStatus.待审核).OrderByDescending(s => s.CreationTime).Take(5).ToListAsync();
             return shopList.MapTo<List<ShopListDto>>();
         }
-
-        //[AbpAllowAnonymous]
-        //public async Task<ShopListDto> CreateWeChatGroup(ShopEditDto input)
-        //{
-        //   // var result = new ShopEditDto();
-        //   //var data = await TemplateApi.
-        //   // ;
-
-        //   // return result;
-        //}
 
         #region 店铺导出
 
@@ -904,6 +877,7 @@ namespace HC.WeChat.Shops
                 return new APIResultDto() { Code = 901, Msg = "网络忙...请待会儿再试！" };
             }
         }
+
         #endregion
 
         #region 生成店铺二维码
@@ -923,6 +897,14 @@ namespace HC.WeChat.Shops
         }
 
         #endregion
+        /// <summary>
+        /// 生成店码
+        /// </summary>
+        public async Task<string> GenerateShopCode(string shopId)
+        {
+            var qrResult = await QrCodeApi.CreateAsync(AppConfig.AppId, 300, 0, QrCode_ActionName.QR_STR_SCENE, shopId);
+            return qrResult.url;
+        }
     }
 }
 
