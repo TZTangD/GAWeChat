@@ -97,6 +97,7 @@ namespace HC.WeChat.MessageHandler
         public override void Subscribe(RequestMessageEvent_Subscribe requestMessage)
         {
             Logger.InfoFormat("关注:{0}", requestMessage);
+            Logger.InfoFormat("关注场景值:{0}", requestMessage.EventKey);
             //获取微信用户信息
             var wechatUser = Senparc.Weixin.MP.AdvancedAPIs.UserApi.Info(appId, requestMessage.FromUserName);
 

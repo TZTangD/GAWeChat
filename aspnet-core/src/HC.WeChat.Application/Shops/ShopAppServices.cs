@@ -31,6 +31,7 @@ using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using Abp.Domain.Uow;
 using HC.WeChat.Dto;
+using Senparc.Weixin.MP;
 
 namespace HC.WeChat.Shops
 {
@@ -322,7 +323,7 @@ namespace HC.WeChat.Shops
             var entity = new ShopEditDto();
             if (input.Id.HasValue)
             {
-                await UpdateShopAsync(new CreateOrUpdateShopInput() {  Shop = input });
+                await UpdateShopAsync(new CreateOrUpdateShopInput() { Shop = input });
             }
             else
             {
@@ -374,7 +375,7 @@ namespace HC.WeChat.Shops
 
             //TODO:根据传入的参数添加过滤条件
             var shopCount = await query.CountAsync();
-            if (input.SortSaleTotal!=null && input.SortSaleTotal == "ascend")
+            if (input.SortSaleTotal != null && input.SortSaleTotal == "ascend")
             {
                 var shops = await query
                     .OrderByDescending(s => s.SaleTotal)
@@ -389,7 +390,8 @@ namespace HC.WeChat.Shops
                     shopCount,
                     shopListDtos
                     );
-            } else if(input.SortSaleTotal != null && input.SortSaleTotal == "descend")
+            }
+            else if (input.SortSaleTotal != null && input.SortSaleTotal == "descend")
             {
                 var shops = await query
                     .OrderBy(s => s.SaleTotal)
@@ -404,7 +406,8 @@ namespace HC.WeChat.Shops
                     shopCount,
                     shopListDtos
                     );
-            } else if (input.SortReadTotal != null && input.SortReadTotal == "ascend")
+            }
+            else if (input.SortReadTotal != null && input.SortReadTotal == "ascend")
             {
                 var shops = await query
                     .OrderByDescending(s => s.ReadTotal)
@@ -547,7 +550,7 @@ namespace HC.WeChat.Shops
             var entity = await _shopRepository.GetAsync(input.Id);
             entity.Status = input.Status;
             entity.AuditTime = DateTime.Now;
-            entity.Reason = input.Reason; 
+            entity.Reason = input.Reason;
             var result = _shopRepository.UpdateAsync(entity);
             //审核通知
             var ShopOpenId = await _wechatuserRepository.GetAll().Where(r => r.UserId == entity.RetailerId).Select(v => v.OpenId).FirstOrDefaultAsync();
@@ -645,23 +648,6 @@ namespace HC.WeChat.Shops
             }
         }
 
-        /// <summary>
-        /// 人气查重改写
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="tenantId"></param>
-        /// <returns></returns>
-        //[AbpAllowAnonymous]
-        //public async Task<ShopListDto> GetViewShopByIdAsync(Guid id, int? tenantId)
-        //{
-        //    using (CurrentUnitOfWork.SetTenantId(tenantId))
-        //    {
-        //        var shop = await _shopRepository.GetAsync(id);
-        //        shop.ReadTotal++;
-        //        return shop.MapTo<ShopListDto>();
-        //    }
-        //}
-
         [AbpAllowAnonymous]
         public async Task<List<ShopListDto>> GetShopListByGoodsIdAsync(int? tenantId, Guid goodsId)
         {
@@ -697,16 +683,6 @@ namespace HC.WeChat.Shops
             var shopList = await _shopRepository.GetAll().Where(s => s.Status == ShopAuditStatus.待审核).OrderByDescending(s => s.CreationTime).Take(5).ToListAsync();
             return shopList.MapTo<List<ShopListDto>>();
         }
-
-        //[AbpAllowAnonymous]
-        //public async Task<ShopListDto> CreateWeChatGroup(ShopEditDto input)
-        //{
-        //   // var result = new ShopEditDto();
-        //   //var data = await TemplateApi.
-        //   // ;
-
-        //   // return result;
-        //}
 
         #region 店铺导出
 
@@ -748,7 +724,7 @@ namespace HC.WeChat.Shops
                             SingleTotal = s.SingleTotal,
                             //RetailerName = r != null ? r.Name : "",
                             RetailerName = r.Name,
-                            RetailerCode=r.Code
+                            RetailerCode = r.Code
                         };
 
             //TODO:根据传入的参数添加过滤条件
@@ -832,7 +808,7 @@ namespace HC.WeChat.Shops
                 ISheet sheet = workbook.CreateSheet("Employees");
                 var rowIndex = 0;
                 IRow titleRow = sheet.CreateRow(rowIndex);
-                string[] titles = { "店铺名称", "店铺地址", "店铺描述", "零售客户","客户编码", "店铺销量", "店铺浏览量", "店铺用户量","店铺电话", "审核状态", "审核时间", "店铺评价", "经度", "纬度" };
+                string[] titles = { "店铺名称", "店铺地址", "店铺描述", "零售客户", "客户编码", "店铺销量", "店铺浏览量", "店铺用户量", "店铺电话", "审核状态", "审核时间", "店铺评价", "经度", "纬度" };
                 var fontTitle = workbook.CreateFont();
                 fontTitle.IsBold = true;
                 for (int i = 0; i < titles.Length; i++)
@@ -897,7 +873,17 @@ namespace HC.WeChat.Shops
                 return new APIResultDto() { Code = 901, Msg = "网络忙...请待会儿再试！" };
             }
         }
+
         #endregion
+
+        /// <summary>
+        /// 生成店码
+        /// </summary>
+        public async Task<string> GenerateShopCode(string shopId)
+        {
+            var qrResult = await QrCodeApi.CreateAsync(AppConfig.AppId, 300, 0, QrCode_ActionName.QR_STR_SCENE, shopId);
+            return qrResult.url;
+        }
     }
 }
 
