@@ -152,7 +152,7 @@ export class AdviseService {
      * @param id 表单id
      */
     get(id: string): Observable<Advise> {
-        let url_ = this.baseUrl + "/api/services/app/Advise/GetAdviseByIdAsync?";
+        let url_ = this.baseUrl + "/api/services/app/Advise/GetSingleAdviseByIdReferenceWeChatUser?";
         if (id !== undefined)
             url_ += "Id=" + encodeURIComponent("" + id) + "&";
         url_ = url_.replace(/[?&]$/, "");

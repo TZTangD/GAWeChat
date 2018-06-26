@@ -340,6 +340,35 @@ namespace HC.WeChat.Advises
 
         }
 
+        /// <summary>
+        /// 获取单条意见反馈信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<AdviseListDto> GetSingleAdviseByIdReferenceWeChatUser(Guid id)
+        {
+            var queryAd = _adviseRepository.GetAll().Where(a => a.Id == id);
+            var queryWe = _wechatuserRepository.GetAll();
+            var entity = await (from ad in queryAd
+                               join we in queryWe on ad.OpenId equals we.OpenId into aw
+                               from de in aw.DefaultIfEmpty()
+                               select new AdviseListDto()
+                               {
+                                   Id = ad.Id,
+                                   Title = ad.Title,
+                                   UserTypeName = ad.UserTypeName,
+                                   OpenId = ad.OpenId,
+                                   Phone = ad.Phone,
+                                   Content = ad.Content,
+                                   PhotoUrl = ad.PhotoUrl,
+                                   TenantId = ad.TenantId,
+                                   CreationTime = ad.CreationTime,
+                                   UserName = de.NickName != null ? de.NickName : ""
+                               }).SingleOrDefaultAsync();
+            return entity;
+        }
+
+
     }
 }
 

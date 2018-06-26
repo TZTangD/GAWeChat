@@ -865,14 +865,45 @@ namespace HC.WeChat.WeChatUsers
         private async Task<List<WeChatUserListDto>> GetWeChatUsersAsync(GetWeChatUsersInput input)
         {
             //var mid = UserManager.GetControlEmployeeId();
-            var query = _wechatuserRepository.GetAll()
-                .WhereIf(!string.IsNullOrEmpty(input.UserName), u => u.UserName.Contains(input.UserName))
-                .WhereIf(!string.IsNullOrEmpty(input.Name), u => u.NickName.Contains(input.Name) || u.UserName.Contains(input.Name) || u.Phone.Contains(input.Name))
-                .WhereIf(input.UserType.HasValue, u => u.UserType == input.UserType);
-            var user = await query
-                .OrderBy(input.Sorting)
-                .ToListAsync();
-            var UserDtos = user.MapTo<List<WeChatUserListDto>>();
+            //var query = _wechatuserRepository.GetAll()
+            //    .WhereIf(!string.IsNullOrEmpty(input.UserName), u => u.UserName.Contains(input.UserName))
+            //    .WhereIf(!string.IsNullOrEmpty(input.Name), u => u.NickName.Contains(input.Name) || u.UserName.Contains(input.Name) || u.Phone.Contains(input.Name))
+            //    .WhereIf(input.UserType.HasValue, u => u.UserType == input.UserType);
+            //var user = await query
+            //    .OrderBy(input.Sorting)
+            //    .ToListAsync();
+
+            var queryWe = _wechatuserRepository.GetAll()
+               .WhereIf(!string.IsNullOrEmpty(input.UserName), u => u.UserName.Contains(input.UserName))
+               .WhereIf(!string.IsNullOrEmpty(input.Name), u => u.NickName.Contains(input.Name) || u.UserName.Contains(input.Name) || u.Phone.Contains(input.Name))
+               .WhereIf(input.UserType.HasValue, u => u.UserType == input.UserType);
+            var queryRe = _retailerRepository.GetAll();
+            var queryEm = _employeeRepository.GetAll();
+            var query = await (from w in queryWe
+                               join r in queryRe on w.UserId equals r.Id into wr
+                               from rw in wr.DefaultIfEmpty()
+                               join e in queryEm on w.UserId equals e.Id into we
+                               from ew in we.DefaultIfEmpty()
+                               select new WeChatUserListDto
+                               {
+                                   Id = w.Id,
+                                   NickName = w.NickName,
+                                   OpenId = w.OpenId,
+                                   UserType = w.UserType,
+                                   UserName = w.UserName,
+                                   BindStatus = w.BindStatus,
+                                   BindTime = w.BindTime,
+                                   UnBindTime = w.UnBindTime,
+                                   AttentionTime = w.AttentionTime,
+                                   UnfollowTime = w.UnfollowTime,
+                                   Phone = w.Phone,
+                                   MemberBarCode = w.MemberBarCode,
+                                   IntegralTotal = w.IntegralTotal,
+                                   IsShopkeeper = w.IsShopkeeper,
+                                   Status = w.Status,
+                                   Code = rw != null ? rw.Code : (ew != null ? ew.Code : "")
+                               }).WhereIf(!string.IsNullOrEmpty(input.Code), wre => wre.Code.Contains(input.Code)).ToListAsync();
+            var UserDtos = query.MapTo<List<WeChatUserListDto>>();
             return UserDtos;
         }
         private string SaveWeChatUsersExcel(string fileName, List<WeChatUserListDto> data)
@@ -884,7 +915,7 @@ namespace HC.WeChat.WeChatUsers
                 ISheet sheet = workbook.CreateSheet("WeChatUser");
                 var rowIndex = 0;
                 IRow titleRow = sheet.CreateRow(rowIndex);
-                string[] titles = { "微信OpenId", "微信昵称", "用户类型", "用户名", "绑定状态", "绑定时间", "解绑时间", "绑定电话", "会员卡条形码", "用户总积分", "是否是店主", "审核状态", "关注时间", "取消关注时间" };
+                string[] titles = { "微信OpenId", "微信昵称", "用户类型", "用户名", "绑定状态", "绑定时间", "解绑时间", "绑定电话", "会员卡条形码", "用户总积分", "是否是店主", "审核状态", "关注时间", "取消关注时间","零售户/员工编码" };
                 var fontTitle = workbook.CreateFont();
                 fontTitle.IsBold = true;
                 for (int i = 0; i < titles.Length; i++)
@@ -913,10 +944,65 @@ namespace HC.WeChat.WeChatUsers
                     ExcelHelper.SetCell(row.CreateCell(11), font, item.StatusName);
                     ExcelHelper.SetCell(row.CreateCell(12), font, item.AttentionTime.ToString());
                     ExcelHelper.SetCell(row.CreateCell(13), font, item.UnfollowTime.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(14), font, item.Code.ToString());
                 }
                 workbook.Write(fs);
             }
             return "/files/downloadtemp/" + fileName;
+        }
+
+        /// <summary>
+        /// 查询微信用户联合零售户表和员工表
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task<PagedResultDto<WeChatUserListDto>> GetPagedWeChatUsersReEmAndRE(GetWeChatUsersInput input)
+        {
+
+            var queryWe = _wechatuserRepository.GetAll()
+                .WhereIf(!string.IsNullOrEmpty(input.UserName), u => u.UserName.Contains(input.UserName))
+                .WhereIf(!string.IsNullOrEmpty(input.Name), u => u.NickName.Contains(input.Name) || u.UserName.Contains(input.Name) || u.Phone.Contains(input.Name))
+                .WhereIf(input.UserType.HasValue, u => u.UserType == input.UserType);
+            var queryRe = _retailerRepository.GetAll();
+            var queryEm = _employeeRepository.GetAll();
+            var query = (from w in queryWe
+                         join r in queryRe on w.UserId equals r.Id into wr
+                         from rw in wr.DefaultIfEmpty()
+                         join e in queryEm on w.UserId equals e.Id into we
+                         from ew in we.DefaultIfEmpty()
+                         select new WeChatUserListDto
+                         {
+                             Id = w.Id,
+                             NickName = w.NickName,
+                             OpenId = w.OpenId,
+                             UserType = w.UserType,
+                             UserName = w.UserName,
+                             BindStatus = w.BindStatus,
+                             BindTime = w.BindTime,
+                             UnBindTime = w.UnBindTime,
+                             AttentionTime = w.AttentionTime,
+                             UnfollowTime = w.UnfollowTime,
+                             Phone = w.Phone,
+                             Status = w.Status,
+                             Code = rw != null ? rw.Code : (ew != null ? ew.Code : "")
+                         }).WhereIf(!string.IsNullOrEmpty(input.Code), wre => wre.Code.Contains(input.Code));
+
+            //TODO:根据传入的参数添加过滤条件
+            var wechatuserCount = await query.CountAsync();
+
+            var wechatusers = await query
+                .OrderBy(input.Sorting)
+                .PageBy(input)
+                .ToListAsync();
+
+            //var wechatuserListDtos = ObjectMapper.Map<List <WeChatUserListDto>>(wechatusers);
+            var wechatuserListDtos = wechatusers.MapTo<List<WeChatUserListDto>>();
+
+            return new PagedResultDto<WeChatUserListDto>(
+                wechatuserCount,
+                wechatuserListDtos
+                );
+
         }
     }
 }

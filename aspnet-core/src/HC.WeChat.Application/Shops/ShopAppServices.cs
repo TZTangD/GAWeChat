@@ -345,7 +345,9 @@ namespace HC.WeChat.Shops
                 .WhereIf(!string.IsNullOrEmpty(input.Name), s => s.Name.Contains(input.Name))
                 .WhereIf(input.Status.HasValue, s => s.Status == input.Status)
                 .WhereIf(!string.IsNullOrEmpty(input.Tel), s => s.Tel.Contains(input.Tel));
-            var queryRetailer = _retailerRepository.GetAll().WhereIf(mid.HasValue, r => r.EmployeeId == mid);
+            var queryRetailer = _retailerRepository.GetAll()
+                .WhereIf(mid.HasValue, r => r.EmployeeId == mid)
+                .WhereIf(!string.IsNullOrEmpty(input.RetailCode), r => r.Code.Contains(input.RetailCode));
             var query = from s in queryShop
                         join r in queryRetailer on s.RetailerId equals r.Id
                         //into queryS
@@ -370,7 +372,9 @@ namespace HC.WeChat.Shops
                             Tel = s.Tel,
                             SingleTotal = s.SingleTotal,
                             //RetailerName = r != null ? r.Name : "",
-                            RetailerName = r.Name
+                            RetailerName = r.Name,
+                            RetailerCode = r.Code
+
                         };
 
             //TODO:根据传入的参数添加过滤条件
