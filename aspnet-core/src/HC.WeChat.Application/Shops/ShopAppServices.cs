@@ -31,6 +31,7 @@ using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using Abp.Domain.Uow;
 using HC.WeChat.Dto;
+using Senparc.Weixin.MP;
 
 namespace HC.WeChat.Shops
 {
@@ -903,6 +904,24 @@ namespace HC.WeChat.Shops
                 return new APIResultDto() { Code = 901, Msg = "网络忙...请待会儿再试！" };
             }
         }
+        #endregion
+
+        #region 生成店铺二维码
+
+        /// <summary>
+        /// 批量生成二维码
+        /// </summary>
+        /// <returns></returns>
+        public async Task BatchCreateQRCode()
+        {
+            var shops =await _shopRepository.GetAll().ToListAsync();
+            foreach(var item in shops)
+            {
+                var ticket = QrCodeApi.CreateAsync(AppConfig.AppId, 0, 0, QrCode_ActionName.QR_LIMIT_STR_SCENE, SceneType.店铺.ToString() + "_" + item.Id.ToString());
+
+            }
+        }
+
         #endregion
     }
 }
