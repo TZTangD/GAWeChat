@@ -1513,6 +1513,9 @@ namespace HC.WeChat.Migrations
                 b.Property<bool?>("IsShopkeeper");
                 b.Property<int>("UserType").IsRequired();
                 b.Property<int?>("Status");
+                b.Property<string>("Ticket").HasMaxLength(200);
+                b.Property<int?>("SourceType");
+                b.Property<string>("SourceId").HasMaxLength(100);
 
                 b.HasKey("Id");
 
@@ -1771,6 +1774,9 @@ namespace HC.WeChat.Migrations
                 b.Property<int?>("TenantId");
                 b.Property<string>("Tel").HasMaxLength(20);
                 b.Property<int?>("SingleTotal");
+                b.Property<string>("Ticket").HasMaxLength(200);
+                b.Property<string>("WechatUrl").HasMaxLength(150);
+
                 b.HasKey("Id");
 
                 //b.HasIndex("TargetTenantId", "TargetUserId", "ReadState");

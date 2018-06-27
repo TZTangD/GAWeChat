@@ -115,6 +115,31 @@ namespace HC.WeChat.Migrations
                     table.PrimaryKey("PK_WinningRecords", x => x.Id);
                 });
 
+            migrationBuilder.AddColumn<string>(
+            name: "Ticket",
+            table: "Shops",
+            nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+            name: "WechatUrl",
+            table: "Shops",
+            nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+           name: "Ticket",
+           table: "WeChatUsers",
+           nullable: true);
+
+            migrationBuilder.AddColumn<int?>(
+           name: "SourceType",
+           table: "WeChatUsers",
+           nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+           name: "SourceId",
+           table: "WeChatUsers",
+           nullable: true);
+
         }
         protected override void Down(MigrationBuilder migrationBuilder)
         {
@@ -125,7 +150,27 @@ namespace HC.WeChat.Migrations
             migrationBuilder.DropTable(
                 name: "UserAddresss");
             migrationBuilder.DropTable(
-                name: "WinningRecords");
+                name: "WinningRecords"); 
+
+            migrationBuilder.DropColumn(
+                name: "Ticket",
+                table: "Shops");
+
+            migrationBuilder.DropColumn(
+               name: "WechatUrl",
+               table: "Shops");
+
+            migrationBuilder.DropColumn(
+               name: "Ticket",
+               table: "WeChatUsers");
+
+            migrationBuilder.DropColumn(
+               name: "SourceType",
+               table: "WeChatUsers");
+
+            migrationBuilder.DropColumn(
+               name: "SourceId",
+               table: "WeChatUsers");
         }
     }
 }

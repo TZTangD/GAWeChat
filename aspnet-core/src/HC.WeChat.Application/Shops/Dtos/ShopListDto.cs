@@ -48,6 +48,16 @@ namespace HC.WeChat.Shops.Dtos
         /// 拒绝理由
         /// </summary>
         public  string Reason { get; set; }
+
+        /// <summary>
+        /// 微信票据（二维码）
+        /// </summary>
+        public virtual string Ticket { get; set; }
+
+        /// <summary>
+        /// 二维码url
+        /// </summary>
+        public virtual string WechatUrl { get; set; }
     }
     [AutoMapFrom(typeof(Shop))]
     public class CheckShopDto

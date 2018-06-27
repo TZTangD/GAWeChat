@@ -113,5 +113,17 @@ namespace HC.WeChat.Shops
         /// 拒绝理由
         /// </summary>
         public virtual string Reason { get; set; }
+
+        /// <summary>
+        /// 微信票据（二维码）
+        /// </summary>
+        [StringLength(200)]
+        public virtual string Ticket { get; set; }
+
+        /// <summary>
+        /// 二维码url
+        /// </summary>
+        [StringLength(200)]
+        public virtual string WechatUrl { get; set; }
     }
 }

@@ -32,6 +32,7 @@ using NPOI.XSSF.UserModel;
 using Abp.Domain.Uow;
 using HC.WeChat.Dto;
 using Senparc.Weixin.MP;
+using Senparc.Weixin.MP.AdvancedAPIs.QrCode;
 
 namespace HC.WeChat.Shops
 {
@@ -502,6 +503,12 @@ namespace HC.WeChat.Shops
         {
             var queryShop = _shopRepository.GetAll()
                 .Where(s => s.Id == id);
+            //当店铺二维码不存在时，去新生成二维码
+            //var shop = queryShop.SingleOrDefault();
+            //if (string.IsNullOrEmpty(shop.WechatUrl))
+            //{
+            //    var qrResult = await GenerateShopCodeAsync(shop.Id);
+            //}
             var queryRetailer = _retailerRepository.GetAll();
             var entity = await (from s in queryShop
                                 join r in queryRetailer on s.RetailerId equals r.Id into queryS
@@ -528,6 +535,13 @@ namespace HC.WeChat.Shops
                                     Tel = s.Tel,
                                     RetailerName = sr != null ? sr.Name : ""
                                 }).SingleOrDefaultAsync();
+            ////当店铺二维码不存在时，去新生成二维码
+            //if (string.IsNullOrEmpty(entity.WechatUrl))
+            //{
+            //   var qrResult= await GenerateShopCodeAsync(entity.Id);
+            //    entity.WechatUrl = qrResult.url;
+            //    entity.Ticket = qrResult.ticket;
+            //}
             return entity;
         }
 
@@ -886,13 +900,15 @@ namespace HC.WeChat.Shops
         /// 批量生成二维码
         /// </summary>
         /// <returns></returns>
-        public async Task BatchCreateQRCode()
+        public async Task BatchCreateQRCodeAsync()
         {
             var shops =await _shopRepository.GetAll().ToListAsync();
             foreach(var item in shops)
             {
-                var ticket = QrCodeApi.CreateAsync(AppConfig.AppId, 0, 0, QrCode_ActionName.QR_LIMIT_STR_SCENE, SceneType.店铺.ToString() + "_" + item.Id.ToString());
-
+                var result = QrCodeApi.CreateAsync(AppConfig.AppId, 0, 0, QrCode_ActionName.QR_LIMIT_STR_SCENE, SceneType.店铺+ "_" + item.Id.ToString()).Result;
+                item.Ticket = result.ticket;
+                item.WechatUrl = result.url;
+                _shopRepository.Update(item);
             }
         }
 
@@ -900,10 +916,13 @@ namespace HC.WeChat.Shops
         /// <summary>
         /// 生成店码
         /// </summary>
-        public async Task<string> GenerateShopCode(string shopId)
+        public async Task<CreateQrCodeResult> GenerateShopCodeAsync(Guid shopId)
         {
-            var qrResult = await QrCodeApi.CreateAsync(AppConfig.AppId, 300, 0, QrCode_ActionName.QR_STR_SCENE, shopId);
-            return qrResult.url;
+            var qrResult = await QrCodeApi.CreateAsync(AppConfig.AppId, 0, 0, QrCode_ActionName.QR_LIMIT_STR_SCENE, SceneType.店铺+"_"+ shopId.ToString());
+            var shop = await _shopRepository.GetAll().Where(s => s.Id == shopId).SingleOrDefaultAsync();
+            shop.Ticket = qrResult.ticket;
+            shop.WechatUrl = qrResult.url;
+            return qrResult;
         }
     }
 }

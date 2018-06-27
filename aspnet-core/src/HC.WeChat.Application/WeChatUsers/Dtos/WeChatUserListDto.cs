@@ -85,5 +85,20 @@ namespace HC.WeChat.WeChatUsers.Dtos
         /// 零售户编码或内部员工编码
         /// </summary>
         public string Code { get; set; }
+
+        /// <summary>
+        /// 微信票据（二维码）
+        /// </summary>
+        public virtual string Ticket { get; set; }
+
+        /// <summary>
+        /// 关注来源信息
+        /// </summary>
+        public virtual int? SourceType { get; set; }
+
+        /// <summary>
+        /// 关注来源Id
+        /// </summary>
+        public virtual string SourceId { get; set; }
     }
 }

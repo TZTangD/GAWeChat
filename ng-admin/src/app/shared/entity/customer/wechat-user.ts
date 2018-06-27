@@ -15,7 +15,10 @@ export class WeChatUser implements IWeChatUser {
     isShopkeeper: boolean;
     status: number;
     headImgUrl: string;
-
+    code:string;
+    ticket:string;
+    sourceType:number;
+    sourceId:string;
     constructor(data?: IWeChatUser) {
         if (data) {
             for (var property in data) {
@@ -43,7 +46,10 @@ export class WeChatUser implements IWeChatUser {
             this.isShopkeeper = data["isShopkeeper"];
             this.status = data["status"];
             this.headImgUrl = data["headImgUrl"];
-
+            this.code = data["code"];
+            this.ticket = data["ticket"];
+            this.sourceType = data["sourceType"];
+            this.sourceId = data["sourceId"];
         }
     }
 
@@ -71,6 +77,10 @@ export class WeChatUser implements IWeChatUser {
         data["isShopkeeper"] = this.isShopkeeper;
         data["status"] = this.status;
         data["headImgUrl"] = this.headImgUrl;
+        data["code"] = this.code;
+        data["ticket"] = this.ticket;
+        data["sourceType"] = this.sourceType;
+        data["sourceId"] = this.sourceId;
         return data;
     }
 
@@ -99,4 +109,8 @@ export interface IWeChatUser {
     isShopkeeper: boolean;
     status: number;
     headImgUrl: string;
+    code:string;
+    ticket:string;
+    sourceType:number;
+    sourceId:string;
 }
