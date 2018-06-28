@@ -376,8 +376,8 @@ namespace HC.WeChat.Shops
                             SingleTotal = s.SingleTotal,
                             //RetailerName = r != null ? r.Name : "",
                             RetailerName = r.Name,
-                            RetailerCode = r.Code
-
+                            RetailerCode = r.Code,
+                            QRUrl = s.QRUrl
                         };
 
             //TODO:根据传入的参数添加过滤条件
@@ -976,6 +976,36 @@ namespace HC.WeChat.Shops
         }
         #endregion
 
+        /// <summary>
+        /// 下载二维码
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        private byte[] GetImageContent(string url)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.AllowAutoRedirect = true;
+            WebProxy proxy = new WebProxy();
+            proxy.BypassProxyOnLocal = true;
+            proxy.UseDefaultCredentials = true;
+            request.Proxy = proxy;
+
+            WebResponse response = request.GetResponse();
+
+            using (Stream stream = response.GetResponseStream())
+            {
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    Byte[] buffer = new Byte[1024];
+                    int current = 0;
+                    while ((current = stream.Read(buffer, 0, buffer.Length)) != 0)
+                    {
+                        ms.Write(buffer, 0, current);
+                    }
+                    return ms.ToArray();
+                }
+            }
+        }
     }
 }
 

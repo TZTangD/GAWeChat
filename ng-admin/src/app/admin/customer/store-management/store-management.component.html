@@ -46,7 +46,11 @@
                 </div>
             </div>
 
-            <div nz-col [nzSpan]="6" style="float:right;text-align: right; padding-left:0px" class="mb-md" [class.text-right]="'true'">
+            <div nz-col [nzSpan]="8" style="float:right;text-align: right; padding-left:0px" class="mb-md" [class.text-right]="'true'">
+                <button nz-button type="button" (click)="downPic()" [nzSize]="'large'" [nzLoading]="exportLoading">
+                            <i class="anticon anticon-download"></i>
+                            <span>批量下载</span>
+                        </button>
                 <button nz-button type="submit" [nzType]="'primary'" [nzLoading]="loading" [nzSize]="'large'">查询</button>
                 <button nz-button type="reset" (click)="refreshData(true)" [nzSize]="'large'" class="mx-sm">重置</button>
                 <!-- <button nz-button (click)="createRetail()" [nzType]="'primary'" [nzSize]="'large'">
@@ -68,7 +72,8 @@
         <thead nz-thead>
             <tr>
                 <th nz-th>
-                    <span>选择</span>
+                    <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()" [nzIndeterminate]="indeterminate">
+                     </label> <span>全选</span>
                 </th>
                 <th nz-th>
                     <span>店铺名称</span>
@@ -113,13 +118,17 @@
         </thead>
         <tbody nz-tbody>
             <tr nz-tbody-tr *ngFor="let shop of nzTable.data">
-                <td nz-td><label nz-checkbox [(ngModel)]="_checked" (ngModelChange)="_console($event)"></td>    
+                <td nz-td>
+                    <nz-checkbox-group *ngIf="shop.status===2" [(ngModel)]="checkOptionsOne" (ngModelChange)="updateSingleChecked()"></nz-checkbox-group>
+
+                </td>
                 <td nz-td>{{shop.name}}</td>
                 <td nz-td title="{{shop.address}}">{{shop.address| lengthLimit:8}}</td>
                 <td nz-td>{{shop.retailerName}}({{shop.retailerCode}})</td>
                 <td nz-td>{{shop.saleTotal}}</td>
                 <td nz-td>{{shop.readTotal}}</td>
-                <td nz-td>{{shop.singleTotal}}</td>
+                <td nz-td>{{shop.singleTotal}}
+                </td>
                 <td nz-td>{{shop.tel}}</td>
                 <!-- <td nz-td>{{shop.longitude}}</td>
                 <td nz-td>{{shop.latitude}}</td> -->
@@ -130,8 +139,8 @@
                 <td nz-td>{{shop.auditTime | _date}}</td>
                 <td nz-td>
                     <a (click)="editShop(shop)">详情</a>
-                    <span *ngIf="shop.statusType==2" nz-table-divider></span>
-                    <a *ngIf="shop.statusType==2">推广码</a>
+                    <span *ngIf="shop.status===2" nz-table-divider></span>
+                    <a *ngIf="shop.status===2" (click)="pic(shop.qrUrl,shop.name)">推广码</a>
                 </td>
             </tr>
         </tbody>

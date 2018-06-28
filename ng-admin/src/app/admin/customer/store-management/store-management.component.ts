@@ -33,7 +33,7 @@ export class StoreManagementComponent extends AppComponentBase implements OnInit
         read: null,
         single: null
     };
-
+    host = AppConsts.remoteServiceBaseUrl;
     loading = false;
     exportLoading = false;
     sortSaleTotal = null;
@@ -73,7 +73,36 @@ export class StoreManagementComponent extends AppComponentBase implements OnInit
             this.refreshData();
         }
     }
+    // _checked = true;
 
+    // _console(value) {
+    //     console.log(value);
+    // }
+    allChecked = false;
+    indeterminate = true;
+    checkOptionsOne = [
+        { label: '', value: '', checked: true },
+    ];
+    updateAllChecked() {
+        this.indeterminate = false;
+        if (this.allChecked) {
+            this.checkOptionsOne.forEach(item => item.checked = true);
+        } else {
+            this.checkOptionsOne.forEach(item => item.checked = false);
+        }
+    }
+
+    updateSingleChecked() {
+        if (this.checkOptionsOne.every(item => item.checked === false)) {
+            this.allChecked = false;
+            this.indeterminate = false;
+        } else if (this.checkOptionsOne.every(item => item.checked === true)) {
+            this.allChecked = true;
+            this.indeterminate = false;
+        } else {
+            this.indeterminate = true;
+        }
+    }
     refreshData(reset = false, search?: boolean) {
         if (reset) {
             this.query.pageIndex = 1;
@@ -100,6 +129,13 @@ export class StoreManagementComponent extends AppComponentBase implements OnInit
             });
             this.query.total = result.totalCount;
         })
+    }
+    pic(url: string, name: string) {
+        var a = document.createElement('a');
+        var event = new MouseEvent('click');
+        a.download = name;
+        a.href = this.host + url;
+        a.dispatchEvent(event);
     }
     getParameter(): Parameter[] {
         var arry = [];
