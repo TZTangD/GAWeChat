@@ -102,4 +102,23 @@ namespace HC.WeChat.Shops.Dtos
         public int WechatUserCount { get; set; }
 
     }
+
+    /// <summary>
+    /// 生成店铺二维码返回结果
+    /// </summary>
+    public class CreateQRResult {
+        /// <summary>
+        /// 票据
+        /// </summary>
+        public string Ticket { get; set; }
+        /// <summary>
+        /// 二维码图片解析后的地址（根据它可自行生成二维码）
+        /// </summary>
+        public string Url { get; set; }
+        /// <summary>
+        /// 本地二维码图片Url
+        /// </summary>
+        public string QRUrl { get; set; }
+
+    }
 }
