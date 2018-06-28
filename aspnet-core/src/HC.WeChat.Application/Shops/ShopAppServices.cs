@@ -911,10 +911,10 @@ namespace HC.WeChat.Shops
                 {
                     //生成二维码 
                     var retailer = await _retailerRepository.GetAll().Where(r => r.Id == item.RetailerId).SingleOrDefaultAsync();
-                    var result = QrCodeApi.CreateAsync(AppConfig.AppId, 0, 0, QrCode_ActionName.QR_LIMIT_STR_SCENE, SceneType.店铺 + "_" + item.Id.ToString()).Result;
+                    var result =await QrCodeApi.CreateAsync(AppConfig.AppId, 0, 0, QrCode_ActionName.QR_LIMIT_STR_SCENE, SceneType.店铺 + "_" + item.Id.ToString());
 
                     //下载二维码到本地
-                    var imgurl = QrCodeApi.GetShowQrCodeUrl(item.Ticket);
+                    var imgurl = QrCodeApi.GetShowQrCodeUrl(result.ticket);
                     var imgeName = retailer.Code + retailer.Name;
                     var img = ImgeFilesDonload(imgurl, imgeName, "shopqr");
 
@@ -938,7 +938,7 @@ namespace HC.WeChat.Shops
             var retailer = await _retailerRepository.GetAll().Where(r => r.Id == shop.RetailerId).SingleOrDefaultAsync();
 
             //下载二维码到本地
-            var imgurl = QrCodeApi.GetShowQrCodeUrl(shop.Ticket);
+            var imgurl = QrCodeApi.GetShowQrCodeUrl(qrResult.ticket);
             var imgeName = retailer.Code + retailer.Name;
             var img = ImgeFilesDonload(imgurl, imgeName, "shopqr");
 
