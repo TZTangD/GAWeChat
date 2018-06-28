@@ -32,6 +32,9 @@ using NPOI.XSSF.UserModel;
 using Abp.Domain.Uow;
 using HC.WeChat.Dto;
 using Senparc.Weixin.MP;
+using Senparc.Weixin.MP.AdvancedAPIs.QrCode;
+using System.Net;
+using System.Text.RegularExpressions;
 
 namespace HC.WeChat.Shops
 {
@@ -502,6 +505,12 @@ namespace HC.WeChat.Shops
         {
             var queryShop = _shopRepository.GetAll()
                 .Where(s => s.Id == id);
+            //当店铺二维码不存在时，去新生成二维码
+            //var shop = queryShop.SingleOrDefault();
+            //if (string.IsNullOrEmpty(shop.WechatUrl))
+            //{
+            //    var qrResult = await GenerateShopCodeAsync(shop.Id);
+            //}
             var queryRetailer = _retailerRepository.GetAll();
             var entity = await (from s in queryShop
                                 join r in queryRetailer on s.RetailerId equals r.Id into queryS
@@ -528,6 +537,13 @@ namespace HC.WeChat.Shops
                                     Tel = s.Tel,
                                     RetailerName = sr != null ? sr.Name : ""
                                 }).SingleOrDefaultAsync();
+            ////当店铺二维码不存在时，去新生成二维码
+            //if (string.IsNullOrEmpty(entity.WechatUrl))
+            //{
+            //   var qrResult= await GenerateShopCodeAsync(entity.Id);
+            //    entity.WechatUrl = qrResult.url;
+            //    entity.Ticket = qrResult.ticket;
+            //}
             return entity;
         }
 
@@ -880,14 +896,86 @@ namespace HC.WeChat.Shops
 
         #endregion
 
+        #region 生成店铺二维码
+
+        /// <summary>
+        /// 批量生成二维码
+        /// </summary>
+        /// <returns></returns>
+        public async Task BatchCreateQRCodeAsync()
+        {
+            var shops = await _shopRepository.GetAll().ToListAsync();
+            foreach (var item in shops)
+            {
+                if (string.IsNullOrEmpty(item.QRUrl))
+                {
+                    //生成二维码 
+                    var retailer = await _retailerRepository.GetAll().Where(r => r.Id == item.RetailerId).SingleOrDefaultAsync();
+                    var result = QrCodeApi.CreateAsync(AppConfig.AppId, 0, 0, QrCode_ActionName.QR_LIMIT_STR_SCENE, SceneType.店铺 + "_" + item.Id.ToString()).Result;
+
+                    //下载二维码到本地
+                    var imgurl = QrCodeApi.GetShowQrCodeUrl(item.Ticket);
+                    var imgeName = retailer.Code + retailer.Name;
+                    var img = ImgeFilesDonload(imgurl, imgeName, "shopqr");
+
+                    //更新二维码数据到数据库
+                    item.Ticket = result.ticket;
+                    item.WechatUrl = result.url;
+                    item.QRUrl = img;
+                    _shopRepository.Update(item);
+                }
+            }
+        }
+
         /// <summary>
         /// 生成店码
         /// </summary>
-        public async Task<string> GenerateShopCode(string shopId)
+        public async Task<CreateQrCodeResult> GenerateShopCodeAsync(Guid shopId)
         {
-            var qrResult = await QrCodeApi.CreateAsync(AppConfig.AppId, 300, 0, QrCode_ActionName.QR_STR_SCENE, shopId);
-            return qrResult.url;
+            //生成二维码
+            var qrResult = await QrCodeApi.CreateAsync(AppConfig.AppId, 0, 0, QrCode_ActionName.QR_LIMIT_STR_SCENE, SceneType.店铺 + "_" + shopId.ToString());
+            var shop = await _shopRepository.GetAll().Where(s => s.Id == shopId).SingleOrDefaultAsync();
+            var retailer = await _retailerRepository.GetAll().Where(r => r.Id == shop.RetailerId).SingleOrDefaultAsync();
+
+            //下载二维码到本地
+            var imgurl = QrCodeApi.GetShowQrCodeUrl(shop.Ticket);
+            var imgeName = retailer.Code + retailer.Name;
+            var img = ImgeFilesDonload(imgurl, imgeName, "shopqr");
+
+            //更新二维码数据到数据库
+            shop.Ticket = qrResult.ticket;
+            shop.WechatUrl = qrResult.url;
+            shop.QRUrl = img;
+            return qrResult;
         }
+
+        /// <summary>
+        /// 二维码保存到本地
+        /// </summary>
+        /// <param name="url">下载地址</param>
+        /// <param name="imgName">图片名</param>
+        /// <param name="fileName">文件名</param>
+        /// <returns></returns>
+        public string ImgeFilesDonload(string url, string imgName, string fileName)
+        {
+            WebClient web = new WebClient();
+            string html = web.DownloadString(url);
+            var location = "";
+            string webRootPath = _hostingEnvironment.WebRootPath;
+            var endRote = string.Format("/upload/{0}/", fileName);
+            var fileDire = webRootPath + endRote;
+            if (!Directory.Exists(fileDire))
+            {
+                Directory.CreateDirectory(fileDire);
+            }
+
+            var filePath = fileDire + imgName + ".jpg";
+            web.DownloadFile(url, filePath);
+            location = filePath.Substring(webRootPath.Length);
+            return location;
+        }
+        #endregion
+
     }
 }
 

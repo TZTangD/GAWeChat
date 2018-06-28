@@ -76,6 +76,7 @@
     "ngx-countdown": "^2.0.0",
     "ngx-tinymce": "^1.0.2",
     "ngx-ueditor": "^1.1.0",
+    "qrious": "^4.0.2",
     "rxjs": "^5.5.5",
     "screenfull": "^3.3.1",
     "signalr": "^2.2.1",

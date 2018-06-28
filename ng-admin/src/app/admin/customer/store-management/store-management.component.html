@@ -111,7 +111,7 @@
         <tbody nz-tbody>
             <tr nz-tbody-tr *ngFor="let shop of nzTable.data">
                 <td nz-td>{{shop.name}}</td>
-                <td nz-td>{{shop.address| lengthLimit:8}}</td>
+                <td nz-td title="{{shop.address}}">{{shop.address| lengthLimit:8}}</td>
                 <td nz-td>{{shop.retailerName}}({{shop.retailerCode}})</td>
                 <td nz-td>{{shop.saleTotal}}</td>
                 <td nz-td>{{shop.readTotal}}</td>

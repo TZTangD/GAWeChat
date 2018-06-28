@@ -294,4 +294,11 @@ namespace HC.WeChat.WechatEnums
         已兑换 = 3,
         已过期 = 4,
     }
+    /// <summary>
+    /// 生产二维码场景值类型
+    /// </summary>
+    public enum SceneType
+    {
+        店铺=1
+    }
 }
