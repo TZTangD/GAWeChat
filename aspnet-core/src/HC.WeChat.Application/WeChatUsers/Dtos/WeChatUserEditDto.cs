@@ -100,18 +100,18 @@ namespace HC.WeChat.WeChatUsers.Dtos
         /// 微信票据（二维码）
         /// </summary>
         [StringLength(200)]
-        public virtual string Ticket { get; set; }
+        public string Ticket { get; set; }
 
         /// <summary>
         /// 关注来源信息
         /// </summary>
-        public virtual int? SourceType { get; set; }
+        public int? SourceType { get; set; }
 
         /// <summary>
         /// 关注来源Id
         /// </summary>
         [StringLength(100)]
-        public virtual string SourceId { get; set; }
+        public string SourceId { get; set; }
     }
 
     [AutoMapTo(typeof(WeChatUser))]

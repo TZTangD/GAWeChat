@@ -1776,6 +1776,7 @@ namespace HC.WeChat.Migrations
                 b.Property<int?>("SingleTotal");
                 b.Property<string>("Ticket").HasMaxLength(200);
                 b.Property<string>("WechatUrl").HasMaxLength(150);
+                b.Property<string>("QRUrl").HasMaxLength(500);
 
                 b.HasKey("Id");
 

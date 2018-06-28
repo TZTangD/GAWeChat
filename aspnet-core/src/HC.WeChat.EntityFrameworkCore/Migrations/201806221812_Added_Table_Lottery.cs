@@ -140,6 +140,11 @@ namespace HC.WeChat.Migrations
            table: "WeChatUsers",
            nullable: true);
 
+            migrationBuilder.AddColumn<string>(
+           name: "QRUrl",
+           table: "Shops",
+           nullable: true);
+
         }
         protected override void Down(MigrationBuilder migrationBuilder)
         {
@@ -171,6 +176,10 @@ namespace HC.WeChat.Migrations
             migrationBuilder.DropColumn(
                name: "SourceId",
                table: "WeChatUsers");
+
+            migrationBuilder.DropColumn(
+              name: "QRUrl",
+              table: "Shops");
         }
     }
 }

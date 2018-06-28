@@ -67,11 +67,15 @@ namespace HC.WeChat.WeChatUsers.DomainServices
         /// 微信关注
         /// </summary>
         [UnitOfWork]
-        public async Task SubscribeAsync(string openId, string nickName, string headImgUrl, int? tenantId)
+        public async Task SubscribeAsync(string openId, string nickName, string headImgUrl, int? tenantId,string scene,string ticket)
         {
             using (_unitOfWorkManager.Current.SetTenantId(tenantId))
             {
+                var scenes = scene.Split("_");
                 var user = await GetWeChatUserAsync(openId, tenantId);
+                user.SourceType = int.Parse(scenes[0]);//关注来源类型
+                user.SourceId = scenes[1];//关注来源Id
+                user.Ticket = ticket;//关注二维码票据
                 if (user != null)
                 {
                     user.NickName = nickName;

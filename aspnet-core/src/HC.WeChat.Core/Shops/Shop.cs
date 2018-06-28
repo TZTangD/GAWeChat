@@ -125,5 +125,11 @@ namespace HC.WeChat.Shops
         /// </summary>
         [StringLength(200)]
         public virtual string WechatUrl { get; set; }
+
+        /// <summary>
+        /// 二维码图片url
+        /// </summary>
+        [StringLength(500)]
+        public virtual string QRUrl { get; set; }
     }
 }

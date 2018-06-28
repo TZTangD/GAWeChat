@@ -89,16 +89,16 @@ namespace HC.WeChat.WeChatUsers.Dtos
         /// <summary>
         /// 微信票据（二维码）
         /// </summary>
-        public virtual string Ticket { get; set; }
+        public string Ticket { get; set; }
 
         /// <summary>
         /// 关注来源信息
         /// </summary>
-        public virtual int? SourceType { get; set; }
+        public int? SourceType { get; set; }
 
         /// <summary>
         /// 关注来源Id
         /// </summary>
-        public virtual string SourceId { get; set; }
+        public string SourceId { get; set; }
     }
 }

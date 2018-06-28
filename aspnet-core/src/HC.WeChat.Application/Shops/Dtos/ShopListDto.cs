@@ -14,7 +14,7 @@ namespace HC.WeChat.Shops.Dtos
         public string Address { get; set; }
         public string Desc { get; set; }
         public Guid? RetailerId { get; set; }
-        public string RetailerName{ get; set; }
+        public string RetailerName { get; set; }
         public string CoverPhoto { get; set; }
         public int? SaleTotal { get; set; }
         public int? ReadTotal { get; set; }
@@ -47,17 +47,22 @@ namespace HC.WeChat.Shops.Dtos
         /// <summary>
         /// 拒绝理由
         /// </summary>
-        public  string Reason { get; set; }
+        public string Reason { get; set; }
 
         /// <summary>
         /// 微信票据（二维码）
         /// </summary>
-        public virtual string Ticket { get; set; }
+        public string Ticket { get; set; }
 
         /// <summary>
         /// 二维码url
         /// </summary>
-        public virtual string WechatUrl { get; set; }
+        public string WechatUrl { get; set; }
+
+        /// <summary>
+        /// 二维码图片url
+        /// </summary>
+        public string QRUrl { get; set; }
     }
     [AutoMapFrom(typeof(Shop))]
     public class CheckShopDto
@@ -67,7 +72,7 @@ namespace HC.WeChat.Shops.Dtos
         public string Reason { get; set; }
         //public DateTime? AuditTime { get; set; }
     }
-    
+
     [AutoMapFrom(typeof(Shop))]
     public class NearbyShopDto : EntityDto<Guid>
     {
