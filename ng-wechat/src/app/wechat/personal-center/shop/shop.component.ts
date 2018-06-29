@@ -33,17 +33,26 @@ export class ShopComponent extends AppComponentBase implements OnInit {
     isView: boolean = false;
     hostUrl: string = AppConsts.remoteServiceBaseUrl;
     isAudit: boolean = false;
-
+    private DEFCONFIG: DialogConfig = <DialogConfig>{
+        // title: '弹窗标题',
+        // content: '弹窗内容，告知当前状态、信息和解决方法，描述文字尽量控制在三行内',
+        skin: 'auto',
+        backdrop: true,
+        cancel: null,
+        confirm: null,
+    };
+    config2: DialogConfig = {};
+    content='';
     constructor(injector: Injector,
         private router: Router,
         private shopService: ShopService,
         private wxService: JWeiXinService,
-        private srv: ToptipsService) {
+        private srv: ToptipsService,
+        private ds: DialogService) {
         super(injector);
         this.activatedRoute.params.subscribe((params: Params) => {
             this.shopId = params['shopId'];
             this.isAudit = params['isAudit'];
-            //alert(this.isAudit)
         });
     }
 
@@ -219,6 +228,16 @@ export class ShopComponent extends AppComponentBase implements OnInit {
             } else {
                 this.srv['warn']('操作异常');
             }
+        });
+    }
+
+    showQrCode(){
+        this.content='<div class="d"><p>店铺推广码</p><img class="qrcode" src="'+AppConsts.remoteServiceBaseUrl+this.shop.qrUrl+'"><p>扫一扫，关注公众号</p></div>';
+        this.config2 = Object.assign({}, this.DEFCONFIG, <DialogConfig>{
+            content: this.content,
+        });
+        this.ds.show(this.config2).subscribe((res: any) => {
+            console.log(res);
         });
     }
 }

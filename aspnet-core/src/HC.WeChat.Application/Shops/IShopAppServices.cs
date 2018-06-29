@@ -5,6 +5,7 @@ using Abp.Application.Services.Dto;
 using HC.WeChat.Shops.Dtos;
 using HC.WeChat.Shops;
 using System;
+using Senparc.Weixin.MP.AdvancedAPIs.QrCode;
 
 namespace HC.WeChat.Shops
 {
@@ -104,6 +105,12 @@ namespace HC.WeChat.Shops
         /// <summary>
         /// 生成店码
         /// </summary>
-        Task<string> GenerateShopCode(string shopId);
+        Task<CreateQRResult> GenerateShopCodeAsync(Guid shopId);
+
+        /// <summary>
+        /// 批量生成二维码
+        /// </summary>
+        /// <returns></returns>
+        Task BatchCreateQRCodeAsync();
     }
 }

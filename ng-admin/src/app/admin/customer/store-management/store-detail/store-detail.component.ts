@@ -68,6 +68,15 @@ export class StoreDetailComponent extends AppComponentBase implements OnInit {
     host = '';
     showCoverPhoto = '';
     auteloading = false;
+
+  background = 'white';
+  backgroundAlpha = 1.0;
+  foreground = 'black';
+  foregroundAlpha = 1.0;
+  level = 'L';
+  mime = 'image/png';
+  padding = 10;
+  size = 220;
     constructor(injector: Injector, private shopService: ShopServiceProxy, private shopEvaluationService: ShopEvaluationServiceProxy,
         private weChatService: WechatUserServiceProxy, private Acroute: ActivatedRoute, private modal: NzModalService,
         private shopProductService: ShopProductsServiceProxy,

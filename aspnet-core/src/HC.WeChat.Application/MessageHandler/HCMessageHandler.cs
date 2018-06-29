@@ -103,7 +103,7 @@ namespace HC.WeChat.MessageHandler
 
             Logger.InfoFormat("关注用户:{0}", wechatUser);
             //关注公众号
-            _wechatUserManager.SubscribeAsync(requestMessage.FromUserName, wechatUser.nickname, wechatUser.headimgurl, _tenantId);
+            _wechatUserManager.SubscribeAsync(requestMessage.FromUserName, wechatUser.nickname, wechatUser.headimgurl, _tenantId,requestMessage.EventKey.Substring(7), requestMessage.Ticket);
         }
 
         /// <summary>

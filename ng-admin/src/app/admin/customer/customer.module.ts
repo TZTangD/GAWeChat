@@ -16,6 +16,8 @@ import { CommodityDetailComponent } from "./commodity-management/commodity-detai
 import { ImageCropperModule } from "ng2-img-cropper";
 import { ColorPickerModule } from "ngx-color-picker";
 import { RefuseComponent } from "./store-management/store-detail/refuse/refuse.component";
+import { CommonModule } from "@angular/common";
+import { AlainABCModule } from "@delon/abc";
 
 @NgModule({
     imports: [
@@ -24,6 +26,9 @@ import { RefuseComponent } from "./store-management/store-detail/refuse/refuse.c
         CustomerRoutingModule,
         ImageCropperModule,
         ColorPickerModule,
+        CommonModule,
+        // AdQRModule ,
+        AlainABCModule 
     ],
     declarations: [
         RetailCustomerComponent,

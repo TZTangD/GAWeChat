@@ -23,6 +23,9 @@ export class Shop implements IShop {
     qqLatitude: number;
     reason: string;
     retailerCode:string;
+    ticket:string;
+    wechatUrl:string;
+    qrUrl:string;
     constructor(data?: IShop) {
         if (data) {
             for (var property in data) {
@@ -57,6 +60,10 @@ export class Shop implements IShop {
             this.reason = data["reason"];
             this.singleTotal = data["singleTotal"];
             this.retailerCode = data["retailerCode"];
+            this.ticket = data["ticket"];
+            this.wechatUrl = data["wechatUrl"];
+            this.qrUrl = data["qrUrl"];
+            
         }
     }
 
@@ -100,6 +107,9 @@ export class Shop implements IShop {
         data["reason"] = this.reason;
         data["singleTotal"] = this.singleTotal;
         data["retailerCode"] = this.retailerCode;
+        data["ticket"] = this.ticket;
+        data["wechatUrl"] = this.wechatUrl;
+        data["qrUrl"] = this.qrUrl;
         return data;
     }
 
@@ -132,4 +142,7 @@ export interface IShop {
     tel: string;
     reason: string;
     retailerCode:string;
+    ticket:string;
+    wechatUrl:string;
+    qrUrl:string;
 }
