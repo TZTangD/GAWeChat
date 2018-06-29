@@ -917,7 +917,7 @@ namespace HC.WeChat.Shops
                 {
                     //生成二维码 
                     var retailer = await _retailerRepository.GetAll().Where(r => r.Id == item.RetailerId).SingleOrDefaultAsync();
-                    var result =await QrCodeApi.CreateAsync(AppConfig.AppId, 0, 0, QrCode_ActionName.QR_LIMIT_STR_SCENE, SceneType.店铺 + "_" + item.Id.ToString());
+                    var result =await QrCodeApi.CreateAsync(AppConfig.AppId, 0, 0, QrCode_ActionName.QR_LIMIT_STR_SCENE, (int)SceneType.店铺 + "_" + item.Id.ToString());
 
                     //下载二维码到本地
                     var imgurl = QrCodeApi.GetShowQrCodeUrl(result.ticket);
@@ -939,7 +939,7 @@ namespace HC.WeChat.Shops
         public async Task<CreateQRResult> GenerateShopCodeAsync(Guid shopId)
         {
             //生成二维码
-            var qrResult = await QrCodeApi.CreateAsync(AppConfig.AppId, 0, 0, QrCode_ActionName.QR_LIMIT_STR_SCENE, SceneType.店铺 + "_" + shopId.ToString());
+            var qrResult = await QrCodeApi.CreateAsync(AppConfig.AppId, 0, 0, QrCode_ActionName.QR_LIMIT_STR_SCENE, (int)SceneType.店铺 + "_" + shopId.ToString());
             var shop = await _shopRepository.GetAll().Where(s => s.Id == shopId).SingleOrDefaultAsync();
             var retailer = await _retailerRepository.GetAll().Where(r => r.Id == shop.RetailerId).SingleOrDefaultAsync();
 
