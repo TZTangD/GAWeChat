@@ -675,8 +675,9 @@ namespace HC.WeChat.Shops
         }
 
         [AbpAllowAnonymous]
-        public async Task<List<ShopListDto>> GetShopListByGoodsIdAsync(int? tenantId, Guid goodsId)
+        public async Task<List<NearbyShopDto>> GetShopListByGoodsIdAsync(int? tenantId, Guid goodsId, double latitude, double longitude)
         {
+            var mbr = new MapMBR(latitude, longitude, 3.1);//确定搜索范围3.1公里 搜索范围扩大0.1公里
             using (CurrentUnitOfWork.SetTenantId(tenantId))
             {
                 var product = await _productRepository.GetAsync(goodsId);
@@ -685,8 +686,29 @@ namespace HC.WeChat.Shops
                 var shopIds = await _shopProductRepository.GetAll()
                     .Where(s => s.ProductId == goodsId)
                     .Select(s => s.ShopId).ToArrayAsync();
-                var shops = await _shopRepository.GetAll().Where(s => shopIds.Contains(s.Id)).ToListAsync();
-                return shops.MapTo<List<ShopListDto>>();
+                //var shops = await _shopRepository.GetAll().Where(s => shopIds.Contains(s.Id)).ToListAsync();
+                //根据经纬度范围过滤数据
+                var dataList = await _shopRepository.GetAll()
+                    .Where(s => s.Status == ShopAuditStatus.已审核
+                    && shopIds.Contains(s.Id)
+                    && s.Latitude > mbr.MinLatitude
+                    && s.Latitude < mbr.MaxLatitude
+                    && s.Longitude > mbr.MinLongitude
+                    && s.Longitude < mbr.MaxLongitude).ToListAsync();
+
+                var resultList = dataList.MapTo<List<NearbyShopDto>>();
+                foreach (var item in resultList)
+                {
+                    if (item.Latitude.HasValue && item.Longitude.HasValue)
+                    {
+                        item.Distance = Math.Round(AbpMapByGoogle.GetDistance(latitude, longitude, item.Latitude.Value, item.Longitude.Value), 0);//不保留小数
+                    }
+                    else
+                    {
+                        item.Distance = 4000;//后面会被过滤
+                    }
+                }
+                return resultList.Where(r => r.Distance <= 3000).OrderBy(r => r.Distance).ToList();
             }
         }
 
