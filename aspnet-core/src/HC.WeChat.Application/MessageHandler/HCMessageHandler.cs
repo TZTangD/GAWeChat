@@ -106,8 +106,8 @@ namespace HC.WeChat.MessageHandler
             Logger.InfoFormat("关注ticket：{0}", requestMessage.Ticket);
 
             //关注公众号
-            //_wechatUserManager.SubscribeAsync(requestMessage.FromUserName, wechatUser.nickname, wechatUser.headimgurl, _tenantId,requestMessage.EventKey, requestMessage.Ticket);
-            _wechatUserManager.SubscribeAsync(requestMessage.FromUserName, wechatUser.nickname, wechatUser.headimgurl, _tenantId);
+            _wechatUserManager.SubscribeAsync(requestMessage.FromUserName, wechatUser.nickname, wechatUser.headimgurl, _tenantId, requestMessage.EventKey, requestMessage.Ticket);
+            //_wechatUserManager.SubscribeAsync(requestMessage.FromUserName, wechatUser.nickname, wechatUser.headimgurl, _tenantId);
 
         }
 

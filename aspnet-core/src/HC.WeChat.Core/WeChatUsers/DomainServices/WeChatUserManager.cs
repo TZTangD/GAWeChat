@@ -67,17 +67,21 @@ namespace HC.WeChat.WeChatUsers.DomainServices
         /// 微信关注
         /// </summary>
         [UnitOfWork]
-        public async Task SubscribeAsync(string openId, string nickName, string headImgUrl, int? tenantId)
+        public async Task SubscribeAsync(string openId, string nickName, string headImgUrl, int? tenantId,string scene,string ticket)
         {
             using (_unitOfWorkManager.Current.SetTenantId(tenantId))
             {
-                //scene = scene.Substring(7);
-                //var scenes = scene.Split("_");
+                scene = scene.Substring(8);
+                string[] scenes = { };
+                if (!string.IsNullOrEmpty(scene))
+                {
+                    scenes = scene.Split("_");
+                }
                 var user = await GetWeChatUserAsync(openId, tenantId);
-                //Logger.InfoFormat("保存关注场景值id：{0}", scene);
-                //Logger.InfoFormat("保存关注场景值数组：{0}", scenes);
-                //Logger.InfoFormat("保存关注ticket：{0}", ticket);
-               
+                Logger.InfoFormat("保存关注场景值id：{0}", scene);
+                Logger.InfoFormat("保存关注场景值数组：{0}", scenes);
+                Logger.InfoFormat("保存关注ticket：{0}", ticket);
+
                 if (user != null)
                 {
                     user.NickName = nickName;
@@ -88,9 +92,12 @@ namespace HC.WeChat.WeChatUsers.DomainServices
                     user.BindTime = DateTime.Now;
                     user.HeadImgUrl = headImgUrl;
                     user.AttentionTime = DateTime.Now; // 第一次关注时间
-                    //user.SourceType = int.Parse(scenes[0]);//关注来源类型
-                    //user.SourceId = scenes[1];//关注来源Id
-                    //user.Ticket = ticket;//关注二维码票据
+                    if (scenes.Length > 0)
+                    {
+                        user.SourceType = int.Parse(scenes[0]);//关注来源类型
+                        user.SourceId = scenes[1];//关注来源Id
+                    }
+                    user.Ticket = ticket;//关注二维码票据
                     await _wechatuserRepository.UpdateAsync(user);
                 }
                 else
@@ -105,9 +112,12 @@ namespace HC.WeChat.WeChatUsers.DomainServices
                     user.AttentionTime = DateTime.Now; // 最后一次关注时间
                     user.IntegralTotal = 0;//积分默认为0
                     user.BindStatus = WechatEnums.BindStatusEnum.未绑定;
-                    //user.SourceType = int.Parse(scenes[0]);//关注来源类型
-                    //user.SourceId = scenes[1];//关注来源Id
-                    //user.Ticket = ticket;//关注二维码票据
+                    if (scenes.Length > 0)
+                    {
+                        user.SourceType = int.Parse(scenes[0]);//关注来源类型
+                        user.SourceId = scenes[1];//关注来源Id
+                    }
+                    user.Ticket = ticket;//关注二维码票据
                     await _wechatuserRepository.InsertAsync(user);
                 }
             }
