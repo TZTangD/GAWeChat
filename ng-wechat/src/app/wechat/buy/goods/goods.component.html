@@ -9,7 +9,7 @@
     <weui-searchbar (search)="onSearch($event)" [(value)]="value" placeholder="输入商品名称" (cancel)="onCancel()" [debounceTime]="500"
         (clear)="onClear()"></weui-searchbar>
     <div class="weui-panel" style="margin-top: 0px;" *ngIf="value">
-        <div class="weui-panel__hd">查找包含【{{value}}】的商品,点击商品查找店铺</div>
+        <div class="weui-panel__hd">查找包含【{{value}}】近3公里以内的商品,点击商品查找店铺</div>
         <div class="weui-panel__bd" *ngIf="goodes | async; let goodes; else loading">
             <a class="weui-cell weui-cell_access" *ngFor="let item of goodes" (click)="onSelectGoods(item)">
                 <div class="weui-cell__bd weui-cell_primary">
@@ -38,6 +38,7 @@
                     <br/>电话：{{s.tel}}</p>
             </div>
             <div class="weui-cell__ft">
+                {{s.distance}}米
             </div>
         </a>
     </div>
