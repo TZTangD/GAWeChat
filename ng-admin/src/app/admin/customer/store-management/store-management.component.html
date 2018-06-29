@@ -47,15 +47,18 @@
             </div>
 
             <div nz-col [nzSpan]="8" style="float:right;text-align: right; padding-left:0px" class="mb-md" [class.text-right]="'true'">
-                <button nz-button type="button" (click)="downPic()" [nzSize]="'large'" [nzLoading]="exportLoading">
-                            <i class="anticon anticon-download"></i>
-                            <span>批量下载</span>
-                        </button>
+                <a style="display: none;" id="aShopPicZipUrl" href="#">
+                    <button type="button" id="btnShopPicZipHref">隐藏下载</button>
+                </a>
+                <button nz-button type="button" (click)="downPromotionCodeZip()" [nzSize]="'large'" [nzLoading]="exportLoading">
+                    <i class="anticon anticon-download"></i>
+                    <span>批量下载</span>
+                </button>
                 <button nz-button type="submit" [nzType]="'primary'" [nzLoading]="loading" [nzSize]="'large'">查询</button>
                 <button nz-button type="reset" (click)="refreshData(true)" [nzSize]="'large'" class="mx-sm">重置</button>
                 <!-- <button nz-button (click)="createRetail()" [nzType]="'primary'" [nzSize]="'large'">
-                    <i class="anticon anticon-plus"></i>
-                    <span>新建</span>
+                                <i class="anticon anticon-plus"></i>
+                                <span>新建</span>
                 </button> -->
                 <a style="display: none;" id="aShopExcelUrl" href="#">
                     <button type="button" id="btnShopHref">隐藏下载</button>

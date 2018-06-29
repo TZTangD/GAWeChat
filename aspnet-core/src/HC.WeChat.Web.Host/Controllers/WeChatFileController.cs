@@ -21,6 +21,8 @@ using NPOI.XSSF.UserModel;
 using System.DrawingCore.Imaging;
 using System.DrawingCore;
 using System.Net;
+using ICSharpCode.SharpZipLib.Zip;
+using ICSharpCode.SharpZipLib.Checksum;
 
 namespace HC.WeChat.Web.Host.Controllers
 {
@@ -505,7 +507,6 @@ namespace HC.WeChat.Web.Host.Controllers
             Stream s = new FileStream(destFile, FileMode.Create);
             Compress(srcBitMap, s, level);
             s.Close();
-        }
-
+        }    
     }
 }

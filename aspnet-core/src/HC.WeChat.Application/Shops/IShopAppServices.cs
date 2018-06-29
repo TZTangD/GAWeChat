@@ -113,9 +113,6 @@ namespace HC.WeChat.Shops
         /// </summary>
         /// <returns></returns>
         Task BatchCreateQRCodeAsync();
-        //APIResultDto DownPic(GetShopsInput input);
-        void DownPic(GetShopsInput input);
-
-        //string DownPic(GetShopsInput input);
+        APIResultDto PromotionCodeZip(GetShopsInput input);
     }
 }

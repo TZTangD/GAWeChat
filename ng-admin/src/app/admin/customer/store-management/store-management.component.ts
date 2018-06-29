@@ -13,6 +13,9 @@ import { AppConsts } from '@shared/AppConsts';
 })
 export class StoreManagementComponent extends AppComponentBase implements OnInit {
     shops: Shop[] = [];
+    zipNameIds: String = null;
+    zipUrlIds: string = null;
+    willDownShopInfo: Shop[];
     search: any = { status: 4 };
     statusList = [
         { text: '已拒绝', value: 0, type: 'error' },
@@ -59,7 +62,6 @@ export class StoreManagementComponent extends AppComponentBase implements OnInit
             this.sortMap.single = null;
             this.refreshData();
         } else if (para == 'single') {
-            // console.log(value + para)
             this.sortSingleTotal = value;
             this.sortReadTotal = null;
             this.sortSaleTotal = null;
@@ -104,26 +106,7 @@ export class StoreManagementComponent extends AppComponentBase implements OnInit
             this.query.total = result.totalCount;
         })
     }
-    pic(url: string, name: string) {
-        this.exportLoading = true;
-        this.shopServie.DownPic({ url: this.host + url, filename: name }).subscribe(data => {
-            // if (data.code == 0) {
-            //     var url = this.host + data.data;
-            //     document.getElementById('aShopPicUrl').setAttribute('href', url);
-            //     document.getElementById('btnShopPicHref').click();
-            // } else {
-            //     this.notify.error(data.msg);
-            // }
-            this.exportLoading = false;
-            // var a = document.createElement('a')
-            // var event = new MouseEvent('click')
 
-            // a.download = name;
-            // a.href = this.host + url;
-
-            // a.dispatchEvent(event)
-        });
-    }
     getParameter(): Parameter[] {
         var arry = [];
         arry.push(Parameter.fromJS({ key: 'Name', value: this.search.name }));
@@ -156,25 +139,45 @@ export class StoreManagementComponent extends AppComponentBase implements OnInit
         });
     }
 
+    downPromotionCodeZip() {
+        this.zipNameIds = '';
+        this.zipUrlIds = '';
+        console.log(this.shops.filter(v => v.selected && v.status == 2).length);
+        this.willDownShopInfo = this.shops.filter(v => v.selected && v.status == 2);
+        var name = this.willDownShopInfo.forEach(v => {
+            this.zipNameIds += v.retailerCode + v.retailerName + ',';
+        });
+        var url = this.willDownShopInfo.forEach(v => {
+            this.zipUrlIds += v.qrUrl + ',';
+        })
+        if (this.zipNameIds != '' && this.zipUrlIds != '') {
+            this.exportLoading = true;
+            this.shopServie.PromotionCodeZip({ url: this.zipUrlIds, fileName: this.zipNameIds }).subscribe(data => {
+                if (data.code == 0) {
+                    var url = AppConsts.remoteServiceBaseUrl + data.data;
+                    document.getElementById('aShopPicZipUrl').setAttribute('href', url);
+                    document.getElementById('btnShopPicZipHref').click();
+                } else {
+                    this.notify.error(data.msg);
+                }
+                this.exportLoading = false;
+            });
+        }
+    }
+
     checkAll(e) {
-        var x = e.value;
         var v = this.isSelectedAll;
         this.shops.forEach(u => {
             u.selected = v;
         });
     }
     isCancelCheck(x: any) {
-        if (x) {
-            this.checkedLength = this.shops.filter(v => v.selected).length;
-            this.checkboxCount = this.shops.length;
-            if (this.checkboxCount - this.checkedLength > 0) {
-                this.isSelectedAll = false;
-            } else {
-                this.isSelectedAll = true;
-            }
-        }
-        else {
-            this.isSelectedAll == false;
+        this.checkedLength = this.shops.filter(v => v.selected && v.status == 2).length;
+        this.checkboxCount = this.shops.filter(v => v.status == 2).length;
+        if (this.checkboxCount - this.checkedLength > 0) {
+            this.isSelectedAll = false;
+        } else {
+            this.isSelectedAll = true;
         }
     }
 }

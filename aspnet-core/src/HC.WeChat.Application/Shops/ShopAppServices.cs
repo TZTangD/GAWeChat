@@ -35,6 +35,8 @@ using Senparc.Weixin.MP;
 using Senparc.Weixin.MP.AdvancedAPIs.QrCode;
 using System.Net;
 using System.Text.RegularExpressions;
+using ICSharpCode.SharpZipLib.Zip;
+using ICSharpCode.SharpZipLib.Checksum;
 
 namespace HC.WeChat.Shops
 {
@@ -536,7 +538,7 @@ namespace HC.WeChat.Shops
                                     TenantId = s.TenantId,
                                     Tel = s.Tel,
                                     RetailerName = sr != null ? sr.Name : "",
-                                    QRUrl=s.QRUrl
+                                    QRUrl = s.QRUrl
                                 }).SingleOrDefaultAsync();
             //当店铺二维码不存在时，去新生成二维码
             if (string.IsNullOrEmpty(entity.QRUrl) && entity.Status == ShopAuditStatus.已审核)
@@ -913,11 +915,11 @@ namespace HC.WeChat.Shops
             var shops = await _shopRepository.GetAll().ToListAsync();
             foreach (var item in shops)
             {
-                if (string.IsNullOrEmpty(item.QRUrl) && item.Status==ShopAuditStatus.已审核)
+                if (string.IsNullOrEmpty(item.QRUrl) && item.Status == ShopAuditStatus.已审核)
                 {
                     //生成二维码 
                     var retailer = await _retailerRepository.GetAll().Where(r => r.Id == item.RetailerId).SingleOrDefaultAsync();
-                    var result =await QrCodeApi.CreateAsync(AppConfig.AppId, 0, 0, QrCode_ActionName.QR_LIMIT_STR_SCENE, SceneType.店铺 + "_" + item.Id.ToString());
+                    var result = await QrCodeApi.CreateAsync(AppConfig.AppId, 0, 0, QrCode_ActionName.QR_LIMIT_STR_SCENE, SceneType.店铺 + "_" + item.Id.ToString());
 
                     //下载二维码到本地
                     var imgurl = QrCodeApi.GetShowQrCodeUrl(result.ticket);
@@ -988,27 +990,150 @@ namespace HC.WeChat.Shops
             return location;
         }
         #endregion
-        //[UnitOfWork(isTransactional: false)]
-        //public string DownPic(string url,string name)
-        //public APIResultDto DownPic(GetShopsInput input)
-        //{
-        //    try
-        //    {
-        //        string remoteUri = input.Url;
-        //        string fileName = input.FileName, myStringWebResource = null;
-        //        WebClient myWebClient = new WebClient();
-        //        //myStringWebResource = remoteUri + fileName;
-        //        myWebClient.DownloadFile(remoteUri, fileName);
-        //        //return new APIResultDto() { Code = 0, Msg = "操作成功" };
-        //        //return "/files/downloadtemp/" + fileName;
-        //       return new WebClient().DownloadFile(input.Url, fileName);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Logger.ErrorFormat("ExportShopExcel errormsg{0} Exception{1}", ex.Message, ex);
-        //        return new APIResultDto() { Code = 901, Msg = "网络忙...请待会儿再试！" };
-        //    }      
-        //} 
+
+        [UnitOfWork(isTransactional: false)]
+        public APIResultDto PromotionCodeZip(GetShopsInput input)
+        {
+            try
+            {
+                var exportData = PackageImgeFilesDownload(input.Url, input.FileName);
+                var result = new APIResultDto();
+                result.Code = 0;
+                result.Data = exportData;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Logger.ErrorFormat("ExportShopExcel errormsg{0} Exception{1}", ex.Message, ex);
+                return new APIResultDto() { Code = 901, Msg = "网络忙...请待会儿再试！" };
+            }
+        }
+        /// <summary>
+        /// 上传至服务器并压缩Zip
+        /// </summary>
+        /// <param name="remoteUrl"></param>
+        /// <param name="imgName"></param>
+        /// <returns></returns>
+        private string PackageImgeFilesDownload(string remoteUrl, string imgName)
+        {
+            remoteUrl = remoteUrl.TrimStart(',').TrimEnd(',');
+            imgName = imgName.TrimStart(',').TrimEnd(',');
+            string fileName = "PromotionCode";
+            string downFileName = "downloadtemp";
+            string webRootPath = _hostingEnvironment.WebRootPath;
+            var endRote = string.Format("/upload/{0}/", fileName);
+            var endRoteZip = string.Format("/upload/{0}", fileName);
+            var downEndRoteZip = string.Format("/files/{0}/", downFileName);
+            var fileDire = webRootPath + endRote;
+            var fileDireZip = webRootPath + endRoteZip;
+            var downFileDireZip = webRootPath + downEndRoteZip;
+            if (Directory.Exists(fileDire))
+            {
+                Directory.Delete(fileDire,true);// 先删除之前的目录
+            }
+            if (remoteUrl.Contains(','))
+            {
+                string[] urlIds = remoteUrl.Split(',');
+                string[] nameIds = imgName.Split(',');
+                int i = 0;
+                foreach (var item in urlIds)
+                {
+                    WebClient web = new WebClient();
+                    string html = web.DownloadString(webRootPath + item);
+                    if (!Directory.Exists(fileDire))
+                    {
+                        Directory.CreateDirectory(fileDire);
+                    }
+                    var filePath = fileDire + nameIds[i] + ".jpg";
+                    web.DownloadFile(webRootPath + item, filePath);
+                    i++;
+                }
+                ZipFileDirectory(fileDireZip, "店铺推广码.zip", downFileDireZip);
+                return "/files/downloadtemp/店铺推广码.zip";
+            }
+            else
+            {
+                WebClient web = new WebClient();
+                string html = web.DownloadString(webRootPath+remoteUrl);
+                if (!Directory.Exists(fileDire))
+                {
+                    Directory.CreateDirectory(fileDire);
+                }
+                var filePath = fileDire + imgName + ".jpg";
+                web.DownloadFile(webRootPath+remoteUrl, filePath);
+                ZipFileDirectory(fileDireZip, "店铺推广码.zip", downFileDireZip);
+                return "/files/downloadtemp/店铺推广码.zip";
+            }
+        }
+        public static void ZipFileDirectory(string strDirectory, string zipedFile, string downFileName)
+        {
+            //如果目录不存在，则报错
+            if (!System.IO.Directory.Exists(strDirectory))
+            {
+                throw new System.IO.FileNotFoundException("指定的目录: " + strDirectory + " 不存在!");
+            }
+            using (System.IO.FileStream ZipFile = System.IO.File.Create(downFileName + zipedFile))
+            {
+                using (ZipOutputStream s = new ZipOutputStream(ZipFile))
+                {
+                    ZipSetp(strDirectory, s, "");
+                }
+            }
+        }
+
+        /// <summary>
+        /// 递归遍历目录
+        /// add yuangang by 2016-06-13
+        /// </summary>
+        private static void ZipSetp(string strDirectory, ZipOutputStream s, string parentPath)
+        {
+            if (strDirectory[strDirectory.Length - 1] != Path.DirectorySeparatorChar)
+            {
+                strDirectory += Path.DirectorySeparatorChar;
+            }
+            Crc32 crc = new Crc32();
+
+            string[] filenames = Directory.GetFileSystemEntries(strDirectory);
+
+            foreach (string file in filenames)// 遍历所有的文件和目录
+            {
+
+                if (Directory.Exists(file))// 先当作目录处理如果存在这个目录就递归Copy该目录下面的文件
+                {
+                    string pPath = parentPath;
+                    pPath += file.Substring(file.LastIndexOf("\\") + 1);
+                    pPath += "\\";
+                    ZipSetp(file, s, pPath);
+                }
+
+                else // 否则直接压缩文件
+                {
+                    //打开压缩文件
+                    using (FileStream fs = File.OpenRead(file))
+                    {
+
+                        byte[] buffer = new byte[fs.Length];
+                        fs.Read(buffer, 0, buffer.Length);
+
+                        string fileName = parentPath + file.Substring(file.LastIndexOf("\\") + 1);
+                        ZipEntry entry = new ZipEntry(fileName);
+
+                        entry.DateTime = DateTime.Now;
+                        entry.Size = fs.Length;
+                        entry.IsUnicodeText = true;
+                        fs.Close();
+
+                        crc.Reset();
+                        crc.Update(buffer);
+
+                        entry.Crc = crc.Value;
+                        s.PutNextEntry(entry);
+
+                        s.Write(buffer, 0, buffer.Length);
+                    }
+                }
+            }
+        }
     }
 }
 
