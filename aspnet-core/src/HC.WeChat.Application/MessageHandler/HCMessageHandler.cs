@@ -102,8 +102,13 @@ namespace HC.WeChat.MessageHandler
             var wechatUser = Senparc.Weixin.MP.AdvancedAPIs.UserApi.Info(appId, requestMessage.FromUserName);
 
             Logger.InfoFormat("关注用户:{0}", wechatUser);
+            Logger.InfoFormat("关注场景值id：{0}", requestMessage.EventKey);
+            Logger.InfoFormat("关注ticket：{0}", requestMessage.Ticket);
+
             //关注公众号
-            _wechatUserManager.SubscribeAsync(requestMessage.FromUserName, wechatUser.nickname, wechatUser.headimgurl, _tenantId,requestMessage.EventKey.Substring(7), requestMessage.Ticket);
+            //_wechatUserManager.SubscribeAsync(requestMessage.FromUserName, wechatUser.nickname, wechatUser.headimgurl, _tenantId,requestMessage.EventKey, requestMessage.Ticket);
+            _wechatUserManager.SubscribeAsync(requestMessage.FromUserName, wechatUser.nickname, wechatUser.headimgurl, _tenantId);
+
         }
 
         /// <summary>
