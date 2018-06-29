@@ -20,6 +20,7 @@ using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
 using System.DrawingCore.Imaging;
 using System.DrawingCore;
+using System.Net;
 
 namespace HC.WeChat.Web.Host.Controllers
 {

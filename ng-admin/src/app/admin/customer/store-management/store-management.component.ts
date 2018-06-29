@@ -27,6 +27,9 @@ export class StoreManagementComponent extends AppComponentBase implements OnInit
         { text: '已审核', value: 2 },
         // { text: '已关闭店铺', value: 3 },
     ];
+    isSelectedAll: boolean = false; // 是否全选
+    checkboxCount: number; // 所有Checkbox数量
+    checkedLength: number; // 已选中的数量
 
     sortMap = {
         sale: null,
@@ -73,36 +76,7 @@ export class StoreManagementComponent extends AppComponentBase implements OnInit
             this.refreshData();
         }
     }
-    // _checked = true;
 
-    // _console(value) {
-    //     console.log(value);
-    // }
-    allChecked = false;
-    indeterminate = true;
-    checkOptionsOne = [
-        { label: '', value: '', checked: true },
-    ];
-    updateAllChecked() {
-        this.indeterminate = false;
-        if (this.allChecked) {
-            this.checkOptionsOne.forEach(item => item.checked = true);
-        } else {
-            this.checkOptionsOne.forEach(item => item.checked = false);
-        }
-    }
-
-    updateSingleChecked() {
-        if (this.checkOptionsOne.every(item => item.checked === false)) {
-            this.allChecked = false;
-            this.indeterminate = false;
-        } else if (this.checkOptionsOne.every(item => item.checked === true)) {
-            this.allChecked = true;
-            this.indeterminate = false;
-        } else {
-            this.indeterminate = true;
-        }
-    }
     refreshData(reset = false, search?: boolean) {
         if (reset) {
             this.query.pageIndex = 1;
@@ -131,11 +105,24 @@ export class StoreManagementComponent extends AppComponentBase implements OnInit
         })
     }
     pic(url: string, name: string) {
-        var a = document.createElement('a');
-        var event = new MouseEvent('click');
-        a.download = name;
-        a.href = this.host + url;
-        a.dispatchEvent(event);
+        this.exportLoading = true;
+        this.shopServie.DownPic({ url: this.host + url, filename: name }).subscribe(data => {
+            // if (data.code == 0) {
+            //     var url = this.host + data.data;
+            //     document.getElementById('aShopPicUrl').setAttribute('href', url);
+            //     document.getElementById('btnShopPicHref').click();
+            // } else {
+            //     this.notify.error(data.msg);
+            // }
+            this.exportLoading = false;
+            // var a = document.createElement('a')
+            // var event = new MouseEvent('click')
+
+            // a.download = name;
+            // a.href = this.host + url;
+
+            // a.dispatchEvent(event)
+        });
     }
     getParameter(): Parameter[] {
         var arry = [];
@@ -167,5 +154,27 @@ export class StoreManagementComponent extends AppComponentBase implements OnInit
             }
             this.exportLoading = false;
         });
+    }
+
+    checkAll(e) {
+        var x = e.value;
+        var v = this.isSelectedAll;
+        this.shops.forEach(u => {
+            u.selected = v;
+        });
+    }
+    isCancelCheck(x: any) {
+        if (x) {
+            this.checkedLength = this.shops.filter(v => v.selected).length;
+            this.checkboxCount = this.shops.length;
+            if (this.checkboxCount - this.checkedLength > 0) {
+                this.isSelectedAll = false;
+            } else {
+                this.isSelectedAll = true;
+            }
+        }
+        else {
+            this.isSelectedAll == false;
+        }
     }
 }

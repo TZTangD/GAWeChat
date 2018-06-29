@@ -6,6 +6,7 @@ using HC.WeChat.Shops.Dtos;
 using HC.WeChat.Shops;
 using System;
 using Senparc.Weixin.MP.AdvancedAPIs.QrCode;
+using HC.WeChat.Dto;
 
 namespace HC.WeChat.Shops
 {
@@ -112,5 +113,9 @@ namespace HC.WeChat.Shops
         /// </summary>
         /// <returns></returns>
         Task BatchCreateQRCodeAsync();
+        //APIResultDto DownPic(GetShopsInput input);
+        void DownPic(GetShopsInput input);
+
+        //string DownPic(GetShopsInput input);
     }
 }

@@ -975,37 +975,27 @@ namespace HC.WeChat.Shops
             return location;
         }
         #endregion
-
-        /// <summary>
-        /// 下载二维码
-        /// </summary>
-        /// <param name="url"></param>
-        /// <returns></returns>
-        private byte[] GetImageContent(string url)
-        {
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            request.AllowAutoRedirect = true;
-            WebProxy proxy = new WebProxy();
-            proxy.BypassProxyOnLocal = true;
-            proxy.UseDefaultCredentials = true;
-            request.Proxy = proxy;
-
-            WebResponse response = request.GetResponse();
-
-            using (Stream stream = response.GetResponseStream())
-            {
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    Byte[] buffer = new Byte[1024];
-                    int current = 0;
-                    while ((current = stream.Read(buffer, 0, buffer.Length)) != 0)
-                    {
-                        ms.Write(buffer, 0, current);
-                    }
-                    return ms.ToArray();
-                }
-            }
-        }
+        //[UnitOfWork(isTransactional: false)]
+        //public string DownPic(string url,string name)
+        //public APIResultDto DownPic(GetShopsInput input)
+        //{
+        //    try
+        //    {
+        //        string remoteUri = input.Url;
+        //        string fileName = input.FileName, myStringWebResource = null;
+        //        WebClient myWebClient = new WebClient();
+        //        //myStringWebResource = remoteUri + fileName;
+        //        myWebClient.DownloadFile(remoteUri, fileName);
+        //        //return new APIResultDto() { Code = 0, Msg = "操作成功" };
+        //        //return "/files/downloadtemp/" + fileName;
+        //       return new WebClient().DownloadFile(input.Url, fileName);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Logger.ErrorFormat("ExportShopExcel errormsg{0} Exception{1}", ex.Message, ex);
+        //        return new APIResultDto() { Code = 901, Msg = "网络忙...请待会儿再试！" };
+        //    }      
+        //} 
     }
 }
 
