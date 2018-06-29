@@ -124,10 +124,10 @@ export class ShopService {
     });
   }
 
-  GetShopListByGoodsIdAsync(params: any): Observable<Shop[]> {
+  GetShopListByGoodsIdAsync(params: any): Observable<NearbyShop[]> {
     return this.http.get('/api/services/app/Shop/GetShopListByGoodsIdAsync', params).map(data => {
       if (data.result) {
-        return Shop.fromJSArray(data.result);
+        return NearbyShop.fromJSArray(data.result);
       } else {
         return null;
       }

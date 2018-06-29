@@ -104,7 +104,7 @@
     "tenants": "租户管理",
     "homeindex": {
         "title": "广安烟草",
-        "welcome": "欢迎您！广安烟草信息化平台"
+        "welcome": "欢迎您！广安烟草信息化平台V2.0"
     },
     "rolepage": {
         "title": "角色管理",
@@ -175,5 +175,6 @@
     "commodity-search":"商品查找",
     "member-management":"会员管理",
     "integral-search":"积分查询",
-    "member-setting":"会员设置"
+    "member-setting":"会员设置",
+    "lottery-setting":"抽奖设置"
 }

@@ -19,7 +19,9 @@ export class Shop implements IShop {
     tenantId: number;
     tel: string;
     evaluationArry: string[];
-
+    ticket:string;
+    wechatUrl:string;
+    qrUrl:string;
     constructor(data?: IShop) {
         if (data) {
             for (var property in data) {
@@ -50,6 +52,9 @@ export class Shop implements IShop {
             this.tenantId = data["tenantId"];
             this.tel = data["tel"];
             this.singleTotal = data["singleTotal"];
+            this.ticket = data["ticket"];
+            this.wechatUrl = data["wechatUrl"];
+            this.qrUrl = data["qrUrl"];
         }
     }
 
@@ -91,6 +96,10 @@ export class Shop implements IShop {
         data["tenantId"] = this.tenantId;
         data["tel"] = this.tel;
         data["singleTotal"] = this.singleTotal;
+        data["ticket"] = this.ticket;
+        data["wechatUrl"] = this.wechatUrl;
+        data["qrUrl"] = this.qrUrl;
+        
         return data;
     }
 
@@ -121,6 +130,9 @@ export interface IShop {
     creationTime: Date;
     tenantId: number;
     tel: string;
+    ticket:string;
+    wechatUrl:string;
+    qrUrl:string;
 }
 
 export class NearbyShop implements INearbyShop {
