@@ -87,7 +87,7 @@ export class GoodsComponent extends AppComponentBase implements OnInit {
         this.shopService.GetShopListByGoodsIdAsync({tenantId: this.settingsService.tenantId, goodsId: gds.id, latitude: this.latitude, longitude: this.longitude}).subscribe(res =>{
             this.shops = res;
             if(!this.shops || this.shops.length == 0){
-                this.lineDesc = '没有售卖【'+ this.sgoods.specification +'】的店铺';
+                this.lineDesc = '附近3公里没有售卖【'+ this.sgoods.specification +'】的店铺';
             }
         });
     }

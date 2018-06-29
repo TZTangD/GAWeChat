@@ -9,7 +9,7 @@
     <weui-searchbar (search)="onSearch($event)" [(value)]="value" placeholder="输入商品名称" (cancel)="onCancel()" [debounceTime]="500"
         (clear)="onClear()"></weui-searchbar>
     <div class="weui-panel" style="margin-top: 0px;" *ngIf="value">
-        <div class="weui-panel__hd">查找包含【{{value}}】近3公里以内的商品,点击商品查找店铺</div>
+        <div class="weui-panel__hd">包含【{{value}}】的商品,点击搜索附近3公里的店铺</div>
         <div class="weui-panel__bd" *ngIf="goodes | async; let goodes; else loading">
             <a class="weui-cell weui-cell_access" *ngFor="let item of goodes" (click)="onSelectGoods(item)">
                 <div class="weui-cell__bd weui-cell_primary">
@@ -27,7 +27,7 @@
             </div>
         </ng-template>
     </div>
-    <div class="weui-cells__title" *ngIf="shops && shops.length > 0">售卖【{{sgoods.specification}}】的店铺</div>
+    <div class="weui-cells__title" *ngIf="shops && shops.length > 0">售卖【{{sgoods.specification}}】的附近3公里以内的店铺</div>
     <div class="weui-cells" *ngIf="shops && shops.length > 0">
         <a class="weui-cell weui-cell_access" *ngFor="let s of shops" (click)="goShop(s.id)">
             <div class="weui-cell__hd weui-cell_img" [ngStyle]="{'background-image':'url('+ hostUrl + s.coverPhoto +')'}">
