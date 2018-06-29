@@ -54,7 +54,6 @@ export class StoreManagementComponent extends AppComponentBase implements OnInit
     }
 
     sort(value, para: string) {
-        this.isSelectedAll = false;
         if (para == 'sale') {
             this.sortSaleTotal = value;
             this.sortReadTotal = null;
@@ -81,6 +80,7 @@ export class StoreManagementComponent extends AppComponentBase implements OnInit
     }
 
     refreshData(reset = false, search?: boolean) {
+        this.isSelectedAll = false;
         if (reset) {
             this.query.pageIndex = 1;
             this.search = { status: 4 };
