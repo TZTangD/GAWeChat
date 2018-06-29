@@ -54,6 +54,7 @@ export class StoreManagementComponent extends AppComponentBase implements OnInit
     }
 
     sort(value, para: string) {
+        this.isSelectedAll = false;
         if (para == 'sale') {
             this.sortSaleTotal = value;
             this.sortReadTotal = null;
@@ -142,7 +143,6 @@ export class StoreManagementComponent extends AppComponentBase implements OnInit
     downPromotionCodeZip() {
         this.zipNameIds = '';
         this.zipUrlIds = '';
-        console.log(this.shops.filter(v => v.selected && v.status == 2).length);
         this.willDownShopInfo = this.shops.filter(v => v.selected && v.status == 2);
         var name = this.willDownShopInfo.forEach(v => {
             this.zipNameIds += v.retailerCode + v.retailerName + ',';
