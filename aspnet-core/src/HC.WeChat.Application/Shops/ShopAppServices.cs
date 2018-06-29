@@ -535,15 +535,17 @@ namespace HC.WeChat.Shops
                                     CreationTime = s.CreationTime,
                                     TenantId = s.TenantId,
                                     Tel = s.Tel,
-                                    RetailerName = sr != null ? sr.Name : ""
+                                    RetailerName = sr != null ? sr.Name : "",
+                                    QRUrl=s.QRUrl
                                 }).SingleOrDefaultAsync();
-            ////当店铺二维码不存在时，去新生成二维码
-            //if (string.IsNullOrEmpty(entity.WechatUrl))
-            //{
-            //   var qrResult= await GenerateShopCodeAsync(entity.Id);
-            //    entity.WechatUrl = qrResult.url;
-            //    entity.Ticket = qrResult.ticket;
-            //}
+            //当店铺二维码不存在时，去新生成二维码
+            if (string.IsNullOrEmpty(entity.QRUrl) && entity.Status == ShopAuditStatus.已审核)
+            {
+                var qrResult = await GenerateShopCodeAsync(entity.Id);
+                entity.WechatUrl = qrResult.Url;
+                entity.Ticket = qrResult.Ticket;
+                entity.QRUrl = qrResult.QRUrl;
+            }
             return entity;
         }
 
@@ -571,7 +573,11 @@ namespace HC.WeChat.Shops
             entity.Status = input.Status;
             entity.AuditTime = DateTime.Now;
             entity.Reason = input.Reason;
-            var result = _shopRepository.UpdateAsync(entity);
+            var result = await _shopRepository.UpdateAsync(entity);
+            if (result.Status == ShopAuditStatus.已审核 && string.IsNullOrEmpty(result.QRUrl))
+            {
+                await GenerateShopCodeAsync(result.Id);
+            }
             //审核通知
             var ShopOpenId = await _wechatuserRepository.GetAll().Where(r => r.UserId == entity.RetailerId).Select(v => v.OpenId).FirstOrDefaultAsync();
             try
@@ -907,7 +913,7 @@ namespace HC.WeChat.Shops
             var shops = await _shopRepository.GetAll().ToListAsync();
             foreach (var item in shops)
             {
-                if (string.IsNullOrEmpty(item.QRUrl))
+                if (string.IsNullOrEmpty(item.QRUrl) && item.Status==ShopAuditStatus.已审核)
                 {
                     //生成二维码 
                     var retailer = await _retailerRepository.GetAll().Where(r => r.Id == item.RetailerId).SingleOrDefaultAsync();
@@ -930,7 +936,7 @@ namespace HC.WeChat.Shops
         /// <summary>
         /// 生成店码
         /// </summary>
-        public async Task<CreateQrCodeResult> GenerateShopCodeAsync(Guid shopId)
+        public async Task<CreateQRResult> GenerateShopCodeAsync(Guid shopId)
         {
             //生成二维码
             var qrResult = await QrCodeApi.CreateAsync(AppConfig.AppId, 0, 0, QrCode_ActionName.QR_LIMIT_STR_SCENE, SceneType.店铺 + "_" + shopId.ToString());
@@ -946,7 +952,14 @@ namespace HC.WeChat.Shops
             shop.Ticket = qrResult.ticket;
             shop.WechatUrl = qrResult.url;
             shop.QRUrl = img;
-            return qrResult;
+
+            //生成二维码结果
+            var result = new CreateQRResult();
+            result.Ticket = qrResult.ticket;
+            result.Url = qrResult.url;
+            result.QRUrl = img;
+
+            return result;
         }
 
         /// <summary>

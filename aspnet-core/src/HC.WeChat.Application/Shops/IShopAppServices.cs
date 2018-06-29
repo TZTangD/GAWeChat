@@ -106,7 +106,7 @@ namespace HC.WeChat.Shops
         /// <summary>
         /// 生成店码
         /// </summary>
-        Task<CreateQrCodeResult> GenerateShopCodeAsync(Guid shopId);
+        Task<CreateQRResult> GenerateShopCodeAsync(Guid shopId);
 
         /// <summary>
         /// 批量生成二维码
