@@ -18,6 +18,9 @@ export class WechatUser implements IWechatUser {
     isShopkeeper: boolean;
     status: number;
     statusName:string;
+    ticket:string;
+    sourceType:number;
+    sourceId:string;
     constructor(data?: IWechatUser) {
         if (data) {
             for (var property in data) {
@@ -48,6 +51,9 @@ export class WechatUser implements IWechatUser {
             this.isShopkeeper = data["isShopkeeper"];
             this.status = data["status"];
             this.statusName = data["statusName"];
+            this.ticket = data["ticket"];
+            this.sourceType = data["sourceType"];
+            this.sourceId = data["sourceId"];
             
         }
     }
@@ -87,6 +93,9 @@ export class WechatUser implements IWechatUser {
         data["isShopkeeper"] = this.isShopkeeper;
         data["status"] = this.status;
         data["statusName"] = this.statusName;
+        data["ticket"] = this.ticket;
+        data["sourceType"] = this.sourceType;
+        data["sourceId"] = this.sourceId;
         
         return data;
     }
@@ -116,6 +125,9 @@ export interface IWechatUser {
     isShopkeeper: boolean;
     status: number;
     statusName:string;
+    ticket:string;
+    sourceType:number;
+    sourceId:string;
     
 }
 

@@ -7,7 +7,7 @@
                     <h3 class="icon-box__title">等待审核</h3>
                     <p class="icon-box__desc">店铺等待营销中心审核</p>
                 </div>
-                <div class="icon-box__ctn"  *ngIf="shop.status == 0">
+                <div class="icon-box__ctn" *ngIf="shop.status == 0">
                     <h3 class="icon-box__title">审核未通过</h3>
                     <p class="icon-box__desc">请修改店铺重新提交</p>
                 </div>
@@ -34,7 +34,7 @@
     <div class="weui-cells weui-cells_img" [ngStyle]="{'background-image':'url('+ hostUrl + shop.coverPhoto +')'}">
         <div class="weui-cell" style="height: 120px;">
         </div>
-        <div class="weui-cell weui-shop-cell_img" *ngIf="shop" >
+        <div class="weui-cell weui-shop-cell_img" *ngIf="shop">
             <div class="weui-cell__hd">
                 <img src="./assets/images/shop/network-o-4.png" alt="" style="width:24px;margin-right:5px;display:block">
             </div>
@@ -43,20 +43,36 @@
             </div>
             <div class="weui-cell__ft">
                 <p>
-                    <img class="weui-icon-h18" src="./assets/images/shop/wave.png" alt="人气"><span style="color:rgb(221, 41, 77);">人气：{{shop.readTotal}}</span>
-                    <img class="weui-icon-h18" alt="销量" src="./assets/images/shop/trend-chart-2.png"><span style="color:rgb(95, 231, 95);">销量：{{shop.saleTotal}}</span></p>
+                    <img class="weui-icon-h18" src="./assets/images/shop/wave.png" alt="人气">
+                    <span style="color:rgb(221, 41, 77);">人气：{{shop.readTotal}}</span>
+                    <img class="weui-icon-h18" alt="销量" src="./assets/images/shop/trend-chart-2.png">
+                    <span style="color:rgb(95, 231, 95);">销量：{{shop.saleTotal}}</span>
+                </p>
             </div>
         </div>
     </div>
     <weui-navbar style="width:100%;">
         <weui-tab heading="店铺信息">
             <div class="weui-panel weui-panel_access">
-                <div class="weui-cells__title">店铺介绍</div>
+                <div class="weui-cells__title weui-cell-title" style="border-bottom: 0px;">
+                    <div class="weui-cell">
+                        <div class="weui-cell__hd" style="font-size: 14px;color: #999999;">
+                            <p>店铺介绍</p>
+                        </div>
+                        <div class="weui-cell__bd " style="font-size: 14px;width:10%;text-align:right;color: #1296db">
+                            <!-- <span style="vertical-align: middle;">推广码</span>  -->
+                        </div>
+                        <div class="weui-cell__ft" style="width:10%;">
+                            <img src="./assets/images/qrcode.png" style="width: 26px;display: block ;" (click)="showQrCode()">
+                        </div>
+                    </div>
+                </div>
                 <div class="weui-cells">
                     <div class="weui-cell" style="font-size: 14px; color: dimgrey;">
                         <p>{{shop.desc}}</p>
                     </div>
                 </div>
+
                 <div class="weui-cells__title">联系方式</div>
                 <div class="weui-cells">
                     <div class="weui-cell">
@@ -95,10 +111,10 @@
                         <button weui-button (click)="goEditShop()">修改店铺</button>
                     </div>
                     <div class="weui-cell" *ngIf="isAudit && shop.status == 1">
-                        <button weui-button type="button" (click)="audit(2)" >审核通过</button>
+                        <button weui-button type="button" (click)="audit(2)">审核通过</button>
                     </div>
                     <div class="weui-cell" *ngIf="isAudit && shop.status == 1">
-                        <button weui-button [weui-type]="'warn'" type="button" (click)="onRejectPrompt()" >拒绝</button>
+                        <button weui-button [weui-type]="'warn'" type="button" (click)="onRejectPrompt()">拒绝</button>
                     </div>
                 </div>
             </div>
