@@ -40,6 +40,9 @@ using HC.WeChat.LuckyDraws;
 using HC.WeChat.Prizes;
 using HC.WeChat.UserAddresss;
 using HC.WeChat.WinningRecords;
+using HC.WeChat.ExhibitionShops;
+using HC.WeChat.Exhibitions;
+using HC.WeChat.VoteLogs;
 
 namespace HC.WeChat.EntityFrameworkCore
 {
@@ -128,5 +131,10 @@ namespace HC.WeChat.EntityFrameworkCore
 
         public virtual DbSet<WinningRecord> WinningRecords { get; set; }
 
+        public virtual DbSet<Exhibition> Exhibitions { get; set; }
+
+        public virtual DbSet<ExhibitionShop> ExhibitionShops { get; set; }
+
+        public virtual DbSet<VoteLog> VoteLogs { get; set; }
     }
 }
