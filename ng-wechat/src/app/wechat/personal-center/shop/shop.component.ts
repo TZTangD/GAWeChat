@@ -232,7 +232,7 @@ export class ShopComponent extends AppComponentBase implements OnInit {
     }
 
     showQrCode(){
-        this.content='<div class="d"><p>店铺推广码</p><img class="qrcode" src="'+AppConsts.remoteServiceBaseUrl+this.shop.qrUrl+'"><p>扫一扫，关注公众号</p></div>';
+        this.content='<div class="mdiv"><p>'+this.shop.name+'</p><div><img class="qrcode" src="'+AppConsts.remoteServiceBaseUrl+this.shop.qrUrl+'"></div><p>扫一扫，关注公众号</p></div>';
         this.config2 = Object.assign({}, this.DEFCONFIG, <DialogConfig>{
             content: this.content,
         });

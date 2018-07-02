@@ -54,19 +54,20 @@
     <weui-navbar style="width:100%;">
         <weui-tab heading="店铺信息">
             <div class="weui-panel weui-panel_access">
-                <div class="weui-cells__title weui-cell-title" style="border-bottom: 0px;">
-                    <div class="weui-cell">
-                        <div class="weui-cell__hd" style="font-size: 14px;color: #999999;">
-                            <p>店铺介绍</p>
-                        </div>
-                        <div class="weui-cell__bd " style="font-size: 14px;width:10%;text-align:right;color: #1296db">
-                            <!-- <span style="vertical-align: middle;">推广码</span>  -->
+                <div class="weui-cells" style="margin-top: 0px;" >
+                    <div class="weui-cell" style="border-top: 0px;" >
+                        <!-- <div class="weui-cell__hd">
+                            <img src="./assets/images/shop/network-o-4.png" alt="" style="width:24px;margin-right:5px;display:block">
+                        </div> -->
+                        <div class="weui-cell__bd " style="font-size: 14px;">
+                            <p>{{shop.name}}</p>
                         </div>
                         <div class="weui-cell__ft" style="width:10%;">
                             <img src="./assets/images/qrcode.png" style="width: 26px;display: block ;" (click)="showQrCode()">
                         </div>
                     </div>
                 </div>
+                <div class="weui-cells__title">店铺介绍</div>
                 <div class="weui-cells">
                     <div class="weui-cell" style="font-size: 14px; color: dimgrey;">
                         <p>{{shop.desc}}</p>
