@@ -80,6 +80,7 @@ export class StoreManagementComponent extends AppComponentBase implements OnInit
     }
 
     refreshData(reset = false, search?: boolean) {
+        this.isSelectedAll = false;
         if (reset) {
             this.query.pageIndex = 1;
             this.search = { status: 4 };
@@ -142,7 +143,6 @@ export class StoreManagementComponent extends AppComponentBase implements OnInit
     downPromotionCodeZip() {
         this.zipNameIds = '';
         this.zipUrlIds = '';
-        console.log(this.shops.filter(v => v.selected && v.status == 2).length);
         this.willDownShopInfo = this.shops.filter(v => v.selected && v.status == 2);
         var name = this.willDownShopInfo.forEach(v => {
             this.zipNameIds += v.retailerCode + v.retailerName + ',';
