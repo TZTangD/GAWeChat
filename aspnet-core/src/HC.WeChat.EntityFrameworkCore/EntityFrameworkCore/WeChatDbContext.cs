@@ -40,6 +40,7 @@ using HC.WeChat.LuckyDraws;
 using HC.WeChat.Prizes;
 using HC.WeChat.UserAddresss;
 using HC.WeChat.WinningRecords;
+using HC.WeChat.QrCodeLogs;
 
 namespace HC.WeChat.EntityFrameworkCore
 {
@@ -127,6 +128,9 @@ namespace HC.WeChat.EntityFrameworkCore
         public virtual DbSet<UserAddress> UserAddresss { get; set; }
 
         public virtual DbSet<WinningRecord> WinningRecords { get; set; }
+
+        public virtual DbSet<QrCodeLog> QrCodeLogs { get; set; }
+
 
     }
 }

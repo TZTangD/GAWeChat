@@ -207,6 +207,7 @@ namespace HC.WeChat.Shops
                     input.Shop.SaleTotal = 0;
                     input.Shop.SingleTotal = 0;
                     input.Shop.Evaluation = "0,0,0";
+                    input.Shop.FansNum = 0;
                     var entity = await CreateShopAsync(input.Shop);
                     await CurrentUnitOfWork.SaveChangesAsync();
                     input.Shop.Id = entity.Id;//获取审核信息的shop Id

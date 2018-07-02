@@ -121,7 +121,7 @@ namespace HC.WeChat.WeChatUsers
         /// <summary>
         /// 关注来源信息
         /// </summary>
-        public virtual int? SourceType { get; set; }
+        public virtual SceneType? SourceType { get; set; }
 
         /// <summary>
         /// 关注来源Id

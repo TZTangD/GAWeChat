@@ -131,5 +131,10 @@ namespace HC.WeChat.Shops
         /// </summary>
         [StringLength(500)]
         public virtual string QRUrl { get; set; }
+
+        /// <summary>
+        /// 粉丝数
+        /// </summary>
+        public virtual int? FansNum { get; set; }
     }
 }

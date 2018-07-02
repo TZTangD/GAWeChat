@@ -105,5 +105,10 @@ namespace HC.WeChat.Shops.Dtos
         /// </summary>
         [StringLength(500)]
         public string QRUrl { get; set; }
+
+        /// <summary>
+        /// 粉丝数
+        /// </summary>
+        public  int? FansNum { get; set; }
     }
 }
