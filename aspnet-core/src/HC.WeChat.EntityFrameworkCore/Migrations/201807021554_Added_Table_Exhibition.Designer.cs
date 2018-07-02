@@ -1,8 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using HC.WeChat.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using JetBrains.Annotations;
+
 
 namespace HC.WeChat.Migrations
 {
