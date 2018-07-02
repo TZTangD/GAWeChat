@@ -68,6 +68,12 @@
                             "link": "/admin/marketting/contribute-management",
                             "translate": "contribute-management",
                             "reuse": false
+                        },
+                        {
+                            "text": "陈列活动",
+                            "link": "/admin/marketting/contribute-management",
+                            "translate": "contribute-management",
+                            "reuse": false
                         }
                     ]
                 },
