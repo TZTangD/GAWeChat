@@ -19,6 +19,7 @@ namespace HC.WeChat.Shops.Dtos
         public string SortSaleTotal { get; set; }
         public string SortReadTotal { get; set; }
         public string SortSingleTotal { get; set; }
+        public string SortFansTotal { get; set; }
         public string RetailCode { get; set; }
         public string Url { get; set; }
         public string FileName { get; set; }

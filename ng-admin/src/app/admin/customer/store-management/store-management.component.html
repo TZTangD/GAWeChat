@@ -100,12 +100,13 @@
                     <nz-table-sort [(nzValue)]="sortMap.single" (nzValueChange)="sort($event,'single')"></nz-table-sort>
                 </th>
                 <th nz-th>
+                    <span>粉丝数</span>
+                    <nz-table-sort [(nzValue)]="sortMap.fans" (nzValueChange)="sort($event,'fans')"></nz-table-sort>
+                </th>
+                <th nz-th>
                     <span>店铺电话</span>
                 </th>
                 <!-- <th nz-th>
-                    <span>经度</span>
-                </th>
-                <th nz-th>
                     <span>纬度</span>
                 </th> -->
                 <th nz-th>
@@ -130,8 +131,8 @@
                 <td nz-td>{{shop.retailerName}}({{shop.retailerCode}})</td>
                 <td nz-td>{{shop.saleTotal}}</td>
                 <td nz-td>{{shop.readTotal}}</td>
-                <td nz-td>{{shop.singleTotal}}
-                </td>
+                <td nz-td>{{shop.singleTotal}}</td>
+                <td nz-td>{{shop.fansNum}}</td>
                 <td nz-td>{{shop.tel}}</td>
                 <!-- <td nz-td>{{shop.longitude}}</td>
                 <td nz-td>{{shop.latitude}}</td> -->

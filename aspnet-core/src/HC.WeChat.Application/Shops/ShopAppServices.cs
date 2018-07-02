@@ -380,7 +380,8 @@ namespace HC.WeChat.Shops
                             //RetailerName = r != null ? r.Name : "",
                             RetailerName = r.Name,
                             RetailerCode = r.Code,
-                            QRUrl = s.QRUrl
+                            QRUrl = s.QRUrl,
+                            FansNum = s.FansNum
                         };
 
             //TODO:根据传入的参数添加过滤条件
@@ -469,6 +470,38 @@ namespace HC.WeChat.Shops
             {
                 var shops = await query
                   .OrderBy(s => s.SingleTotal)
+                  .ThenBy(input.Sorting)
+                  .PageBy(input)
+                  .ToListAsync();
+
+                //var shopListDtos = ObjectMapper.Map<List <ShopListDto>>(shops);
+                var shopListDtos = shops.MapTo<List<ShopListDto>>();
+
+                return new PagedResultDto<ShopListDto>(
+                    shopCount,
+                    shopListDtos
+                    );
+            }
+            else if (input.SortFansTotal != null && input.SortFansTotal == "ascend")
+            {
+                var shops = await query
+                  .OrderByDescending(s => s.FansNum)
+                  .ThenBy(input.Sorting)
+                  .PageBy(input)
+                  .ToListAsync();
+
+                //var shopListDtos = ObjectMapper.Map<List <ShopListDto>>(shops);
+                var shopListDtos = shops.MapTo<List<ShopListDto>>();
+
+                return new PagedResultDto<ShopListDto>(
+                    shopCount,
+                    shopListDtos
+                    );
+            }
+            else if (input.SortFansTotal != null && input.SortFansTotal == "descend")
+            {
+                var shops = await query
+                  .OrderBy(s => s.FansNum)
                   .ThenBy(input.Sorting)
                   .PageBy(input)
                   .ToListAsync();
@@ -775,7 +808,8 @@ namespace HC.WeChat.Shops
                             SingleTotal = s.SingleTotal,
                             //RetailerName = r != null ? r.Name : "",
                             RetailerName = r.Name,
-                            RetailerCode = r.Code
+                            RetailerCode = r.Code,
+                            FansNum=s.FansNum
                         };
 
             //TODO:根据传入的参数添加过滤条件
@@ -834,6 +868,24 @@ namespace HC.WeChat.Shops
                 var shopListDtos = shops.MapTo<List<ShopListDto>>();
                 return shopListDtos;
             }
+            else if (input.SortFansTotal != null && input.SortFansTotal == "ascend")
+            {
+                var shops = await query
+                    .OrderByDescending(s => s.FansNum)
+                    .ThenBy(input.Sorting)
+                    .ToListAsync();
+                var shopListDtos = shops.MapTo<List<ShopListDto>>();
+                return shopListDtos;
+            }
+            else if (input.SortFansTotal != null && input.SortFansTotal == "descend")
+            {
+                var shops = await query
+                    .OrderBy(s => s.FansNum)
+                    .ThenBy(input.Sorting)
+                    .ToListAsync();
+                var shopListDtos = shops.MapTo<List<ShopListDto>>();
+                return shopListDtos;
+            }
             else
             {
                 var shops = await query
@@ -859,7 +911,7 @@ namespace HC.WeChat.Shops
                 ISheet sheet = workbook.CreateSheet("Employees");
                 var rowIndex = 0;
                 IRow titleRow = sheet.CreateRow(rowIndex);
-                string[] titles = { "店铺名称", "店铺地址", "店铺描述", "零售客户", "客户编码", "店铺销量", "店铺浏览量", "店铺用户量", "店铺电话", "审核状态", "审核时间", "店铺评价", "经度", "纬度" };
+                string[] titles = { "店铺名称", "店铺地址", "店铺描述", "零售客户", "客户编码", "店铺销量", "店铺浏览量", "店铺用户量","粉丝数", "店铺电话", "审核状态", "审核时间", "店铺评价", "经度", "纬度" };
                 var fontTitle = workbook.CreateFont();
                 fontTitle.IsBold = true;
                 for (int i = 0; i < titles.Length; i++)
@@ -889,12 +941,13 @@ namespace HC.WeChat.Shops
                     ExcelHelper.SetCell(row.CreateCell(5), font, item.SaleTotal.ToString());
                     ExcelHelper.SetCell(row.CreateCell(6), font, item.ReadTotal.ToString());
                     ExcelHelper.SetCell(row.CreateCell(7), font, item.SingleTotal.ToString());
-                    ExcelHelper.SetCell(row.CreateCell(8), font, item.Tel);
-                    ExcelHelper.SetCell(row.CreateCell(9), font, item.StatusName);
-                    ExcelHelper.SetCell(row.CreateCell(10), font, item.AuditTime.ToString());
-                    ExcelHelper.SetCell(row.CreateCell(11), font, evaluationStr);
-                    ExcelHelper.SetCell(row.CreateCell(12), font, item.Longitude.ToString());
-                    ExcelHelper.SetCell(row.CreateCell(13), font, item.Latitude.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(8), font, item.FansNum.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(9), font, item.Tel);
+                    ExcelHelper.SetCell(row.CreateCell(10), font, item.StatusName);
+                    ExcelHelper.SetCell(row.CreateCell(11), font, item.AuditTime.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(12), font, evaluationStr);
+                    ExcelHelper.SetCell(row.CreateCell(13), font, item.Longitude.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(14), font, item.Latitude.ToString());
 
                 }
                 workbook.Write(fs);

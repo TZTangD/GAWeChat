@@ -58,7 +58,7 @@
         <nz-tabset [nzSize]="'default'">
             <nz-tab>
 
-                <ng-template #nzTabHeading>特色产品</ng-template>
+                <ng-template #nzTabHeading>特色商品</ng-template>
                 <nz-table #nzTable3 [nzAjaxData]="shopProducts" [nzTotal]="querySP.total" [(nzPageIndex)]="querySP.pageIndex" [(nzPageSize)]="querySP.pageSize"
                     [nzLoading]="loadingSP" [nzShowTotal]="'true'" [nzShowSizeChanger]="true" (nzPageIndexChange)="getShopProducts()"
                     (nzPageSizeChange)="getShopProducts()">

@@ -17,11 +17,11 @@ namespace HC.WeChat.QrCodeLogs.Authorization
                           //在这里配置了QrCodeLog 的权限。
 
 
-            var pages = context.GetPermissionOrNull(AppLtmPermissions.Pages) ?? context.CreatePermission(AppLtmPermissions.Pages, L("Pages"));
+            var pages = context.GetPermissionOrNull(AppPermissions.Pages) ?? context.CreatePermission(AppPermissions.Pages, L("Pages"));
 
  
-            var administration = pages.Children.FirstOrDefault(p => p.Name == AppLtmPermissions.Pages_Administration) 
-                ?? pages.CreateChildPermission(AppLtmPermissions.Pages_Administration, L("Administration"));
+            var administration = pages.Children.FirstOrDefault(p => p.Name == AppPermissions.Pages_Administration) 
+                ?? pages.CreateChildPermission(AppPermissions.Pages_Administration, L("Administration"));
 
         var qrcodelog = administration.CreateChildPermission(QrCodeLogAppPermissions.QrCodeLog , L("QrCodeLog"));
             qrcodelog.CreateChildPermission(QrCodeLogAppPermissions.QrCodeLog_CreateQrCodeLog, L("CreateQrCodeLog"));

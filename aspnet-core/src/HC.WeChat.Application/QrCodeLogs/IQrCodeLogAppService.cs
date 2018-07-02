@@ -20,10 +20,10 @@ namespace HC.WeChat.QrCodeLogs
         /// <returns></returns>
         Task<PagedResultDto<QrCodeLogListDto>> GetPagedQrCodeLogs(GetQrCodeLogsInput input);
 
-            /// <summary>
-            /// 通过指定id获取QrCodeLogListDto信息
-            /// </summary>
-            Task<QrCodeLogListDto> GetQrCodeLogByIdAsync(EntityDto<Guid> input);
+        /// <summary>
+        /// 通过指定id获取QrCodeLogListDto信息
+        /// </summary>
+        Task<QrCodeLogListDto> GetQrCodeLogByIdAsync(EntityDto<Guid> input);
 
 
         /// <summary>
@@ -55,9 +55,9 @@ namespace HC.WeChat.QrCodeLogs
         /// <returns></returns>
         Task DeleteQrCodeLog(EntityDto<Guid> input);
 
-            /// <summary>
-            /// 批量删除QrCodeLog
-            /// </summary>
+        /// <summary>
+        /// 批量删除QrCodeLog
+        /// </summary>
         Task BatchDeleteQrCodeLogsAsync(List<Guid> input);
     }
 }
