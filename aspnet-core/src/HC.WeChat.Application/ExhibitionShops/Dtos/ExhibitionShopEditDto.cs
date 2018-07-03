@@ -18,6 +18,7 @@ namespace HC.WeChat.ExhibitionShops.Dtos
         /// </summary>
         public Guid? RetailerId { get; set; }
 
+        public string Area { get; set; }
 
         /// <summary>
         /// ShopName

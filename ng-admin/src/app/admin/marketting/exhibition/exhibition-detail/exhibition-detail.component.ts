@@ -8,11 +8,12 @@ import { ExhibitionShop } from '@shared/entity/marketting';
 
 @Component({
     moduleId: module.id,
-    selector: 'exhibition',
-    templateUrl: 'exhibition.component.html',
+    selector: 'exhibition-detail',
+    templateUrl: 'exhibition-detail.component.html',
+    styleUrls: ['exhibition-detail.component.scss']
 })
-export class ExhibitionComponent extends AppComponentBase implements OnInit {
-    exhibitionShopList: ExhibitionShop[] = [];
+export class ExhibitionDetailComponent extends AppComponentBase implements OnInit {
+    exhibitionShop: ExhibitionShop[] = [];
     loading = false;
     exportLoading = false;
     search: any = {};
@@ -28,6 +29,7 @@ export class ExhibitionComponent extends AppComponentBase implements OnInit {
     refreshData(reset = false, search?: boolean) {
         if (reset) {
             this.query.pageIndex = 1;
+            this.search = { status: 2 };
         }
         if (search) {
             this.query.pageIndex = 1;
@@ -35,18 +37,8 @@ export class ExhibitionComponent extends AppComponentBase implements OnInit {
         this.loading = true;
         this.exhibitionShopService.getAll(this.query.skipCount(), this.query.pageSize, this.getParameter()).subscribe((result: PagedResultDtoOfExhibitionShop) => {
             this.loading = false;
-            this.exhibitionShopList = result.items;
+            this.exhibitionShop = result.items;
             this.query.total = result.totalCount;
         })
-    }
-
-    getParameter(): Parameter[] {
-        var arry = [];
-        arry.push(Parameter.fromJS({ key: 'ShopName', value: this.search.shopName }));
-        return arry;
-    }
-
-    exhibitionDetails(id: string) {
-        this.router.navigate(['admin/marketting/exhibition-detail', id]);
     }
 }

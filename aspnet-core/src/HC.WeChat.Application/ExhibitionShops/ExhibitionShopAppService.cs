@@ -17,7 +17,6 @@ using System;
 using HC.WeChat.Authorization;
 using HC.WeChat.Shops;
 using HC.WeChat.Retailers;
-using System.Linq;
 
 namespace HC.WeChat.ExhibitionShops
 {
@@ -213,39 +212,72 @@ namespace HC.WeChat.ExhibitionShops
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        //public async Task<PagedResultDto<ExhibitionShopListDto>> GetPagedExhibitionShopsAsync(GetExhibitionShopsInput input)
-        //{
-        //    var exhibitons = _exhibitionshopRepository.GetAll()
-        //         .WhereIf(!string.IsNullOrEmpty(input.ShopName), v => v.ShopName.Contains(input.ShopName));
-        //    var retailer = _retailerRepository.GetAll();
-        //    var shop = _shopRepository.GetAll();
-        //    var result = from e in exhibitons
-        //                 join r in retailer on e.RetailerId equals r.Id
-        //                 join s in shop on e.ShopId equals s.Id
-        //                 select new ExhibitionShopListDto()
-        //                 {
-        //                     Id = e.Id,
-        //                     ShopName = e.ShopName,
-        //                     CustCode = r.Code,
-        //                     CustName = r.Name,
-        //                     Area = "未知",
-        //                     ShopAddress = e.ShopAddress,
-        //                     Phone = s.Tel,
-        //                     Votes =e.Votes,
-        //                     FansNum = s.fa
-        //                 }
-        //                 //shop in _shopRepository
-        //    var exhibitionshopCount = await query.CountAsync();
-        //    var exhibitionshops = await query
-        //        .OrderBy(input.Sorting).AsNoTracking()
-        //        .PageBy(input)
-        //        .ToListAsync();
-        //    var exhibitionshopListDtos = exhibitionshops.MapTo<List<ExhibitionShopListDto>>();
-        //    return new PagedResultDto<ExhibitionShopListDto>(
-        //        exhibitionshopCount,
-        //        exhibitionshopListDtos
-        //        );
-        //}
+        public async Task<PagedResultDto<ExhibitionShopListDto>> GetPagedExhibitionShopsAsync(GetExhibitionShopsInput input)
+        {
+            var exhibitons = _exhibitionshopRepository.GetAll()
+                 .WhereIf(!string.IsNullOrEmpty(input.ShopName), v => v.ShopName.Contains(input.ShopName));
+            var retailer = _retailerRepository.GetAll();
+            var shop = _shopRepository.GetAll();
+            var result = (from e in exhibitons
+                          join r in retailer on e.RetailerId equals r.Id
+                          join s in shop on e.ShopId equals s.Id
+                          select new ExhibitionShopListDto()
+                          {
+                              Id = e.Id,
+                              ShopName = e.ShopName,
+                              CustCode = r.Code,
+                              CustName = r.Name,
+                              Area = "未知",
+                              ShopAddress = e.ShopAddress,
+                              Phone = s.Tel,
+                              Votes = e.Votes != null ? e.Votes : 0,
+                              FansNum = s.FansNum.Value
+                          });
+            var exhibitionshopCount = await result.CountAsync();
+            var exhibitionshops = await result
+                .OrderBy(input.Sorting).AsNoTracking()
+                .PageBy(input)
+                .ToListAsync();
+            var exhibitionshopListDtos = exhibitionshops.MapTo<List<ExhibitionShopListDto>>();
+            return new PagedResultDto<ExhibitionShopListDto>(
+                exhibitionshopCount,
+                exhibitionshopListDtos
+                );
+        }
+
+        /// <summary>
+        /// 根据id获取陈列活动详情
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<ExhibitionShopListDto> GetPagedExhibitionShopsByIdAsync(Guid id)
+        {
+            //string picPath = await _exhibitionshopRepository.GetAll().Where(v => v.Id == id).Select(v => v.PicPath).FirstOrDefaultAsync();
+            //if (picPath != null || picPath.Length>0)
+            //{
+            //    string[] picIds = picPath.Split(',');
+            //}
+            var exhibitons = _exhibitionshopRepository.GetAll().Where(v => v.Id == id);
+            var retailer = _retailerRepository.GetAll();
+            var shop = _shopRepository.GetAll();
+            var result = (from e in exhibitons
+                          join r in retailer on e.RetailerId equals r.Id
+                          join s in shop on e.ShopId equals s.Id
+                          select new ExhibitionShopListDto()
+                          {
+                              Id = e.Id,
+                              ShopName = e.ShopName,
+                              CustCode = r.Code,
+                              CustName = r.Name,
+                              Area = "未知",
+                              ShopAddress = e.ShopAddress,
+                              Phone = s.Tel,
+                              Votes = e.Votes != null ? e.Votes : 0,
+                              FansNum = s.FansNum.Value,
+                              PicPath = e.PicPath
+                          }).FirstOrDefaultAsync();
+            return await result;
+        }
     }
 }
 

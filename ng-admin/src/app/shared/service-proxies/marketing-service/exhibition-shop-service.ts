@@ -83,12 +83,11 @@ export class ExhibitionShopServiceProxy {
      * 获取所有陈列店铺信息
      */
     getAll(skipCount: number, maxResultCount: number, parameter: Parameter[]): Observable<PagedResultDtoOfExhibitionShop> {
-        let url_ = this.baseUrl + "/api/services/app/ExhibitionShop/GetPagedManuscripts?";
+        let url_ = this.baseUrl + "/api/services/app/ExhibitionShop/GetPagedExhibitionShopsAsync?";
         if (skipCount !== undefined)
             url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&";
         if (maxResultCount !== undefined)
             url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&";
-
         if (parameter.length > 0) {
             parameter.forEach(element => {
                 if (element.value !== undefined && element.value !== null) {
@@ -248,11 +247,11 @@ export class ExhibitionShopServiceProxy {
 
 }
 
-export class PagedResultDtoOfExhibitionShop implements IPagedResultDtoOfManuscript {
+export class PagedResultDtoOfExhibitionShop implements IPagedResultDtoOfExhibitionShop {
     totalCount: number;
     items: ExhibitionShop[];
 
-    constructor(data?: IPagedResultDtoOfManuscript) {
+    constructor(data?: IPagedResultDtoOfExhibitionShop) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -297,7 +296,7 @@ export class PagedResultDtoOfExhibitionShop implements IPagedResultDtoOfManuscri
     }
 }
 
-export interface IPagedResultDtoOfManuscript {
+export interface IPagedResultDtoOfExhibitionShop {
     totalCount: number;
     items: ExhibitionShop[];
 }

@@ -56,7 +56,11 @@ namespace HC.WeChat.ExhibitionShops
         /// </summary>
         [Required]
         public virtual int Status { get; set; }
-
+        
+        /// <summary>
+        /// 片区
+        /// </summary>
+        public virtual string Area { get; set; }
         /// <summary>
         /// 店铺Id
         /// </summary>

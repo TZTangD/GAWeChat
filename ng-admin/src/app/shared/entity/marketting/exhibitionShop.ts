@@ -9,6 +9,11 @@ export class ExhibitionShop implements IExhibitionShop {
     status: number;
     shopId: string;
     auditTime: Date;
+    custCode: string;
+    custName: string;
+    area: string;
+    fansNum: number;
+    phone: string;
     constructor(data?: IExhibitionShop) {
         if (data) {
             for (var property in data) {
@@ -30,6 +35,11 @@ export class ExhibitionShop implements IExhibitionShop {
             this.status = data["status"];
             this.shopId = data["shopId"];
             this.auditTime = data["auditTime"];
+            this.custCode = data["custCode"];
+            this.custName = data["custName"];
+            this.area = data["area"];
+            this.fansNum = data["fansNum"];
+            this.phone = data["phone"];
         }
     }
 
@@ -51,6 +61,11 @@ export class ExhibitionShop implements IExhibitionShop {
         data["status"] = this.status;
         data["shopId"] = this.shopId;
         data["auditTime"] = this.auditTime;
+        data["custCode"] = this.custCode;
+        data["custName"] = this.custName;
+        data["area"] = this.area;
+        data["fansNum"] = this.fansNum;
+        data["phone"] = this.phone;
         return data;
     }
 
@@ -72,4 +87,9 @@ export interface IExhibitionShop {
     status: number;
     shopId: string;
     auditTime: Date;
+    custCode: string;
+    custName: string;
+    area: string;
+    fansNum: number;
+    phone: string;
 }

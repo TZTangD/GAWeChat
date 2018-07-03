@@ -1,48 +1,27 @@
 <!--component html goes here -->
 <pro-header></pro-header>
 <nz-card [nzBordered]="false">
-    <!-- <form nz-form (ngSubmit)="refreshData(false,true)" [nzLayout]="'inline'">
+    <form nz-form (ngSubmit)="refreshData(false,true)" [nzLayout]="'inline'">
         <div nz-row [nzGutter]="24">
-            <ng-template #deleteContent>
-                <h2>是否删除文章{{articleTitle}}?</h2>
-            </ng-template>
             <div nz-col [nzSpan]="6" class="mb-md">
                 <div nz-form-item class="d-flex">
                     <div nz-form-label>
-                        <label for="name">店铺名称</label>
+                        <label for="shopName">店铺名称</label>
                     </div>
                     <div nz-form-control class="flex-1">
-                        <nz-input [(ngModel)]="search.name" name="name" [nzSize]="'large'" [nzPlaceHolder]="'请输入活动名称'" nzId="name"></nz-input>
-                    </div>
-                </div>
-            </div>
-
-            <div nz-col [nzSpan]="6" class="mb-md">
-                <div nz-form-item class="d-flex">
-                    <div nz-form-label>
-                        <label>活动状态</label>
-                    </div>
-                    <div nz-form-control class="flex-1">
-                        <nz-select [nzPlaceHolder]="'请选择活动状态'" name="status" [(ngModel)]="search.status" [nzShowSearch]="true" nzSize="large">
-                            <nz-option *ngFor="let i of PushStatus" [nzLabel]="i.text" [nzValue]="i.value">
-                            </nz-option>
-                        </nz-select>
+                        <nz-input [(ngModel)]="search.shopName" name="shopName" [nzSize]="'large'" [nzPlaceHolder]="'请输入店铺名称'" nzId="shopName"></nz-input>
                     </div>
                 </div>
             </div>
             <div nz-col [nzSpan]="6" class="mb-md" [class.text-right]="'true'">
                 <button nz-button type="submit" [nzType]="'primary'" [nzLoading]="loading" [nzSize]="'large'">查询</button>
                 <button nz-button type="reset" (click)="refreshData(true)" [nzSize]="'large'" class="mx-sm">重置</button>
-                <button nz-button type="button" (click)="createActivity()" [nzType]="'primary'" [nzSize]="'large'">
-                    <i class="anticon anticon-plus"></i>
-                    <span>新建</span>
-                </button>
             </div>
         </div>
         <div nz-row [nzGutter]="24">
             <div nz-col style="float:right; padding-left:0px" [nzSpan]="4" [nzOffset]="20" class="mb-md">
-                <a style="display: none;" id="aActivityExcelUrl" href="#">
-                    <button type="button" id="btnActivityHref">隐藏下载</button>
+                <a style="display: none;" id="aExhibitionExcelUrl" href="#">
+                    <button type="button" id="btnExhibitionHref">隐藏下载</button>
                 </a>
                 <button nz-button type="button" style="float: right;" (click)="exportExcel()" [nzSize]="'large'" [nzLoading]="exportLoading">
                     <i class="anticon anticon-download"></i>
@@ -50,41 +29,54 @@
                 </button>
             </div>
         </div>
-    </form> -->
-    <!-- <nz-table #nzTable [nzAjaxData]="articles" [nzTotal]="query.total" [(nzPageIndex)]="query.pageIndex" [(nzPageSize)]="query.pageSize"
-        [nzLoading]="loading" [nzShowTotal]="'true'" [nzShowSizeChanger]="true" (nzPageIndexChange)="refreshData()" (nzPageSizeChange)="refreshData()">
+    </form>
+    <nz-table #nzTable [nzAjaxData]="exhibitionShopList" [nzTotal]="query.total" [(nzPageIndex)]="query.pageIndex" [(nzPageSize)]="query.pageSize" [nzLoading]="loading" [nzShowTotal]="'true'" [nzShowSizeChanger]="true" (nzPageIndexChange)="refreshData()"
+        (nzPageSizeChange)="refreshData()">
         <thead nz-thead>
             <tr>
                 <th nz-th>
+                    <span>零售客户编码</span>
+                </th>
+                <th nz-th>
+                    <span>客户名称</span>
+                </th>
+                <th nz-th>
                     <span>店铺名称</span>
+                </th>
+                <th nz-th>
+                    <span>所属区县</span>
                 </th>
                 <th nz-th>
                     <span>店铺地址</span>
                 </th>
                 <th nz-th>
-                    <span>投票数</span>
+                    <span>店铺电话</span>
                 </th>
                 <th nz-th>
-                    <span>审核状态</span>
+                    <span>实时票数</span>
+                </th>
+                <th nz-th>
+                    <span>店铺会员数</span>
                 </th>
                 <th nz-th>
                     <span>操作</span>
                 </th>
             </tr>
         </thead>
-    <tbody nz-tbody>
-        <tr nz-tbody-tr *ngFor="let article of nzTable.data">
-            <td nz-td>{{article.title}}</td>
-            <td nz-td>{{article.author}}</td>
-            <td nz-td>{{article.readTotal }}</td>
-            <td nz-td>{{article.goodTotal}}</td>
-            <td nz-td>{{article.pushStatusName}}</td>
-            <td nz-td>{{article.pushTime | _date}}</td>
-            <td nz-td>
-                <a (click)="editActivity(article)">查看详情</a>
-             
-            </td>
-        </tr>
-    </tbody>
-    </nz-table> -->
+        <tbody nz-tbody>
+            <tr nz-tbody-tr *ngFor="let item of nzTable.data">
+                <td nz-td>{{item.custCode}}</td>
+                <td nz-td>{{item.custName}}</td>
+                <td nz-td>{{item.shopName }}</td>
+                <td nz-td>{{item.area}}</td>
+                <td nz-td>{{item.shopAddress}}</td>
+                <td nz-td>{{item.phone}}</td>
+                <td nz-td>{{item.votes}}</td>
+                <td nz-td>{{item.fansNum}}</td>
+                <td nz-td>
+                    <a (click)="exhibitionDetails(item.id)">查看详情</a>
+                </td>
+            </tr>
+        </tbody>
+    </nz-table>
 </nz-card>

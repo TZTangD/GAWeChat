@@ -20,11 +20,10 @@ namespace HC.WeChat.Exhibitions
         /// <returns></returns>
         Task<PagedResultDto<ExhibitionListDto>> GetPagedExhibitions(GetExhibitionsInput input);
 
-            /// <summary>
-            /// 通过指定id获取ExhibitionListDto信息
-            /// </summary>
-            Task<ExhibitionListDto> GetExhibitionByIdAsync(EntityDto<Guid> input);
-
+        /// <summary>
+        /// 获取ExhibitionListDto信息
+        /// </summary>
+        Task<ExhibitionListDto> GetExhibitionByIdAsync();
 
         /// <summary>
         /// 导出Exhibition为excel表
