@@ -63,6 +63,11 @@ namespace HC.WeChat.Shops.Dtos
         /// 二维码图片url
         /// </summary>
         public string QRUrl { get; set; }
+
+        /// <summary>
+        /// 粉丝数
+        /// </summary>
+        public int? FansNum { get; set; }
     }
     [AutoMapFrom(typeof(Shop))]
     public class CheckShopDto

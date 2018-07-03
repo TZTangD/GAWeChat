@@ -37,7 +37,8 @@ export class StoreManagementComponent extends AppComponentBase implements OnInit
     sortMap = {
         sale: null,
         read: null,
-        single: null
+        single: null,
+        fans:null,
     };
     host = AppConsts.remoteServiceBaseUrl;
     loading = false;
@@ -45,6 +46,7 @@ export class StoreManagementComponent extends AppComponentBase implements OnInit
     sortSaleTotal = null;
     sortReadTotal = null;
     sortSingleTotal = null;
+    sortFansTotal = null;
     constructor(injector: Injector, private shopServie: ShopServiceProxy,
         private router: Router) {
         super(injector);
@@ -58,23 +60,38 @@ export class StoreManagementComponent extends AppComponentBase implements OnInit
             this.sortSaleTotal = value;
             this.sortReadTotal = null;
             this.sortSingleTotal = null;
+            this.sortFansTotal = null;
             this.sortMap.read = null;
             this.sortMap.single = null;
+            this.sortMap.fans = null;
             this.refreshData();
         } else if (para == 'single') {
             this.sortSingleTotal = value;
             this.sortReadTotal = null;
             this.sortSaleTotal = null;
+            this.sortFansTotal = null;
             this.sortMap.read = null;
             this.sortMap.sale = null;
+            this.sortMap.fans = null;
             this.refreshData();
         }
-        else {
+        else if (para == 'read') {
             this.sortReadTotal = value;
+            this.sortSaleTotal = null;
+            this.sortSingleTotal = null;
+            this.sortFansTotal = null;
+            this.sortMap.sale = null;
+            this.sortMap.single = null;
+            this.sortMap.fans = null;
+            this.refreshData();
+        }else{
+            this.sortFansTotal = value;
+            this.sortReadTotal = null;
             this.sortSaleTotal = null;
             this.sortSingleTotal = null;
             this.sortMap.sale = null;
             this.sortMap.single = null;
+            this.sortMap.read = null;
             this.refreshData();
         }
     }
@@ -87,10 +104,12 @@ export class StoreManagementComponent extends AppComponentBase implements OnInit
             this.sortSaleTotal = null;
             this.sortReadTotal = null;
             this.sortSingleTotal = null;
+            this.sortFansTotal = null;
             this.sortMap = {
                 sale: null,
                 read: null,
-                single: null
+                single: null,
+                fans:null
             };
         }
         if (search) {
@@ -116,6 +135,7 @@ export class StoreManagementComponent extends AppComponentBase implements OnInit
         arry.push(Parameter.fromJS({ key: 'sortSaleTotal', value: this.sortSaleTotal }));
         arry.push(Parameter.fromJS({ key: 'sortReadTotal', value: this.sortReadTotal }));
         arry.push(Parameter.fromJS({ key: 'sortSingleTotal', value: this.sortSingleTotal }));
+        arry.push(Parameter.fromJS({ key: 'sortFansTotal', value: this.sortFansTotal }));
         arry.push(Parameter.fromJS({ key: 'RetailCode', value: this.search.code }));
         return arry;
     }
@@ -128,7 +148,7 @@ export class StoreManagementComponent extends AppComponentBase implements OnInit
      */
     exportExcel() {
         this.exportLoading = true;
-        this.shopServie.ExportExcel({ name: this.search.name, tel: this.search.tel, status: this.search.status === 4 ? null : this.search.status, sortSaleTotal: this.sortSaleTotal, sortReadTotal: this.sortReadTotal, sortSingleTotal: this.sortSingleTotal }).subscribe(data => {
+        this.shopServie.ExportExcel({ name: this.search.name, tel: this.search.tel, status: this.search.status === 4 ? null : this.search.status, sortSaleTotal: this.sortSaleTotal, sortReadTotal: this.sortReadTotal, sortSingleTotal: this.sortSingleTotal,sortFansTotal:this.sortFansTotal }).subscribe(data => {
             if (data.code == 0) {
                 var url = AppConsts.remoteServiceBaseUrl + data.data;
                 document.getElementById('aShopExcelUrl').setAttribute('href', url);

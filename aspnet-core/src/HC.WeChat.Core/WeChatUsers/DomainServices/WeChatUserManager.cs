@@ -6,6 +6,9 @@ using Abp.Domain.Repositories;
 using Abp.Domain.Services;
 using Abp.Domain.Uow;
 using HC.WeChat.WeChatUsers;
+using HC.WeChat.Shops;
+using HC.WeChat.QrCodeLogs;
+using HC.WeChat.WechatEnums;
 
 namespace HC.WeChat.WeChatUsers.DomainServices
 {
@@ -16,13 +19,19 @@ namespace HC.WeChat.WeChatUsers.DomainServices
     {
         private readonly IRepository<WeChatUser, Guid> _wechatuserRepository;
         private readonly IUnitOfWorkManager _unitOfWorkManager;
+        private readonly IRepository<Shop, Guid> _shopRepository;
+        private readonly IRepository<QrCodeLog, Guid> _qrcodelogRepository;
+
         /// <summary>
         /// WeChatUser的构造方法
         /// </summary>
-        public WeChatUserManager(IRepository<WeChatUser, Guid> wechatuserRepository, IUnitOfWorkManager unitOfWorkManager)
+        public WeChatUserManager(IRepository<WeChatUser, Guid> wechatuserRepository, IUnitOfWorkManager unitOfWorkManager,
+           IRepository<Shop, Guid> shopRepository, IRepository<QrCodeLog, Guid> qrcodelogRepository)
         {
             _wechatuserRepository = wechatuserRepository;
             _unitOfWorkManager = unitOfWorkManager;
+            _shopRepository = shopRepository;
+            _qrcodelogRepository = qrcodelogRepository;
         }
 
         /// <summary>
@@ -34,11 +43,11 @@ namespace HC.WeChat.WeChatUsers.DomainServices
             //存在就更新
             if (_wechatuserRepository.GetAll().Any(u => u.Id == user.Id))
             {
-               return  await _wechatuserRepository.UpdateAsync(user);
+                return await _wechatuserRepository.UpdateAsync(user);
             }
             else //新增
             {
-               return  await _wechatuserRepository.InsertAsync(user);
+                return await _wechatuserRepository.InsertAsync(user);
             }
         }
 
@@ -67,7 +76,7 @@ namespace HC.WeChat.WeChatUsers.DomainServices
         /// 微信关注
         /// </summary>
         [UnitOfWork]
-        public async Task SubscribeAsync(string openId, string nickName, string headImgUrl, int? tenantId,string scene,string ticket)
+        public async Task SubscribeAsync(string openId, string nickName, string headImgUrl, int? tenantId, string scene, string ticket)
         {
             using (_unitOfWorkManager.Current.SetTenantId(tenantId))
             {
@@ -81,6 +90,29 @@ namespace HC.WeChat.WeChatUsers.DomainServices
                 Logger.InfoFormat("保存关注场景值id：{0}", scene);
                 Logger.InfoFormat("保存关注场景值数组：{0}", scenes);
                 Logger.InfoFormat("保存关注ticket：{0}", ticket);
+                //关注后店铺粉丝+1(方法执行的先后顺序)
+                if (scenes.Length > 0 && (SceneType)int.Parse(scenes[0]) == SceneType.店铺)
+                {
+                    var isExsit = _qrcodelogRepository.GetAll().Any(q => q.OpenId == openId && q.SourceId == scenes[1]);
+                    Logger.InfoFormat("关注日志是否存在：{0}", isExsit);
+                    if (!isExsit)
+                    {
+                        var shop = _shopRepository.GetAll().Where(s => s.Id == new Guid(scenes[1])).FirstOrDefault();
+                        shop.FansNum = shop.FansNum == null ? 1 : shop.FansNum + 1;//店铺初始化为0
+                        await _shopRepository.UpdateAsync(shop);
+                    }
+                }
+                //关注之后新增推广日志
+                var qrCodeLog = new QrCodeLog();
+                qrCodeLog.AttentionTime = DateTime.Now;
+                qrCodeLog.OpenId = openId;
+                qrCodeLog.SourceId = scenes.Length > 0 ? scenes[1] : "";
+                if (scenes.Length > 0)
+                {
+                    qrCodeLog.SourceType = (SceneType)int.Parse(scenes[0]);
+                }
+                qrCodeLog.Ticket = ticket;
+                await _qrcodelogRepository.InsertAsync(qrCodeLog);
 
                 if (user != null)
                 {
@@ -92,9 +124,9 @@ namespace HC.WeChat.WeChatUsers.DomainServices
                     user.BindTime = DateTime.Now;
                     user.HeadImgUrl = headImgUrl;
                     user.AttentionTime = DateTime.Now; // 第一次关注时间
-                    if (scenes.Length > 0)
+                    if (scenes.Length > 0)//关注来源
                     {
-                        user.SourceType = int.Parse(scenes[0]);//关注来源类型
+                        user.SourceType = (WechatEnums.SceneType)int.Parse(scenes[0]);//关注来源类型
                         user.SourceId = scenes[1];//关注来源Id
                     }
                     user.Ticket = ticket;//关注二维码票据
@@ -112,12 +144,12 @@ namespace HC.WeChat.WeChatUsers.DomainServices
                     user.AttentionTime = DateTime.Now; // 最后一次关注时间
                     user.IntegralTotal = 0;//积分默认为0
                     user.BindStatus = WechatEnums.BindStatusEnum.未绑定;
-                    if (scenes.Length > 0)
+                    if (string.IsNullOrEmpty(user.SourceId) && scenes.Length > 0)
                     {
-                        user.SourceType = int.Parse(scenes[0]);//关注来源类型
+                        user.SourceType = (SceneType)int.Parse(scenes[0]);//关注来源类型
                         user.SourceId = scenes[1];//关注来源Id
                     }
-                    user.Ticket = ticket;//关注二维码票据
+                    //user.Ticket = ticket;//关注二维码票据
                     await _wechatuserRepository.InsertAsync(user);
                 }
             }
