@@ -80,10 +80,10 @@ namespace HC.WeChat.WeChatUsers.DomainServices
         {
             using (_unitOfWorkManager.Current.SetTenantId(tenantId))
             {
-                scene = scene.Substring(8);
                 string[] scenes = { };
                 if (!string.IsNullOrEmpty(scene))
                 {
+                    scene = scene.Substring(8);
                     scenes = scene.Split("_");
                 }
                 var user = await GetWeChatUserAsync(openId, tenantId);
