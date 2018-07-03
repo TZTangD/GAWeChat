@@ -31,7 +31,7 @@ namespace HC.WeChat.LevelJob
             _productAppService = productAppService;
             //启动日志
             //Logger.InfoFormat("启动job时间：{0}", DateTime.Now);
-            DoWork();
+            //DoWork();
         }
         [UnitOfWork]
         protected override void DoWork()
