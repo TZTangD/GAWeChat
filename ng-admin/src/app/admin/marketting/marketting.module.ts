@@ -14,6 +14,7 @@ import { ExperienceDetailComponent } from "./experience-share/experience-detail/
 import { ContributeDetailComponent } from "./contribute-management/contribute-detail/contribute-detail.component";
 import { NgxTinymceModule } from 'ngx-tinymce';
 import { EditorModule } from '@tinymce/tinymce-angular';
+import { ExhibitionComponent } from "./exhibition/exhibition.component";
 
 @NgModule({
     imports: [
@@ -35,6 +36,7 @@ import { EditorModule } from '@tinymce/tinymce-angular';
         ExperienceDetailComponent,
         ContributeManagementComponent,
         ContributeDetailComponent,
+        ExhibitionComponent
     ],
     providers: [
         AppRouteGuard

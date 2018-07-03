@@ -59,5 +59,6 @@ namespace HC.WeChat.ExhibitionShops
             /// 批量删除ExhibitionShop
             /// </summary>
         Task BatchDeleteExhibitionShopsAsync(List<Guid> input);
+        //Task<PagedResultDto<ExhibitionShopListDto>> GetPagedExhibitionShopsAsync(GetExhibitionShopsInput input);
     }
 }

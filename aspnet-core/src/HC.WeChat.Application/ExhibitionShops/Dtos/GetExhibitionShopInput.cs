@@ -12,6 +12,11 @@ namespace HC.WeChat.ExhibitionShops.Dtos
         public string Filter { get; set; }
 
         /// <summary>
+        /// 店铺名
+        /// </summary>
+        public string ShopName { get; set; }
+
+        /// <summary>
         /// 正常化排序使用
         /// </summary>
         public void Normalize()

@@ -14,17 +14,24 @@ using HC.WeChat.ExhibitionShops.DomainServices;
 using HC.WeChat.ExhibitionShops.Dtos;
 using HC.WeChat.ExhibitionShops;
 using System;
+using HC.WeChat.Authorization;
+using HC.WeChat.Shops;
+using HC.WeChat.Retailers;
+using System.Linq;
 
 namespace HC.WeChat.ExhibitionShops
 {
     /// <summary>
     /// ExhibitionShop应用层服务的接口实现方法
     /// </summary>
-    [AbpAuthorize(ExhibitionShopAppPermissions.ExhibitionShop)]
+    //[AbpAuthorize(ExhibitionShopAppPermissions.ExhibitionShop)]
+    [AbpAuthorize(AppPermissions.Pages)]
     public class ExhibitionShopAppService : WeChatAppServiceBase, IExhibitionShopAppService
     {
         private readonly IRepository<ExhibitionShop, Guid> _exhibitionshopRepository;
         private readonly IExhibitionShopManager _exhibitionshopManager;
+        private readonly IRepository<Shop, Guid> _shopRepository;
+        private readonly IRepository<Retailer, Guid> _retailerRepository;
 
         /// <summary>
         /// 构造函数
@@ -32,8 +39,12 @@ namespace HC.WeChat.ExhibitionShops
         public ExhibitionShopAppService(
             IRepository<ExhibitionShop, Guid> exhibitionshopRepository
       , IExhibitionShopManager exhibitionshopManager
+            , IRepository<Shop, Guid> shopRepository
+            , IRepository<Retailer, Guid> retailerRepository
         )
         {
+            _retailerRepository = retailerRepository;
+            _shopRepository = shopRepository;
             _exhibitionshopRepository = exhibitionshopRepository;
             _exhibitionshopManager = exhibitionshopManager;
         }
@@ -64,12 +75,6 @@ namespace HC.WeChat.ExhibitionShops
                 exhibitionshopCount,
                 exhibitionshopListDtos
                 );
-
-
-
-
-
-
         }
 
         /// <summary>
@@ -81,10 +86,6 @@ namespace HC.WeChat.ExhibitionShops
 
             return entity.MapTo<ExhibitionShopListDto>();
         }
-
-
-
-
 
 
         /// <summary>
@@ -207,6 +208,44 @@ namespace HC.WeChat.ExhibitionShops
             await _exhibitionshopRepository.DeleteAsync(s => input.Contains(s.Id));
         }
 
+        /// <summary>
+        /// 分页获取陈列活动列表
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        //public async Task<PagedResultDto<ExhibitionShopListDto>> GetPagedExhibitionShopsAsync(GetExhibitionShopsInput input)
+        //{
+        //    var exhibitons = _exhibitionshopRepository.GetAll()
+        //         .WhereIf(!string.IsNullOrEmpty(input.ShopName), v => v.ShopName.Contains(input.ShopName));
+        //    var retailer = _retailerRepository.GetAll();
+        //    var shop = _shopRepository.GetAll();
+        //    var result = from e in exhibitons
+        //                 join r in retailer on e.RetailerId equals r.Id
+        //                 join s in shop on e.ShopId equals s.Id
+        //                 select new ExhibitionShopListDto()
+        //                 {
+        //                     Id = e.Id,
+        //                     ShopName = e.ShopName,
+        //                     CustCode = r.Code,
+        //                     CustName = r.Name,
+        //                     Area = "未知",
+        //                     ShopAddress = e.ShopAddress,
+        //                     Phone = s.Tel,
+        //                     Votes =e.Votes,
+        //                     FansNum = s.fa
+        //                 }
+        //                 //shop in _shopRepository
+        //    var exhibitionshopCount = await query.CountAsync();
+        //    var exhibitionshops = await query
+        //        .OrderBy(input.Sorting).AsNoTracking()
+        //        .PageBy(input)
+        //        .ToListAsync();
+        //    var exhibitionshopListDtos = exhibitionshops.MapTo<List<ExhibitionShopListDto>>();
+        //    return new PagedResultDto<ExhibitionShopListDto>(
+        //        exhibitionshopCount,
+        //        exhibitionshopListDtos
+        //        );
+        //}
     }
 }
 
