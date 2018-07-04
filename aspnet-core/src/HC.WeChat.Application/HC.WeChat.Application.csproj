@@ -20,6 +20,8 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DotNetCore.NPOI" Version="1.0.2" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0004" />
+    <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta0004" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Abp.WeChat.Senparc\Abp.WeChat.Senparc.csproj" />

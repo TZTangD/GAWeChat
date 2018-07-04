@@ -7,6 +7,7 @@ using HC.WeChat.Shops;
 using System;
 using Senparc.Weixin.MP.AdvancedAPIs.QrCode;
 using HC.WeChat.Dto;
+using System.IO;
 
 namespace HC.WeChat.Shops
 {
@@ -114,5 +115,13 @@ namespace HC.WeChat.Shops
         /// <returns></returns>
         Task BatchCreateQRCodeAsync();
         APIResultDto PromotionCodeZip(GetShopsInput input);
+
+        /// <summary>
+        /// 二维码添加logo
+        /// </summary>
+        /// <param name="filePath">二维码路径</param>
+        /// <param name="imgName">图片名称</param>
+        /// <returns></returns>
+        string QrcodeImgLogo(string filePath, string imgName);
     }
 }
