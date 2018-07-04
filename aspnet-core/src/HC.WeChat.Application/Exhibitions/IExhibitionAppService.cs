@@ -45,7 +45,7 @@ namespace HC.WeChat.Exhibitions
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task CreateOrUpdateExhibition(CreateOrUpdateExhibitionInput input);
+        Task CreateOrUpdateExhibition(ExhibitionEditDto input);
 
         /// <summary>
         /// 删除Exhibition信息的方法

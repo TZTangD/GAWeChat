@@ -11,7 +11,7 @@ import { Inject, Optional, Injectable, InjectionToken } from "@angular/core";
 import { Observable } from "rxjs/Observable";
 import { Http, Headers, ResponseContentType, Response } from "@angular/http";
 import { Parameter, ApiResult } from '@shared/service-proxies/entity';
-import { ExhibitionShop } from '@shared/entity/marketting';
+import { ExhibitionShop, Exhibition } from '@shared/entity/marketting';
 
 function throwException(message: string, status: number, response: string, headers: { [key: string]: any; }, result?: any): Observable<any> {
     if (result !== null && result !== undefined)
@@ -29,56 +29,56 @@ export class ExhibitionShopServiceProxy {
         this.baseUrl = baseUrl ? baseUrl : "";
     }
 
-    exportExcel(input: any): Observable<ApiResult> {
-        let url_ = this.baseUrl + "/api/services/app/ExhibitionShop/ExportManuscriptsExcel";
-        url_ = url_.replace(/[?&]$/, "");
+    // exportExcel(input: any): Observable<ApiResult> {
+    //     let url_ = this.baseUrl + "/api/services/app/ExhibitionShop/ExportManuscriptsExcel";
+    //     url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(input);
+    //     const content_ = JSON.stringify(input);
 
-        let options_ = {
-            body: content_,
-            method: "post",
-            headers: new Headers({
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            })
-        };
+    //     let options_ = {
+    //         body: content_,
+    //         method: "post",
+    //         headers: new Headers({
+    //             "Content-Type": "application/json",
+    //             "Accept": "application/json"
+    //         })
+    //     };
 
-        return this.http.request(url_, options_).flatMap((response_) => {
-            return this.processExportExcel(response_);
-        }).catch((response_: any) => {
-            if (response_ instanceof Response) {
-                try {
-                    return this.processExportExcel(response_);
-                } catch (e) {
-                    return <Observable<ApiResult>><any>Observable.throw(e);
-                }
-            } else
-                return <Observable<ApiResult>><any>Observable.throw(response_);
-        });
-    }
-    protected processExportExcel(response: Response): Observable<ApiResult> {
-        const status = response.status;
+    //     return this.http.request(url_, options_).flatMap((response_) => {
+    //         return this.processExportExcel(response_);
+    //     }).catch((response_: any) => {
+    //         if (response_ instanceof Response) {
+    //             try {
+    //                 return this.processExportExcel(response_);
+    //             } catch (e) {
+    //                 return <Observable<ApiResult>><any>Observable.throw(e);
+    //             }
+    //         } else
+    //             return <Observable<ApiResult>><any>Observable.throw(response_);
+    //     });
+    // }
+    // protected processExportExcel(response: Response): Observable<ApiResult> {
+    //     const status = response.status;
 
-        let _headers: any = response.headers ? response.headers.toJSON() : {};
-        if (status === 200) {
-            const _responseText = response.text();
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 ? ApiResult.fromJS(resultData200) : new ApiResult();
-            return Observable.of(result200);
-        } else if (status === 401) {
-            const _responseText = response.text();
-            return throwException("A server error occurred.", status, _responseText, _headers);
-        } else if (status === 403) {
-            const _responseText = response.text();
-            return throwException("A server error occurred.", status, _responseText, _headers);
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.text();
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Observable.of<ApiResult>(<any>null);
-    }
+    //     let _headers: any = response.headers ? response.headers.toJSON() : {};
+    //     if (status === 200) {
+    //         const _responseText = response.text();
+    //         let result200: any = null;
+    //         let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+    //         result200 = resultData200 ? ApiResult.fromJS(resultData200) : new ApiResult();
+    //         return Observable.of(result200);
+    //     } else if (status === 401) {
+    //         const _responseText = response.text();
+    //         return throwException("A server error occurred.", status, _responseText, _headers);
+    //     } else if (status === 403) {
+    //         const _responseText = response.text();
+    //         return throwException("A server error occurred.", status, _responseText, _headers);
+    //     } else if (status !== 200 && status !== 204) {
+    //         const _responseText = response.text();
+    //         return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+    //     }
+    //     return Observable.of<ApiResult>(<any>null);
+    // }
     /**
      * 获取所有陈列店铺信息
      */
@@ -95,9 +95,7 @@ export class ExhibitionShopServiceProxy {
                 }
             });
         }
-
         url_ = url_.replace(/[?&]$/, "");
-
         let options_ = {
             method: "get",
             headers: new Headers({
@@ -142,59 +140,9 @@ export class ExhibitionShopServiceProxy {
         }
         return Observable.of<PagedResultDtoOfExhibitionShop>(<any>null);
     }
-    get(id: number): Observable<ExhibitionShop> {
-        let url_ = this.baseUrl + "/api/services/app/ExhibitionShop/GetManuscriptByIdAsync?";
-        if (id !== undefined)
-            url_ += "Id=" + encodeURIComponent("" + id) + "&";
-        url_ = url_.replace(/[?&]$/, "");
 
-        let options_ = {
-            method: "get",
-            headers: new Headers({
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            })
-        };
-
-        return this.http.request(url_, options_).flatMap((response_) => {
-            return this.processGet(response_);
-        }).catch((response_: any) => {
-            if (response_ instanceof Response) {
-                try {
-                    return this.processGet(response_);
-                } catch (e) {
-                    return <Observable<ExhibitionShop>><any>Observable.throw(e);
-                }
-            } else
-                return <Observable<ExhibitionShop>><any>Observable.throw(response_);
-        });
-    }
-
-    protected processGet(response: Response): Observable<ExhibitionShop> {
-        const status = response.status;
-
-        let _headers: any = response.headers ? response.headers.toJSON() : {};
-        if (status === 200) {
-            const _responseText = response.text();
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 ? ExhibitionShop.fromJS(resultData200) : new ExhibitionShop();
-            return Observable.of(result200);
-        } else if (status === 401) {
-            const _responseText = response.text();
-            return throwException("A server error occurred.", status, _responseText, _headers);
-        } else if (status === 403) {
-            const _responseText = response.text();
-            return throwException("A server error occurred.", status, _responseText, _headers);
-        } else if (status !== 200 && status !== 204) {
-            const _responseText = response.text();
-            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-        }
-        return Observable.of<ExhibitionShop>(<any>null);
-    }
-
-    update(input: ExhibitionShop): Observable<ExhibitionShop> {
-        let url_ = this.baseUrl + "/api/services/app/ExhibitionShop/MarkManuscriptDto";
+    update(input: Exhibition): Observable<Exhibition> {
+        let url_ = this.baseUrl + "/api/services/app/Exhibition/CreateOrUpdateExhibition";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(input);
@@ -215,6 +163,103 @@ export class ExhibitionShopServiceProxy {
                 try {
                     return this.processUpdate(response_);
                 } catch (e) {
+                    return <Observable<Exhibition>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<Exhibition>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processUpdate(response: Response): Observable<Exhibition> {
+        const status = response.status;
+
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? Exhibition.fromJS(resultData200) : new Exhibition();
+            return Observable.of(result200);
+        } else if (status === 401) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status === 403) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<Exhibition>(<any>null);
+    }
+    get(): Observable<Exhibition> {
+        let url_ = this.baseUrl + "/api/services/app/Exhibition/GetExhibitionByIdAsync";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = {
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_) => {
+            return this.processGet(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processGet(response_);
+                } catch (e) {
+                    return <Observable<Exhibition>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<Exhibition>><any>Observable.throw(response_);
+        });
+    }
+
+    protected processGet(response: Response): Observable<Exhibition> {
+        const status = response.status;
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? Exhibition.fromJS(resultData200) : new Exhibition();
+            return Observable.of(result200);
+        } else if (status === 401) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status === 403) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<Exhibition>(<any>null);
+    }
+    getExhibitionDetailById(id: string): Observable<ExhibitionShop> {
+        let url_ = this.baseUrl + "/api/services/app/ExhibitionShop/GetExhibitionShopByIdAsync?";
+        if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = {
+            method: "get",
+            headers: new Headers({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request(url_, options_).flatMap((response_) => {
+            return this.processGetExhibitionDetailById(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processGetExhibitionDetailById(response_);
+                } catch (e) {
                     return <Observable<ExhibitionShop>><any>Observable.throw(e);
                 }
             } else
@@ -222,9 +267,8 @@ export class ExhibitionShopServiceProxy {
         });
     }
 
-    protected processUpdate(response: Response): Observable<ExhibitionShop> {
+    protected processGetExhibitionDetailById(response: Response): Observable<ExhibitionShop> {
         const status = response.status;
-
         let _headers: any = response.headers ? response.headers.toJSON() : {};
         if (status === 200) {
             const _responseText = response.text();
@@ -244,7 +288,6 @@ export class ExhibitionShopServiceProxy {
         }
         return Observable.of<ExhibitionShop>(<any>null);
     }
-
 }
 
 export class PagedResultDtoOfExhibitionShop implements IPagedResultDtoOfExhibitionShop {

@@ -84,7 +84,7 @@ namespace HC.WeChat.Web.Host.Controllers
             APIResultDto result = new APIResultDto();
             //UserOpenId = "oPM5Uv81jfyJqWbVxWAH-RUqsCAs";
             //UserOpenId = "oPM5Uv89yy7Iv8k9gLHjjsMTT5Gw";
-            //UserOpenId = "oB4nYjnoHhuWrPVi2pYLuPjnCaU0";
+            UserOpenId = "oB4nYjnoHhuWrPVi2pYLuPjnCaU0"; //杨帆专用
             //UserOpenId = "oWusewPRxWuP4wMz3UmHR0y7CJME";
             //UserOpenId = "o4l6swGJKxy4aEpUy3Hqm2DEeo_s";
             //UserOpenId = "o4l6swJ2RNer4X1OfB6yCvZorszs"; 

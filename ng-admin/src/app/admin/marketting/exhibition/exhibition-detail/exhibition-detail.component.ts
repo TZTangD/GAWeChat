@@ -2,9 +2,10 @@ import { Component, OnInit, Injector } from '@angular/core';
 import { AppComponentBase } from '@shared/app-component-base';
 import { ExhibitionShopServiceProxy, PagedResultDtoOfExhibitionShop } from '@shared/service-proxies/marketing-service';
 import { Parameter } from '@shared/service-proxies/entity';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { NzModalService } from 'ng-zorro-antd';
 import { ExhibitionShop } from '@shared/entity/marketting';
+import { AppConsts } from '@shared/AppConsts';
 
 @Component({
     moduleId: module.id,
@@ -13,32 +14,42 @@ import { ExhibitionShop } from '@shared/entity/marketting';
     styleUrls: ['exhibition-detail.component.scss']
 })
 export class ExhibitionDetailComponent extends AppComponentBase implements OnInit {
-    exhibitionShop: ExhibitionShop[] = [];
-    loading = false;
-    exportLoading = false;
-    search: any = {};
+    exhibitionShop: ExhibitionShop = new ExhibitionShop;
+    id: string;
+    picIds: string[] = [];
+    previewImage = '';
+    previewVisible = false;
+    //图片路径前缀
+    host = '';
 
     constructor(injector: Injector,
-        private router: Router, private modal: NzModalService,
+        private router: Router, private modal: NzModalService, private actRouter: ActivatedRoute,
         private exhibitionShopService: ExhibitionShopServiceProxy, ) {
         super(injector);
+        this.id = this.actRouter.snapshot.params['id'];
     }
     ngOnInit(): void {
-        this.refreshData();
+        this.getExhibitionDetail();
+        this.host = AppConsts.remoteServiceBaseUrl;
     }
-    refreshData(reset = false, search?: boolean) {
-        if (reset) {
-            this.query.pageIndex = 1;
-            this.search = { status: 2 };
-        }
-        if (search) {
-            this.query.pageIndex = 1;
-        }
-        this.loading = true;
-        this.exhibitionShopService.getAll(this.query.skipCount(), this.query.pageSize, this.getParameter()).subscribe((result: PagedResultDtoOfExhibitionShop) => {
-            this.loading = false;
-            this.exhibitionShop = result.items;
-            this.query.total = result.totalCount;
+    getExhibitionDetail() {
+        this.exhibitionShopService.getExhibitionDetailById(this.id).subscribe((result: ExhibitionShop) => {
+            this.exhibitionShop = result;
+            // if (result.picPath.indexOf(',') != -1) {
+            if (result.picPath != '') {
+                this.picIds = this.exhibitionShop.picPath.split(',');
+            }
+            console.log(this.picIds);
         })
+    }
+
+    //图片放大
+    handlePreview = (url: string) => {
+        this.previewImage = url;
+        this.previewVisible = true;
+    }
+
+    return() {
+        this.router.navigate(['admin/marketting/exhibition']);
     }
 }

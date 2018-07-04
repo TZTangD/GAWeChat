@@ -12,7 +12,6 @@ using Microsoft.EntityFrameworkCore;
 using HC.WeChat.ExhibitionShops.Authorization;
 using HC.WeChat.ExhibitionShops.DomainServices;
 using HC.WeChat.ExhibitionShops.Dtos;
-using HC.WeChat.ExhibitionShops;
 using System;
 using HC.WeChat.Authorization;
 using HC.WeChat.Shops;
@@ -79,11 +78,30 @@ namespace HC.WeChat.ExhibitionShops
         /// <summary>
         /// 通过指定id获取ExhibitionShopListDto信息
         /// </summary>
-        public async Task<ExhibitionShopListDto> GetExhibitionShopByIdAsync(EntityDto<Guid> input)
+        public async Task<ExhibitionShopListDto> GetExhibitionShopByIdAsync(Guid id)
         {
-            var entity = await _exhibitionshopRepository.GetAsync(input.Id);
-
-            return entity.MapTo<ExhibitionShopListDto>();
+            //var entity = await _exhibitionshopRepository.GetAsync(id);
+            //return entity.MapTo<ExhibitionShopListDto>();
+            var exhibitons = _exhibitionshopRepository.GetAll().Where(v => v.Id == id);
+            var retailer = _retailerRepository.GetAll();
+            var shop = _shopRepository.GetAll();
+            var result = (from e in exhibitons
+                          join r in retailer on e.RetailerId equals r.Id
+                          join s in shop on e.ShopId equals s.Id
+                          select new ExhibitionShopListDto()
+                          {
+                              Id = e.Id,
+                              ShopName = e.ShopName,
+                              CustCode = r.Code,
+                              CustName = r.Name,
+                              Area = r.Area,
+                              ShopAddress = e.ShopAddress,
+                              Phone = s.Tel,
+                              Votes = e.Votes != null ? e.Votes : 0,
+                              FansNum = s.FansNum,
+                              PicPath =e.PicPath
+                          });
+            return await result.FirstOrDefaultAsync();
         }
 
 
@@ -153,7 +171,7 @@ namespace HC.WeChat.ExhibitionShops
         /// <summary>
         /// 新增ExhibitionShop
         /// </summary>
-        [AbpAuthorize(ExhibitionShopAppPermissions.ExhibitionShop_CreateExhibitionShop)]
+        //[AbpAuthorize(ExhibitionShopAppPermissions.ExhibitionShop_CreateExhibitionShop)]
         protected virtual async Task<ExhibitionShopEditDto> CreateExhibitionShopAsync(ExhibitionShopEditDto input)
         {
             //TODO:新增前的逻辑判断，是否允许新增
@@ -167,7 +185,7 @@ namespace HC.WeChat.ExhibitionShops
         /// <summary>
         /// 编辑ExhibitionShop
         /// </summary>
-        [AbpAuthorize(ExhibitionShopAppPermissions.ExhibitionShop_EditExhibitionShop)]
+        //[AbpAuthorize(ExhibitionShopAppPermissions.ExhibitionShop_EditExhibitionShop)]
         protected virtual async Task UpdateExhibitionShopAsync(ExhibitionShopEditDto input)
         {
             //TODO:更新前的逻辑判断，是否允许更新
@@ -227,11 +245,11 @@ namespace HC.WeChat.ExhibitionShops
                               ShopName = e.ShopName,
                               CustCode = r.Code,
                               CustName = r.Name,
-                              Area = "未知",
+                              Area = r.Area,
                               ShopAddress = e.ShopAddress,
                               Phone = s.Tel,
                               Votes = e.Votes != null ? e.Votes : 0,
-                              FansNum = s.FansNum.Value
+                              FansNum = s.FansNum
                           });
             var exhibitionshopCount = await result.CountAsync();
             var exhibitionshops = await result

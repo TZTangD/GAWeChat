@@ -66,7 +66,7 @@ namespace HC.WeChat.ExhibitionShops.Dtos
         public DateTime? AuditTime { get; set; }
 
         public string Phone { get; set; }
-        public int FansNum { get; set; }
+        public int? FansNum { get; set; }
         public string Area { get; set; }
         public string CustCode { get; set; }
         public string CustName { get; set; }

@@ -71,7 +71,6 @@ namespace HC.WeChat.Exhibitions
         public async Task<ExhibitionListDto> GetExhibitionByIdAsync()
         {
             var entity = await _exhibitionRepository.GetAll().FirstOrDefaultAsync();
-
             return entity.MapTo<ExhibitionListDto>();
         }
 
@@ -124,16 +123,15 @@ namespace HC.WeChat.Exhibitions
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task CreateOrUpdateExhibition(CreateOrUpdateExhibitionInput input)
+        public async Task CreateOrUpdateExhibition(ExhibitionEditDto input)
         {
-
-            if (input.Exhibition.Id.HasValue)
+            if (input.Id.HasValue)
             {
-                await UpdateExhibitionAsync(input.Exhibition);
+                await UpdateExhibitionAsync(input);
             }
             else
             {
-                await CreateExhibitionAsync(input.Exhibition);
+                await CreateExhibitionAsync(input);
             }
         }
 
@@ -152,7 +150,7 @@ namespace HC.WeChat.Exhibitions
         /// <summary>
         /// 编辑Exhibition
         /// </summary>
-        [AbpAuthorize(ExhibitionAppPermissions.Exhibition_EditExhibition)]
+        //[AbpAuthorize(ExhibitionAppPermissions.Exhibition_EditExhibition)]
         protected virtual async Task UpdateExhibitionAsync(ExhibitionEditDto input)
         {
             //TODO:更新前的逻辑判断，是否允许更新
