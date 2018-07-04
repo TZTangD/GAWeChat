@@ -38,7 +38,7 @@ export class StoreManagementComponent extends AppComponentBase implements OnInit
         sale: null,
         read: null,
         single: null,
-        fans:null,
+        fans: null,
     };
     host = AppConsts.remoteServiceBaseUrl;
     loading = false;
@@ -84,7 +84,7 @@ export class StoreManagementComponent extends AppComponentBase implements OnInit
             this.sortMap.single = null;
             this.sortMap.fans = null;
             this.refreshData();
-        }else{
+        } else {
             this.sortFansTotal = value;
             this.sortReadTotal = null;
             this.sortSaleTotal = null;
@@ -109,7 +109,7 @@ export class StoreManagementComponent extends AppComponentBase implements OnInit
                 sale: null,
                 read: null,
                 single: null,
-                fans:null
+                fans: null
             };
         }
         if (search) {
@@ -148,7 +148,7 @@ export class StoreManagementComponent extends AppComponentBase implements OnInit
      */
     exportExcel() {
         this.exportLoading = true;
-        this.shopServie.ExportExcel({ name: this.search.name, tel: this.search.tel, status: this.search.status === 4 ? null : this.search.status, sortSaleTotal: this.sortSaleTotal, sortReadTotal: this.sortReadTotal, sortSingleTotal: this.sortSingleTotal,sortFansTotal:this.sortFansTotal }).subscribe(data => {
+        this.shopServie.ExportExcel({ name: this.search.name, tel: this.search.tel, status: this.search.status === 4 ? null : this.search.status, sortSaleTotal: this.sortSaleTotal, sortReadTotal: this.sortReadTotal, sortSingleTotal: this.sortSingleTotal, sortFansTotal: this.sortFansTotal }).subscribe(data => {
             if (data.code == 0) {
                 var url = AppConsts.remoteServiceBaseUrl + data.data;
                 document.getElementById('aShopExcelUrl').setAttribute('href', url);
@@ -161,6 +161,7 @@ export class StoreManagementComponent extends AppComponentBase implements OnInit
     }
 
     downPromotionCodeZip() {
+
         this.zipNameIds = '';
         this.zipUrlIds = '';
         this.willDownShopInfo = this.shops.filter(v => v.selected && v.status == 2);
@@ -169,7 +170,7 @@ export class StoreManagementComponent extends AppComponentBase implements OnInit
         });
         var url = this.willDownShopInfo.forEach(v => {
             this.zipUrlIds += v.qrUrl + ',';
-        })
+        });
         if (this.zipNameIds != '' && this.zipUrlIds != '') {
             this.exportLoading = true;
             this.shopServie.PromotionCodeZip({ url: this.zipUrlIds, fileName: this.zipNameIds }).subscribe(data => {
@@ -183,6 +184,10 @@ export class StoreManagementComponent extends AppComponentBase implements OnInit
                 this.exportLoading = false;
             });
         }
+        else {
+            this.notify.warn(this.l('请选择需要下载推广码的店铺！'));
+        }
+
     }
 
     checkAll(e) {

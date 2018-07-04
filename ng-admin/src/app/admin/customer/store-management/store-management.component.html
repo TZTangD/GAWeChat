@@ -45,15 +45,20 @@
                     </div>
                 </div>
             </div>
-
+            <div nz-col [nzSpan]="6" class="mb-md">
+                <button nz-button type="button" (click)="downPromotionCodeZip()" [nzSize]="'large'" [nzLoading]="exportLoading">
+                    <i class="anticon anticon-download"></i>
+                    <span>批量下载推广码</span>
+                </button>
+            </div>
             <div nz-col [nzSpan]="8" style="float:right;text-align: right; padding-left:0px" class="mb-md" [class.text-right]="'true'">
                 <a style="display: none;" id="aShopPicZipUrl" href="#">
                     <button type="button" id="btnShopPicZipHref">隐藏下载</button>
                 </a>
-                <button nz-button type="button" (click)="downPromotionCodeZip()" [nzSize]="'large'" [nzLoading]="exportLoading">
+                <!-- <button nz-button type="button" (click)="downPromotionCodeZip()" [nzSize]="'large'" [nzLoading]="exportLoading">
                     <i class="anticon anticon-download"></i>
-                    <span>批量下载</span>
-                </button>
+                    <span>批量下载推广码</span>
+                </button> -->
                 <button nz-button type="submit" [nzType]="'primary'" [nzLoading]="loading" [nzSize]="'large'">查询</button>
                 <button nz-button type="reset" (click)="refreshData(true)" [nzSize]="'large'" class="mx-sm">重置</button>
                 <!-- <button nz-button (click)="createRetail()" [nzType]="'primary'" [nzSize]="'large'">
@@ -71,12 +76,14 @@
         </div>
 
     </form>
-    <nz-table #nzTable [nzAjaxData]="shops" [nzTotal]="query.total" [(nzPageIndex)]="query.pageIndex" [(nzPageSize)]="query.pageSize" [nzLoading]="loading" [nzShowTotal]="'true'" [nzShowSizeChanger]="true" (nzPageIndexChange)="refreshData()" (nzPageSizeChange)="refreshData()">
+    <nz-table #nzTable [nzAjaxData]="shops" [nzTotal]="query.total" [(nzPageIndex)]="query.pageIndex" [(nzPageSize)]="query.pageSize"
+        [nzLoading]="loading" [nzShowTotal]="'true'" [nzShowSizeChanger]="true" (nzPageIndexChange)="refreshData()" (nzPageSizeChange)="refreshData()">
         <thead nz-thead>
             <tr>
                 <th nz-th>
                     <label nz-checkbox [(ngModel)]="isSelectedAll" (ngModelChange)="checkAll($event)">
-                     </label> <span>全选</span>
+                    </label>
+                    <span>全选</span>
                 </th>
                 <th nz-th>
                     <span>店铺名称</span>
@@ -124,7 +131,7 @@
             <tr nz-tbody-tr *ngFor="let shop of nzTable.data">
                 <td nz-td>
                     <label nz-checkbox *ngIf="shop.status===2" [(ngModel)]="shop.selected" (ngModelChange)="isCancelCheck($event)">
-                        </label>
+                    </label>
                 </td>
                 <td nz-td>{{shop.name}}</td>
                 <td nz-td title="{{shop.address}}">{{shop.address| lengthLimit:8}}</td>
