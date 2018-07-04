@@ -27,7 +27,7 @@
             </div>
         </ng-template>
     </div>
-    <div class="weui-cells__title" *ngIf="shops && shops.length > 0">售卖【{{sgoods.specification}}】的附近3公里以内的店铺</div>
+    <div class="weui-cells__title" *ngIf="shops && shops.length > 0">售卖【{{sgoods.specification}}】附近3公里以内的店铺</div>
     <div class="weui-cells" *ngIf="shops && shops.length > 0">
         <a class="weui-cell weui-cell_access" *ngFor="let s of shops" (click)="goShop(s.id)">
             <div class="weui-cell__hd weui-cell_img" [ngStyle]="{'background-image':'url('+ hostUrl + s.coverPhoto +')'}">

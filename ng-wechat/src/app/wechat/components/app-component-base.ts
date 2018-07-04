@@ -46,5 +46,19 @@ export abstract class AppComponentBase {
         return params;
     }
 
+    get IsIOS(){
+        let ua = navigator.userAgent.toLowerCase();
+        //alert(ua);
+        return /mac os/.test(ua);
+        //return /android/.test(ua);
+    }
+
+    get CurrentUrl() {
+        if(this.IsIOS){
+            return encodeURIComponent(location.href.split('#')[0]+'index.html');
+        } else {
+            return encodeURIComponent(location.href.split('#')[0]);
+        }
+    }
 
 }

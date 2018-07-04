@@ -58,7 +58,7 @@ export class ScanComponent extends AppComponentBase implements OnInit {
             }
             //alert(location.href.split('#')[0])
             //alert(encodeURIComponent(location.href.split('#')[0]));
-            let url = encodeURIComponent(location.href.split('#')[0]);
+            let url = this.CurrentUrl;//encodeURIComponent(location.href.split('#')[0]);
             this.settingsService.getJsApiConfig(url).subscribe(result => {
                 if (result) {
                     result.jsApiList = ['scanQRCode'];//指定调用的接口名
