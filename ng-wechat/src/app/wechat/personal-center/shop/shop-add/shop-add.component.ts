@@ -321,17 +321,23 @@ export class ShopAddComponent extends AppComponentBase implements OnInit {
     }
     //选择图片
     fileChange($event) {
+        this.imgCropperPopup.show();
         this.srvToast.show(null, 10000, null, 'loading');
-        const image: any = new Image();
-        const file: File = $event.target.files[0];
+        //const image: any = new Image();
+        //const file: File = $event.target.files[0];
+        var image:any = new Image();
+        var file:File = $event.target.files[0];
+        var myReader:FileReader = new FileReader();
+        var that = this;
         //alert(file.size);
         this.setCompressRatio(file.size);
         this.fileName = file.name;
-        const myReader: FileReader = new FileReader();
-        myReader.onloadend = (loadEvent: any) => {
+        //const myReader: FileReader = new FileReader();
+        myReader.onloadend = function (loadEvent:any) { //(loadEvent: any) => {
             image.src = loadEvent.target.result;
-            this.shopCropper.setImage(image);
-            this.srvToast.hide();
+            //this.shopCropper.setImage(image);
+            that.shopCropper.setImage(image);
+            that.srvToast.hide();
         };
         myReader.readAsDataURL(file);
     }
