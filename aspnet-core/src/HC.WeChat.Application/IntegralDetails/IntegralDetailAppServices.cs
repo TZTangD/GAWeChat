@@ -23,6 +23,7 @@ using Senparc.Weixin.MP.AdvancedAPIs;
 using HC.WeChat.WechatAppConfigs.Dtos;
 using HC.WeChat.WechatAppConfigs;
 using HC.WeChat.Retailers;
+using HC.WeChat.Employees;
 
 namespace HC.WeChat.IntegralDetails
 {
@@ -39,18 +40,21 @@ namespace HC.WeChat.IntegralDetails
         private readonly IIntegralDetailManager _integraldetailManager;
         private readonly IRepository<WeChatUser, Guid> _wechatusersRepository;
         private readonly IRepository<Retailer, Guid> _retailerRepository;
+        private readonly IRepository<Employee, Guid> _employeeRepository;
         /// <summary>
         /// 构造函数
         /// </summary>
         public IntegralDetailAppService(IRepository<IntegralDetail, Guid> integraldetailRepository
             , IRepository<Retailer, Guid> retailerRepository
             , IIntegralDetailManager integraldetailManager
+            , IRepository<Employee, Guid> employeeRepository
             , IRepository<WeChatUser, Guid> wechatusersRepository)
         {
             _integraldetailRepository = integraldetailRepository;
             _integraldetailManager = integraldetailManager;
             _wechatusersRepository = wechatusersRepository;
             _retailerRepository = retailerRepository;
+            _employeeRepository = employeeRepository;
         }
 
         /// <summary>
@@ -232,24 +236,29 @@ namespace HC.WeChat.IntegralDetails
             //            };
 
             var queryIntegral = _wechatusersRepository.GetAll().Where(v => v.IntegralTotal > 0)
-                //.WhereIf(!string.IsNullOrEmpty(input.Name), v => v.NickName.Contains(input.Name))
+                .WhereIf(!string.IsNullOrEmpty(input.Name), v => v.NickName.Contains(input.Name))
                 .WhereIf(input.UserType.HasValue, u => u.UserType == input.UserType)
                 .WhereIf(!string.IsNullOrEmpty(input.Phone), u => u.Phone.Contains(input.Phone));
+
             ////TODO:根据传入的参数添加过滤条件
             var retailer = _retailerRepository.GetAll();
+            var employee = _employeeRepository.GetAll();
             var query = (from w in queryIntegral
                          join r in retailer on w.UserId equals r.Id into wr
                          from table in wr.DefaultIfEmpty()
+                         join e in employee on w.UserId equals e.Id into wre
+                         from result in wre.DefaultIfEmpty()
                          select new WeChatUserListDto()
                          {
                              Id = w.Id,
                              OpenId = w.OpenId,
                              NickName = w.NickName,
                              UserType = w.UserType,
-                             Code = table.Code ?? null,
+                             Code = table != null ? table.Code : (result != null ? result.Code : ""),
                              Phone = w.Phone,
-                             IntegralTotal = w.IntegralTotal
-                         }).WhereIf(!string.IsNullOrEmpty(input.Name), v => v.Code.Contains(input.Name) || v.NickName.Contains(input.Name));
+                             IntegralTotal = w.IntegralTotal,
+                             UserName = w.UserName
+                         }).WhereIf(!string.IsNullOrEmpty(input.Code), v => v.Code.Contains(input.Code));
             var intergralCount = await query.CountAsync();
             if (input.SortValue == "ascend")
             {

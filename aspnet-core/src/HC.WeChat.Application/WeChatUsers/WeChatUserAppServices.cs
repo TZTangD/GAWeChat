@@ -915,7 +915,7 @@ namespace HC.WeChat.WeChatUsers
                 ISheet sheet = workbook.CreateSheet("WeChatUser");
                 var rowIndex = 0;
                 IRow titleRow = sheet.CreateRow(rowIndex);
-                string[] titles = { "微信OpenId", "微信昵称", "用户类型", "用户名", "绑定状态", "绑定时间", "解绑时间", "绑定电话", "会员卡条形码", "用户总积分", "是否是店主", "审核状态", "关注时间", "取消关注时间","零售户/员工编码" };
+                string[] titles = { "微信OpenId", "微信昵称", "用户类型", "用户名", "绑定状态", "绑定时间", "解绑时间", "绑定电话", "会员卡条形码", "用户总积分", "是否是店主", "审核状态", "关注时间", "取消关注时间", "零售户/员工编码" };
                 var fontTitle = workbook.CreateFont();
                 fontTitle.IsBold = true;
                 for (int i = 0; i < titles.Length; i++)
@@ -1003,6 +1003,127 @@ namespace HC.WeChat.WeChatUsers
                 wechatuserListDtos
                 );
 
+        }
+
+        /// <summary>
+        /// 会员积分Excel导出
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [UnitOfWork(isTransactional: false)]
+        public async Task<APIResultDto> ExportWeChatUsersIntegralExcelAsync(GetWeChatUsersInput input)
+        {
+            try
+            {
+                var exportData = await GetWeChatUsersIntegralAsync(input);
+                var result = new APIResultDto();
+                result.Code = 0;
+                result.Data = SaveWeChatUsersIntegralExcel("会员积分.xlsx", exportData);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Logger.ErrorFormat("ExportPostInfoExcel errormsg:{0} Exception:{1}", ex.Message, ex);
+                return new APIResultDto() { Code = 901, Msg = "网络忙... 请待会重试！" };
+            }
+        }
+
+        private async Task<List<WeChatUserListDto>> GetWeChatUsersIntegralAsync(GetWeChatUsersInput input)
+        {
+            var queryIntegral = _wechatuserRepository.GetAll().Where(v => v.IntegralTotal > 0)
+                .WhereIf(!string.IsNullOrEmpty(input.Name), v => v.NickName.Contains(input.Name))
+                .WhereIf(input.UserType.HasValue, u => u.UserType == input.UserType)
+                .WhereIf(!string.IsNullOrEmpty(input.Phone), u => u.Phone.Contains(input.Phone));
+            var retailer = _retailerRepository.GetAll();
+            var employee = _employeeRepository.GetAll();
+            var query = (from w in queryIntegral
+                         join r in retailer on w.UserId equals r.Id into wr
+                         from table in wr.DefaultIfEmpty()
+                         join e in employee on w.UserId equals e.Id into wre
+                         from result in wre.DefaultIfEmpty()
+                         select new WeChatUserListDto()
+                         {
+                             Id = w.Id,
+                             OpenId = w.OpenId,
+                             NickName = w.NickName,
+                             UserType = w.UserType,
+                             Code = table != null ? table.Code : (result != null ? result.Code : ""),
+                             Phone = w.Phone,
+                             IntegralTotal = w.IntegralTotal,
+                             UserName = w.UserName
+                         }).WhereIf(!string.IsNullOrEmpty(input.Code), v => v.Code.Contains(input.Code));
+            if (input.SortValue != null && input.SortValue == "ascend")
+            {
+                var intergral = await query
+                .OrderByDescending(v => v.IntegralTotal)
+                .ThenBy(input.Sorting)
+                .PageBy(input)
+                .ToListAsync();
+                var intergralListDtos = intergral.MapTo<List<WeChatUserListDto>>();
+                return intergralListDtos;
+            }
+            else if (input.SortValue != null && input.SortValue == "descend")
+            {
+                var intergral = await query
+                 .OrderBy(v => v.IntegralTotal)
+                 .ThenBy(input.Sorting)
+                 .PageBy(input)
+                 .ToListAsync();
+                var intergralListDtos = intergral.MapTo<List<WeChatUserListDto>>();
+                return intergralListDtos;
+            }
+            else
+            {
+                var intergral = await query
+                .OrderByDescending(v => v.IntegralTotal)
+                .ThenBy(input.Sorting)
+                .PageBy(input)
+                .ToListAsync();
+                var intergralListDtos = intergral.MapTo<List<WeChatUserListDto>>();
+                return intergralListDtos;
+            }
+        }
+
+        private string SaveWeChatUsersIntegralExcel(string fileName, List<WeChatUserListDto> data)
+        {
+            var fullPath = ExcelHelper.GetSavePath(_hostingEnvironment.WebRootPath) + fileName;
+            using (var fs = new FileStream(fullPath, FileMode.Create, FileAccess.Write))
+            {
+                IWorkbook workbook = new XSSFWorkbook();
+                ISheet sheet = workbook.CreateSheet("WeChatUser");
+                var rowIndex = 0;
+                IRow titleRow = sheet.CreateRow(rowIndex);
+                string[] titles = { "会员姓名", "用户类型", "用户名(编码)", "电话号码", "积分"};
+                var fontTitle = workbook.CreateFont();
+                fontTitle.IsBold = true;
+                for (int i = 0; i < titles.Length; i++)
+                {
+                    var cell = titleRow.CreateCell(i);
+                    cell.CellStyle.SetFont(fontTitle);
+                    cell.SetCellValue(titles[i]);
+                }
+
+                var font = workbook.CreateFont();
+                foreach (var item in data)
+                {
+                    rowIndex++;
+                    IRow row = sheet.CreateRow(rowIndex);
+                    ExcelHelper.SetCell(row.CreateCell(0), font, item.NickName);
+                    ExcelHelper.SetCell(row.CreateCell(1), font, item.UserTypeName);
+                    if (item.Code!="")
+                    {
+                        ExcelHelper.SetCell(row.CreateCell(2), font, item.UserName+"("+item.Code+")");
+                    }
+                    else
+                    {
+                        ExcelHelper.SetCell(row.CreateCell(2), font, item.UserName);
+                    }
+                    ExcelHelper.SetCell(row.CreateCell(3), font, item.Phone);
+                    ExcelHelper.SetCell(row.CreateCell(4), font, item.IntegralTotal);
+                }
+                workbook.Write(fs);
+            }
+            return "/files/downloadtemp/" + fileName;
         }
     }
 }

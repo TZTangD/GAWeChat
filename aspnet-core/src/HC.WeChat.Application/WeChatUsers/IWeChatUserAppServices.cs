@@ -120,6 +120,6 @@ namespace HC.WeChat.WeChatUsers
         /// <returns></returns>
         Task<int> GetShopEmployeesNoCheckCountAsync(int? tenantId, Guid userId);
         Task<APIResultDto> ExportWeChatUsersExcel(GetWeChatUsersInput input);
-
+        Task<APIResultDto> ExportWeChatUsersIntegralExcelAsync(GetWeChatUsersInput input);
     }
 }
