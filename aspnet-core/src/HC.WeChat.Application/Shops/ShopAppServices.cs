@@ -579,7 +579,8 @@ namespace HC.WeChat.Shops
                                     TenantId = s.TenantId,
                                     Tel = s.Tel,
                                     RetailerName = sr != null ? sr.Name : "",
-                                    QRUrl = s.QRUrl
+                                    QRUrl = s.QRUrl,
+                                    FansNum = s.FansNum
                                 }).SingleOrDefaultAsync();
             //当店铺二维码不存在时，去新生成二维码
             if (string.IsNullOrEmpty(entity.QRUrl) && entity.Status == ShopAuditStatus.已审核)
