@@ -63,7 +63,7 @@ export class ShopComponent extends AppComponentBase implements OnInit {
                 console.warn('jweixin.js 加载失败');
                 return;
             }
-            let url = encodeURIComponent(location.href.split('#')[0]);
+            let url = this.CurrentUrl;//encodeURIComponent(location.href.split('#')[0]);
             this.settingsService.getJsApiConfig(url).subscribe(result => {
                 if (result) {
                     result.jsApiList = ['openLocation'];//指定调用的接口名

@@ -12,7 +12,6 @@ using Microsoft.EntityFrameworkCore;
 using HC.WeChat.Shops.Dtos;
 using HC.WeChat.Shops.DomainServices;
 using System;
-using HC.WeChat.Authorization;
 using HC.WeChat.Retailers;
 using HC.WeChat.WeChatUsers.DomainServices;
 using HC.WeChat.WechatEnums;
@@ -32,11 +31,19 @@ using NPOI.XSSF.UserModel;
 using Abp.Domain.Uow;
 using HC.WeChat.Dto;
 using Senparc.Weixin.MP;
-using Senparc.Weixin.MP.AdvancedAPIs.QrCode;
 using System.Net;
-using System.Text.RegularExpressions;
 using ICSharpCode.SharpZipLib.Zip;
 using ICSharpCode.SharpZipLib.Checksum;
+using System.DrawingCore.Text;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
+using SixLabors.ImageSharp.Processing.Transforms;
+using SixLabors.ImageSharp.Processing.Filters;
+using SixLabors.ImageSharp.Processing.Text;
+using SixLabors.ImageSharp.Processing.Drawing;
+using SixLabors.Primitives;
+using HC.WeChat.Authorization;
 
 namespace HC.WeChat.Shops
 {
@@ -809,7 +816,7 @@ namespace HC.WeChat.Shops
                             //RetailerName = r != null ? r.Name : "",
                             RetailerName = r.Name,
                             RetailerCode = r.Code,
-                            FansNum=s.FansNum
+                            FansNum = s.FansNum
                         };
 
             //TODO:根据传入的参数添加过滤条件
@@ -911,7 +918,7 @@ namespace HC.WeChat.Shops
                 ISheet sheet = workbook.CreateSheet("Employees");
                 var rowIndex = 0;
                 IRow titleRow = sheet.CreateRow(rowIndex);
-                string[] titles = { "店铺名称", "店铺地址", "店铺描述", "零售客户", "客户编码", "店铺销量", "店铺浏览量", "店铺用户量","粉丝数", "店铺电话", "审核状态", "审核时间", "店铺评价", "经度", "纬度" };
+                string[] titles = { "店铺名称", "店铺地址", "店铺描述", "零售客户", "客户编码", "店铺销量", "店铺浏览量", "店铺用户量", "粉丝数", "店铺电话", "审核状态", "审核时间", "店铺评价", "经度", "纬度" };
                 var fontTitle = workbook.CreateFont();
                 fontTitle.IsBold = true;
                 for (int i = 0; i < titles.Length; i++)
@@ -995,7 +1002,7 @@ namespace HC.WeChat.Shops
                 {
                     //生成二维码 
                     var retailer = await _retailerRepository.GetAll().Where(r => r.Id == item.RetailerId).SingleOrDefaultAsync();
-                    var result =await QrCodeApi.CreateAsync(AppConfig.AppId, 0, 0, QrCode_ActionName.QR_LIMIT_STR_SCENE, (int)SceneType.店铺 + "_" + item.Id.ToString());
+                    var result = await QrCodeApi.CreateAsync(AppConfig.AppId, 0, 0, QrCode_ActionName.QR_LIMIT_STR_SCENE, (int)SceneType.店铺 + "_" + item.Id.ToString());
 
                     //下载二维码到本地
                     var imgurl = QrCodeApi.GetShowQrCodeUrl(result.ticket);
@@ -1063,7 +1070,9 @@ namespace HC.WeChat.Shops
             var filePath = fileDire + imgName + ".jpg";
             web.DownloadFile(url, filePath);
             location = filePath.Substring(webRootPath.Length);
-            return location;
+            imgName = filePath.Substring(fileDire.Length);
+            var imgPath = QrcodeImgLogo(filePath, imgName);
+            return imgPath;
         }
         #endregion
 
@@ -1105,7 +1114,7 @@ namespace HC.WeChat.Shops
             var downFileDireZip = webRootPath + downEndRoteZip;
             if (Directory.Exists(fileDire))
             {
-                Directory.Delete(fileDire,true);// 先删除之前的目录
+                Directory.Delete(fileDire, true);// 先删除之前的目录
             }
             if (remoteUrl.Contains(','))
             {
@@ -1130,13 +1139,13 @@ namespace HC.WeChat.Shops
             else
             {
                 WebClient web = new WebClient();
-                string html = web.DownloadString(webRootPath+remoteUrl);
+                string html = web.DownloadString(webRootPath + remoteUrl);
                 if (!Directory.Exists(fileDire))
                 {
                     Directory.CreateDirectory(fileDire);
                 }
                 var filePath = fileDire + imgName + ".jpg";
-                web.DownloadFile(webRootPath+remoteUrl, filePath);
+                web.DownloadFile(webRootPath + remoteUrl, filePath);
                 ZipFileDirectory(fileDireZip, "店铺推广码.zip", downFileDireZip);
                 return "/files/downloadtemp/店铺推广码.zip";
             }
@@ -1208,6 +1217,36 @@ namespace HC.WeChat.Shops
                         s.Write(buffer, 0, buffer.Length);
                     }
                 }
+            }
+        }
+
+
+        /// <summary>
+        /// 二维码添加logo
+        /// </summary>
+        /// <param name="filePath">二维码路径</param>
+        /// <param name="imgName">图片名称</param>
+        /// <returns></returns>
+        public string QrcodeImgLogo(string filePath, string imgName)
+        {
+            string webRootPath = _hostingEnvironment.WebRootPath;
+            using (FileStream stream = File.OpenRead(filePath))
+            using (Image<Rgba32> logo = Image.Load(webRootPath + "/upload/shopqr/logo.jpg"))
+            using (Image<Rgba32> image = Image.Load(stream))
+            {
+                logo.Mutate(x => x
+                     .Resize(90, 90));
+                image.Mutate(x => x.DrawImage(logo, PixelBlenderMode.Src, 1, new Point(image.Width / 2 - 45, image.Height / 2 - 45)));
+                var endRote = string.Format("/upload/{0}/", "qrlogo");
+                var fileDire = webRootPath + endRote;
+                if (!Directory.Exists(fileDire))
+                {
+                    Directory.CreateDirectory(fileDire);
+                }
+                var path = fileDire + imgName;
+                image.Save(path);
+                var imgPath = path.Substring(webRootPath.Length);
+                return imgPath;
             }
         }
     }

@@ -40,6 +40,7 @@ export class NearbyShopComponent extends AppComponentBase implements OnInit {
     }
 
     ngOnInit() {
+        //alert(this.CurrentUrl);
         //调用城市服务信息
         this.citylocation = new qq.maps.CityService(this.options);
         this.wxService.get().then(res => {
@@ -47,7 +48,7 @@ export class NearbyShopComponent extends AppComponentBase implements OnInit {
                 console.warn('weixin或qq map js加载失败');
                 return;
             }
-            let url = encodeURIComponent(location.href.split('#')[0]);
+            let url = this.CurrentUrl; //encodeURIComponent(location.href.split('#')[0]);
             this.settingsService.getJsApiConfig(url).subscribe(result => {
                 if (result) {
                     result.jsApiList = ['openLocation', 'getLocation'];//指定调用的接口名

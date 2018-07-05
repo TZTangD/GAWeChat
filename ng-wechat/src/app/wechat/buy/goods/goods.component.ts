@@ -35,7 +35,7 @@ export class GoodsComponent extends AppComponentBase implements OnInit {
                 console.warn('weixin或qq map js加载失败');
                 return;
             }
-            let url = encodeURIComponent(location.href.split('#')[0]);
+            let url = this.CurrentUrl;//encodeURIComponent(location.href.split('#')[0]);
             this.settingsService.getJsApiConfig(url).subscribe(result => {
                 if (result) {
                     result.jsApiList = ['getLocation'];//指定调用的接口名
