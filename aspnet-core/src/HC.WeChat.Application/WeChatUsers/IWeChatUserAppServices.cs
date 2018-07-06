@@ -121,5 +121,11 @@ namespace HC.WeChat.WeChatUsers
         Task<int> GetShopEmployeesNoCheckCountAsync(int? tenantId, Guid userId);
         Task<APIResultDto> ExportWeChatUsersExcel(GetWeChatUsersInput input);
 
+        /// <summary>
+        /// 微信用户统计（按零售户分公司统计）
+        /// </summary>
+        /// <returns></returns>
+        Task<WeChatUserStatisticLiDto> GetWeChatUserStatistic();
+
     }
 }

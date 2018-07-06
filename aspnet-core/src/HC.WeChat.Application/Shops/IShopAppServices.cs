@@ -93,7 +93,7 @@ namespace HC.WeChat.Shops
         /// 店铺审核
         /// </summary>
         Task CheckShop(CheckShopDto input);
-        
+
         //Task<ShopListDto> GetViewShopByIdAsync(Guid id, int? tenantId);
 
         Task<List<NearbyShopDto>> GetNearbyShopByLocationAsync(double latitude, double longitude, int? tenantId, string openId);
@@ -123,5 +123,11 @@ namespace HC.WeChat.Shops
         /// <param name="imgName">图片名称</param>
         /// <returns></returns>
         string QrcodeImgLogo(string filePath, string imgName);
+
+        /// <summary>
+        /// 店铺入驻数统计（按分公司统计）
+        /// </summary>
+        /// <returns></returns>
+        Task<ShopStatisticLiDto> GetShopStatisticsByCompany();
     }
 }

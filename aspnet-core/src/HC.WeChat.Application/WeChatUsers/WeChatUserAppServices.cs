@@ -915,7 +915,7 @@ namespace HC.WeChat.WeChatUsers
                 ISheet sheet = workbook.CreateSheet("WeChatUser");
                 var rowIndex = 0;
                 IRow titleRow = sheet.CreateRow(rowIndex);
-                string[] titles = { "微信OpenId", "微信昵称", "用户类型", "用户名", "绑定状态", "绑定时间", "解绑时间", "绑定电话", "会员卡条形码", "用户总积分", "是否是店主", "审核状态", "关注时间", "取消关注时间","零售户/员工编码" };
+                string[] titles = { "微信OpenId", "微信昵称", "用户类型", "用户名", "绑定状态", "绑定时间", "解绑时间", "绑定电话", "会员卡条形码", "用户总积分", "是否是店主", "审核状态", "关注时间", "取消关注时间", "零售户/员工编码" };
                 var fontTitle = workbook.CreateFont();
                 fontTitle.IsBold = true;
                 for (int i = 0; i < titles.Length; i++)
@@ -1003,6 +1003,33 @@ namespace HC.WeChat.WeChatUsers
                 wechatuserListDtos
                 );
 
+        }
+
+        /// <summary>
+        /// 微信用户统计（按零售户分公司统计）
+        /// </summary>
+        /// <returns></returns>
+        public async Task<WeChatUserStatisticLiDto> GetWeChatUserStatistic()
+        {
+            var weChat = _wechatuserRepository.GetAll().Where(w => w.UserType != UserTypeEnum.取消关注);
+            var retail = _retailerRepository.GetAll();
+            var query = from w in weChat
+                               join r in retail on w.UserId equals r.Id into g
+                               from wr in g.DefaultIfEmpty()
+                               group wr by wr.BranchCompany into m
+                               select new WeChatUserStatisticDto
+                               {
+                                   Company = m.Key == null ? "其它" : m.Key,
+                                   Count = m.Count(),
+                                   GroupId = m.Key == null ? 2 : 1,
+                               };
+
+            var total =await query.SumAsync(w=>w.Count);
+            var list =await query.OrderBy(l => l.GroupId).ThenByDescending(l => l.Count).ToListAsync();
+            var result = new WeChatUserStatisticLiDto();
+            result.WechatUserStaDto = list;
+            result.Total = total;
+            return result;
         }
     }
 }

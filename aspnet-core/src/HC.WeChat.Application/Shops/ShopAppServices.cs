@@ -817,7 +817,10 @@ namespace HC.WeChat.Shops
                             //RetailerName = r != null ? r.Name : "",
                             RetailerName = r.Name,
                             RetailerCode = r.Code,
-                            FansNum = s.FansNum
+                            FansNum = s.FansNum,
+                            BranchCompany = r.BranchCompany,
+                            Manager = r.Manager,
+                            //Area=r.Area
                         };
 
             //TODO:根据传入的参数添加过滤条件
@@ -919,7 +922,7 @@ namespace HC.WeChat.Shops
                 ISheet sheet = workbook.CreateSheet("Employees");
                 var rowIndex = 0;
                 IRow titleRow = sheet.CreateRow(rowIndex);
-                string[] titles = { "店铺名称", "店铺地址", "店铺描述", "零售客户", "客户编码", "店铺销量", "店铺浏览量", "店铺用户量", "粉丝数", "店铺电话", "审核状态", "审核时间", "店铺评价", "经度", "纬度" };
+                string[] titles = { "店铺名称", "店铺地址", "店铺描述", "零售客户", "客户编码", "客户经理", "单位", "店铺销量", "店铺浏览量", "店铺用户量", "粉丝数", "店铺电话", "审核状态", "审核时间", "店铺评价", "经度", "纬度", "片区" };
                 var fontTitle = workbook.CreateFont();
                 fontTitle.IsBold = true;
                 for (int i = 0; i < titles.Length; i++)
@@ -946,16 +949,19 @@ namespace HC.WeChat.Shops
                     ExcelHelper.SetCell(row.CreateCell(2), font, item.Desc);
                     ExcelHelper.SetCell(row.CreateCell(3), font, item.RetailerName);
                     ExcelHelper.SetCell(row.CreateCell(4), font, item.RetailerCode);
-                    ExcelHelper.SetCell(row.CreateCell(5), font, item.SaleTotal.ToString());
-                    ExcelHelper.SetCell(row.CreateCell(6), font, item.ReadTotal.ToString());
-                    ExcelHelper.SetCell(row.CreateCell(7), font, item.SingleTotal.ToString());
-                    ExcelHelper.SetCell(row.CreateCell(8), font, item.FansNum.ToString());
-                    ExcelHelper.SetCell(row.CreateCell(9), font, item.Tel);
-                    ExcelHelper.SetCell(row.CreateCell(10), font, item.StatusName);
-                    ExcelHelper.SetCell(row.CreateCell(11), font, item.AuditTime.ToString());
-                    ExcelHelper.SetCell(row.CreateCell(12), font, evaluationStr);
-                    ExcelHelper.SetCell(row.CreateCell(13), font, item.Longitude.ToString());
-                    ExcelHelper.SetCell(row.CreateCell(14), font, item.Latitude.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(5), font, item.Manager);
+                    ExcelHelper.SetCell(row.CreateCell(6), font, item.BranchCompany);
+                    ExcelHelper.SetCell(row.CreateCell(7), font, item.SaleTotal.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(8), font, item.ReadTotal.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(9), font, item.SingleTotal.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(10), font, item.FansNum.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(11), font, item.Tel);
+                    ExcelHelper.SetCell(row.CreateCell(12), font, item.StatusName);
+                    ExcelHelper.SetCell(row.CreateCell(13), font, item.AuditTime.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(14), font, evaluationStr);
+                    ExcelHelper.SetCell(row.CreateCell(15), font, item.Longitude.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(16), font, item.Latitude.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(17), font, item.Area);
 
                 }
                 workbook.Write(fs);
@@ -1250,6 +1256,36 @@ namespace HC.WeChat.Shops
                 return imgPath;
             }
         }
+
+        #region 店铺数据统计
+
+        /// <summary>
+        /// 店铺入驻数统计（按分公司统计）
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ShopStatisticLiDto> GetShopStatisticsByCompany()
+        {
+            var shop = _shopRepository.GetAll().Where(s => s.Status == ShopAuditStatus.已审核);
+            var retail = _retailerRepository.GetAll();
+            var query =(from s in shop
+                               join r in retail on s.RetailerId equals r.Id into g
+                               from sr in g.DefaultIfEmpty()
+                               where sr.BranchCompany != null
+                               group sr by sr.BranchCompany into m
+                               select new ShopStatisticDto
+                               {
+                                   Company = m.Key == null ? "其它" : m.Key,
+                                   Count = m.Count()
+                               });
+            var total =await query.SumAsync(s=>s.Count);
+            var list = await query.OrderByDescending(l => l.Count).ToListAsync();
+            var result = new ShopStatisticLiDto();
+            result.ShopStaDto = list;
+            result.Total = total;
+            return result;
+        }
+
+        #endregion
     }
 }
 
