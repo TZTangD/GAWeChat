@@ -58,7 +58,7 @@
                 入驻店铺统计
             </ng-template>
             <bar height="275" [data]="shopData"></bar>
-            <nz-table #nzTable [nzAjaxData]="shopStatistics" [nzIsPagination]="false" [nzLoading]="eloading" [nzShowSizeChanger]="true">
+            <nz-table #nzTable [nzAjaxData]="shopStatistics" [nzIsPagination]="false"  [nzShowSizeChanger]="true">
                 <thead nz-thead>
                     <tr>
                         <th nz-th>
@@ -89,7 +89,7 @@
                 关注微信用户统计
             </ng-template>
             <bar height="275" color="#00a854" [data]="wechatData"></bar>
-            <nz-table #nzTablew [nzAjaxData]="wechatUserStatistic" [nzIsPagination]="false" [nzLoading]="eloading" [nzShowSizeChanger]="true">
+            <nz-table #nzTablew [nzAjaxData]="wechatUserStatistic" [nzIsPagination]="false"  [nzShowSizeChanger]="true">
                 <thead nz-thead>
                     <tr>
                         <th nz-th>
