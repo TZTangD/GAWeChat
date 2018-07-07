@@ -121,13 +121,13 @@ namespace HC.WeChat.Shops
         /// </summary>
         /// <param name="filePath">二维码路径</param>
         /// <param name="imgName">图片名称</param>
-        /// <returns></returns>
         string QrcodeImgLogo(string filePath, string imgName);
 
         /// <summary>
         /// 店铺入驻数统计（按分公司统计）
         /// </summary>
-        /// <returns></returns>
         Task<ShopStatisticLiDto> GetShopStatisticsByCompany();
+
+        Task<APIResultDto> BatchCompressionPictures(string fromPath, string toPaht, int height);
     }
 }

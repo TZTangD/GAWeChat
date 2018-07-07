@@ -85,7 +85,7 @@ namespace HC.WeChat.Web.Host.Controllers
             //UserOpenId = "oPM5Uv81jfyJqWbVxWAH-RUqsCAs";
             //UserOpenId = "oPM5Uv89yy7Iv8k9gLHjjsMTT5Gw";
             //UserOpenId = "oB4nYjnoHhuWrPVi2pYLuPjnCaU0";
-            //UserOpenId = "oWusewPRxWuP4wMz3UmHR0y7CJME";
+            UserOpenId = "oWusewPRxWuP4wMz3UmHR0y7CJME";
             //UserOpenId = "o4l6swGJKxy4aEpUy3Hqm2DEeo_s";
             //UserOpenId = "o4l6swJ2RNer4X1OfB6yCvZorszs";
             //UserOpenId = "oWusewCseG_DDxU965N3UV2Dd8SM";

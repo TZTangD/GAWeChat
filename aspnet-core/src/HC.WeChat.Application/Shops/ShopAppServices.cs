@@ -1286,6 +1286,39 @@ namespace HC.WeChat.Shops
         }
 
         #endregion
+
+        /// <summary>
+        /// 批量压缩图片
+        /// </summary>
+        public Task<APIResultDto> BatchCompressionPictures(string fromPath, string toPaht, int height)
+        {
+            if (!Directory.Exists(fromPath))
+            {
+                return Task.FromResult(new APIResultDto() { Code = 701, Msg = string.Format("fromPath:{0}不存在", fromPath) });
+            }
+
+            if (!Directory.Exists(toPaht))
+            {
+                return Task.FromResult(new APIResultDto() { Code = 702, Msg = string.Format("toPaht:{0}不存在", toPaht) });
+            }
+
+            DirectoryInfo dinfo = new DirectoryInfo(fromPath);
+            foreach (var item in dinfo.GetFiles())
+            {
+                using (Image<Rgba32> image = Image.Load(item.OpenRead()))
+                {
+                    if (image.Height > height)
+                    {
+                        var width = (int)((height / image.Height) * image.Width);
+                        image.Mutate(x => x.Resize(width, height));
+                        image.Save(toPaht + "/" + item.Name);
+                    }
+                }
+            }
+
+            return Task.FromResult(new APIResultDto() { Code = 1, Msg = "压缩图片成功" });
+        }
+
     }
 }
 
