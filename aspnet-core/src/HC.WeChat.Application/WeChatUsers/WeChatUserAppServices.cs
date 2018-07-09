@@ -1124,6 +1124,30 @@ namespace HC.WeChat.WeChatUsers
                 workbook.Write(fs);
             }
             return "/files/downloadtemp/" + fileName;
+        /// 微信用户统计（按零售户分公司统计）
+        /// </summary>
+        /// <returns></returns>
+        public async Task<WeChatUserStatisticLiDto> GetWeChatUserStatistic()
+        {
+            var weChat = _wechatuserRepository.GetAll().Where(w => w.UserType != UserTypeEnum.取消关注);
+            var retail = _retailerRepository.GetAll();
+            var query = from w in weChat
+                               join r in retail on w.UserId equals r.Id into g
+                               from wr in g.DefaultIfEmpty()
+                               group wr by wr.BranchCompany into m
+                               select new WeChatUserStatisticDto
+                               {
+                                   Company = m.Key == null ? "其它" : m.Key,
+                                   Count = m.Count(),
+                                   GroupId = m.Key == null ? 2 : 1,
+                               };
+
+            var total =await query.SumAsync(w=>w.Count);
+            var list =await query.OrderBy(l => l.GroupId).ThenByDescending(l => l.Count).ToListAsync();
+            var result = new WeChatUserStatisticLiDto();
+            result.WechatUserStaDto = list;
+            result.Total = total;
+            return result;
         }
     }
 }
