@@ -1093,7 +1093,7 @@ namespace HC.WeChat.WeChatUsers
                 ISheet sheet = workbook.CreateSheet("WeChatUser");
                 var rowIndex = 0;
                 IRow titleRow = sheet.CreateRow(rowIndex);
-                string[] titles = { "会员姓名", "用户类型", "用户名(编码)", "电话号码", "积分"};
+                string[] titles = { "会员姓名", "用户类型", "用户名(编码)", "电话号码", "积分" };
                 var fontTitle = workbook.CreateFont();
                 fontTitle.IsBold = true;
                 for (int i = 0; i < titles.Length; i++)
@@ -1110,9 +1110,9 @@ namespace HC.WeChat.WeChatUsers
                     IRow row = sheet.CreateRow(rowIndex);
                     ExcelHelper.SetCell(row.CreateCell(0), font, item.NickName);
                     ExcelHelper.SetCell(row.CreateCell(1), font, item.UserTypeName);
-                    if (item.Code!="")
+                    if (item.Code != "")
                     {
-                        ExcelHelper.SetCell(row.CreateCell(2), font, item.UserName+"("+item.Code+")");
+                        ExcelHelper.SetCell(row.CreateCell(2), font, item.UserName + "(" + item.Code + ")");
                     }
                     else
                     {
@@ -1123,7 +1123,9 @@ namespace HC.WeChat.WeChatUsers
                 }
                 workbook.Write(fs);
             }
+
             return "/files/downloadtemp/" + fileName;
+        }
         /// 微信用户统计（按零售户分公司统计）
         /// </summary>
         /// <returns></returns>
@@ -1132,23 +1134,24 @@ namespace HC.WeChat.WeChatUsers
             var weChat = _wechatuserRepository.GetAll().Where(w => w.UserType != UserTypeEnum.取消关注);
             var retail = _retailerRepository.GetAll();
             var query = from w in weChat
-                               join r in retail on w.UserId equals r.Id into g
-                               from wr in g.DefaultIfEmpty()
-                               group wr by wr.BranchCompany into m
-                               select new WeChatUserStatisticDto
-                               {
-                                   Company = m.Key == null ? "其它" : m.Key,
-                                   Count = m.Count(),
-                                   GroupId = m.Key == null ? 2 : 1,
-                               };
+                        join r in retail on w.UserId equals r.Id into g
+                        from wr in g.DefaultIfEmpty()
+                        group wr by wr.BranchCompany into m
+                        select new WeChatUserStatisticDto
+                        {
+                            Company = m.Key == null ? "其它" : m.Key,
+                            Count = m.Count(),
+                            GroupId = m.Key == null ? 2 : 1,
+                        };
 
-            var total =await query.SumAsync(w=>w.Count);
-            var list =await query.OrderBy(l => l.GroupId).ThenByDescending(l => l.Count).ToListAsync();
+            var total = await query.SumAsync(w => w.Count);
+            var list = await query.OrderBy(l => l.GroupId).ThenByDescending(l => l.Count).ToListAsync();
             var result = new WeChatUserStatisticLiDto();
             result.WechatUserStaDto = list;
             result.Total = total;
             return result;
         }
+        
     }
 }
 
