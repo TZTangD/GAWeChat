@@ -18,7 +18,6 @@ namespace HC.WeChat.ExhibitionShops.Dtos
         /// </summary>
         public Guid? RetailerId { get; set; }
 
-
         /// <summary>
         /// ShopName
         /// </summary>

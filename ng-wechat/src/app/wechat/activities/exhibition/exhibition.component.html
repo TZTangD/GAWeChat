@@ -1,0 +1,109 @@
+<!--component html goes here -->
+<Page [ngClass]="'Exhibition'" [title]="'陈列活动'" [showTitle]="false" [spacing]="false">
+    <div class="weui-panel weui-panel_access">
+        <div class="weui-cell" style=" padding-bottom: 0px; padding-top: 0px; padding-left: 0px; padding-right: 0px;">
+            <div style="text-align: center; width: 100%;">
+                <img src="assets/images/exhibition/exhibitionBanner.jpg" style="width:100%;">
+            </div>
+        </div>
+        <div class="weui-panel__bd">
+            <weui-searchbar (search)="onSearch($event)" [(value)]="value" placeholder="请输入店铺名称" (cancel)="onCancel()" [debounceTime]="500" (clear)="onClear()"></weui-searchbar>
+            <div class="weui-panel" style="margin-top: 0px;" *ngIf="value">
+                <div class="weui-panel__hd">包含【{{value}}】的店铺</div>
+                <div class="weui-panel__bd" *ngIf="shops | async; let shops; else loading">
+                    <a class="weui-cell weui-cell_access" *ngFor="let item of shops" (click)="goDetail(item.id,item.shopId)">
+                        <div class="weui-cell__bd weui-cell_primary">
+                            <p>{{item.shopName}}</p>
+                        </div>
+                    </a>
+                    <div class="weui-media-box weui-media-box_text" *ngIf="shops?.length === 0">没有该店铺信息</div>
+                </div>
+                <ng-template #loading>
+                    <div class="weui-panel__bd">
+                        <div class="weui-media-box weui-media-box_text">加载中...</div>
+                    </div>
+                </ng-template>
+            </div>
+
+            <div class="weui-flex">
+                <div class="weui-flex__item">
+                    <div class="placeholder" style="text-align: center;font-size: 13px;color: #999999;">已参赛:{{shopTotal}}</div>
+                </div>
+                <div class="weui-flex__item">
+                    <div class="placeholder" style="text-align: center;font-size: 13px;color: #999999;">投票人次:{{voteTotal}}</div>
+                </div>
+            </div>
+            <div class="button-sp-area">
+                <button class="btn" weui-button [weui-mini]="'mini'" [weui-plain]="true" (click)="getExhibitionShop('vote')">投票排行</button>
+                <button class="btn" weui-button [weui-mini]="'mini'" [weui-plain]="true" (click)="getExhibitionShop('time')">最新参赛</button>
+            </div>
+            <weui-loadmore type="line" *ngIf="!exhibitionShopList || exhibitionShopList.length == 0"></weui-loadmore>
+            <!-- <div class="weui-cell weui-cell_access">
+            <div class="weui-flex__item" *ngFor="let item of exhibitionShopList">
+                <div class="placeholder" style="text-align: center;color: #999999;">
+                    <div class="weui-panel__bd">                    
+                        <img class="weui-media-box__thumb" src="{{hostUrl+item.picPath}}" alt="" (click)="goDetail(item.id)">
+                        <div class="weui-media-box weui-media-box_text">
+                            <p class="weui-media-box__desc" style="color: #434142;float: left;font-size: 13px">{{item.shopName}}</p>
+                            <ul class="weui-media-box__info">
+                                <li class="weui-media-box__info__meta" style="color: #999999">票数：{{item.votes}}</li>
+                                <li class="weui-media-box__info__meta weui-media-box__info__meta_extra" (click)="voteAdd(item.id)" style="color: #0BB20C">投票</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+            <div class="weui-flex" style="flex-flow: row wrap;padding-left: 30px;">
+                <div class="weui-flex__item" style="text-align: center;" *ngFor="let item of exhibitionShopList">
+                    <!-- <div class="placeholder" style="text-align: center;color: #999999;"> -->
+                    <div class="weui-media-box__hd" style="float: left;">
+                        <img style="height: 128px;width: 128px;" class="weui-media-box__thumb" src="{{hostUrl+item.picPath}}" alt="" (click)="goDetail(item.id,item.shopId)">
+                        <div class="weui-media-box weui-media-box_text" style="padding-top: 5px;padding-bottom: 5px;">
+                            <p class="weui-media-box__desc" style="color: #434142;float: center;text-align: center; font-size: 13px">{{item.shopName}}</p>
+                            <ul class="weui-media-box__info" style="margin-top: 5px;">
+                                <li class="weui-media-box__info__meta" style="color: #999999">票数：{{item.votes}}</li>
+                                <li class="weui-media-box__info__meta weui-media-box__info__meta_extra" (click)="voteAdd(item.id)" style="color: #0BB20C">投票</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- </div> -->
+                </div>
+            </div>
+        </div>
+        <section class="rules">
+            <div class="text">
+                <div class="prize">活动公告</div>
+                <div class="neirong">
+                    <strong>
+                        <span style="color:#E53333;font-size:16px;">&nbsp; &nbsp; &nbsp;{{exhibition.content}}</span>
+                    </strong>
+                </div>
+                <div class="prize">投票须知</div>
+                <div class="neirong">
+                    <div style="text-align:center;">
+                        <span style="font-size:14px;">
+                            <div>
+                                <div>
+                                    &nbsp; 投票时间为：{{exhibition.beginTime| date:'yyyy-MM-dd'}}——{{exhibition.endTime| date:'yyyy-MM-dd'}}
+                                </div>
+                                <div>
+                                    &nbsp; 每天每个微信号可以投{{exhibition.frequency}}票
+                                </div>
+                                <strong>
+                                <div style="color:#E53333;font-size:16px;"> 
+                                    {{exhibition.desc}}
+                                </div></strong>                           
+                            </div>                            
+                        </span>
+                    </div>
+                    <strong>
+                    </strong>
+                </div>
+            </div>
+        </section>
+        <div class="qrUrl" style="text-align: center">
+            <img class="mdiv" style="width:233.625px;height: 233.625px;" src="{{qjyyPic}}" alt="">
+            <p>长按识别二维码</p>
+        </div>
+    </div>
+</Page>

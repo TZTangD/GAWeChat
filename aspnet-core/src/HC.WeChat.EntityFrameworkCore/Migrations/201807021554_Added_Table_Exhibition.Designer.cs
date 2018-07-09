@@ -1487,7 +1487,7 @@ namespace HC.WeChat.Migrations
                 b.Property<string>("DepartmentId").HasMaxLength(50);
                 b.Property<string>("SlsmanId").HasMaxLength(50);
                 b.Property<string>("SlsmanName").HasMaxLength(100);
-
+                b.Property<string>("Area").HasMaxLength(100);
                 b.HasKey("Id");
 
                 b.HasIndex("Code");
@@ -1979,7 +1979,8 @@ namespace HC.WeChat.Migrations
                 b.Property<string>("ShopName").IsRequired().HasMaxLength(200);
                 b.Property<string>("ShopAddress").HasMaxLength(500);
                 b.Property<string>("PicPath").IsRequired();
-                b.Property<int?>("Votes"); b.Property<int>("Status").IsRequired();
+                b.Property<int?>("Votes");
+                b.Property<int>("Status").IsRequired();
                 b.Property<Guid>("ShopId").IsRequired(); b.Property<DateTime?>("AuditTime");
                 b.HasKey("Id");
 
