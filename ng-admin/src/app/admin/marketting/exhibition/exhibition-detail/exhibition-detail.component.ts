@@ -16,6 +16,7 @@ import { AppConsts } from '@shared/AppConsts';
 export class ExhibitionDetailComponent extends AppComponentBase implements OnInit {
     exhibitionShop: ExhibitionShop = new ExhibitionShop;
     id: string;
+    shopName = '';
     picIds: string[] = [];
     previewImage = '';
     previewVisible = false;
