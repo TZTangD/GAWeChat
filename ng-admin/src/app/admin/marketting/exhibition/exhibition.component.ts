@@ -7,6 +7,7 @@ import { NzModalService } from 'ng-zorro-antd';
 import { ExhibitionShop, Exhibition } from '@shared/entity/marketting';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import * as moment from 'moment';
+import { AppConsts } from '@shared/AppConsts';
 
 @Component({
     moduleId: module.id,
@@ -48,6 +49,7 @@ export class ExhibitionComponent extends AppComponentBase implements OnInit {
     refreshData(reset = false, search?: boolean) {
         if (reset) {
             this.query.pageIndex = 1;
+            this.search = {}
         }
         if (search) {
             this.query.pageIndex = 1;
@@ -63,6 +65,9 @@ export class ExhibitionComponent extends AppComponentBase implements OnInit {
     getParameter(): Parameter[] {
         var arry = [];
         arry.push(Parameter.fromJS({ key: 'ShopName', value: this.search.shopName }));
+        arry.push(Parameter.fromJS({ key: 'CustName', value: this.search.custName }));
+        arry.push(Parameter.fromJS({ key: 'CustCode', value: this.search.custCode }));
+        arry.push(Parameter.fromJS({ key: 'Phone', value: this.search.phone }));
         return arry;
     }
 
@@ -88,5 +93,18 @@ export class ExhibitionComponent extends AppComponentBase implements OnInit {
                 this.loading = false;
             });
         }
+    }
+    exportExcel() {
+        this.exportLoading = true;
+        this.exhibitionService.exportExcel({ shopName: this.search.shopName, custName: this.search.custName, custCode: this.search.custCode, phone: this.search.phone }).subscribe(result => {
+            if (result.code == 0) {
+                var url = AppConsts.remoteServiceBaseUrl + result.data;
+                document.getElementById('aExhibitionShopExcelUrl').setAttribute('href', url);
+                document.getElementById('btnExhibitionShopHref').click();
+            } else {
+                this.notify.error(result.msg);
+            }
+            this.exportLoading = false;
+        });
     }
 }

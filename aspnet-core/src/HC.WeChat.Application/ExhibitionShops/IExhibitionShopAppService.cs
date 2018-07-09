@@ -5,6 +5,7 @@ using Abp.Application.Services.Dto;
 using HC.WeChat.ExhibitionShops.Dtos;
 using HC.WeChat.ExhibitionShops;
 using System;
+using HC.WeChat.Dto;
 
 namespace HC.WeChat.ExhibitionShops
 {
@@ -61,5 +62,11 @@ namespace HC.WeChat.ExhibitionShops
         Task BatchDeleteExhibitionShopsAsync(List<Guid> input);
         Task<PagedResultDto<ExhibitionShopListDto>> GetPagedExhibitionShopsAsync(GetExhibitionShopsInput input);
         Task<ExhibitionShopListDto> GetPagedExhibitionShopsByIdAsync(Guid id);
+        Task<List<ExhibitionShopListDto>> GetWXPagedExhibitionShopsAsync(string type);
+
+        Task<int> GetWXExhibitionShopsCountAsync();
+        Task<List<ExhibitionShopListDto>> GetExhibitionShopByKeyAsync(string key);
+        Task<ExhibitionShopListDto> GetWXExhibitionShopsByIdAsync(Guid id);
+        Task<APIResultDto> ExportExhibitionShopsExcel(GetExhibitionShopsInput input);
     }
 }

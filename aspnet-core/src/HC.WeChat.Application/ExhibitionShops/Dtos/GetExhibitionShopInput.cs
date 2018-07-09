@@ -15,6 +15,10 @@ namespace HC.WeChat.ExhibitionShops.Dtos
         /// 店铺名
         /// </summary>
         public string ShopName { get; set; }
+        public string CustName { get; set; }
+        public string CustCode { get; set; }
+        public string Phone { get; set; }
+
 
         /// <summary>
         /// 正常化排序使用

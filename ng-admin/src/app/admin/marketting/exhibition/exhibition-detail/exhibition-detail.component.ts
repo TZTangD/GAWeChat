@@ -39,7 +39,6 @@ export class ExhibitionDetailComponent extends AppComponentBase implements OnIni
             if (result.picPath != '') {
                 this.picIds = this.exhibitionShop.picPath.split(',');
             }
-            console.log(this.picIds);
         })
     }
 

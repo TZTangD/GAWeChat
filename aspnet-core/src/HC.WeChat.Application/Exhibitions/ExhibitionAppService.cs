@@ -185,7 +185,17 @@ namespace HC.WeChat.Exhibitions
             await _exhibitionRepository.DeleteAsync(s => input.Contains(s.Id));
         }
 
-        //public async Task 
+        /// <summary>
+        /// 微信获取活动配置
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task<ExhibitionEditDto> GetExhibitionConfigAsync()
+        {
+            var config = await _exhibitionRepository.GetAll().FirstOrDefaultAsync();
+            return config.MapTo<ExhibitionEditDto>();
+        }
     }
 }
 

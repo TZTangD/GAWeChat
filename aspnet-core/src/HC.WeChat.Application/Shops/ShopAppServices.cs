@@ -1249,6 +1249,18 @@ namespace HC.WeChat.Shops
                 return imgPath;
             }
         }
+
+        /// <summary>
+        /// 微信获取店铺推广码url
+        /// </summary>
+        /// <param name="shopId"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task<string> GetQRUrlByShopId(Guid shopId)
+        {
+            string url =await _shopRepository.GetAll().Where(v => v.Id == shopId).Select(v => v.QRUrl).FirstOrDefaultAsync();       
+            return url;
+        }
     }
 }
 

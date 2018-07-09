@@ -71,7 +71,7 @@ namespace HC.WeChat.ExhibitionShops.Dtos
         public string CustCode { get; set; }
         public string CustName { get; set; }
 
-
+        public int? Total { get; set; }
 
         ////BCC/ BEGIN CUSTOM CODE SECTION
 

@@ -16,6 +16,15 @@ using System;
 using HC.WeChat.Authorization;
 using HC.WeChat.Shops;
 using HC.WeChat.Retailers;
+using HC.WeChat.Exhibitions.Dtos;
+using HC.WeChat.Exhibitions;
+using HC.WeChat.Dto;
+using Abp.Domain.Uow;
+using HC.WeChat.Helpers;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
 
 namespace HC.WeChat.ExhibitionShops
 {
@@ -30,6 +39,8 @@ namespace HC.WeChat.ExhibitionShops
         private readonly IExhibitionShopManager _exhibitionshopManager;
         private readonly IRepository<Shop, Guid> _shopRepository;
         private readonly IRepository<Retailer, Guid> _retailerRepository;
+        private readonly IRepository<Exhibition, Guid> _exhibitionRepository;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
         /// <summary>
         /// 构造函数
@@ -39,12 +50,16 @@ namespace HC.WeChat.ExhibitionShops
       , IExhibitionShopManager exhibitionshopManager
             , IRepository<Shop, Guid> shopRepository
             , IRepository<Retailer, Guid> retailerRepository
+            , IRepository<Exhibition, Guid> exhibitionRepository
+                , IHostingEnvironment hostingEnvironment
         )
         {
             _retailerRepository = retailerRepository;
             _shopRepository = shopRepository;
             _exhibitionshopRepository = exhibitionshopRepository;
             _exhibitionshopManager = exhibitionshopManager;
+            _exhibitionRepository = exhibitionRepository;
+            _hostingEnvironment = hostingEnvironment;
         }
 
 
@@ -99,7 +114,7 @@ namespace HC.WeChat.ExhibitionShops
                               Phone = s.Tel,
                               Votes = e.Votes != null ? e.Votes : 0,
                               FansNum = s.FansNum,
-                              PicPath =e.PicPath
+                              PicPath = e.PicPath
                           });
             return await result.FirstOrDefaultAsync();
         }
@@ -250,7 +265,9 @@ namespace HC.WeChat.ExhibitionShops
                               Phone = s.Tel,
                               Votes = e.Votes != null ? e.Votes : 0,
                               FansNum = s.FansNum
-                          });
+                          }).WhereIf(!string.IsNullOrEmpty(input.Phone), v => v.Phone.Contains(input.Phone))
+                 .WhereIf(!string.IsNullOrEmpty(input.CustCode), v => v.CustCode.Contains(input.CustCode))
+                 .WhereIf(!string.IsNullOrEmpty(input.CustName), v => v.CustName.Contains(input.CustName));
             var exhibitionshopCount = await result.CountAsync();
             var exhibitionshops = await result
                 .OrderBy(input.Sorting).AsNoTracking()
@@ -270,11 +287,6 @@ namespace HC.WeChat.ExhibitionShops
         /// <returns></returns>
         public async Task<ExhibitionShopListDto> GetPagedExhibitionShopsByIdAsync(Guid id)
         {
-            //string picPath = await _exhibitionshopRepository.GetAll().Where(v => v.Id == id).Select(v => v.PicPath).FirstOrDefaultAsync();
-            //if (picPath != null || picPath.Length>0)
-            //{
-            //    string[] picIds = picPath.Split(',');
-            //}
             var exhibitons = _exhibitionshopRepository.GetAll().Where(v => v.Id == id);
             var retailer = _retailerRepository.GetAll();
             var shop = _shopRepository.GetAll();
@@ -293,6 +305,194 @@ namespace HC.WeChat.ExhibitionShops
                               Votes = e.Votes != null ? e.Votes : 0,
                               FansNum = s.FansNum.Value,
                               PicPath = e.PicPath
+                          }).FirstOrDefaultAsync();
+            return await result;
+        }
+
+        /// <summary>
+        /// 通过指定id获取ExhibitionListDto信息
+        /// </summary>
+        private async Task<ExhibitionListDto> GetExhibitionByIdAsync()
+        {
+            var entity = await _exhibitionRepository.GetAll().FirstOrDefaultAsync();
+            return entity.MapTo<ExhibitionListDto>();
+        }
+        /// <summary>
+        /// 陈列活动Excel导出
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        [UnitOfWork(isTransactional: false)]
+        public async Task<APIResultDto> ExportExhibitionShopsExcel(GetExhibitionShopsInput input)
+        {
+            try
+            {
+                var exportData = await GetExhibitionShopsAsync(input);
+                var result = new APIResultDto();
+                result.Code = 0;
+                result.Data = SaveExhibitionShopsAsyncsExcel("陈列店铺.xlsx", exportData);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Logger.ErrorFormat("ExportPostInfoExcel errormsg:{0} Exception:{1}", ex.Message, ex);
+                return new APIResultDto() { Code = 901, Msg = "网络忙... 请待会重试！" };
+            }
+        }
+        private async Task<List<ExhibitionShopListDto>> GetExhibitionShopsAsync(GetExhibitionShopsInput input)
+        {
+            var exhibitons = _exhibitionshopRepository.GetAll()
+                 .WhereIf(!string.IsNullOrEmpty(input.ShopName), v => v.ShopName.Contains(input.ShopName));
+            var retailer = _retailerRepository.GetAll();
+            var shop = _shopRepository.GetAll();
+            var result = await (from e in exhibitons
+                                join r in retailer on e.RetailerId equals r.Id
+                                join s in shop on e.ShopId equals s.Id
+                                select new ExhibitionShopListDto()
+                                {
+                                    Id = e.Id,
+                                    ShopName = e.ShopName,
+                                    CustCode = r.Code,
+                                    CustName = r.Name,
+                                    Area = r.Area,
+                                    ShopAddress = e.ShopAddress,
+                                    Phone = s.Tel,
+                                    Votes = e.Votes != null ? e.Votes : 0,
+                                    FansNum = s.FansNum
+                                }).WhereIf(!string.IsNullOrEmpty(input.Phone), v => v.Phone.Contains(input.Phone))
+                 .WhereIf(!string.IsNullOrEmpty(input.CustCode), v => v.CustCode.Contains(input.CustCode))
+                 .WhereIf(!string.IsNullOrEmpty(input.CustName), v => v.CustName.Contains(input.CustName)).ToListAsync();
+            var ExhibitonsDtos = result.MapTo<List<ExhibitionShopListDto>>();
+            return ExhibitonsDtos;
+        }
+
+        private string SaveExhibitionShopsAsyncsExcel(string fileName, List<ExhibitionShopListDto> data)
+        {
+            var fullPath = ExcelHelper.GetSavePath(_hostingEnvironment.WebRootPath) + fileName;
+            using (var fs = new FileStream(fullPath, FileMode.Create, FileAccess.Write))
+            {
+                IWorkbook workbook = new XSSFWorkbook();
+                ISheet sheet = workbook.CreateSheet("WeChatUser");
+                var rowIndex = 0;
+                IRow titleRow = sheet.CreateRow(rowIndex);
+                string[] titles = { "零售客户编码", "客户名称", "店铺名称", "所属区县", "店铺地址", "店铺电话", "实时票数", "店铺会员数" };
+                var fontTitle = workbook.CreateFont();
+                fontTitle.IsBold = true;
+                for (int i = 0; i < titles.Length; i++)
+                {
+                    var cell = titleRow.CreateCell(i);
+                    cell.CellStyle.SetFont(fontTitle);
+                    cell.SetCellValue(titles[i]);
+                }
+
+                var font = workbook.CreateFont();
+                foreach (var item in data)
+                {
+                    rowIndex++;
+                    IRow row = sheet.CreateRow(rowIndex);
+                    ExcelHelper.SetCell(row.CreateCell(0), font, item.CustCode);
+                    ExcelHelper.SetCell(row.CreateCell(1), font, item.CustName);
+                    ExcelHelper.SetCell(row.CreateCell(2), font, item.ShopName);
+                    ExcelHelper.SetCell(row.CreateCell(3), font, item.Area);
+                    ExcelHelper.SetCell(row.CreateCell(4), font, item.ShopAddress);
+                    ExcelHelper.SetCell(row.CreateCell(5), font, item.Phone);
+                    ExcelHelper.SetCell(row.CreateCell(6), font, item.Votes.ToString());
+                    ExcelHelper.SetCell(row.CreateCell(7), font, item.FansNum.ToString());
+                }
+                workbook.Write(fs);
+            }
+            return "/files/downloadtemp/" + fileName;
+        }
+
+        /// <summary>
+        /// 获取陈列活动列表
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task<List<ExhibitionShopListDto>> GetWXPagedExhibitionShopsAsync(string type)
+        {
+            var config = await GetExhibitionByIdAsync();
+            var exhibitons = _exhibitionshopRepository.GetAll().Where(v => v.Status == 1);
+            var result = from e in exhibitons
+                         select new ExhibitionShopListDto()
+                         {
+                             Id = e.Id,
+                             ShopName = e.ShopName,
+                             Votes = e.Votes ?? 0,
+                             PicPath = e.PicPath,
+                             ShopId = e.ShopId,
+                             CreateTime = e.CreateTime
+                         };
+            if (type == "time")
+            {
+                return await result.Take(config.TopTotal).OrderByDescending(v=>v.CreateTime).ToListAsync();
+            }
+            else if (type == "vote")
+            {
+                return await result.Take(config.TopTotal).OrderByDescending(v=>v.Votes).ToListAsync();
+
+            }else
+            {
+                return await result.Take(config.TopTotal).OrderByDescending(v => v.Votes).ToListAsync();
+            }
+        }
+
+        /// <summary>
+        /// 获取参加活动店铺数
+        /// </summary>
+        /// <param name="tenantId"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task<int> GetWXExhibitionShopsCountAsync()
+        {
+            int total = await _exhibitionshopRepository.GetAll().CountAsync();
+            return total;
+        }
+
+        [AbpAllowAnonymous]
+        public async Task<List<ExhibitionShopListDto>> GetExhibitionShopByKeyAsync(string key)
+        {
+            var exhibitons = _exhibitionshopRepository.GetAll().Where(p => p.ShopName.Contains(key));
+            var result = from e in exhibitons
+                         select new ExhibitionShopListDto()
+                         {
+                             Id = e.Id,
+                             ShopName = e.ShopName,
+                             Votes = e.Votes ?? 0,
+                             PicPath = e.PicPath,
+                             ShopId = e.ShopId
+                         };
+            return await result.Take(5).ToListAsync();
+        }
+
+        /// <summary>
+        /// 微信端根据id获取陈列店铺资料
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task<ExhibitionShopListDto> GetWXExhibitionShopsByIdAsync(Guid id)
+        {
+            var exhibitons = _exhibitionshopRepository.GetAll().Where(v => v.Id == id);
+            var retailer = _retailerRepository.GetAll();
+            var shop = _shopRepository.GetAll();
+            var result = (from e in exhibitons
+                          join r in retailer on e.RetailerId equals r.Id
+                          join s in shop on e.ShopId equals s.Id
+                          select new ExhibitionShopListDto()
+                          {
+                              Id = e.Id,
+                              ShopName = e.ShopName,
+                              CustCode = r.Code,
+                              CustName = r.Name,
+                              Area = "未知",
+                              ShopAddress = e.ShopAddress,
+                              Phone = s.Tel,
+                              Votes = e.Votes != null ? e.Votes : 0,
+                              FansNum = s.FansNum.Value,
+                              PicPath = e.PicPath,
+                              ShopId = s.Id
                           }).FirstOrDefaultAsync();
             return await result;
         }

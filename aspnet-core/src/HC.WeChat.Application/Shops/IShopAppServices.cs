@@ -123,5 +123,6 @@ namespace HC.WeChat.Shops
         /// <param name="imgName">图片名称</param>
         /// <returns></returns>
         string QrcodeImgLogo(string filePath, string imgName);
+        Task<string> GetQRUrlByShopId(Guid shopId);
     }
 }

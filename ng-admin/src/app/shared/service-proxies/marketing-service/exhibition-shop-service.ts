@@ -29,56 +29,57 @@ export class ExhibitionShopServiceProxy {
         this.baseUrl = baseUrl ? baseUrl : "";
     }
 
-    // exportExcel(input: any): Observable<ApiResult> {
-    //     let url_ = this.baseUrl + "/api/services/app/ExhibitionShop/ExportManuscriptsExcel";
-    //     url_ = url_.replace(/[?&]$/, "");
+    exportExcel(input: any): Observable<ApiResult> {
+        let url_ = this.baseUrl + "/api/services/app/ExhibitionShop/ExportExhibitionShopsExcel";
+        url_ = url_.replace(/[?&]$/, "");
 
-    //     const content_ = JSON.stringify(input);
+        const content_ = JSON.stringify(input);
 
-    //     let options_ = {
-    //         body: content_,
-    //         method: "post",
-    //         headers: new Headers({
-    //             "Content-Type": "application/json",
-    //             "Accept": "application/json"
-    //         })
-    //     };
+        let options_ = {
+            body: content_,
+            method: "post",
+            headers: new Headers({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
 
-    //     return this.http.request(url_, options_).flatMap((response_) => {
-    //         return this.processExportExcel(response_);
-    //     }).catch((response_: any) => {
-    //         if (response_ instanceof Response) {
-    //             try {
-    //                 return this.processExportExcel(response_);
-    //             } catch (e) {
-    //                 return <Observable<ApiResult>><any>Observable.throw(e);
-    //             }
-    //         } else
-    //             return <Observable<ApiResult>><any>Observable.throw(response_);
-    //     });
-    // }
-    // protected processExportExcel(response: Response): Observable<ApiResult> {
-    //     const status = response.status;
+        return this.http.request(url_, options_).flatMap((response_) => {
+            return this.processExportExcel(response_);
+        }).catch((response_: any) => {
+            if (response_ instanceof Response) {
+                try {
+                    return this.processExportExcel(response_);
+                } catch (e) {
+                    return <Observable<ApiResult>><any>Observable.throw(e);
+                }
+            } else
+                return <Observable<ApiResult>><any>Observable.throw(response_);
+        });
+    }
+    protected processExportExcel(response: Response): Observable<ApiResult> {
+        const status = response.status;
 
-    //     let _headers: any = response.headers ? response.headers.toJSON() : {};
-    //     if (status === 200) {
-    //         const _responseText = response.text();
-    //         let result200: any = null;
-    //         let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-    //         result200 = resultData200 ? ApiResult.fromJS(resultData200) : new ApiResult();
-    //         return Observable.of(result200);
-    //     } else if (status === 401) {
-    //         const _responseText = response.text();
-    //         return throwException("A server error occurred.", status, _responseText, _headers);
-    //     } else if (status === 403) {
-    //         const _responseText = response.text();
-    //         return throwException("A server error occurred.", status, _responseText, _headers);
-    //     } else if (status !== 200 && status !== 204) {
-    //         const _responseText = response.text();
-    //         return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-    //     }
-    //     return Observable.of<ApiResult>(<any>null);
-    // }
+        let _headers: any = response.headers ? response.headers.toJSON() : {};
+        if (status === 200) {
+            const _responseText = response.text();
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = resultData200 ? ApiResult.fromJS(resultData200) : new ApiResult();
+            return Observable.of(result200);
+        } else if (status === 401) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status === 403) {
+            const _responseText = response.text();
+            return throwException("A server error occurred.", status, _responseText, _headers);
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.text();
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Observable.of<ApiResult>(<any>null);
+    }
+
     /**
      * 获取所有陈列店铺信息
      */

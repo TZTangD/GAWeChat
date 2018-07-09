@@ -58,5 +58,6 @@ namespace HC.WeChat.Exhibitions
             /// 批量删除Exhibition
             /// </summary>
         Task BatchDeleteExhibitionsAsync(List<Guid> input);
+        Task<ExhibitionEditDto> GetExhibitionConfigAsync();
     }
 }

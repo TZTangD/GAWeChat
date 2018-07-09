@@ -4,11 +4,14 @@ import { AngularSplitModule } from 'angular-split';
 import { SharedModule } from '../../../shared/shared.module';
 import { ComponentsModule } from '../../components/components.module';
 import { ExhibitionComponent } from './exhibition.component';
+import { ArticleService } from '../../../services';
+import { ExhibitionDetailComponent } from './exhibition-detail/exhibition-detail.component';
 
-const COMPONENTS = [ExhibitionComponent];
+const COMPONENTS = [ExhibitionComponent, ExhibitionDetailComponent];
 
 const routes: Routes = [
     { path: 'exhibition', component: ExhibitionComponent },
+    { path: 'exhibition-detail', component: ExhibitionDetailComponent }
 ];
 @NgModule({
     imports: [
@@ -21,6 +24,7 @@ const routes: Routes = [
         ...COMPONENTS
     ],
     providers: [
+        ArticleService
     ]
 })
 export class ExhibitionModule {
