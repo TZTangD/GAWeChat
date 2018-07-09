@@ -239,6 +239,16 @@ namespace HC.WeChat.Web.Host.Controllers
                         //ViewBag.PageUrl = _weChatOAuthAppService.GetAuthorizeUrl(url, "123", Senparc.Weixin.MP.OAuthScope.snsapi_base);
                     }
                     break;
+                case GAAuthorizationPageEnum.Exhibition:
+                    {
+                        if (!string.IsNullOrEmpty(UserOpenId))
+                        {
+                            return Redirect(string.Format(GAAuthorizationPageUrl.ExhibitionUrl, param));
+                        }
+                        url = host + "/GAWX/Exhibition";
+                        //ViewBag.PageUrl = _weChatOAuthAppService.GetAuthorizeUrl(url, "123", Senparc.Weixin.MP.OAuthScope.snsapi_base);
+                    }
+                    break;
                 default:
                     { 
                         return Redirect("/gawechat/index.html");
@@ -371,6 +381,20 @@ namespace HC.WeChat.Web.Host.Controllers
             return Redirect(string.Format(GAAuthorizationPageUrl.ShopReviewUrl, state));
         }
 
+        /// <summary>
+        /// 陈列活动
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="state"></param>
+        /// <returns></returns>
+        public IActionResult Exhibition(string code, string state)
+        {
+            //存储openId 避免重复提交
+            SetUserOpenId(code);
+
+            return Redirect(string.Format(GAAuthorizationPageUrl.ExhibitionUrl, state));
+        }
+
         public IActionResult Login(string openId)
         {
             UserOpenId = openId;
@@ -394,6 +418,7 @@ namespace HC.WeChat.Web.Host.Controllers
         NearbyShop = 201,
         Goods = 202,
         Activity = 101,
+        Exhibition = 103,
         Share = 102,
         IntegralDetail = 301,
         CustBindInfo = 302,
@@ -415,5 +440,7 @@ namespace HC.WeChat.Web.Host.Controllers
         public static string IntegralDetailUrl = "/gawechat/index.html#/integrals/integral";
         public static string CustBindInfoUrl = "/gawechat/index.html#/shop-employees/shop-employee";
         public static string ShopReviewUrl = "/gawechat/index.html#/shops/shop;shopId={0};isAudit=true";
+        public static string ExhibitionUrl = "/gawechat/index.html#/exhibitions/exhibition";
+
     }
 }
