@@ -55,7 +55,6 @@ export class ExhibitionComponent extends AppComponentBase implements OnInit {
             content: '您今天已经超过投票限制了。温馨提示:注册会员，买烟积分，享更多活动机会。赶快去注册吧!'
         });
         this.dia.show(this.config).subscribe((res: any) => {
-            console.log(res);
             if (res.value == true) {
                 this.router.navigate(["/personals/bind-member"]);
             }
@@ -132,6 +131,7 @@ export class ExhibitionComponent extends AppComponentBase implements OnInit {
                 this.voteLog.exhibitionId = id;
                 this.articleService.AddVoteLogAsync(this.voteLog).subscribe(data => {
                     if (data && data.code === 0) {
+                        this.srvt['success']('投票成功', 0);
                     } else if (data && data.code === 999) {
                         this.voteTotal--;
                         this.exhibitionShopList.find(v => v.id == id).votes--;

@@ -62,7 +62,7 @@
                             <p class="weui-media-box__desc" style="color: #434142;float: center;text-align: center; font-size: 13px">{{item.shopName}}</p>
                             <ul class="weui-media-box__info" style="margin-top: 5px;">
                                 <li class="weui-media-box__info__meta" style="color: #999999">票数：{{item.votes}}</li>
-                                <li class="weui-media-box__info__meta weui-media-box__info__meta_extra" (click)="voteAdd(item.id)" style="color: #0BB20C">投票</li>
+                                <li class="weui-media-box__info__meta weui-media-box__info__meta_extra" (click)="voteAdd(item.id)" style="color: #0BB20C;font-size: 16px">投票</li>
                             </ul>
                         </div>
                     </div>
@@ -74,9 +74,7 @@
             <div class="text">
                 <div class="prize">活动公告</div>
                 <div class="neirong">
-                    <strong>
-                        <span style="color:#E53333;font-size:16px;">&nbsp; &nbsp; &nbsp;{{exhibition.content}}</span>
-                    </strong>
+                    <span style="font-size:16px;">&nbsp; &nbsp; &nbsp;{{exhibition.content}}</span>
                 </div>
                 <div class="prize">投票须知</div>
                 <div class="neirong">
@@ -89,10 +87,9 @@
                                 <div>
                                     &nbsp; 每天每个微信号可以投{{exhibition.frequency}}票
                                 </div>
-                                <strong>
-                                <div style="color:#E53333;font-size:16px;"> 
+                                <div style="font-size:16px;"> 
                                     {{exhibition.desc}}
-                                </div></strong>                           
+                                </div>                         
                             </div>                            
                         </span>
                     </div>
@@ -101,9 +98,9 @@
                 </div>
             </div>
         </section>
-        <div class="qrUrl" style="text-align: center">
+        <div class="qrUrl" style="text-align: center" *ngIf="qjyyPic">
             <img class="mdiv" style="width:233.625px;height: 233.625px;" src="{{qjyyPic}}" alt="">
-            <p>长按识别二维码</p>
+            <p>长按识别二维码关注公众号</p>
         </div>
     </div>
 </Page>

@@ -17,6 +17,7 @@ import { DialogModule } from 'ngx-weui';
 
 export class ExhibitionDetailComponent extends AppComponentBase implements OnInit {
     exhibitionShop: ExhibitionShop = new ExhibitionShop();
+    exhibition: Exhibition = new Exhibition();
     picIds: string[] = [];
     voteLog: VoteLog = new VoteLog();
     total: number = 0;
@@ -47,6 +48,7 @@ export class ExhibitionDetailComponent extends AppComponentBase implements OnIni
     }
     ngOnInit() {
         this.getExhibitionShopDetail(this.id);
+        this.getExhibitionConfig();
         this.getShopQrUrl();
     }
 
@@ -74,6 +76,13 @@ export class ExhibitionDetailComponent extends AppComponentBase implements OnIni
         });
         return false;
     }
+
+    getExhibitionConfig() {
+        let params: any = {};
+        this.articleService.GetExhibitionConfigAsync(params).subscribe(result => {
+            this.exhibition = result;
+        });
+    }
     voteAdd(id: string, type: 'success' | 'loading', forceHide: boolean = false) {
         if (this.settingsService.openId) {
             if (this.currentDayVote < this.frequency) {
@@ -84,6 +93,7 @@ export class ExhibitionDetailComponent extends AppComponentBase implements OnIni
                 this.voteLog.exhibitionId = id;
                 this.articleService.AddVoteLogAsync(this.voteLog).subscribe(data => {
                     if (data && data.code === 0) {
+                        this.srvt['success']('投票成功', 0);
                     } else if (data && data.code === 999) {
                         this.voteTotal--;
                         this.exhibitionShop.votes--;

@@ -772,7 +772,7 @@ namespace HC.WeChat.Shops
 
         public async Task<List<ShopListDto>> GetPendingShopList()
         {
-            var shopList = await _shopRepository.GetAll().Where(s => s.Status == ShopAuditStatus.待审核).OrderByDescending(s => s.CreationTime).Take(5).ToListAsync();
+            var shopList = await _shopRepository.GetAll().Where(s => s.Status == ShopAuditStatus.待审核).OrderByDescending(s => s.CreationTime).ToListAsync();
             return shopList.MapTo<List<ShopListDto>>();
         }
 
