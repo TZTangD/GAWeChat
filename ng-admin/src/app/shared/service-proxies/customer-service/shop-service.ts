@@ -143,7 +143,7 @@ export class ShopServiceProxy {
         return Observable.of<HomeInfo>(<any>null);
     }
 
-    getPendingShopList(): Observable<Shop[]> {
+    getPendingShopList(): Observable<ApiResult> {
         let url_ = this.baseUrl + "/api/services/app/Shop/GetPendingShopList";
 
         url_ = url_.replace(/[?&]$/, "");
@@ -163,14 +163,14 @@ export class ShopServiceProxy {
                 try {
                     return this.processGetPendingShopList(response_);
                 } catch (e) {
-                    return <Observable<Shop[]>><any>Observable.throw(e);
+                    return <Observable<ApiResult>><any>Observable.throw(e);
                 }
             } else
-                return <Observable<Shop[]>><any>Observable.throw(response_);
+                return <Observable<ApiResult>><any>Observable.throw(response_);
         });
     }
 
-    protected processGetPendingShopList(response: Response): Observable<Shop[]> {
+    protected processGetPendingShopList(response: Response): Observable<ApiResult> {
         const status = response.status;
 
         let _headers: any = response.headers ? response.headers.toJSON() : {};
@@ -178,7 +178,7 @@ export class ShopServiceProxy {
             const _responseText = response.text();
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 ? Shop.fromJSArray(resultData200) : Observable.of<Shop[]>(<any>null);
+            result200 = resultData200 ? ApiResult.fromJS(resultData200) : Observable.of<ApiResult>(<any>null);
             return Observable.of(result200);
         } else if (status === 401) {
             const _responseText = response.text();
@@ -190,7 +190,7 @@ export class ShopServiceProxy {
             const _responseText = response.text();
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Observable.of<Shop[]>(<any>null);
+        return Observable.of<ApiResult>(<any>null);
     }
 
     /**

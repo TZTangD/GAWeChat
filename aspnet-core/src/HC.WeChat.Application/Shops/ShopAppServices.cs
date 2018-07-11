@@ -770,10 +770,16 @@ namespace HC.WeChat.Shops
             return homeInfo;
         }
 
-        public async Task<List<ShopListDto>> GetPendingShopList()
+        public async Task<APIResultDto> GetPendingShopList()
         {
-            var shopList = await _shopRepository.GetAll().Where(s => s.Status == ShopAuditStatus.待审核).OrderByDescending(s => s.CreationTime).ToListAsync();
-            return shopList.MapTo<List<ShopListDto>>();
+            var query = _shopRepository.GetAll().Where(s => s.Status == ShopAuditStatus.待审核);
+            var count = await query.CountAsync();
+            var shopList = await query.OrderByDescending(s => s.CreationTime).Take(5).ToListAsync();
+            return new APIResultDto()
+            {
+                Code = 0,
+                Data = new { ShopList = shopList.MapTo<List<ShopListDto>>(), Count = count }
+            };
         }
 
         #region 店铺导出

@@ -102,7 +102,7 @@ namespace HC.WeChat.Shops
 
         Task<HomeInfo> GetHomeInfo();
 
-        Task<List<ShopListDto>> GetPendingShopList();
+        Task<APIResultDto> GetPendingShopList();
 
         /// <summary>
         /// 生成店码
