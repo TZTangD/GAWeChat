@@ -1151,7 +1151,23 @@ namespace HC.WeChat.WeChatUsers
             result.Total = total;
             return result;
         }
-        
+
+
+        /// <summary>
+        /// 判断用户是否关注
+        /// </summary>
+        /// <param name="openId"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task<bool> GetIsAttentionByOpenIdAsync(string openId)
+        {
+            int weChat = await _wechatuserRepository.GetAll().Where(v=>v.OpenId == openId && v.UserType!= UserTypeEnum.取消关注).CountAsync();
+            if (weChat == 0)
+            {
+                return false;
+            }
+            return true;
+        }
     }
 }
 

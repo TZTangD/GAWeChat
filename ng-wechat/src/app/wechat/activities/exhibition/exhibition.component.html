@@ -11,7 +11,7 @@
             <div class="weui-panel" style="margin-top: 0px;" *ngIf="value">
                 <div class="weui-panel__hd">包含【{{value}}】的店铺</div>
                 <div class="weui-panel__bd" *ngIf="shops | async; let shops; else loading">
-                    <a class="weui-cell weui-cell_access" *ngFor="let item of shops" (click)="goDetail(item.id,item.shopId)">
+                    <a class="weui-cell weui-cell_access" *ngFor="let item of shops" (click)="goDetail(item.shopId)">
                         <div class="weui-cell__bd weui-cell_primary">
                             <p>{{item.shopName}}</p>
                         </div>
@@ -57,7 +57,7 @@
                 <div class="weui-flex__item" style="text-align: center;" *ngFor="let item of exhibitionShopList">
                     <!-- <div class="placeholder" style="text-align: center;color: #999999;"> -->
                     <div class="weui-media-box__hd" style="float: left;">
-                        <img style="height: 128px;width: 128px;" class="weui-media-box__thumb" src="{{hostUrl+item.picPath}}" alt="" (click)="goDetail(item.id,item.shopId)">
+                        <img style="height: 128px;width: 128px;" class="weui-media-box__thumb" src="{{hostUrl+item.picPath}}" alt="" (click)="goDetail(item.shopId)">
                         <div class="weui-media-box weui-media-box_text" style="padding-top: 5px;padding-bottom: 5px;">
                             <p class="weui-media-box__desc" style="color: #434142;float: center;text-align: center; font-size: 13px">{{item.shopName}}</p>
                             <ul class="weui-media-box__info" style="margin-top: 5px;">

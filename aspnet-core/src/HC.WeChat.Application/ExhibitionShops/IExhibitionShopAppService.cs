@@ -66,7 +66,10 @@ namespace HC.WeChat.ExhibitionShops
 
         Task<int> GetWXExhibitionShopsCountAsync();
         Task<List<ExhibitionShopListDto>> GetExhibitionShopByKeyAsync(string key);
-        Task<ExhibitionShopListDto> GetWXExhibitionShopsByIdAsync(Guid id);
+        Task<ExhibitionShopListDto> GetWXExhibitionShopsByIdAsync(Guid shopId);
+
         Task<APIResultDto> ExportExhibitionShopsExcel(GetExhibitionShopsInput input);
+
+        Task<string> GetAuthorizationUrl(string shopId);
     }
 }

@@ -25,6 +25,8 @@ using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
+using HC.WeChat.Authorization.WeChatOAuth;
+using HC.WeChat.WechatAppConfigs;
 
 namespace HC.WeChat.ExhibitionShops
 {
@@ -41,6 +43,8 @@ namespace HC.WeChat.ExhibitionShops
         private readonly IRepository<Retailer, Guid> _retailerRepository;
         private readonly IRepository<Exhibition, Guid> _exhibitionRepository;
         private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IWeChatOAuthAppService _weChatOAuthAppService;
+        private readonly IWechatAppConfigAppService _wechatAppConfigAppService;
 
         /// <summary>
         /// 构造函数
@@ -52,6 +56,8 @@ namespace HC.WeChat.ExhibitionShops
             , IRepository<Retailer, Guid> retailerRepository
             , IRepository<Exhibition, Guid> exhibitionRepository
                 , IHostingEnvironment hostingEnvironment
+            , IWeChatOAuthAppService weChatOAuthAppService
+            , IWechatAppConfigAppService wechatAppConfigAppService
         )
         {
             _retailerRepository = retailerRepository;
@@ -60,6 +66,9 @@ namespace HC.WeChat.ExhibitionShops
             _exhibitionshopManager = exhibitionshopManager;
             _exhibitionRepository = exhibitionRepository;
             _hostingEnvironment = hostingEnvironment;
+            _weChatOAuthAppService = weChatOAuthAppService;
+            _wechatAppConfigAppService = wechatAppConfigAppService;
+            _weChatOAuthAppService.WechatAppConfig = _wechatAppConfigAppService.GetWechatAppConfig(null).Result;
         }
 
 
@@ -472,9 +481,9 @@ namespace HC.WeChat.ExhibitionShops
         /// <param name="id"></param>
         /// <returns></returns>
         [AbpAllowAnonymous]
-        public async Task<ExhibitionShopListDto> GetWXExhibitionShopsByIdAsync(Guid id)
+        public async Task<ExhibitionShopListDto> GetWXExhibitionShopsByIdAsync(Guid shopId)
         {
-            var exhibitons = _exhibitionshopRepository.GetAll().Where(v => v.Id == id);
+            var exhibitons = _exhibitionshopRepository.GetAll().Where(v => v.ShopId == shopId);
             var retailer = _retailerRepository.GetAll();
             var shop = _shopRepository.GetAll();
             var result = (from e in exhibitons
@@ -495,6 +504,13 @@ namespace HC.WeChat.ExhibitionShops
                               ShopId = s.Id
                           }).FirstOrDefaultAsync();
             return await result;
+        }
+
+        [AbpAllowAnonymous]
+        public Task<string> GetAuthorizationUrl(string shopId)
+        {
+            var url = "http://wx.photostory.top/GAWX/ExhibitionDetailUrl";
+            return Task.FromResult(_weChatOAuthAppService.GetAuthorizeUrl(url, shopId, Senparc.Weixin.MP.OAuthScope.snsapi_base));
         }
     }
 }

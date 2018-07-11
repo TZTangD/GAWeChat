@@ -141,6 +141,16 @@ export class ArticleService {
         });
     }
 
+    GetIsAttentionByOpenIdAsync(openId: string): Observable<any> {
+        return this.http.get('/api/services/app/WeChatUser/GetIsAttentionByOpenIdAsync?openId=' + openId).map(data => {
+            if (data.result) {
+                return data.result;
+            } else {
+                return false;
+            }
+        });
+    }
+
     GetCurrentDayVoteByIdAsync(params: any): Observable<any> {
         return this.http.get('/api/services/app/VoteLog/GetCurrentDayVoteByIdAsync', params).map(data => {
             if (data.result) {
@@ -162,10 +172,20 @@ export class ArticleService {
         });
     }
 
-    GetWXExhibitionShopsByIdAsync(id: string): Observable<ExhibitionShop> {
-        return this.http.get('/api/services/app/ExhibitionShop/GetWXExhibitionShopsByIdAsync?Id=' + id).map(data => {
+    GetWXExhibitionShopsByIdAsync(shopId: string): Observable<ExhibitionShop> {
+        return this.http.get('/api/services/app/ExhibitionShop/GetWXExhibitionShopsByIdAsync?shopId=' + shopId).map(data => {
             if (data.result) {
                 return ExhibitionShop.fromJS(data.result);
+            } else {
+                return null;
+            }
+        });
+    }
+
+    GetAuthorizationUrl(params: any): Observable<string> {
+        return this.http.get('/api/services/app/ExhibitionShop/GetAuthorizationUrl', params).map(data => {
+            if (data.result) {
+                return data.result;
             } else {
                 return null;
             }

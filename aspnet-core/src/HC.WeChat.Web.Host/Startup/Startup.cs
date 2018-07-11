@@ -20,6 +20,7 @@ using Microsoft.Extensions.Options;
 using Senparc.Weixin.MP.Containers;
 using HC.WeChat.Models.WeChat;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Http;
 
 #if FEATURE_SIGNALR
 using Microsoft.AspNet.SignalR;
@@ -140,8 +141,8 @@ namespace HC.WeChat.Web.Host.Startup
 #endif
             //404错跳转配置
             //app.UseStatusCodePagesWithRedirects("/GAWX/Error/{0}");
-            app.UseStatusCodePagesWithRedirects("/GAWX/Error");
-
+            //app.UseStatusCodePagesWithRedirects("/GAWX/Error");
+            
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -151,6 +152,20 @@ namespace HC.WeChat.Web.Host.Startup
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+            });
+
+            app.Run(async (context) => {
+                var url = context.Request.GetAbsoluteUri();
+
+                if (url.Contains("/gawechat/") && !url.Contains("/index.html"))
+                {
+                    //context.Response.Redirect(url + "index.html");
+                    context.Response.Redirect(url.Replace("/gawechat/", "/gawechat/index.html"));
+                    //url.Replace("/gawechat/", "/gawechat/index.html");
+                }
+                //string host = "http://wx.photostory.top";
+                //url = host + "/GAWX/Authorization?page=103";
+                //context.Response.Redirect(url);
             });
 
             #region 微信相关

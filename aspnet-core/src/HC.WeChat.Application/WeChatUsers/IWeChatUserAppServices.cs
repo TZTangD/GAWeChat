@@ -127,6 +127,6 @@ namespace HC.WeChat.WeChatUsers
         /// </summary>
         /// <returns></returns>
         Task<WeChatUserStatisticLiDto> GetWeChatUserStatistic();
-
+        Task<bool> GetIsAttentionByOpenIdAsync(string openId);
     }
 }
