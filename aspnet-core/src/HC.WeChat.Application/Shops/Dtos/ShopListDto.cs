@@ -159,6 +159,11 @@ namespace HC.WeChat.Shops.Dtos
         /// </summary>
         public int? Count { get; set; }
 
+        /// <summary>
+        /// 排序id
+        /// </summary>
+        public int GroupId { get; set; }
+
     }
 
     public class ShopStatisticLiDto

@@ -826,7 +826,7 @@ namespace HC.WeChat.Shops
                             FansNum = s.FansNum,
                             BranchCompany = r.BranchCompany,
                             Manager = r.Manager,
-                            //Area=r.Area
+                            Area = r.Area
                         };
 
             //TODO:根据传入的参数添加过滤条件
@@ -1271,7 +1271,7 @@ namespace HC.WeChat.Shops
         [AbpAllowAnonymous]
         public async Task<string> GetQRUrlByShopId(Guid shopId)
         {
-            string url =await _shopRepository.GetAll().Where(v => v.Id == shopId).Select(v => v.QRUrl).FirstOrDefaultAsync();       
+            string url = await _shopRepository.GetAll().Where(v => v.Id == shopId).Select(v => v.QRUrl).FirstOrDefaultAsync();
             return url;
         }
         #region 店铺数据统计
@@ -1284,18 +1284,19 @@ namespace HC.WeChat.Shops
         {
             var shop = _shopRepository.GetAll().Where(s => s.Status == ShopAuditStatus.已审核);
             var retail = _retailerRepository.GetAll();
-            var query =(from s in shop
-                               join r in retail on s.RetailerId equals r.Id into g
-                               from sr in g.DefaultIfEmpty()
-                               where sr.BranchCompany != null
-                               group sr by sr.BranchCompany into m
-                               select new ShopStatisticDto
-                               {
-                                   Company = m.Key == null ? "其它" : m.Key,
-                                   Count = m.Count()
-                               });
-            var total =await query.SumAsync(s=>s.Count);
-            var list = await query.OrderByDescending(l => l.Count).ToListAsync();
+            var query = (from s in shop
+                         join r in retail on s.RetailerId equals r.Id into g
+                         from sr in g.DefaultIfEmpty()
+                             //where sr.BranchCompany != null
+                         group sr by sr.BranchCompany into m
+                         select new ShopStatisticDto
+                         {
+                             Company = m.Key == null ? "其它" : m.Key,
+                             Count = m.Count(),
+                             GroupId = m.Key != null ? 1 : 2
+                         });
+            var total = await query.SumAsync(s => s.Count);
+            var list = await query.OrderBy(l=>l.GroupId).ThenByDescending(l => l.Count).ToListAsync();
             var result = new ShopStatisticLiDto();
             result.ShopStaDto = list;
             result.Total = total;
