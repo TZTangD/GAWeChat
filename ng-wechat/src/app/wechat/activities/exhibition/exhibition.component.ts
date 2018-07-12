@@ -157,7 +157,7 @@ export class ExhibitionComponent extends AppComponentBase implements OnInit {
                 // });
                 // this.dia.show(this.shareConfig).subscribe((res: any) => {
                 // });
-                location.href = encodeURIComponent(this.hostUrl + '/GAWX/QrCode?url=' + this.hostUrl + this.qjyyPic);
+                location.href = this.hostUrl + '/GAWX/QrCode?url=' + encodeURIComponent(this.hostUrl + this.qjyyPic);
             }
         });
 
