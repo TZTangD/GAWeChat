@@ -135,5 +135,6 @@ namespace HC.WeChat.WeChatUsers
         /// <returns></returns>
         Task<bool> GetWeChatUserIsExsit(string openId);
 
+        Task<bool> GetIsAttentionByOpenIdAsync(string openId);
     }
 }

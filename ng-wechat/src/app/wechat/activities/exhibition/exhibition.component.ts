@@ -20,6 +20,7 @@ export class ExhibitionComponent extends AppComponentBase implements OnInit {
     exhibitionShopList: ExhibitionShop[] = [];
     exhibition: Exhibition = new Exhibition();
     picIds: string[] = [];
+    voteDesc: string[] = [];
     voteLog: VoteLog = new VoteLog();
     shopTotal: number = 0; // 参赛数
     voteTotal: number = 0; // 投票数
@@ -30,6 +31,7 @@ export class ExhibitionComponent extends AppComponentBase implements OnInit {
     content = '';
     shareConfig: DialogConfig = {};
     config: DialogConfig = {};
+    isAttention: boolean = false; // 用户是否关注
     @ViewChild('ios') iosAS: DialogComponent;
     @ViewChild('success') successToast: ToastComponent;
     constructor(injector: Injector, private router: Router, private srvt: ToastService, private srv: ToptipsService, private articleService: ArticleService
@@ -65,6 +67,17 @@ export class ExhibitionComponent extends AppComponentBase implements OnInit {
         let params: any = {};
         this.articleService.GetExhibitionConfigAsync(params).subscribe(result => {
             this.exhibition = result;
+            if (this.exhibition.desc != '') {
+                this.voteDesc = this.exhibition.desc.split('#');
+            }
+        });
+    }
+
+    getIsAttentionByOpenIdAsync() {
+        let params: any = {};
+        params.openId = this.settingsService.openId;
+        this.articleService.GetIsAttentionByOpenIdAsync(params).subscribe(result => {
+            this.isAttention = result;
         });
     }
 
@@ -122,56 +135,64 @@ export class ExhibitionComponent extends AppComponentBase implements OnInit {
     }
 
     voteAdd(id: string, type: 'success' | 'loading', forceHide: boolean = false) {
-        if (this.settingsService.openId) {
-            if (this.currentDayVote < this.exhibition.frequency) {
-                this.exhibitionShopList.find(v => v.id == id).votes++;
-                this.voteTotal++;
-                this.currentDayVote++;
-                this.voteLog.openId = this.settingsService.openId;
-                this.voteLog.exhibitionId = id;
-                this.articleService.AddVoteLogAsync(this.voteLog).subscribe(data => {
-                    if (data && data.code === 0) {
-                        this.srvt['success']('投票成功', 0);
-                    } else if (data && data.code === 999) {
-                        this.voteTotal--;
-                        this.exhibitionShopList.find(v => v.id == id).votes--;
-                        this.currentDayVote--;
-                        this.srvt['loading']('活动已过期', 0);
-                    } else if (data && data.code === 888) {
-                        this.voteTotal--;
-                        this.exhibitionShopList.find(v => v.id == id).votes--;
-                        this.currentDayVote--;
-                        this.srvt['loading']('活动尚未开始哦', 0);
-                    }
-                    else {
-                        this.voteTotal--;
-                        this.exhibitionShopList.find(v => v.id == id).votes--;
-                        this.currentDayVote--;
-                        this.srvt['loading']('请重试');
-                    }
-                });
+        this.articleService.GetIsAttentionByOpenIdAsync(this.settingsService.openId).subscribe(result => {
+            this.isAttention = result;
+            if (this.isAttention == true) {
+                if (this.currentDayVote < this.exhibition.frequency) {
+                    this.voteBLL(id);
+                } else {
+                    // this.srvt['success']('您已经超过每日投票限制了哦', 2000);
+                    this.onShowBySrv('ios', false);
+                }
             } else {
-                // this.srvt['success']('您已经超过每日投票限制了哦', 2000);
-                this.onShowBySrv('ios', false);
+                // this.DEFCONFIG = <DialogConfig>{
+                //     skin: 'auto',
+                //     backdrop: true,
+                //     cancel: null,
+                //     confirm: null,
+                // };
+                // this.content = '<div class="mdiv"><p>渠江烟雨</p><div><img class="qrcode" src="' + this.qjyyPic + '"></div><p>长按识别二维码</br>关注公众号后方可投票</p></div>';
+                // this.shareConfig = Object.assign({}, this.DEFCONFIG, <DialogConfig>{
+                //     content: this.content,
+                // });
+                // this.dia.show(this.shareConfig).subscribe((res: any) => {
+                // });
+                location.href = encodeURIComponent(this.hostUrl + '/GAWX/QrCode?url=' + this.hostUrl + this.qjyyPic);
             }
-        } else {
-            this.DEFCONFIG = <DialogConfig>{
-                skin: 'auto',
-                backdrop: true,
-                cancel: null,
-                confirm: null,
-            };
-            this.content = '<div class="mdiv"><p>渠江烟雨</p><div><img class="qrcode" src="' + this.qjyyPic + '"></div><p>长按识别二维码</br>关注公众号后方可投票</p></div>';
-            this.shareConfig = Object.assign({}, this.DEFCONFIG, <DialogConfig>{
-                content: this.content,
-            });
-            this.dia.show(this.shareConfig).subscribe((res: any) => {
-            });
-        }
+        });
+
     }
 
+    voteBLL(id: any) {
+        this.exhibitionShopList.find(v => v.id == id).votes++;
+        this.voteTotal++;
+        this.currentDayVote++;
+        this.voteLog.openId = this.settingsService.openId;
+        this.voteLog.exhibitionId = id;
+        this.articleService.AddVoteLogAsync(this.voteLog).subscribe(data => {
+            if (data && data.code === 0) {
+                this.srvt['success']('投票成功', 0);
+            } else if (data && data.code === 999) {
+                this.voteTotal--;
+                this.exhibitionShopList.find(v => v.id == id).votes--;
+                this.currentDayVote--;
+                this.srvt['loading']('活动已过期', 0);
+            } else if (data && data.code === 888) {
+                this.voteTotal--;
+                this.exhibitionShopList.find(v => v.id == id).votes--;
+                this.currentDayVote--;
+                this.srvt['loading']('活动尚未开始哦', 0);
+            }
+            else {
+                this.voteTotal--;
+                this.exhibitionShopList.find(v => v.id == id).votes--;
+                this.currentDayVote--;
+                this.srvt['loading']('请重试');
+            }
+        });
+    }
 
-    goDetail(id: string, shopId: string) {
-        this.router.navigate(['/exhibitions/exhibition-detail', { id: id, shopId: shopId, currentDayVote: this.currentDayVote, voteTotal: this.voteTotal, frequency: this.exhibition.frequency }]);
+    goDetail(shopId: string) {
+        this.router.navigate(['/exhibitions/exhibition-detail', { shopId: shopId }]);
     }
 }

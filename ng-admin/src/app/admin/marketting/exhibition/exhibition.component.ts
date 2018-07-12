@@ -21,6 +21,12 @@ export class ExhibitionComponent extends AppComponentBase implements OnInit {
     search: any = {};
     exhibition: Exhibition = new Exhibition();
     form: FormGroup;
+    sortMap = {
+        votes: null,
+        fans: null
+    };
+    sortVotesTotal = null;
+    sortFansTotal = null;
 
     constructor(injector: Injector, private fb: FormBuilder,
         private router: Router, private modal: NzModalService,
@@ -29,12 +35,10 @@ export class ExhibitionComponent extends AppComponentBase implements OnInit {
     }
     ngOnInit(): void {
         this.form = this.fb.group({
-            // beginTime: [null, [Validators.compose([Validators.required, Validators.pattern(/^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s+(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/)])]],
-            // endTime: [null, [Validators.compose([Validators.required, Validators.pattern(/^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s+(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/)])]],
             topTotal: [null, [Validators.compose([Validators.required, Validators.pattern(/^[+]{0,1}(\d+)$|^[+]{0,1}(\d+\.\d+)$/), Validators.min(0)])]],
             frequency: [null, [Validators.compose([Validators.required, Validators.pattern(/^[+]{0,1}(\d+)$|^[+]{0,1}(\d+\.\d+)$/), Validators.min(0)])]],
             desc: [null],
-            content: [null],
+            // content: [null],
             endTime: [null, Validators.compose([Validators.required])],
             beginTime: [null, Validators.compose([Validators.required])],
         });
@@ -46,10 +50,29 @@ export class ExhibitionComponent extends AppComponentBase implements OnInit {
         return this.form.controls[id];
     }
 
+    sort(value, para: string) {
+        if (para == 'fans') {
+            this.sortFansTotal = value;
+            this.sortVotesTotal = null;
+            this.sortMap.votes = null;
+            this.refreshData();
+        } else {
+            this.sortVotesTotal = value;
+            this.sortFansTotal = null;
+            this.sortMap.fans = null;
+            this.refreshData();
+        }
+    }
     refreshData(reset = false, search?: boolean) {
         if (reset) {
             this.query.pageIndex = 1;
-            this.search = {}
+            this.search = {};
+            this.sortVotesTotal = null;
+            this.sortFansTotal = null;
+            this.sortMap = {
+                fans: null,
+                votes: null
+            };
         }
         if (search) {
             this.query.pageIndex = 1;
@@ -68,6 +91,8 @@ export class ExhibitionComponent extends AppComponentBase implements OnInit {
         arry.push(Parameter.fromJS({ key: 'CustName', value: this.search.custName }));
         arry.push(Parameter.fromJS({ key: 'CustCode', value: this.search.custCode }));
         arry.push(Parameter.fromJS({ key: 'Phone', value: this.search.phone }));
+        arry.push(Parameter.fromJS({ key: 'sortFansTotal', value: this.sortFansTotal }));
+        arry.push(Parameter.fromJS({ key: 'sortVotesTotal', value: this.sortVotesTotal }));
         return arry;
     }
 
@@ -96,7 +121,7 @@ export class ExhibitionComponent extends AppComponentBase implements OnInit {
     }
     exportExcel() {
         this.exportLoading = true;
-        this.exhibitionService.exportExcel({ shopName: this.search.shopName, custName: this.search.custName, custCode: this.search.custCode, phone: this.search.phone }).subscribe(result => {
+        this.exhibitionService.exportExcel({ shopName: this.search.shopName, custName: this.search.custName, custCode: this.search.custCode, phone: this.search.phone, sortFansTotal: this.sortFansTotal, sortVotesTotal: this.sortVotesTotal }).subscribe(result => {
             if (result.code == 0) {
                 var url = AppConsts.remoteServiceBaseUrl + result.data;
                 document.getElementById('aExhibitionShopExcelUrl').setAttribute('href', url);

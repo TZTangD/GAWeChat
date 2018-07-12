@@ -25,6 +25,8 @@ using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
+using HC.WeChat.Authorization.WeChatOAuth;
+using HC.WeChat.WechatAppConfigs;
 
 namespace HC.WeChat.ExhibitionShops
 {
@@ -41,6 +43,8 @@ namespace HC.WeChat.ExhibitionShops
         private readonly IRepository<Retailer, Guid> _retailerRepository;
         private readonly IRepository<Exhibition, Guid> _exhibitionRepository;
         private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IWeChatOAuthAppService _weChatOAuthAppService;
+        private readonly IWechatAppConfigAppService _wechatAppConfigAppService;
 
         /// <summary>
         /// 构造函数
@@ -52,6 +56,8 @@ namespace HC.WeChat.ExhibitionShops
             , IRepository<Retailer, Guid> retailerRepository
             , IRepository<Exhibition, Guid> exhibitionRepository
                 , IHostingEnvironment hostingEnvironment
+            , IWeChatOAuthAppService weChatOAuthAppService
+            , IWechatAppConfigAppService wechatAppConfigAppService
         )
         {
             _retailerRepository = retailerRepository;
@@ -60,6 +66,9 @@ namespace HC.WeChat.ExhibitionShops
             _exhibitionshopManager = exhibitionshopManager;
             _exhibitionRepository = exhibitionRepository;
             _hostingEnvironment = hostingEnvironment;
+            _weChatOAuthAppService = weChatOAuthAppService;
+            _wechatAppConfigAppService = wechatAppConfigAppService;
+            _weChatOAuthAppService.WechatAppConfig = _wechatAppConfigAppService.GetWechatAppConfig(null).Result;
         }
 
 
@@ -269,15 +278,69 @@ namespace HC.WeChat.ExhibitionShops
                  .WhereIf(!string.IsNullOrEmpty(input.CustCode), v => v.CustCode.Contains(input.CustCode))
                  .WhereIf(!string.IsNullOrEmpty(input.CustName), v => v.CustName.Contains(input.CustName));
             var exhibitionshopCount = await result.CountAsync();
-            var exhibitionshops = await result
-                .OrderBy(input.Sorting).AsNoTracking()
-                .PageBy(input)
-                .ToListAsync();
-            var exhibitionshopListDtos = exhibitionshops.MapTo<List<ExhibitionShopListDto>>();
-            return new PagedResultDto<ExhibitionShopListDto>(
-                exhibitionshopCount,
-                exhibitionshopListDtos
-                );
+            if (input.SortFansTotal != null && input.SortFansTotal == "ascend")
+            {
+                var exhibitionshops = await result
+                    .OrderByDescending(v => v.FansNum).AsNoTracking()
+                    .PageBy(input)
+                    .ToListAsync();
+                var exhibitionshopListDtos = exhibitionshops.MapTo<List<ExhibitionShopListDto>>();
+                return new PagedResultDto<ExhibitionShopListDto>(
+                    exhibitionshopCount,
+                    exhibitionshopListDtos
+                    );
+            }
+            else if (input.SortFansTotal != null && input.SortFansTotal == "descend")
+            {
+                var exhibitionshops = await result
+                    .OrderBy(v => v.FansNum).AsNoTracking()
+                    .PageBy(input)
+                    .ToListAsync();
+                var exhibitionshopListDtos = exhibitionshops.MapTo<List<ExhibitionShopListDto>>();
+                return new PagedResultDto<ExhibitionShopListDto>(
+                    exhibitionshopCount,
+                    exhibitionshopListDtos
+                    );
+            }
+            else if (input.SortVotesTotal != null && input.SortVotesTotal == "ascend")
+            {
+                var exhibitionshops = await result
+                    .OrderByDescending(v => v.Votes).AsNoTracking()
+                    .PageBy(input)
+                    .ToListAsync();
+
+                var exhibitionshopListDtos = exhibitionshops.MapTo<List<ExhibitionShopListDto>>();
+                return new PagedResultDto<ExhibitionShopListDto>(
+                    exhibitionshopCount,
+                    exhibitionshopListDtos
+                    );
+            }
+
+            else if (input.SortVotesTotal != null && input.SortVotesTotal == "descend")
+            {
+                var exhibitionshops = await result
+                    .OrderBy(v => v.Votes).AsNoTracking()
+                    .PageBy(input)
+                    .ToListAsync();
+
+                var exhibitionshopListDtos = exhibitionshops.MapTo<List<ExhibitionShopListDto>>();
+                return new PagedResultDto<ExhibitionShopListDto>(
+                    exhibitionshopCount,
+                    exhibitionshopListDtos
+                    );
+            }
+            else
+            {
+                var exhibitionshops = await result
+                    .OrderByDescending(v => v.Votes).AsNoTracking()
+                    .PageBy(input)
+                    .ToListAsync();
+                var exhibitionshopListDtos = exhibitionshops.MapTo<List<ExhibitionShopListDto>>();
+                return new PagedResultDto<ExhibitionShopListDto>(
+                    exhibitionshopCount,
+                    exhibitionshopListDtos
+                    );
+            }
         }
 
         /// <summary>
@@ -345,25 +408,68 @@ namespace HC.WeChat.ExhibitionShops
                  .WhereIf(!string.IsNullOrEmpty(input.ShopName), v => v.ShopName.Contains(input.ShopName));
             var retailer = _retailerRepository.GetAll();
             var shop = _shopRepository.GetAll();
-            var result = await (from e in exhibitons
-                                join r in retailer on e.RetailerId equals r.Id
-                                join s in shop on e.ShopId equals s.Id
-                                select new ExhibitionShopListDto()
-                                {
-                                    Id = e.Id,
-                                    ShopName = e.ShopName,
-                                    CustCode = r.Code,
-                                    CustName = r.Name,
-                                    Area = r.Area,
-                                    ShopAddress = e.ShopAddress,
-                                    Phone = s.Tel,
-                                    Votes = e.Votes != null ? e.Votes : 0,
-                                    FansNum = s.FansNum
-                                }).WhereIf(!string.IsNullOrEmpty(input.Phone), v => v.Phone.Contains(input.Phone))
+            var result = (from e in exhibitons
+                          join r in retailer on e.RetailerId equals r.Id
+                          join s in shop on e.ShopId equals s.Id
+                          select new ExhibitionShopListDto()
+                          {
+                              Id = e.Id,
+                              ShopName = e.ShopName,
+                              CustCode = r.Code,
+                              CustName = r.Name,
+                              Area = r.Area,
+                              ShopAddress = e.ShopAddress,
+                              Phone = s.Tel,
+                              Votes = e.Votes != null ? e.Votes : 0,
+                              FansNum = s.FansNum
+                          }).WhereIf(!string.IsNullOrEmpty(input.Phone), v => v.Phone.Contains(input.Phone))
                  .WhereIf(!string.IsNullOrEmpty(input.CustCode), v => v.CustCode.Contains(input.CustCode))
-                 .WhereIf(!string.IsNullOrEmpty(input.CustName), v => v.CustName.Contains(input.CustName)).ToListAsync();
-            var ExhibitonsDtos = result.MapTo<List<ExhibitionShopListDto>>();
-            return ExhibitonsDtos;
+                 .WhereIf(!string.IsNullOrEmpty(input.CustName), v => v.CustName.Contains(input.CustName));
+            if (input.SortFansTotal != null && input.SortFansTotal == "ascend")
+            {
+                var exhibitionshops = await result
+                    .OrderByDescending(v => v.FansNum).AsNoTracking()
+                    .PageBy(input)
+                    .ToListAsync();
+                var exhibitionshopListDtos = exhibitionshops.MapTo<List<ExhibitionShopListDto>>();
+                return exhibitionshopListDtos;
+            }
+            else if (input.SortFansTotal != null && input.SortFansTotal == "descend")
+            {
+                var exhibitionshops = await result
+                      .OrderBy(v => v.FansNum).AsNoTracking()
+                      .PageBy(input)
+                      .ToListAsync();
+                var exhibitionshopListDtos = exhibitionshops.MapTo<List<ExhibitionShopListDto>>();
+                return exhibitionshopListDtos;
+            }
+            else if (input.SortVotesTotal != null && input.SortVotesTotal == "ascend")
+            {
+                var exhibitionshops = await result
+                         .OrderByDescending(v => v.Votes).AsNoTracking()
+                         .PageBy(input)
+                         .ToListAsync();
+                var exhibitionshopListDtos = exhibitionshops.MapTo<List<ExhibitionShopListDto>>();
+                return exhibitionshopListDtos;
+            }
+            else if (input.SortVotesTotal != null && input.SortVotesTotal == "descend")
+            {
+                var exhibitionshops = await result
+                          .OrderBy(v => v.Votes).AsNoTracking()
+                          .PageBy(input)
+                          .ToListAsync();
+                var exhibitionshopListDtos = exhibitionshops.MapTo<List<ExhibitionShopListDto>>();
+                return exhibitionshopListDtos;
+            }
+            else
+            {
+                var exhibitionshops = await result
+                        .OrderByDescending(v => v.Votes).AsNoTracking()
+                        .PageBy(input)
+                        .ToListAsync();
+                var exhibitionshopListDtos = exhibitionshops.MapTo<List<ExhibitionShopListDto>>();
+                return exhibitionshopListDtos;
+            }
         }
 
         private string SaveExhibitionShopsAsyncsExcel(string fileName, List<ExhibitionShopListDto> data)
@@ -426,13 +532,14 @@ namespace HC.WeChat.ExhibitionShops
                          };
             if (type == "time")
             {
-                return await result.Take(config.TopTotal).OrderByDescending(v=>v.CreateTime).ToListAsync();
+                return await result.Take(config.TopTotal).OrderByDescending(v => v.CreateTime).ToListAsync();
             }
             else if (type == "vote")
             {
-                return await result.Take(config.TopTotal).OrderByDescending(v=>v.Votes).ToListAsync();
+                return await result.Take(config.TopTotal).OrderByDescending(v => v.Votes).ToListAsync();
 
-            }else
+            }
+            else
             {
                 return await result.Take(config.TopTotal).OrderByDescending(v => v.Votes).ToListAsync();
             }
@@ -472,9 +579,9 @@ namespace HC.WeChat.ExhibitionShops
         /// <param name="id"></param>
         /// <returns></returns>
         [AbpAllowAnonymous]
-        public async Task<ExhibitionShopListDto> GetWXExhibitionShopsByIdAsync(Guid id)
+        public async Task<ExhibitionShopListDto> GetWXExhibitionShopsByIdAsync(Guid shopId)
         {
-            var exhibitons = _exhibitionshopRepository.GetAll().Where(v => v.Id == id);
+            var exhibitons = _exhibitionshopRepository.GetAll().Where(v => v.ShopId == shopId);
             var retailer = _retailerRepository.GetAll();
             var shop = _shopRepository.GetAll();
             var result = (from e in exhibitons
@@ -495,6 +602,13 @@ namespace HC.WeChat.ExhibitionShops
                               ShopId = s.Id
                           }).FirstOrDefaultAsync();
             return await result;
+        }
+
+        [AbpAllowAnonymous]
+        public Task<string> GetAuthorizationUrl(string shopId, string host)
+        {
+            string url = host + "/GAWX/ExhibitionDetailUrl";
+            return Task.FromResult(_weChatOAuthAppService.GetAuthorizeUrl(url, shopId, Senparc.Weixin.MP.OAuthScope.snsapi_base));
         }
     }
 }

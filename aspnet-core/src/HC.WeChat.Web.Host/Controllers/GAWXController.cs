@@ -52,6 +52,8 @@ namespace HC.WeChat.Web.Host.Controllers
           IWeChatUserAppService weChatUserAppService,
            IShopAppService shopAppService
             //IHostingEnvironment env
+          IWeChatOAuthAppService weChatOAuthAppService//,
+                                                      //IHostingEnvironment env
             ) : base(wechatAppConfigAppService)
         {
             //_settings = settings.Value;
@@ -93,6 +95,8 @@ namespace HC.WeChat.Web.Host.Controllers
             //UserOpenId = "oPM5Uv81jfyJqWbVxWAH-RUqsCAs";
             UserOpenId = "oPM5Uv89yy7Iv8k9gLHjjsMTT5Gw";//零售户
             //UserOpenId = "oB4nYjnoHhuWrPVi2pYLuPjnCaU0"; //杨帆专用
+            //UserOpenId = "oPM5Uv89yy7Iv8k9gLHjjsMTT5Gw";
+            //UserOpenId = "oB4nYjnoHhuWrPVi2pYLuPjnCaU1"; //杨帆专用
             //UserOpenId = "oWusewPRxWuP4wMz3UmHR0y7CJME";
             //UserOpenId = "oB4nYjnoHhuWrPVi2pYLuPjnCaU0";
             //UserOpenId = "oWusewPRxWuP4wMz3UmHR0y7CJME";
@@ -206,7 +210,7 @@ namespace HC.WeChat.Web.Host.Controllers
                         //url = host + "/GAWX/Activity";
                         //ViewBag.PageUrl = _weChatOAuthAppService.GetAuthorizeUrl(url, "123", Senparc.Weixin.MP.OAuthScope.snsapi_base);
                     }
-                    //break;
+                //break;
                 case GAAuthorizationPageEnum.Share:
                     {
                         //if (!string.IsNullOrEmpty(UserOpenId))
@@ -216,7 +220,7 @@ namespace HC.WeChat.Web.Host.Controllers
                         //url = host + "/GAWX/Share";
                         //ViewBag.PageUrl = _weChatOAuthAppService.GetAuthorizeUrl(url, "123", Senparc.Weixin.MP.OAuthScope.snsapi_base);
                     }
-                    //break;
+                //break;
                 case GAAuthorizationPageEnum.IntegralDetail:
                     {
                         if (!string.IsNullOrEmpty(UserOpenId))
@@ -257,8 +261,18 @@ namespace HC.WeChat.Web.Host.Controllers
                         //ViewBag.PageUrl = _weChatOAuthAppService.GetAuthorizeUrl(url, "123", Senparc.Weixin.MP.OAuthScope.snsapi_base);
                     }
                     break;
+                case GAAuthorizationPageEnum.ExhibitionDetailUrl:
+                    {
+                        if (!string.IsNullOrEmpty(UserOpenId))
+                        {
+                            return Redirect(string.Format(GAAuthorizationPageUrl.ExhibitionDetailUrl, param));
+                        }
+                        url = host + "/GAWX/ExhibitionDetailUrl";
+                        //ViewBag.PageUrl = _weChatOAuthAppService.GetAuthorizeUrl(url, "123", Senparc.Weixin.MP.OAuthScope.snsapi_base);
+                    }
+                    break;
                 default:
-                    { 
+                    {
                         return Redirect("/gawechat/index.html");
                     }
             }
@@ -268,6 +282,13 @@ namespace HC.WeChat.Web.Host.Controllers
             return Redirect(pageUrl);
             //return View();
         }
+
+        public IActionResult QrCode(string url)
+        {
+            ViewBag.QrCodeUrl = url;
+            return View();
+        }
+
         /// <summary>
         /// 个人中心
         /// </summary>
@@ -395,12 +416,18 @@ namespace HC.WeChat.Web.Host.Controllers
         /// <param name="code"></param>
         /// <param name="state"></param>
         /// <returns></returns>
-        public IActionResult Exhibition(string code, string state)
+        public IActionResult Exhibition(string code, string state, string openId)
         {
             //存储openId 避免重复提交
             SetUserOpenId(code);
 
             return Redirect(string.Format(GAAuthorizationPageUrl.ExhibitionUrl, state));
+        }
+
+        public IActionResult ExhibitionDetailUrl(string code, string state)
+        {
+            SetUserOpenId(code);
+            return Redirect(string.Format(GAAuthorizationPageUrl.ExhibitionDetailUrl, state));
         }
 
         public IActionResult Login(string openId)
@@ -454,7 +481,8 @@ namespace HC.WeChat.Web.Host.Controllers
         Share = 102,
         IntegralDetail = 301,
         CustBindInfo = 302,
-        ShopReview = 303
+        ShopReview = 303,
+        ExhibitionDetailUrl = 304
     }
 
     public class GAAuthorizationPageUrl
@@ -468,12 +496,13 @@ namespace HC.WeChat.Web.Host.Controllers
         public static string GoodsUrl = "/gawechat/index.html#/goodses/goods";
 
         public static string ActivityUrl = "/gawechat/index.html#/activities/activity";
-        public static string ShareUrl = "/gawechat/index.html#/shares/share"; 
+        public static string ShareUrl = "/gawechat/index.html#/shares/share";
         public static string IntegralDetailUrl = "/gawechat/index.html#/integrals/integral";
         public static string CustBindInfoUrl = "/gawechat/index.html#/shop-employees/shop-employee";
         public static string ShopReviewUrl = "/gawechat/index.html#/shops/shop;shopId={0};isAudit=true";
         public static string ExhibitionUrl = "/gawechat/index.html#/exhibitions/exhibition";
         public static string ShopUrl = "/gawechat/index.html#/shops/shop;shopId={0}";
         public static string ShopQrCodeUrl = "/gawechat/index.html#/qrcodes/qrcode;shopId={0}";
+        public static string ExhibitionDetailUrl = "/gawechat/index.html#/exhibitions/exhibition-detail;shopId={0}";
     }
 }

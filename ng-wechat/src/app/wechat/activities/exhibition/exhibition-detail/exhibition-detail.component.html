@@ -51,10 +51,7 @@
         <!-- <div class="weui-media-box__hd weui-cell_img" *ngFor="let item of picIds" [ngStyle]="{'background-image':'url('+ hostUrl + item +')'}">
     </div> -->
         <div class="weui-media-box__hd weui-cell_img" *ngFor="let item of picIds">
-            <img style="    height: 100%;
-        width: 360px;
-        padding-left: 2px;
-        padding-right: 2px;" class="weui-media-box__thumb" src="{{hostUrl+item}}" alt="">
+            <img style="width: 100%;" class="weui-media-box__thumb" src="{{hostUrl+item}}" alt="">
         </div>
         <div class="button-sp-area" *ngIf="exhibitionShop">
             <button weui-button [weui-mini]="'mini'" (click)="voteAdd(exhibitionShop.id,'success')" [weui-plain]="true">为Ta投一票吧</button>
@@ -67,35 +64,27 @@
         </div>
         <section class="rules">
             <div class="text">
-                <div class="prize">活动公告</div>
+                <!-- <div class="prize">活动公告</div>
                 <div class="neirong">
                     <span style="font-size:16px;">&nbsp; &nbsp; &nbsp;{{exhibition.content}}</span>
-                </div>
+                </div> -->
                 <div class="prize">投票须知</div>
                 <div class="neirong">
-                    <div style="text-align:center;">
+                    <div style="text-align:left;">
                         <span style="font-size:14px;">
-                            <div>
-                                <div>
-                                    &nbsp; 投票时间为：{{exhibition.beginTime| date:'yyyy-MM-dd'}}——{{exhibition.endTime| date:'yyyy-MM-dd'}}
-                                </div>
-                                <div>
-                                    &nbsp; 每天每个微信号可以投{{exhibition.frequency}}票
-                                </div>               
-                                <div style="font-size:16px;"> 
-                                    {{exhibition.desc}}
-                                </div>                          
+                            <div>                           
+                                <p *ngFor="let item of voteDesc" style="font-size:16px;padding-left: 10px;"> 
+                                    {{item}}
+                                </p>                         
                             </div>                            
                         </span>
                     </div>
-                    <strong>
-                    </strong>
                 </div>
             </div>
         </section>
-        <div class="qrUrl" style="text-align: center" *ngIf="shopQrUrl">
+        <!-- <div class="qrUrl" style="text-align: center" *ngIf="shopQrUrl">
             <img class="mdiv" style="width:233.625px;height: 233.625px;" src="{{hostUrl+shopQrUrl}}" alt="">
             <p>长按识别二维码关注公众号</p>
-        </div>
+        </div> -->
     </div>
 </Page>

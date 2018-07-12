@@ -234,13 +234,28 @@ namespace HC.WeChat.MessageHandler
             }
             foreach (var item in this.MessageInfo.KeyWordsPic)
             {
-                        requestHandler.Keyword(item.Key, () =>
-                        {
-                            var responseMessage = ResponseMessageBase.CreateFromRequestMessage<ResponseMessageNews>(requestMessage);
-                            responseMessage.ArticleCount = 1;
-                            responseMessage.Articles.Add(item.Value);
-                            return responseMessage;
-                        });
+                if (item.Key == "默认")
+                {
+                    requestHandler.Default(() =>
+                    {
+                        //var responseMessage = this.CreateResponseMessage<ResponseMessageText>();
+                        //responseMessage.Content = this.MessageInfo.KeyWords["默认"];
+                        var responseMessage = ResponseMessageBase.CreateFromRequestMessage<ResponseMessageNews>(requestMessage);
+                        responseMessage.ArticleCount = 1;
+                        responseMessage.Articles.Add(GetPicSubscribe());
+                        return responseMessage;
+                    });
+                }
+                else
+                {
+                    requestHandler.Keyword(item.Key, () =>
+                    {
+                        var responseMessage = ResponseMessageBase.CreateFromRequestMessage<ResponseMessageNews>(requestMessage);
+                        responseMessage.ArticleCount = 1;
+                        responseMessage.Articles.Add(item.Value);
+                        return responseMessage;
+                    });
+                }
             }
             return requestHandler.GetResponseMessage() as IResponseMessageBase;
         }
