@@ -52,7 +52,6 @@ namespace HC.WeChat.Web.Host.Controllers
           IWeChatUserAppService weChatUserAppService,
            IShopAppService shopAppService
             //IHostingEnvironment env
-          IWeChatOAuthAppService weChatOAuthAppService//,
                                                       //IHostingEnvironment env
             ) : base(wechatAppConfigAppService)
         {
@@ -463,7 +462,8 @@ namespace HC.WeChat.Web.Host.Controllers
                 //二维码关注页面
                 var shopId = new Guid(state);
                 var url = _shopAppService.GetQrCodeUrl(shopId);
-                return Redirect(string.Format(GAAuthorizationPageUrl.ShopQrCodeUrl, state));
+                //return Redirect(string.Format(GAAuthorizationPageUrl.ShopQrCodeUrl, state));
+                return RedirectToAction("QrCode",new { url= url });
             }
         }
     }
