@@ -135,10 +135,7 @@ export class ExhibitionComponent extends AppComponentBase implements OnInit {
     }
 
     voteAdd(id: string, type: 'success' | 'loading', forceHide: boolean = false) {
-        let params: any = {};
-        params.openId = this.settingsService.openId;
-
-        this.articleService.GetIsAttentionByOpenIdAsync(params).subscribe(result => {
+        this.articleService.GetIsAttentionByOpenIdAsync(this.settingsService.openId).subscribe(result => {
             this.isAttention = result;
             if (this.isAttention == true) {
                 if (this.currentDayVote < this.exhibition.frequency) {
@@ -148,18 +145,19 @@ export class ExhibitionComponent extends AppComponentBase implements OnInit {
                     this.onShowBySrv('ios', false);
                 }
             } else {
-                this.DEFCONFIG = <DialogConfig>{
-                    skin: 'auto',
-                    backdrop: true,
-                    cancel: null,
-                    confirm: null,
-                };
-                this.content = '<div class="mdiv"><p>渠江烟雨</p><div><img class="qrcode" src="' + this.qjyyPic + '"></div><p>长按识别二维码</br>关注公众号后方可投票</p></div>';
-                this.shareConfig = Object.assign({}, this.DEFCONFIG, <DialogConfig>{
-                    content: this.content,
-                });
-                this.dia.show(this.shareConfig).subscribe((res: any) => {
-                });
+                // this.DEFCONFIG = <DialogConfig>{
+                //     skin: 'auto',
+                //     backdrop: true,
+                //     cancel: null,
+                //     confirm: null,
+                // };
+                // this.content = '<div class="mdiv"><p>渠江烟雨</p><div><img class="qrcode" src="' + this.qjyyPic + '"></div><p>长按识别二维码</br>关注公众号后方可投票</p></div>';
+                // this.shareConfig = Object.assign({}, this.DEFCONFIG, <DialogConfig>{
+                //     content: this.content,
+                // });
+                // this.dia.show(this.shareConfig).subscribe((res: any) => {
+                // });
+                location.href = encodeURIComponent(this.hostUrl + '/GAWX/QrCode?url=' + this.hostUrl + this.qjyyPic);
             }
         });
 

@@ -133,18 +133,21 @@ export class ExhibitionDetailComponent extends AppComponentBase implements OnIni
                 }
             }
             else {
-                this.DEFCONFIG = <DialogConfig>{
-                    skin: 'auto',
-                    backdrop: true,
-                    cancel: null,
-                    confirm: null,
-                };
-                this.content = '<div class="mdiv"><p>' + this.exhibitionShop.shopName + '</p><div><img class="qrcode" src="' + AppConsts.remoteServiceBaseUrl + this.shopQrUrl + '"></div><p>长按识别二维码</br>关注公众号后方可投票</p></div>';
-                this.shareConfig = Object.assign({}, this.DEFCONFIG, <DialogConfig>{
-                    content: this.content,
-                });
-                this.dia.show(this.shareConfig).subscribe((res: any) => {
-                });
+                // this.DEFCONFIG = <DialogConfig>{
+                //     skin: 'auto',
+                //     backdrop: true,
+                //     cancel: null,
+                //     confirm: null,
+                // };
+                // this.content = '<div class="mdiv"><p>' + this.exhibitionShop.shopName + '</p><div><img class="qrcode" src="' + AppConsts.remoteServiceBaseUrl + this.shopQrUrl + '"></div><p>长按识别二维码</br>关注公众号后方可投票</p></div>';
+                // this.shareConfig = Object.assign({}, this.DEFCONFIG, <DialogConfig>{
+                //     content: this.content,
+                // });
+                // this.dia.show(this.shareConfig).subscribe((res: any) => {
+                // });
+                // location.href = encodeURIComponent(this.hostUrl + '/GAWX/QrCode?param=' + this.hostUrl + this.shopQrUrl);
+                location.href = this.hostUrl + '/GAWX/QrCode?url=' + encodeURIComponent(this.hostUrl + this.shopQrUrl);
+
             }
         });
     }
