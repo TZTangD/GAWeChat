@@ -128,5 +128,12 @@ namespace HC.WeChat.WeChatUsers
         /// <returns></returns>
         Task<WeChatUserStatisticLiDto> GetWeChatUserStatistic();
 
+        /// <summary>
+        /// 是否存在该微信用户
+        /// </summary>
+        /// <param name="openId"></param>
+        /// <returns></returns>
+        Task<bool> GetWeChatUserIsExsit(string openId);
+
     }
 }

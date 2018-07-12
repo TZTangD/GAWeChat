@@ -44,6 +44,7 @@ using SixLabors.ImageSharp.Processing.Text;
 using SixLabors.ImageSharp.Processing.Drawing;
 using SixLabors.Primitives;
 using HC.WeChat.Authorization;
+using HC.WeChat.Authorization.WeChatOAuth;
 
 namespace HC.WeChat.Shops
 {
@@ -70,7 +71,7 @@ namespace HC.WeChat.Shops
         private WechatAppConfigInfo AppConfig { get; set; }
         private readonly IRepository<WeChatUser, Guid> _wechatuserRepository;
         private readonly IHostingEnvironment _hostingEnvironment;
-
+        IWeChatOAuthAppService _weChatOAuthAppService;
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -83,7 +84,7 @@ namespace HC.WeChat.Shops
          , IRepository<MemberConfig, Guid> memberconfigRepository
             , IRepository<WeChatUser, Guid> wechatuserRepository
             , IRepository<WechatAppConfig, int> wechatappconfigRepository
-            , IHostingEnvironment hostingEnvironment)
+            , IHostingEnvironment hostingEnvironment, IWeChatOAuthAppService weChatOAuthAppService)
         {
             _shopRepository = shopRepository;
             _shopManager = shopManager;
@@ -98,6 +99,7 @@ namespace HC.WeChat.Shops
             _wechatuserRepository = wechatuserRepository;
             _wechatappconfigRepository = wechatappconfigRepository;
             _hostingEnvironment = hostingEnvironment;
+            _weChatOAuthAppService = weChatOAuthAppService;
         }
 
         /// <summary>
@@ -1335,6 +1337,29 @@ namespace HC.WeChat.Shops
             }
 
             return Task.FromResult(new APIResultDto() { Code = 1, Msg = "压缩图片成功" });
+        }
+
+        /// <summary>
+        /// 获取进入店铺二维码url
+        /// </summary>
+        /// <param name="shopId"></param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public string GetQrCodeUrl(Guid shopId)
+        {
+            var url = "http://localhost:21021/GAWX/QrCode";
+            var qrUrl = _weChatOAuthAppService.GetAuthorizeUrl(url, shopId.ToString(),OAuthScope.snsapi_base);
+            return qrUrl;
+        }
+        /// <summary>
+        /// 获取店铺推广码（关注公众号二维码）
+        /// </summary>
+        /// <param name="shopId">店铺id</param>
+        /// <returns></returns>
+        [AbpAllowAnonymous]
+        public async Task<string> GetShopQrCodeURL(Guid shopId)
+        {
+            return await _shopRepository.GetAll().Where(s => s.Id == shopId).Select(s => s.QRUrl).FirstOrDefaultAsync();
         }
 
     }

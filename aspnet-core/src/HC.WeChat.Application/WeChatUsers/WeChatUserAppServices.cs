@@ -1151,7 +1151,17 @@ namespace HC.WeChat.WeChatUsers
             result.Total = total;
             return result;
         }
-        
+
+        /// <summary>
+        /// 是否存在该微信用户
+        /// </summary>
+        /// <param name="openId"></param>
+        /// <returns></returns>
+        public async Task<bool> GetWeChatUserIsExsit(string openId)
+        {
+            return await _wechatuserRepository.GetAll().AnyAsync(w => w.OpenId == openId);
+        }
+
     }
 }
 
