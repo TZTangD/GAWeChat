@@ -20,6 +20,7 @@ export class ExhibitionComponent extends AppComponentBase implements OnInit {
     exhibitionShopList: ExhibitionShop[] = [];
     exhibition: Exhibition = new Exhibition();
     picIds: string[] = [];
+    voteDesc: string[] = [];
     voteLog: VoteLog = new VoteLog();
     shopTotal: number = 0; // 参赛数
     voteTotal: number = 0; // 投票数
@@ -66,6 +67,9 @@ export class ExhibitionComponent extends AppComponentBase implements OnInit {
         let params: any = {};
         this.articleService.GetExhibitionConfigAsync(params).subscribe(result => {
             this.exhibition = result;
+            if (this.exhibition.desc != '') {
+                this.voteDesc = this.exhibition.desc.split('#');
+            }
         });
     }
 

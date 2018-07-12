@@ -25,7 +25,7 @@
                 </ng-template>
             </div>
 
-            <div class="weui-flex">
+            <div class="weui-flex" style="padding-top: 5px;">
                 <div class="weui-flex__item">
                     <div class="placeholder" style="text-align: center;font-size: 13px;color: #999999;">已参赛:{{shopTotal}}</div>
                 </div>
@@ -53,12 +53,13 @@
                     </div>
                 </div>
             </div> -->
-            <div class="weui-flex" style="flex-flow: row wrap;padding-left: 30px;">
+            <div class="weui-flex" style="flex-flow: row wrap;padding-left: 13px;">
                 <div class="weui-flex__item" style="text-align: center;" *ngFor="let item of exhibitionShopList">
                     <!-- <div class="placeholder" style="text-align: center;color: #999999;"> -->
                     <div class="weui-media-box__hd" style="float: left;">
-                        <img style="height: 128px;width: 128px;" class="weui-media-box__thumb" src="{{hostUrl+item.picPath}}" alt="" (click)="goDetail(item.shopId)">
-                        <div class="weui-media-box weui-media-box_text" style="padding-top: 5px;padding-bottom: 5px;">
+                        <img style="height: 128px;width: 160px;" class="weui-media-box__thumb diy_img" [ngStyle]="{'background-image':'url('+ hostUrl + item.picPath +')'}" alt="" (click)="goDetail(item.shopId)">
+                        <!-- <img style="height: 128px;width: 128px;" class="weui-media-box__thumb" src="{{hostUrl+item.picPath}}" alt="" (click)="goDetail(item.shopId)"> -->
+                        <div class="weui-media-box weui-media-box_text" style="padding-top: 0px;padding-bottom: 5px;">
                             <p class="weui-media-box__desc" style="color: #434142;float: center;text-align: center; font-size: 13px">{{item.shopName}}</p>
                             <ul class="weui-media-box__info" style="margin-top: 5px;">
                                 <li class="weui-media-box__info__meta" style="color: #999999">票数：{{item.votes}}</li>
@@ -72,35 +73,40 @@
         </div>
         <section class="rules">
             <div class="text">
-                <div class="prize">活动公告</div>
+                <!-- <div class="prize">活动公告</div>
                 <div class="neirong">
                     <span style="font-size:16px;">&nbsp; &nbsp; &nbsp;{{exhibition.content}}</span>
-                </div>
+                </div> -->
                 <div class="prize">投票须知</div>
                 <div class="neirong">
-                    <div style="text-align:center;">
+                    <div style="text-align:left;">
                         <span style="font-size:14px;">
-                            <div>
-                                <div>
-                                    &nbsp; 投票时间为：{{exhibition.beginTime| date:'yyyy-MM-dd'}}——{{exhibition.endTime| date:'yyyy-MM-dd'}}
-                                </div>
-                                <div>
-                                    &nbsp; 每天每个微信号可以投{{exhibition.frequency}}票
-                                </div>
-                                <div style="font-size:16px;"> 
-                                    {{exhibition.desc}}
-                                </div>                         
+                            <div>                           
+                                <p *ngFor="let item of voteDesc" style="font-size:16px;padding-left: 10px;"> 
+                                    {{item}}
+                                </p>                         
                             </div>                            
                         </span>
                     </div>
-                    <strong>
-                    </strong>
                 </div>
             </div>
         </section>
-        <div class="qrUrl" style="text-align: center" *ngIf="qjyyPic">
-            <img class="mdiv" style="width:233.625px;height: 233.625px;" src="{{qjyyPic}}" alt="">
-            <p>长按识别二维码关注公众号</p>
+        <div *ngIf="qjyyPic">
+            <img class="mdiv" src="assets/images/exhibition/qrurl.jpg" style="width: 128px;height: 128px; padding: 128px;" />
+            <!-- <p>长按识别二维码关注公众号</p> -->
         </div>
+        <!-- <div class="qrUrl" style="text-align: center" *ngIf="qjyyPic">
+            <img class="mdiv" src="{{qjyyPic}}" alt="">
+            <p>长按识别二维码关注公众号</p>
+        </div> -->
+        <!-- <div class="qrUrl" style="text-align: center" *ngIf="qjyyPic">
+            <img class="mdiv" src="{{qjyyPic}}" style="position:absolute;width: 160px;height: 160px;opacity: 0" alt="">
+            <p>长按识别二维码关注公众号</p>
+        </div> -->
     </div>
+    <!-- <img style="height: 100%;width: 100%;opacity: 0" src="{{qjyyPic}}"> -->
 </Page>
+
+<!-- <img class="" data-ratio="1" data-src="{{qjyyPic}}" data-type="jpeg" data-w="344" style="box-sizing: border-box !important; word-wrap: break-word !important; visibility: visible !important; width: 140px !important; height: auto !important;" title="1490853201556697.jpg"
+    width="140px" _width="140px" src="{{qjyyPic}}" data-fail="0">
+<p>长按识别二维码关注公众号</p> -->

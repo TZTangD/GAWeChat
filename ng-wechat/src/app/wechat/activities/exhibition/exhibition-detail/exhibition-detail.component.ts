@@ -38,6 +38,7 @@ export class ExhibitionDetailComponent extends AppComponentBase implements OnIni
     DEFCONFIG: DialogConfig = <DialogConfig>{
     };
     config: DialogConfig = {};
+    voteDesc: string[] = [];
     @ViewChild('success') successToast: ToastComponent;
     @ViewChild('ios') iosAS: DialogComponent;
     constructor(injector: Injector, private router: Router,
@@ -49,7 +50,7 @@ export class ExhibitionDetailComponent extends AppComponentBase implements OnIni
     ngOnInit() {
         this.getExhibitionShopDetail(this.shopId);
         if (!this.settingsService.openId) {
-            this.articleService.GetAuthorizationUrl({ shopId: this.shopId }).subscribe((res) => {
+            this.articleService.GetAuthorizationUrl({ shopId: this.shopId, host: this.hostUrl }).subscribe((res) => {
                 location.href = res;
             });
         } else {
@@ -114,6 +115,9 @@ export class ExhibitionDetailComponent extends AppComponentBase implements OnIni
         let params: any = {};
         this.articleService.GetExhibitionConfigAsync(params).subscribe(result => {
             this.exhibition = result;
+            if (this.exhibition.desc != '') {
+                this.voteDesc = this.exhibition.desc.split('#');
+            }
         });
     }
 

@@ -70,6 +70,6 @@ namespace HC.WeChat.ExhibitionShops
 
         Task<APIResultDto> ExportExhibitionShopsExcel(GetExhibitionShopsInput input);
 
-        Task<string> GetAuthorizationUrl(string shopId);
+        Task<string> GetAuthorizationUrl(string shopId, string host);
     }
 }

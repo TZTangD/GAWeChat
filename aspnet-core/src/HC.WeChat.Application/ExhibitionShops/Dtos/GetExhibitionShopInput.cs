@@ -18,6 +18,8 @@ namespace HC.WeChat.ExhibitionShops.Dtos
         public string CustName { get; set; }
         public string CustCode { get; set; }
         public string Phone { get; set; }
+        public string SortFansTotal { get; set; }
+        public string SortVotesTotal { get; set; }
 
 
         /// <summary>
