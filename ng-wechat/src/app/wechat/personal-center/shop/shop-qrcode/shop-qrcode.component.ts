@@ -66,7 +66,7 @@ export class ShopQrcodeComponent extends AppComponentBase implements OnInit {
     getQrCode() {
         console.log(this.shop.id)
         this.load.loadScript('assets/libs/qrcode.min.js').then((res) => {
-            this.shopService.GetQrCodeUrl({shopId:this.shop.id}).subscribe(data => {
+            this.shopService.GetQrCodeUrl({shopId:this.shop.id,host:AppConsts.remoteServiceBaseUrl}).subscribe(data => {
                 //生成微信二维码
                 this.generateQRcode('wechat_qrcode', data);
                 this.isExist = true;

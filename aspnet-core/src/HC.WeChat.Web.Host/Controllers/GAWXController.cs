@@ -441,13 +441,11 @@ namespace HC.WeChat.Web.Host.Controllers
         {
             return Redirect(GAAuthorizationPageUrl.PersonalCenterUrl);
         }
+
         /// <summary>
         /// 推广码
         /// </summary>
-        /// <param name="code"></param>
-        /// <param name="state">shopId</param>
-        /// <returns></returns>
-        public IActionResult QrCode(string code, string state)
+        public IActionResult ShopAuth(string code, string state)
         {
             var oauth = _weChatOAuthAppService.GetAccessTokenAsync(code).Result;
             var isExist = _weChatUserAppService.GetWeChatUserIsExsit(oauth.openid).Result;
@@ -461,8 +459,7 @@ namespace HC.WeChat.Web.Host.Controllers
             {
                 //二维码关注页面
                 var shopId = new Guid(state);
-                var url = _shopAppService.GetQrCodeUrl(shopId);
-                //return Redirect(string.Format(GAAuthorizationPageUrl.ShopQrCodeUrl, state));
+                var url = host+ _shopAppService.GetShopQrCodeURL(shopId).Result;
                 return RedirectToAction("QrCode",new { url= url });
             }
         }

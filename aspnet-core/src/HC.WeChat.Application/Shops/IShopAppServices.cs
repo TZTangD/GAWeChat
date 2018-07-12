@@ -135,7 +135,7 @@ namespace HC.WeChat.Shops
         /// </summary>
         /// <param name="shopId"></param>
         /// <returns></returns>
-        string GetQrCodeUrl(Guid shopId);
+        string GetQrCodeUrl(Guid shopId, string host);
 
         /// <summary>
         /// 获取店铺推广码

@@ -38,7 +38,7 @@ export class ShopComponent extends AppComponentBase implements OnInit {
     hostUrl: string = AppConsts.remoteServiceBaseUrl;
     isAudit: boolean = false;
     qrCodeUrl = '';
-    private DEFCONFIG: DialogConfig = <DialogConfig>{
+    public DEFCONFIG: DialogConfig = <DialogConfig>{
         // title: '弹窗标题',
         // content: '弹窗内容，告知当前状态、信息和解决方法，描述文字尽量控制在三行内',
         skin: 'auto',

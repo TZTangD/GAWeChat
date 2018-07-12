@@ -1157,9 +1157,10 @@ namespace HC.WeChat.WeChatUsers
         /// </summary>
         /// <param name="openId"></param>
         /// <returns></returns>
+        [AbpAllowAnonymous]
         public async Task<bool> GetWeChatUserIsExsit(string openId)
         {
-            return await _wechatuserRepository.GetAll().AnyAsync(w => w.OpenId == openId);
+            return await _wechatuserRepository.GetAll().AnyAsync(w => w.OpenId == openId && w.UserType!=UserTypeEnum.取消关注);
         }
 
 

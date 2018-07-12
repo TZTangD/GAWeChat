@@ -34,13 +34,10 @@ using Senparc.Weixin.MP;
 using System.Net;
 using ICSharpCode.SharpZipLib.Zip;
 using ICSharpCode.SharpZipLib.Checksum;
-using System.DrawingCore.Text;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Processing.Transforms;
-using SixLabors.ImageSharp.Processing.Filters;
-using SixLabors.ImageSharp.Processing.Text;
 using SixLabors.ImageSharp.Processing.Drawing;
 using SixLabors.Primitives;
 using HC.WeChat.Authorization;
@@ -100,6 +97,7 @@ namespace HC.WeChat.Shops
             _wechatappconfigRepository = wechatappconfigRepository;
             _hostingEnvironment = hostingEnvironment;
             _weChatOAuthAppService = weChatOAuthAppService;
+            _weChatOAuthAppService.WechatAppConfig = AppConfig;
         }
 
         /// <summary>
@@ -1345,9 +1343,9 @@ namespace HC.WeChat.Shops
         /// <param name="shopId"></param>
         /// <returns></returns>
         [AbpAllowAnonymous]
-        public string GetQrCodeUrl(Guid shopId)
+        public string GetQrCodeUrl(Guid shopId,string host)
         {
-            var url = "http://localhost:21021/GAWX/QrCode";
+            var url = host+ "/GAWX/ShopAuth";
             var qrUrl = _weChatOAuthAppService.GetAuthorizeUrl(url, shopId.ToString(),OAuthScope.snsapi_base);
             return qrUrl;
         }
