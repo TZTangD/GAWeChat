@@ -24,6 +24,7 @@ export const routes = [
     // Not found
     { path: 'lotteries', loadChildren: './activities/lottery/lottery.module#LotteryModule' },
     { path: 'exhibitions', loadChildren: './activities/exhibition/exhibition.module#ExhibitionModule' },
+    { path: 'shop-qrcodes', loadChildren: './personal-center/shop/shop-qrcode/shop-qrcode.module#ShopQrcodeModule' },
     { path: '**', redirectTo: '' }
 ];
 

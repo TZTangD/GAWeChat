@@ -129,5 +129,19 @@ namespace HC.WeChat.Shops
         Task<ShopStatisticLiDto> GetShopStatisticsByCompany();
 
         Task<APIResultDto> BatchCompressionPictures(string fromPath, string toPaht, int height);
+
+        /// <summary>
+        /// 获取店铺二维码url
+        /// </summary>
+        /// <param name="shopId"></param>
+        /// <returns></returns>
+        string GetQrCodeUrl(Guid shopId);
+
+        /// <summary>
+        /// 获取店铺推广码
+        /// </summary>
+        /// <param name="shopId">店铺id</param>
+        /// <returns></returns>
+        Task<string> GetShopQrCodeURL(Guid shopId);
     }
 }
