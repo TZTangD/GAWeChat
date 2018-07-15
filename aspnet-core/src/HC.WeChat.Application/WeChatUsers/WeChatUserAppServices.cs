@@ -1136,18 +1136,28 @@ namespace HC.WeChat.WeChatUsers
             var query = from w in weChat
                         join r in retail on w.UserId equals r.Id into g
                         from wr in g.DefaultIfEmpty()
-                        group wr by wr.BranchCompany into m
+                        group new { wr.BranchCompany } by wr.BranchCompany into m
                         select new WeChatUserStatisticDto
                         {
-                            Company = m.Key == null ? "其它" : m.Key,
+                            Company = m.Key, // == null ? "其它" : m.Key,
                             Count = m.Count(),
-                            GroupId = m.Key == null ? 2 : 1,
+                            //GroupId = m.Key == null ? 2 : 1,
                         };
 
-            var total = await query.SumAsync(w => w.Count);
-            var list = await query.OrderBy(l => l.GroupId).ThenByDescending(l => l.Count).ToListAsync();
+            //var total = await query.SumAsync(w => w.Count);
+            var list = await query.ToListAsync();
+            var total = list.Sum(w => w.Count);
+            foreach (var item in list)
+            {
+                if (string.IsNullOrEmpty(item.Company))
+                {
+                    item.Company = "其它";
+                    item.GroupId = 1;
+                    break;
+                }
+            }
             var result = new WeChatUserStatisticLiDto();
-            result.WechatUserStaDto = list;
+            result.WechatUserStaDto = list.OrderBy(l => l.GroupId).ThenByDescending(l => l.Count).ToList(); ;
             result.Total = total;
             return result;
         }

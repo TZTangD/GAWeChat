@@ -1285,18 +1285,28 @@ namespace HC.WeChat.Shops
             var shop = _shopRepository.GetAll().Where(s => s.Status == ShopAuditStatus.已审核);
             var retail = _retailerRepository.GetAll();
             var query = (from s in shop
-                         join r in retail on s.RetailerId equals r.Id into g
-                         from sr in g.DefaultIfEmpty()
-                             //where sr.BranchCompany != null
-                         group sr by sr.BranchCompany into m
+                         join r in retail on s.RetailerId equals r.Id //into g
+                         //from sr in g.DefaultIfEmpty()
+                         //where sr.BranchCompany != null
+                         group new { r.BranchCompany } by r.BranchCompany into m
                          select new ShopStatisticDto
                          {
-                             Company = m.Key == null ? "其它" : m.Key,
+                             Company = m.Key,//== null ? "其它" : m.Key,
                              Count = m.Count(),
-                             GroupId = m.Key != null ? 1 : 2
+                             //GroupId = m.Key != null ? 1 : 2
                          });
-            var total = await query.SumAsync(s => s.Count);
-            var list = await query.OrderBy(l=>l.GroupId).ThenByDescending(l => l.Count).ToListAsync();
+            //var total = await query.SumAsync(s => s.Count);
+            var list = await query.OrderByDescending(l => l.Count).ToListAsync();
+            var total = list.Sum(s => s.Count);
+            //foreach (var item in list)
+            //{
+            //    if (string.IsNullOrEmpty(item.Company))
+            //    {
+            //        item.Company = "其它";
+            //        item.GroupId = 1;
+            //        break;
+            //    }
+            //}
             var result = new ShopStatisticLiDto();
             result.ShopStaDto = list;
             result.Total = total;
@@ -1308,7 +1318,7 @@ namespace HC.WeChat.Shops
         /// <summary>
         /// 批量压缩图片
         /// </summary>
-        public Task<APIResultDto> BatchCompressionPictures(string fromPath, string toPaht, int height)
+        public Task<APIResultDto> BatchCompressionPictures(string fromPath, string toPaht, int type, int val)
         {
             if (!Directory.Exists(fromPath))
             {
@@ -1325,12 +1335,34 @@ namespace HC.WeChat.Shops
             {
                 using (Image<Rgba32> image = Image.Load(item.OpenRead()))
                 {
-                    if (image.Height > height)
+                    var fileName = item.Name.Split('.')[0] + ".jpg";
+                    if (type == 1)//按宽度值压缩
                     {
-                        var width = (int)((height / image.Height) * image.Width);
-                        image.Mutate(x => x.Resize(width, height));
-                        image.Save(toPaht + "/" + item.Name);
+                        if (image.Width > val)
+                        {
+                            var height = (int)((val / image.Width) * image.Height);
+                            image.Mutate(x => x.Resize(val, height));
+                            image.Save(toPaht + "/" + fileName);
+                        }
+                        else
+                        {
+                            image.Save(toPaht + "/" + fileName);
+                        }
                     }
+                    else //按高度值压缩
+                    {
+                        if (image.Height > val)
+                        {
+                            var width = (int)((val / image.Height) * image.Width);
+                            image.Mutate(x => x.Resize(width, val));
+                            image.Save(toPaht + "/" + fileName);
+                        }
+                        else
+                        {
+                            image.Save(toPaht + "/" + fileName);
+                        }
+                    }
+                    
                 }
             }
 
