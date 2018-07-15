@@ -91,10 +91,10 @@ export class ArticleService {
         });
     }
 
-    GetWXPagedExhibitionShopsAsync(params: any): Observable<ExhibitionShop[]> {
+    GetWXPagedExhibitionShopsAsync(params: any): Observable<any[]> {
         return this.http.get('/api/services/app/ExhibitionShop/GetWXPagedExhibitionShopsAsync', params).map(data => {
             if (data.result) {
-                return ExhibitionShop.fromJSArray(data.result);
+                return data.result;
             } else {
                 return null;
             }

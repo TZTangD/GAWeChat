@@ -62,29 +62,32 @@
         <div class="button-sp-area" *ngIf="exhibitionShop">
             <button weui-button [weui-mini]="'mini'" (click)="alertShare()" [weui-plain]="true">我要分享拉票</button>
         </div>
-        <section class="rules">
+    </div>
+    <div class="weui-panel weui-panel_access">
+        <section class="rules" style="padding-top: 10px;">
             <div class="text">
                 <!-- <div class="prize">活动公告</div>
                 <div class="neirong">
                     <span style="font-size:16px;">&nbsp; &nbsp; &nbsp;{{exhibition.content}}</span>
                 </div> -->
                 <div class="prize">投票须知</div>
-                <div class="neirong">
+                <div>
                     <div style="text-align:left;">
-                        <span style="font-size:14px;">
-                            <div>                           
-                                <p *ngFor="let item of voteDesc" style="font-size:16px;padding-left: 10px;"> 
+                        <span style="font-size:13px; padding: 10px;">
+                            <div>
+                                <p *ngFor="let item of voteDesc" style="padding-left: 10px;">
                                     {{item}}
-                                </p>                         
-                            </div>                            
+                                </p>
+                            </div>
                         </span>
                     </div>
                 </div>
             </div>
         </section>
-        <!-- <div class="qrUrl" style="text-align: center" *ngIf="shopQrUrl">
+    </div>
+    <!-- <div class="qrUrl" style="text-align: center" *ngIf="shopQrUrl">
             <img class="mdiv" style="width:233.625px;height: 233.625px;" src="{{hostUrl+shopQrUrl}}" alt="">
             <p>长按识别二维码关注公众号</p>
         </div> -->
-    </div>
+
 </Page>

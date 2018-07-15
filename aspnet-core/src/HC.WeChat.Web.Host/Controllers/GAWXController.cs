@@ -92,11 +92,11 @@ namespace HC.WeChat.Web.Host.Controllers
         {
             APIResultDto result = new APIResultDto();
             //UserOpenId = "oPM5Uv81jfyJqWbVxWAH-RUqsCAs";
-            UserOpenId = "oPM5Uv89yy7Iv8k9gLHjjsMTT5Gw";//零售户
+            //UserOpenId = "oPM5Uv89yy7Iv8k9gLHjjsMTT5Gw";//零售户
             //UserOpenId = "oB4nYjnoHhuWrPVi2pYLuPjnCaU0"; //杨帆专用
             //UserOpenId = "oPM5Uv89yy7Iv8k9gLHjjsMTT5Gw";
             //UserOpenId = "oB4nYjnoHhuWrPVi2pYLuPjnCaU1"; //杨帆专用
-            //UserOpenId = "oWusewPRxWuP4wMz3UmHR0y7CJME";
+            //UserOpenId = "oWusewPRxWuP4wMz3UmHR0y7CJME"; //回家测试用
             //UserOpenId = "oB4nYjnoHhuWrPVi2pYLuPjnCaU0";
             //UserOpenId = "oWusewPRxWuP4wMz3UmHR0y7CJME";
             //UserOpenId = "o4l6swGJKxy4aEpUy3Hqm2DEeo_s";
@@ -447,21 +447,46 @@ namespace HC.WeChat.Web.Host.Controllers
         /// </summary>
         public IActionResult ShopAuth(string code, string state)
         {
-            var oauth = _weChatOAuthAppService.GetAccessTokenAsync(code).Result;
-            var isExist = _weChatUserAppService.GetWeChatUserIsExsit(oauth.openid).Result;
-            if (isExist)
+            //如果code为null 跳转获取code, 注：state需要传入 shopId
+            if (string.IsNullOrEmpty(code))
             {
-                UserOpenId = oauth.openid;
-                //店铺页面
-                return Redirect(string.Format(GAAuthorizationPageUrl.ShopUrl,state));
+                var url = host + "/GAWX/ShopAuth";
+                var pageUrl = _weChatOAuthAppService.GetAuthorizeUrl(url, state, Senparc.Weixin.MP.OAuthScope.snsapi_base);
+                return Redirect(pageUrl);
             }
             else
             {
-                //二维码关注页面
-                var shopId = new Guid(state);
-                var url = host+ _shopAppService.GetShopQrCodeURL(shopId).Result;
-                return RedirectToAction("QrCode",new { url= url });
+                //存储openId 避免重复提交
+                SetUserOpenId(code);
+                var isExist = _weChatUserAppService.GetWeChatUserIsExsit(UserOpenId).Result;
+                if (isExist)
+                {
+                    //店铺页面
+                    return Redirect(string.Format(GAAuthorizationPageUrl.ShopUrl, state));
+                }
+                else
+                {
+                    //二维码关注页面
+                    var shopId = new Guid(state);
+                    var url = host + _shopAppService.GetShopQrCodeURL(shopId).Result;
+                    return RedirectToAction("QrCode", new { url = url });
+                }
             }
+            //var oauth = _weChatOAuthAppService.GetAccessTokenAsync(code).Result;
+            //var isExist = _weChatUserAppService.GetWeChatUserIsExsit(oauth.openid).Result;
+            //if (isExist)
+            //{
+            //    UserOpenId = oauth.openid;
+            //    //店铺页面
+            //    return Redirect(string.Format(GAAuthorizationPageUrl.ShopUrl,state));
+            //}
+            //else
+            //{
+            //    //二维码关注页面
+            //    var shopId = new Guid(state);
+            //    var url = host+ _shopAppService.GetShopQrCodeURL(shopId).Result;
+            //    return RedirectToAction("QrCode",new { url= url });
+            //}
         }
     }
 

@@ -2,6 +2,7 @@ using System;
 using Abp.Application.Services.Dto;
 using System.ComponentModel.DataAnnotations;
 using HC.WeChat.ExhibitionShops;
+using System.Collections.Generic;
 
 namespace HC.WeChat.ExhibitionShops.Dtos
 {
@@ -76,5 +77,29 @@ namespace HC.WeChat.ExhibitionShops.Dtos
         ////BCC/ BEGIN CUSTOM CODE SECTION
 
         ////ECC/ END CUSTOM CODE SECTION
+    }
+
+    public class ExhibitionWechatDto : EntityDto<Guid>
+    {
+        public DateTime CreateTime { get; set; }
+
+        public Guid? Id { get; set; }
+
+        public string ShopName { get; set; }
+
+        public int Votes { get; set; }
+
+        public string PicPath { get; set; }
+
+        public Guid? ShopId { get; set; }
+    }
+
+    public class ExhibitionViewDto
+    {
+        public ExhibitionViewDto()
+        {
+            Items = new List<ExhibitionWechatDto>();
+        }
+        public List<ExhibitionWechatDto> Items { get; set; }
     }
 }

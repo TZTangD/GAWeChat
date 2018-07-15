@@ -15,7 +15,8 @@
             </div>
         </div>
         <div class="weui-panel__bd">
-            <weui-searchbar (search)="onSearch($event)" [(value)]="value" placeholder="请输入店铺名称" (cancel)="onCancel()" [debounceTime]="500" (clear)="onClear()"></weui-searchbar>
+            <weui-searchbar (search)="onSearch($event)" [(value)]="value" placeholder="请输入店铺名称" (cancel)="onCancel()" [debounceTime]="500"
+                (clear)="onClear()"></weui-searchbar>
             <div class="weui-panel" style="margin-top: 0px;" *ngIf="value">
                 <div class="weui-panel__hd">包含【{{value}}】的店铺</div>
                 <div class="weui-panel__bd" *ngIf="shops | async; let shops; else loading">
@@ -35,21 +36,25 @@
 
             <div class="weui-flex" style="padding-top: 5px;">
                 <div class="weui-flex__item">
-                    <div class="placeholder" style="text-align: center;font-size: 13px;color: #999999;">已参赛:{{shopTotal}}</div>
+                    <div class="placeholder" style="text-align: center;font-size: 13px;color: #999999; line-height: 25px; height: 50px;">参赛店铺<br/>{{shopTotal}}</div>
+                </div>
+                <div class="weui-flex__item"style="text-align: center;font-size: 26px;color: #999999; line-height: 50px; height: 50px; width: 50px;">
+                    |
                 </div>
                 <div class="weui-flex__item">
-                    <div class="placeholder" style="text-align: center;font-size: 13px;color: #999999;">投票人次:{{voteTotal}}</div>
+                    <div class="placeholder" style="text-align: center;font-size: 13px;color: #999999; line-height: 25px; height: 50px;">投票人次<br/>{{voteTotal}}</div>
                 </div>
             </div>
             <div class="button-sp-area">
-                <button class="btn" weui-button [weui-mini]="'mini'" [weui-plain]="true" (click)="getExhibitionShop('vote')">投票排行</button>
-                <button class="btn" weui-button [weui-mini]="'mini'" [weui-plain]="true" (click)="getExhibitionShop('time')">最新参赛</button>
+                <button weui-button [weui-mini]="'mini'" [weui-plain]="selectedType == 'time'" (click)="getExhibitionShop('vote')">投票排行</button>
+                <button weui-button [weui-mini]="'mini'" [weui-plain]="selectedType == 'vote'" (click)="getExhibitionShop('time')">最新参赛</button>
             </div>
             <weui-loadmore type="line" *ngIf="!exhibitionShopList || exhibitionShopList.length == 0"></weui-loadmore>
-            <div class="weui-flex" style="flex-flow: row wrap;padding-left: 13px;">
+            <!-- <div class="weui-flex" style="flex-flow: row wrap;padding-left: 13px;" >
                 <div class="weui-flex__item" style="text-align: center;" *ngFor="let item of exhibitionShopList">
                     <div class="weui-media-box__hd" style="float: left;">
-                        <img style="height: 128px;width: 160px;" class="weui-media-box__thumb diy_img" [ngStyle]="{'background-image':'url('+ hostUrl + item.picPath +')'}" alt="" (click)="goDetail(item.shopId)">
+                        <img style="height: 128px;width: 160px;" class="weui-media-box__thumb diy_img" [ngStyle]="{'background-image':'url('+ hostUrl + item.picPath +')'}"
+                            alt="" (click)="goDetail(item.shopId)">
                         <div class="weui-media-box weui-media-box_text" style="padding-top: 0px;padding-bottom: 5px;">
                             <p class="weui-media-box__desc" style="color: #434142;float: center;text-align: center; font-size: 13px">{{item.shopName}}</p>
                             <ul class="weui-media-box__info" style="margin-top: 5px;">
@@ -59,19 +64,42 @@
                         </div>
                     </div>
                 </div>
+            </div> -->
+        </div>
+        <div class="weui-flex"  *ngFor="let view of exhibitionShopList" >
+            <div class="weui-flex__item" style="padding: 5px;" *ngFor="let item of view.items" >
+                <div class="weui-form-preview">
+                    <div class="weui-form-preview__hd weui-form-preview" style="padding-bottom: 0px; padding-top: 0px;">
+                        <label class="weui-form-preview__label" style="min-width: 1em; font-size: 13px;">票数</label>
+                        <em class="weui-form-preview__value" style="font-size: 1.2em;">{{item.votes}}</em>
+                    </div>
+                    <div class="weui-form-preview__bd diy_img " (click)="goDetail(item.shopId)" [ngStyle]="{'background-image':'url('+ hostUrl + item.picPath +')'}" >
+                        <div class="weui-cell" style="height: 100px; padding: 0px;">
+                        </div>
+                        <div class="weui-cell weui-shop-cell_img" >
+                            <div class="weui-cell__hd">
+                                <p>{{item.shopName}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="weui-form-preview__ft">
+                        <a class="weui-form-preview__btn weui-form-preview__btn_primary" style="font-size: 1.2em;" href="javascript:" (click)="voteAdd(item)" >投一票</a>
+                    </div>
+                </div>
             </div>
+            <div *ngIf="view.items.length == 1" class="weui-flex__item"></div>
         </div>
         <section class="rules">
             <div class="text">
                 <div class="prize">投票须知</div>
                 <div class="neirong">
                     <div style="text-align:left;">
-                        <span style="font-size:14px;">
-                            <div>                           
-                                <p *ngFor="let item of voteDesc" style="font-size:16px;padding-left: 10px;"> 
+                        <span style="font-size:13px; padding: 10px;">
+                            <div>
+                                <p *ngFor="let item of voteDesc" style="padding-left: 10px;">
                                     {{item}}
-                                </p>                         
-                            </div>                            
+                                </p>
+                            </div>
                         </span>
                     </div>
                 </div>

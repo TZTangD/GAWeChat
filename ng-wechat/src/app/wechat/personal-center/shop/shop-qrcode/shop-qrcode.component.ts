@@ -4,10 +4,10 @@ import { DialogConfig, DialogService } from 'ngx-weui';
 import { AppConsts, ShopService } from '../../../../services';
 import { ActivatedRoute } from '@angular/router';
 import { Shop } from '../../../../services/model';
-import { Observable } from 'rxjs/Observable';
 import { Observer } from 'rxjs';
 import { LoaderService } from 'ngx-weui/utils/loader.service';
 import { isAndroid } from 'ngx-weui/utils/browser';
+import { ToastService } from "ngx-weui/toast";
 
 @Component({
     selector: 'shop-qrcode',
@@ -18,30 +18,28 @@ export class ShopQrcodeComponent extends AppComponentBase implements OnInit {
     @Input() config: DialogConfig;
     @Output() close = new EventEmitter<ShopQrcodeComponent>();
     private observer: Observer<any>;
-    shop: Shop = new Shop();
+    shop: Shop;
     qrCodeUrl = '';
     _shown = false;
     isExist = false;
     constructor(injector: Injector, private shopService: ShopService, private activeRoute: ActivatedRoute,
-        private load: LoaderService) {
+        private load: LoaderService, private toastServ: ToastService) {
         super(injector);
     }
     ngOnInit(): void {
-
+        this.isExist = false;
     }
-    show(shop: Shop): Observable<any> {
-        if (this.config.skin === 'auto') {
-            this.config.skin = isAndroid() ? 'android' : 'ios';
-        }
+    show(shop: Shop) {
+        //if (this.config.skin === 'auto') {
+        //    this.config.skin = isAndroid() ? 'android' : 'ios';
+        //}
+        this.config.skin = 'ios';
         this.shop = shop;
-        console.log(this.shop);
+        //console.log(this.shop);
         if (!this.isExist) {
             this.getQrCode();
         }
         this._shown = true;
-        return Observable.create((observer: Observer<any>) => {
-            this.observer = observer;
-        });
     }
     generateQRcode(id: string, url: any) {
         let qrShopCode = new QRCode(id, {
@@ -50,6 +48,7 @@ export class ShopQrcodeComponent extends AppComponentBase implements OnInit {
             height: 230,
             correctLevel: QRCode.CorrectLevel.H
         });
+        document.getElementById(id).getElementsByTagName('img').item(0).style.width = '100%';
     }
 
     /**
@@ -64,13 +63,16 @@ export class ShopQrcodeComponent extends AppComponentBase implements OnInit {
         this.close.emit(this);
     }
     getQrCode() {
-        console.log(this.shop.id)
+        //console.log(this.shop.id)
+        this.toastServ.show(null, 10000, null, 'loading');
         this.load.loadScript('assets/libs/qrcode.min.js').then((res) => {
-            this.shopService.GetQrCodeUrl({shopId:this.shop.id,host:AppConsts.remoteServiceBaseUrl}).subscribe(data => {
-                //生成微信二维码
-                this.generateQRcode('wechat_qrcode', data);
+            //this.shopService.GetQrCodeUrl({shopId:this.shop.id,host:AppConsts.remoteServiceBaseUrl}).subscribe(data => {
+            let url = AppConsts.remoteServiceBaseUrl + '/GAWX/ShopAuth?state='+this.shop.id;    
+            //生成微信二维码
+                this.generateQRcode('wechat_qrcode', url);
                 this.isExist = true;
-            });
+                this.toastServ.hide();
+            //});
         })
     }
 

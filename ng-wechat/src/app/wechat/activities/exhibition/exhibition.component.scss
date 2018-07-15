@@ -43,6 +43,7 @@
     text-align: center;
     border: 1px solid #959595;
     color: #3e3c3c;
+    margin-top: 10px;
 }
 
 .qrcode {
@@ -54,10 +55,18 @@
 }
 
 .diy_img {
-    width: 100%;
-    height: 180px;
+    height: 130px;
+    width: auto;
     background: no-repeat center center;
     background-size: cover;
     position: relative;
     margin-top: 0px;
+    padding: 0px;
+}
+
+.weui-shop-cell_img{
+    font-size: 14px; 
+    color:black; 
+    background:rgba(255,255,255,0.3); 
+    padding: 0px;
 }

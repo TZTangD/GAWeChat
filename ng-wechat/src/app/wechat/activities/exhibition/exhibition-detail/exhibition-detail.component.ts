@@ -94,11 +94,11 @@ export class ExhibitionDetailComponent extends AppComponentBase implements OnIni
         this.config = Object.assign({}, this.DEFCONFIG, <DialogConfig>{
             skin: type,
             backdrop: backdrop,
-            content: '您今天已经超过投票限制了。温馨提示:注册会员，买烟积分，享更多活动机会。赶快去注册吧!'
+            content: '已超过每日投票限制，请明天再来吧！温馨提示：注册会员，买烟积分，享更多活动机会，没注册的小伙伴赶快去注册吧！'
         });
         this.dia.show(this.config).subscribe((res: any) => {
             if (res.value == true) {
-                this.router.navigate(["/personals/bind-member"]);
+                this.router.navigate(["/members/member-card"]);
             }
         });
         return false;

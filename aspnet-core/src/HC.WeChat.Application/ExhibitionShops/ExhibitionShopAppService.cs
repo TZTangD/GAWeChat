@@ -516,12 +516,12 @@ namespace HC.WeChat.ExhibitionShops
         /// <param name="tenantId"></param>
         /// <returns></returns>
         [AbpAllowAnonymous]
-        public async Task<List<ExhibitionShopListDto>> GetWXPagedExhibitionShopsAsync(string type)
+        public async Task<List<ExhibitionViewDto>> GetWXPagedExhibitionShopsAsync(string type)
         {
             var config = await GetExhibitionByIdAsync();
             var exhibitons = _exhibitionshopRepository.GetAll().Where(v => v.Status == 1);
             var result = from e in exhibitons
-                         select new ExhibitionShopListDto()
+                         select new ExhibitionWechatDto()
                          {
                              Id = e.Id,
                              ShopName = e.ShopName,
@@ -530,19 +530,41 @@ namespace HC.WeChat.ExhibitionShops
                              ShopId = e.ShopId,
                              CreateTime = e.CreateTime
                          };
+            var resultList = new List<ExhibitionWechatDto>();
             if (type == "time")
             {
-                return await result.Take(config.TopTotal).OrderByDescending(v => v.CreateTime).ToListAsync();
+                resultList = await result.Take(config.TopTotal).OrderByDescending(v => v.CreateTime).ToListAsync();
             }
             else if (type == "vote")
             {
-                return await result.Take(config.TopTotal).OrderByDescending(v => v.Votes).ToListAsync();
-
+                resultList = await result.Take(config.TopTotal).OrderByDescending(v => v.Votes).ToListAsync();
             }
             else
             {
-                return await result.Take(config.TopTotal).OrderByDescending(v => v.Votes).ToListAsync();
+                resultList = await result.Take(config.TopTotal).OrderByDescending(v => v.Votes).ToListAsync();
             }
+
+            var resultViewList = new List<ExhibitionViewDto>();
+            ExhibitionViewDto view = new ExhibitionViewDto();
+            int i = 0;
+            foreach (var item in resultList)
+            {
+                item.ShopName = item.ShopName.Length > 10 ? item.ShopName.Substring(0, 10) + "..." : item.ShopName;
+                view.Items.Add(item);
+                if (i%2 == 1)
+                {
+                    resultViewList.Add(view);
+                    view = new ExhibitionViewDto();
+                }
+                i++;
+            }
+
+            if (view.Items.Count() > 0)
+            {
+                resultViewList.Add(view);
+            }
+
+            return resultViewList;
         }
 
         /// <summary>

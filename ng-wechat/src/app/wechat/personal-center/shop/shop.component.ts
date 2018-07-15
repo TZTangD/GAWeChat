@@ -41,7 +41,7 @@ export class ShopComponent extends AppComponentBase implements OnInit {
     public DEFCONFIG: DialogConfig = <DialogConfig>{
         // title: '弹窗标题',
         // content: '弹窗内容，告知当前状态、信息和解决方法，描述文字尽量控制在三行内',
-        skin: 'auto',
+        skin: 'ios',
         backdrop: true,
         cancel: null,
         confirm: null,
@@ -267,8 +267,7 @@ export class ShopComponent extends AppComponentBase implements OnInit {
             //     console.log(res);
             //     this.generateQRcode('wechat_qrcode', this.qrCodeUrl);
             // });
-            this.qrcodeAS.show(this.shop).subscribe((res:any)=>{
-            });
+            this.qrcodeAS.show(this.shop);
     }
 
     generateQRcode(id: string, url: any) {

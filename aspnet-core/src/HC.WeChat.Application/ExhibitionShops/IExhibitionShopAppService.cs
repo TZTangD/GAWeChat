@@ -62,7 +62,7 @@ namespace HC.WeChat.ExhibitionShops
         Task BatchDeleteExhibitionShopsAsync(List<Guid> input);
         Task<PagedResultDto<ExhibitionShopListDto>> GetPagedExhibitionShopsAsync(GetExhibitionShopsInput input);
         Task<ExhibitionShopListDto> GetPagedExhibitionShopsByIdAsync(Guid id);
-        Task<List<ExhibitionShopListDto>> GetWXPagedExhibitionShopsAsync(string type);
+        Task<List<ExhibitionViewDto>> GetWXPagedExhibitionShopsAsync(string type);
 
         Task<int> GetWXExhibitionShopsCountAsync();
         Task<List<ExhibitionShopListDto>> GetExhibitionShopByKeyAsync(string key);

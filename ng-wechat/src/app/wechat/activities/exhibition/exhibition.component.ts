@@ -17,7 +17,7 @@ import { ToptipsService, ToastComponent, ToastService, DialogComponent, DialogCo
 export class ExhibitionComponent extends AppComponentBase implements OnInit {
     shops: Observable<ExhibitionShop[]>;
     value: string;
-    exhibitionShopList: ExhibitionShop[] = [];
+    exhibitionShopList = [];
     exhibition: Exhibition = new Exhibition();
     picIds: string[] = [];
     voteDesc: string[] = [];
@@ -34,6 +34,7 @@ export class ExhibitionComponent extends AppComponentBase implements OnInit {
     isAttention: boolean = false; // 用户是否关注
     @ViewChild('ios') iosAS: DialogComponent;
     @ViewChild('success') successToast: ToastComponent;
+    selectedType: string = 'vote';
     constructor(injector: Injector, private router: Router, private srvt: ToastService, private srv: ToptipsService, private articleService: ArticleService
         , private dia: DialogService) {
         super(injector);
@@ -54,11 +55,11 @@ export class ExhibitionComponent extends AppComponentBase implements OnInit {
         this.config = Object.assign({}, this.DEFCONFIG, <DialogConfig>{
             skin: type,
             backdrop: backdrop,
-            content: '您今天已经超过投票限制了。温馨提示:注册会员，买烟积分，享更多活动机会。赶快去注册吧!'
+            content: '已超过每日投票限制，请明天再来吧！温馨提示：注册会员，买烟积分，享更多活动机会，没注册的小伙伴赶快去注册吧！'
         });
         this.dia.show(this.config).subscribe((res: any) => {
             if (res.value == true) {
-                this.router.navigate(["/personals/bind-member"]);
+                this.router.navigate(["/members/member-card"]);
             }
         });
         return false;
@@ -105,14 +106,17 @@ export class ExhibitionComponent extends AppComponentBase implements OnInit {
 
     getExhibitionShop(type: string) {
         this.exhibitionShopList = []
+        this.selectedType = type;
         let params: any = { type: type };
         this.articleService.GetWXPagedExhibitionShopsAsync(params).subscribe(result => {
-            this.exhibitionShopList.push(...result);
+            this.exhibitionShopList = result;
             result.filter(v => {
-                if (v.picPath != '') {
-                    this.picIds = v.picPath.split(',');
-                    v.picPath = this.picIds[0];
-                }
+                v.items.map(i => {
+                    if (i.picPath != '') {
+                        let picIds = i.picPath.split(',');
+                        i.picPath = picIds[0];
+                    }
+                });
             })
         });
     }
@@ -163,29 +167,29 @@ export class ExhibitionComponent extends AppComponentBase implements OnInit {
 
     }
 
-    voteBLL(id: any) {
-        this.exhibitionShopList.find(v => v.id == id).votes++;
+    voteBLL(item: any) {
+        item.votes++;
         this.voteTotal++;
         this.currentDayVote++;
         this.voteLog.openId = this.settingsService.openId;
-        this.voteLog.exhibitionId = id;
+        this.voteLog.exhibitionId = item.id;
         this.articleService.AddVoteLogAsync(this.voteLog).subscribe(data => {
             if (data && data.code === 0) {
                 this.srvt['success']('投票成功', 0);
             } else if (data && data.code === 999) {
                 this.voteTotal--;
-                this.exhibitionShopList.find(v => v.id == id).votes--;
+                item.votes--;
                 this.currentDayVote--;
                 this.srvt['loading']('活动已过期', 0);
             } else if (data && data.code === 888) {
                 this.voteTotal--;
-                this.exhibitionShopList.find(v => v.id == id).votes--;
+                item.votes--;
                 this.currentDayVote--;
                 this.srvt['loading']('活动尚未开始哦', 0);
             }
             else {
                 this.voteTotal--;
-                this.exhibitionShopList.find(v => v.id == id).votes--;
+                item.votes--;
                 this.currentDayVote--;
                 this.srvt['loading']('请重试');
             }
